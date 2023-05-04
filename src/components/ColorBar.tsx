@@ -7,7 +7,7 @@ interface ColorBarProps {
   setLockedColors: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-const ColorBar = ({ color, setLockedColors }: ColorBarProps) => {
+export const ColorBar = ({ color, setLockedColors }: ColorBarProps) => {
   const {
     attributes,
     listeners,
@@ -57,5 +57,3 @@ const ColorBar = ({ color, setLockedColors }: ColorBarProps) => {
     </div>
   )
 }
-
-export default ColorBar

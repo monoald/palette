@@ -1,13 +1,13 @@
-import './App.css'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { makeColorPalette } from './lib/palette'
-import { useKeyDown } from './hooks/useKeyDown'
+import { makeColorPalette } from '../lib/palette'
+import { useKeyDown } from '../hooks/useKeyDown'
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core"
 import { arrayMove, SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable"
-import ColorBar from './components/ColorBar'
+import { ColorBar } from '../components/ColorBar'
+import '../styles/PaletteGenerator.css'
 
-const Test = () => {
+export const PaletteGenerator = () => {
   const [colors, setColors] = useState<string[]>([])
   const [lockedColors, setLockedColors] = useState<string[]>([])
   console.log(colors);
@@ -83,5 +83,3 @@ const Test = () => {
     </DndContext>
   )
 }
-
-export default Test

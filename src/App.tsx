@@ -9,6 +9,9 @@ import ColorBar from './components/ColorBar'
 
 const Test = () => {
   const [colors, setColors] = useState<string[]>([])
+  const [lockedColors, setLockedColors] = useState<string[]>([])
+  console.log(colors);
+  
 
   function changeColorPalette() {
     const newColors = makeColorPalette({
@@ -17,6 +20,16 @@ const Test = () => {
       paletteType: 'analogous',
       quantity: 5
     }) as string[]
+
+    if (lockedColors.length !== 0) {
+      const lockedColorsIndex = lockedColors.map((color) => {
+        return colors.indexOf(color)
+      })
+      
+      lockedColorsIndex.forEach(color => {
+        newColors.splice(color, 1, colors[color])
+      })
+    }
 
     setColors(newColors)
   }
@@ -38,7 +51,6 @@ const Test = () => {
   }, ['Space'])
 
   function handleDragEnd(event: DragEndEvent) {
-    console.log('hola');
     const {active, over} = event
     const dragged = active.id as string
     const target = over?.id as string
@@ -62,10 +74,9 @@ const Test = () => {
         <SortableContext
           items={colors}
           strategy={horizontalListSortingStrategy}
-
         >
           {colors.map((color: string) => (
-            <ColorBar id={color} />
+            <ColorBar color={color} setLockedColors={setLockedColors} />
           ))}
         </SortableContext>
       </div>

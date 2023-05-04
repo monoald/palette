@@ -3,42 +3,57 @@ import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 
 interface ColorBarProps {
-  id: string
+  color: string
+  setLockedColors: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-const ColorBar = ({ id }: ColorBarProps) => {
+const ColorBar = ({ color, setLockedColors }: ColorBarProps) => {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
-  } = useSortable({ id: id})
+  } = useSortable({ id: color})
 
   const [cliked, setCliked] = useState(false)
 
   const style = transform ? {
     transform: CSS.Transform.toString(transform),
-    // transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-  }: undefined  
+  }: undefined 
+  
+  function handleLockColor(item: string) {
+    setLockedColors((lockedColors) => {
+      if (lockedColors.includes(item)) {
+        return lockedColors
+      } else {
+        return [...lockedColors, item]
+      }
+  })
+  }
 
   return (
     <div
-      onMouseDown={() => { setCliked(true) }}
-      onMouseUp={() => { setCliked(false) }}
       ref={setNodeRef}
       style={{
         ...style,
-        'background': id,
+        'background': color,
         'width': '100%',
         'flex': 1,
         'height': '100vh',
         'zIndex': cliked ? 1 : 0
       }}
       {...attributes}
-      {...listeners}
     >
-      {id}
-      {/* <button onClick={() => handleLock(id)}>Lock</button> */}
+      {color}
+      <button onClick={() => handleLockColor(color)}>Lock</button>
+
+      <button
+        onMouseDown={() => { setCliked(true) }}
+        onMouseUp={() => { setCliked(false) }}
+        {...listeners}
+      >
+        Move
+      </button>
     </div>
   )
 }

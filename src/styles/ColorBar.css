@@ -1,0 +1,23 @@
+.Color-Bar {
+  width: 100%;
+  flex: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.color-button {
+  background-color: transparent;
+  color: black;
+  font-size: 24px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.color-button:focus {
+  outline: none;
+}

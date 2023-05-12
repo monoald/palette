@@ -1,0 +1,29 @@
+.Table {
+  width: 510px;
+  margin: 20px auto;
+  table-layout: fixed;
+  color: rgb(232, 233, 243);
+  letter-spacing: 0.8px;
+}
+.Table th,
+.Table td {
+  width: 170px;
+  max-width: 140px;
+}
+.Table th {
+  padding: 14px;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+.Table td {
+  padding: 8px;
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.Table .icon-check,
+.Table .icon-x {
+  margin-right: 10px;
+  font-size: 2.4rem;
+  vertical-align: middle;
+}

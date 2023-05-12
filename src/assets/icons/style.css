@@ -31,3 +31,14 @@
 .icon-move:before {
   content: "\e902";
 }
+.icon-contrast:before {
+  content: "\e903";
+}
+.icon-check:before {
+  content: "\e904";
+  color: #45cb85;
+}
+.icon-x:before {
+  content: "\e905";
+  color: #c1292e;
+}

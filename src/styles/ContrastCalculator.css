@@ -1,0 +1,47 @@
+.Contrast-Calculator {
+  display: grid;
+  grid-template-areas: 
+  "buttons"
+  "wcag-info"
+  "close-button"
+  ;
+  grid-template-rows: 33px 1fr;
+  width: 600px;
+  max-width: 600px;
+  height: auto;
+  border: none;
+  border-radius: 18px;
+  padding: 20px;
+  margin: 0 auto;
+  background: rgb(26, 27, 37);
+  letter-spacing: 0.7px;
+}
+.buttons-container {
+  grid-area: buttons;
+  display: flex;
+  position: relative;
+}
+.color-button {
+  width: 50%;
+  height: 33px;
+  border-radius: 0;
+  font-size: 1.65rem;
+}
+.color-button--primary {
+  border-top-left-radius: 12px;
+}
+.color-button--secondary {
+  border-top-right-radius: 12px;
+}
+.wcag-info {
+  grid-area: wcag-info;
+}
+.contrast-container {
+  margin-top: 20px;
+  font-size: 1.6rem;
+  font-weight: 300;
+
+}
+.contrast-container b {
+  font-weight: 500;
+}

@@ -1,0 +1,15 @@
+.Modal {
+  position: absolute;
+  display: grid;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.close-button {
+  width: 80px;
+  margin: 0 auto;
+  background-color: rgb(193, 41, 46);
+  color: rgb(26, 27, 37);
+  font-size: 1.2rem;
+  border: none;
+}

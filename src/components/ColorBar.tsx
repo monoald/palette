@@ -4,9 +4,10 @@ import { useSortable } from '@dnd-kit/sortable'
 import '../styles/ColorBar.css'
 
 interface Color {
-  id: string
+  color: string
   isLocked: boolean
   contrastColor: string
+  id: number
 }
 interface ColorBarProps {
   color: Color
@@ -18,7 +19,8 @@ interface ColorBarProps {
 
 interface ContrastColor {
   color: string
-  primaryColorContrast: string
+  primaryColorContrast: string,
+  id: number
 }
 
 export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurrentColor }: ColorBarProps) => {
@@ -29,6 +31,7 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurren
     transform,
   } = useSortable({ id: color.id })
 
+  // const []
   const [cliked, setCliked] = useState<boolean>(false)
   const [isHovering, setIsHovering] = useState<boolean>(false)
 
@@ -39,8 +42,8 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurren
   function handleLockColor(item: string) {
 
     const newColors = colors.map((clr) => {
-      if (clr.id === item) {
-        return { id: clr.id, isLocked: !clr.isLocked, contrastColor: clr.contrastColor }
+      if (clr.color === item) {
+        return { color: clr.color, isLocked: !clr.isLocked, contrastColor: clr.contrastColor, id: clr.id }
       }
       return clr
     })
@@ -54,8 +57,9 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurren
   function handleContrast() {
     setModalContrast(modal => !modal)
     setCurrentColor({
-      color: color.id,
-      primaryColorContrast: color.contrastColor
+      color: color.color,
+      primaryColorContrast: color.contrastColor,
+      id: color.id
     })
   }
 
@@ -66,20 +70,20 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurren
       {...attributes}
       style={{
         ...style,
-        'background': color.id,
+        'background': color.color,
         'zIndex': cliked ? 1 : 0,
         'color': color.contrastColor
       }}
       onMouseEnter={() => setIsHovering(!isHovering)}
       onMouseLeave={() => setIsHovering(!isHovering)}
     >
-      {color.id}
+      {color.color}
       {isHovering &&
         <>
           <button
             className='color-button'
             style={buttonColor}
-            onMouseDown={() => handleLockColor(color.id)}
+            onMouseDown={() => handleLockColor(color.color)}
           >
             {color.isLocked
               ? <span className='icon-lock-close'></span>

@@ -5,10 +5,11 @@
   "wcag-info"
   "close-button"
   ;
+  align-self: center;
   grid-template-rows: 33px 1fr;
   width: 600px;
   max-width: 600px;
-  height: auto;
+  height: 360px;
   border: none;
   border-radius: 18px;
   padding: 20px;

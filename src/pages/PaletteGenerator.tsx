@@ -1,24 +1,26 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core"
 import { arrayMove, SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable"
-import { hexToRgb } from '../lib'
 import { makeColorPalette } from '../lib/palette'
-import { rateContrast } from '../lib/rate/rateContrast'
 import { useKeyDown } from '../hooks/useKeyDown'
 import { ColorBar } from '../components/ColorBar'
 import { ContrastCalculator } from '../components/ContrastCalculator'
 import '../assets/icons/style.css'
 import '../styles/PaletteGenerator.css'
+import { getMainContrastColor } from '../utils/getMainContrastColor'
 
 interface Color {
-  id: string
+  color: string
   isLocked: boolean
   contrastColor: string
+  id: number
 }
 
 interface ContrastColor {
   color: string
   primaryColorContrast: string
+  id: number
 }
 
 export const PaletteGenerator = () => {
@@ -26,7 +28,8 @@ export const PaletteGenerator = () => {
   const [modalContrast, setModalContrast] = useState<boolean>(false)
   const [currentColor, setCurrentColor] = useState<ContrastColor>({
     color: '',
-    primaryColorContrast: ''
+    primaryColorContrast: '',
+    id: 0
   })
 
   function changeColorPalette() {
@@ -37,15 +40,12 @@ export const PaletteGenerator = () => {
       quantity: 5
     }) as string[]
 
-    const newObject = newColors.map(color => {
-      const rgb = hexToRgb(color)
-
-      const whiteContrast = rateContrast([{ r: 255, g: 255, b: 255}, rgb ])
-      const blackContrast = rateContrast([{ r: 0, g: 0, b: 0}, rgb ])
+    const newObject = newColors.map((color, index) => {
       return {
-        id: color,
+        color: color,
         isLocked: false,
-        contrastColor: whiteContrast.contrastValue > blackContrast.contrastValue ? '#ffffff' : '#000000'
+        contrastColor: getMainContrastColor(color),
+        id: index
       }
     })
 
@@ -65,13 +65,31 @@ export const PaletteGenerator = () => {
 
   useEffect(() => {
     changeColorPalette()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  
-  
+
   useKeyDown(() => {
     changeColorPalette()
   }, ['Space'])
+
+  useEffect(() => {
+    const newColor = colors.findIndex(color => color.color === currentColor.color)
+    
+    if (currentColor !== null && newColor == -1 && colors.length !== 0) {
+      const updatedColors = colors.map((clr) => {
+        if (clr.id === currentColor.id) {
+          return {
+            color: currentColor.color,
+            isLocked: clr.isLocked,
+            contrastColor: getMainContrastColor(currentColor.color),
+            id: clr.id
+          }
+        }
+        return clr
+      })
+      setColors(updatedColors)
+    }
+  }, [currentColor])
+  
 
   function handleDragEnd(event: DragEndEvent) {
     const {active, over} = event
@@ -80,8 +98,8 @@ export const PaletteGenerator = () => {
 
     if(dragged !== target) {
       setColors((colores) => {
-        const activeIndex = colores.findIndex(item  => item.id === dragged)
-        const overIndex = colores.findIndex(item  => item.id === target)
+        const activeIndex = colores.findIndex(item  => item.color === dragged)
+        const overIndex = colores.findIndex(item  => item.color === target)
 
         return arrayMove(colores, activeIndex, overIndex)
       })
@@ -111,7 +129,9 @@ export const PaletteGenerator = () => {
         { modalContrast &&
           <ContrastCalculator
             color={currentColor}
+            setColor={setCurrentColor}
             setModalContrast={setModalContrast}
+            colorsLength={colors.length}
           />
         }
       </main>

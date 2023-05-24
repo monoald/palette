@@ -55,7 +55,7 @@ export const PaletteGenerator = () => {
       quantity: 5
     }) as string[]
 
-    const newObject = newColors.map((color, index): Color => {
+    const newObject = newColors.map((color): Color => {
       const formats = colorFormatConverter(color, {
         currentFormat: 'hex',
         AllFormats: true,
@@ -64,7 +64,7 @@ export const PaletteGenerator = () => {
         color: color,
         isLocked: false,
         contrastColor: getMainContrastColor(color),
-        id: index,
+        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
         formats: {
           cmyk: formats.cmyk as Cmyk,
           hsb: formats.hsv as Hsv,

@@ -11,10 +11,11 @@ import { getMainContrastColor } from '../../utils/getMainContrastColor';
 import '../../styles/ColorPicker.css'
 import { Canvas } from './Canvas';
 import { Color } from '../../pages/PaletteGenerator';
+import { CloseModalButton } from '../CloseModalButton';
 
 
 interface ColorPickerProps {
-  setOpenColorPicker: React.Dispatch<React.SetStateAction<boolean>>
+  setModalColorPicker: React.Dispatch<React.SetStateAction<boolean>>
   color: Color
   setColor: React.Dispatch<React.SetStateAction<Color>>
 }
@@ -27,7 +28,7 @@ interface Coordinates {
 
 const formatSelectData = ['HEXADECIMAL', 'CMYK', 'HSB', 'HSL', 'LAB', 'RGB', 'XYZ']
 
-export const ColorPicker = ({ setOpenColorPicker, color, setColor }: ColorPickerProps) => {
+export const ColorPicker = ({ setModalColorPicker, color, setColor }: ColorPickerProps) => {
   const [pickerFormat, setPickerFormat] = useState('HEXADECIMAL');
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null)
   const [moveThumb, setMoveThumb] = useState(true)
@@ -77,7 +78,7 @@ export const ColorPicker = ({ setOpenColorPicker, color, setColor }: ColorPicker
   }
 
   return (
-    <Modal setModal={setOpenColorPicker} backgroundOpacity={0}>
+    <Modal setModal={setModalColorPicker} backgroundOpacity={0}>
         <dialog
           open
           className='Color-Picker'
@@ -130,6 +131,7 @@ export const ColorPicker = ({ setOpenColorPicker, color, setColor }: ColorPicker
               }
             </PickerContainer>
           </div>
+          <CloseModalButton setModal={setModalColorPicker} />
         </dialog>
     </Modal>
   );

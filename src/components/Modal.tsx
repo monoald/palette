@@ -8,28 +8,12 @@ interface ModalProps {
 }
 
 export const Modal = ({ setModal, backgroundOpacity, children }: ModalProps) => {
-  function switchState() {
-    setModal(modal => !modal )
-  }
   function closeModal(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const target = event.target as HTMLElement
     if (target.id === 'modal') {
-      switchState()
+      setModal(modal => !modal )
     }
   }
-
-  const CloseModalButton = () => {
-    return (
-      <button
-        className='close-button'
-        onClick={() => switchState()}
-      >
-        CLOSE
-      </button>
-    )
-  }
-
-
   return (
     <div
       className='Modal'
@@ -39,7 +23,7 @@ export const Modal = ({ setModal, backgroundOpacity, children }: ModalProps) => 
         'backgroundColor': `rgba(0, 0, 0, ${backgroundOpacity})`
       }}
     >
-      {React.cloneElement(children, { CloseModalButton })}
+      {children}
     </div>
   )
 }

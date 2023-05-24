@@ -8,16 +8,17 @@ import { ColorPicker } from './colorPicker/ColorPicker'
 import '../styles/ContrastCalculator.css'
 import { getMainContrastColor } from '../utils/getMainContrastColor'
 import { Color } from '../pages/PaletteGenerator'
+import { CloseModalButton } from './CloseModalButton'
 
 interface ContrastCalculatorProps {
   color: Color
   setColor: React.Dispatch<React.SetStateAction<Color>>
-  CloseModalButton?: React.ElementType
+  // CloseModalButton?: React.ElementType
   setModalContrast: React.Dispatch<React.SetStateAction<boolean>>
   colorsLength: number
 }
 
-export const ContrastCalculator = ({ color, setColor, CloseModalButton, setModalContrast, colorsLength }: ContrastCalculatorProps) => {
+export const ContrastCalculator = ({ color, setColor, setModalContrast, colorsLength }: ContrastCalculatorProps) => {
   const [openColorPicker, setOpenColorPicker] = useState<boolean>(false)
   const [secondaryColor, setSecondaryColor] = useState<Color>({
     color: color.contrastColor,
@@ -101,14 +102,13 @@ export const ContrastCalculator = ({ color, setColor, CloseModalButton, setModal
             </div>
             <ContrastTable contrast={contrast} />
           </div>
-          {CloseModalButton &&
-            <CloseModalButton />
-          }
+
+          <CloseModalButton setModal={setModalContrast} />
         </div>
       </Modal>
       { openColorPicker &&
           <ColorPicker
-            setOpenColorPicker={setOpenColorPicker}
+            setModalColorPicker={setOpenColorPicker}
             color={updatedColor === 'primary' ? color : secondaryColor}
             setColor={updatedColor === 'primary' ? setColor : setSecondaryColor}
           />

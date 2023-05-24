@@ -27,7 +27,7 @@ export const Select = ({ options, value, setValue, configuration }: SelectProps)
   }
 
   return (
-    <>
+    <div className='Select'>
       <button
         className='toggle-button'
         onClick={handleOpenSelect}
@@ -52,10 +52,10 @@ export const Select = ({ options, value, setValue, configuration }: SelectProps)
       {isOpen &&
         <div className='options-box' onClick={handleSelect} style={{ zIndex: 1 }}>
           {options.map(option => (
-            <button className='option' value={option}>{option}</button>
+            <button key={option} className='option' value={option}>{option}</button>
           ))}
         </div>
       }
-    </>
+    </div>
   )
 }

@@ -42,3 +42,6 @@
   content: "\e905";
   color: #c1292e;
 }
+.icon-arrow-down:before {
+  content: "\e906";
+}

@@ -1,0 +1,33 @@
+.range-input {
+  width: 240px;
+  height: 11px;
+  border: none;
+  border-radius: 10px;
+  appearance: none;
+}
+
+.range-input::-webkit-slider-thumb {
+  position: relative;
+  -webkit-appearance: none;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url('../assets/icons/pickerThumb.svg');
+  cursor: grab;
+  background-color: var(--thumb-background);
+}
+
+.range-input::-webkit-slider-thumb:active {
+  cursor: grabbing;
+}
+
+.hue-input {
+  background: -webkit-linear-gradient(left, hsl(0, 100%, 50%), hsl(60, 100%, 50%), hsl(120, 100%, 50%), hsl(180, 100%, 50%), hsl(240, 100%, 50%), hsl(300, 100%, 50%), hsl(360, 100%, 50%));
+}
+
+.color-input {
+  background: var(--background-color);
+}

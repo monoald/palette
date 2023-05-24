@@ -2,25 +2,14 @@ import React, { useState } from 'react'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import '../styles/ColorBar.css'
+import { Color } from '../pages/PaletteGenerator'
 
-interface Color {
-  color: string
-  isLocked: boolean
-  contrastColor: string
-  id: number
-}
 interface ColorBarProps {
   color: Color
   colors: Color[]
   setColors: React.Dispatch<React.SetStateAction<Color[]>>
   setModalContrast: React.Dispatch<React.SetStateAction<boolean>>
-  setCurrentColor: React.Dispatch<React.SetStateAction<ContrastColor>>
-}
-
-interface ContrastColor {
-  color: string
-  primaryColorContrast: string,
-  id: number
+  setCurrentColor: React.Dispatch<React.SetStateAction<Color>>
 }
 
 export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurrentColor }: ColorBarProps) => {
@@ -31,7 +20,6 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurren
     transform,
   } = useSortable({ id: color.id })
 
-  // const []
   const [cliked, setCliked] = useState<boolean>(false)
   const [isHovering, setIsHovering] = useState<boolean>(false)
 
@@ -41,9 +29,15 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurren
   
   function handleLockColor(item: string) {
 
-    const newColors = colors.map((clr) => {
+    const newColors = colors.map((clr): Color => {
       if (clr.color === item) {
-        return { color: clr.color, isLocked: !clr.isLocked, contrastColor: clr.contrastColor, id: clr.id }
+        return {
+          color: clr.color,
+          isLocked: !clr.isLocked,
+          contrastColor: clr.contrastColor,
+          id: clr.id,
+          formats: clr.formats
+        }
       }
       return clr
     })
@@ -56,11 +50,7 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurren
 
   function handleContrast() {
     setModalContrast(modal => !modal)
-    setCurrentColor({
-      color: color.color,
-      primaryColorContrast: color.contrastColor,
-      id: color.id
-    })
+    setCurrentColor(color)
   }
 
   return (

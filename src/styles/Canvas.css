@@ -1,0 +1,32 @@
+.canvas-container {
+  position: relative;
+  width: 239px;
+  height: 240px;
+}
+.color-canvas {
+  border-radius: 12px;
+  overflow: hidden;
+}
+.thumb {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgb(26, 27, 37);
+  cursor: grab;
+  border: 1px solid rgba(232, 233, 243, 0.4);
+}
+
+.thumb:active {
+  cursor: grabbing;
+}
+
+.thumb-center {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 233, 243, 0.4);
+}

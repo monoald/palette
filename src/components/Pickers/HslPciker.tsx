@@ -1,0 +1,80 @@
+import React from "react"
+import { BackgroundColor, ColorInput } from "./StyledRangeInputs"
+import { AnyFormat, Hsl } from "../../lib/types"
+import { colorFormatConverter } from "../../lib"
+import { Color } from "../../pages/PaletteGenerator"
+
+interface HslPickerProps {
+  color?: Color
+  updateColor?: (color: AnyFormat, format: string, moveThumb: boolean) => void
+}
+
+export const HslPicker = ({ color, updateColor }: HslPickerProps) => {
+  const hsl = color?.formats.hsl as Hsl
+  const hex = colorFormatConverter(hsl, { currentFormat: 'hsl', targetFormat: ['hex']}).hex as string
+
+  const saturationBackground: BackgroundColor = {
+    start: colorFormatConverter(
+      { h: hsl.h, s: 0, l: hsl.l },
+      { currentFormat: 'hsl', targetFormat: ['hex'] }
+    ).hex as string,
+    end: colorFormatConverter(
+      { h: hsl.h, s: 100, l: hsl.l },
+      { currentFormat: 'hsl', targetFormat: ['hex'] }
+    ).hex as string
+  }
+
+  const lightnessBackground: BackgroundColor = {
+    start: colorFormatConverter(
+      { h: hsl.h, s: hsl.s, l: 0 },
+      { currentFormat: 'hsl', targetFormat: ['hex'] }
+    ).hex as string,
+    end: colorFormatConverter(
+      { h: hsl.h, s: hsl.s, l: 50 },
+      { currentFormat: 'hsl', targetFormat: ['hex'] }
+    ).hex as string
+  }
+
+  function handleHslChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if (updateColor) {
+      const target = event.target as HTMLInputElement
+
+      const hueValue = target.id === 'hue' ? +target.value : hsl.h
+      const saturationValue = target.id === 'saturation' ? +target.value : hsl.s
+      const lightnessValue = target.id === 'lightness' ? +target.value : hsl.l
+
+      updateColor({ h: hueValue, s: saturationValue, l: lightnessValue }, 'hsl', true)
+    }
+  }
+
+  return (
+    <>
+      <ColorInput
+        id="hue"
+        min={0}
+        max={360}
+        value={hsl.h as number}
+        onChange={handleHslChange}
+        isHue
+      />
+      <ColorInput
+        id="saturation"
+        min={0}
+        max={100}
+        value={hsl.s}
+        onChange={handleHslChange}
+        thumbColor={hex}
+        backgroundColor={`${saturationBackground.start}, ${saturationBackground.end}`}
+      />
+      <ColorInput
+        id="lightness"
+        min={0}
+        max={100}
+        value={hsl.l}
+        onChange={handleHslChange}
+        thumbColor={hex}
+        backgroundColor={`${lightnessBackground.start}, ${lightnessBackground.end}, #fff`}
+      />
+    </>
+  )
+}

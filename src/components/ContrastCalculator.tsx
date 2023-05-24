@@ -4,34 +4,29 @@ import { WCAGRequierements, rateContrast } from '../lib/rate/rateContrast'
 import { hexToRgb } from '../lib'
 import { ContrastTable } from './ContrastTable'
 import { Modal } from './Modal'
-import { ColorPicker } from './ColorPicker'
+import { ColorPicker } from './colorPicker/ColorPicker'
 import '../styles/ContrastCalculator.css'
-import { getBaseColor } from '../lib/utils/getBaseColor'
-import { Hsl } from '../lib/types'
 import { getMainContrastColor } from '../utils/getMainContrastColor'
+import { Color } from '../pages/PaletteGenerator'
 
 interface ContrastCalculatorProps {
-  color: ContrastColor
-  setColor: React.Dispatch<React.SetStateAction<ContrastColor>>
+  color: Color
+  setColor: React.Dispatch<React.SetStateAction<Color>>
   CloseModalButton?: React.ElementType
   setModalContrast: React.Dispatch<React.SetStateAction<boolean>>
   colorsLength: number
 }
 
-interface ContrastColor {
-  color: string
-  primaryColorContrast: string,
-  id: number
-}
-
-
 export const ContrastCalculator = ({ color, setColor, CloseModalButton, setModalContrast, colorsLength }: ContrastCalculatorProps) => {
   const [openColorPicker, setOpenColorPicker] = useState<boolean>(false)
-  const [secondaryColor, setSecondaryColor] = useState<ContrastColor>({
-    color: color.primaryColorContrast,
-    primaryColorContrast: getMainContrastColor(color.primaryColorContrast),
-    id: colorsLength
+  const [secondaryColor, setSecondaryColor] = useState<Color>({
+    color: color.contrastColor,
+    isLocked: false,
+    contrastColor: getMainContrastColor(color.contrastColor),
+    id: colorsLength,
+    formats: color.formats
   })
+
   const [updatedColor, setUpdatedColor] = useState<string>('')
   const [contrast, setContrast] = useState<WCAGRequierements>({
     contrastValue: 0,
@@ -68,11 +63,6 @@ export const ContrastCalculator = ({ color, setColor, CloseModalButton, setModal
     setUpdatedColor(newColor)
   }
 
-  function getBaseHue(colorHex: string) {
-    const hue = getBaseColor(colorHex, { targetFormat: 'hsl' }) as Hsl
-    return hue.h
-  }
-
   return (
     <>
       <Modal setModal={setModalContrast} backgroundOpacity={0.4}>
@@ -82,7 +72,7 @@ export const ContrastCalculator = ({ color, setColor, CloseModalButton, setModal
               className='color-button color-button--primary'
               style={{
                 backgroundColor: color.color,
-                color: color.primaryColorContrast === '#000000' ? '#1A1B25' :   '#fff',
+                color: color.contrastColor === '#000000' ? '#1A1B25' :   '#fff',
                 border: color.color === '#1a1b25' ? '1px solid rgba(200, 200, 200, 0.3)' : 'none'
               }}
               onClick={() => handleColorPicker('primary')}
@@ -94,7 +84,7 @@ export const ContrastCalculator = ({ color, setColor, CloseModalButton, setModal
               className='color-button color-button--secondary'
               style={{
                 backgroundColor: secondaryColor.color,
-                color: secondaryColor.primaryColorContrast  === '#000000' ? '#1A1B25' :   '#fff',
+                color: secondaryColor.contrastColor  === '#000000' ? '#1A1B25' :   '#fff',
                 border: secondaryColor.color === '#1a1b25' ? '1px solid rgba(200, 200, 200, 0.3)' : 'none'
               }}
               onClick={() => handleColorPicker('secondary')}
@@ -119,9 +109,8 @@ export const ContrastCalculator = ({ color, setColor, CloseModalButton, setModal
       { openColorPicker &&
           <ColorPicker
             setOpenColorPicker={setOpenColorPicker}
-            color={updatedColor === 'primary' ? color.color : secondaryColor.color}
+            color={updatedColor === 'primary' ? color : secondaryColor}
             setColor={updatedColor === 'primary' ? setColor : setSecondaryColor}
-            hue={updatedColor === 'primary' ? getBaseHue(color.color) : getBaseHue(color.primaryColorContrast)}
           />
       }
     </>

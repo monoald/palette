@@ -13,12 +13,12 @@ import { CloseModalButton } from './CloseModalButton'
 interface ContrastCalculatorProps {
   color: Color
   setColor: React.Dispatch<React.SetStateAction<Color>>
-  // CloseModalButton?: React.ElementType
   setModalContrast: React.Dispatch<React.SetStateAction<boolean>>
   colorsLength: number
+  addColor: (existingColor: string, newColor: string, side: string) => void
 }
 
-export const ContrastCalculator = ({ color, setColor, setModalContrast, colorsLength }: ContrastCalculatorProps) => {
+export const ContrastCalculator = ({ color, setColor, setModalContrast, colorsLength, addColor }: ContrastCalculatorProps) => {
   const [openColorPicker, setOpenColorPicker] = useState<boolean>(false)
   const [secondaryColor, setSecondaryColor] = useState<Color>({
     color: color.contrastColor,
@@ -81,17 +81,28 @@ export const ContrastCalculator = ({ color, setColor, setModalContrast, colorsLe
               {color.color}
             </button>
 
-            <button
+            <div
               className='color-button color-button--secondary'
               style={{
                 backgroundColor: secondaryColor.color,
                 color: secondaryColor.contrastColor  === '#000000' ? '#1A1B25' :   '#fff',
                 border: secondaryColor.color === '#1a1b25' ? '1px solid rgba(200, 200, 200, 0.3)' : 'none'
               }}
-              onClick={() => handleColorPicker('secondary')}
-            >
+              >
+              <button
+                className='secondary-color'
+                onClick={() => handleColorPicker('secondary')}
+              >
               {secondaryColor.color}
-            </button>
+              </button>
+
+              <button
+                className='secondary-add'
+                onClick={() => addColor(color.color, secondaryColor.color, 'right')}
+              >
+                <span className='icon-plus'></span>
+              </button>
+            </div>
           </div>
 
           <div className='wcag-info'>

@@ -45,3 +45,6 @@
 .icon-arrow-down:before {
   content: "\e906";
 }
+.icon-plus:before {
+  content: "\e907";
+}

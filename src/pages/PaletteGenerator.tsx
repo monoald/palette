@@ -47,55 +47,12 @@ export const PaletteGenerator = () => {
     }
   })
 
-  function changeColorPalette() {
-    const newColors = makeColorPalette({
-      randomColor: true,
-      format: "hex",
-      paletteType: 'monochromatic',
-      quantity: 5
-    }) as string[]
-
-    const newObject = newColors.map((color): Color => {
-      const formats = colorFormatConverter(color, {
-        currentFormat: 'hex',
-        AllFormats: true,
-      })
-      return {
-        color: color,
-        isLocked: false,
-        contrastColor: getMainContrastColor(color),
-        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
-        formats: {
-          cmyk: formats.cmyk as Cmyk,
-          hsb: formats.hsv as Hsv,
-          hsl: formats.hsl as Hsl,
-          lab: formats.lab as Lab,
-          rgb: formats.rgb as Rgb,
-          xyz: formats.xyz as Xyz,
-        }
-      }
-    })
-
-    // Keep locked colors
-    const lockedIndex: number[] = []
-
-    colors.forEach((color, index) => {
-      if (color.isLocked === true) lockedIndex.push(index)
-    })
-
-    lockedIndex.forEach(color => {
-      newObject.splice(color, 1, colors[color])
-    })
-
-    setColors(newObject)
-  }
-
   useEffect(() => {
-    changeColorPalette()
+    changeColorPalette(true)
   }, [])
 
   useKeyDown(() => {
-    changeColorPalette()
+    changeColorPalette(false)
   }, ['Space'])
 
   // Update color
@@ -119,7 +76,54 @@ export const PaletteGenerator = () => {
       setColors(updatedColors)
     }
   }, [currentColor])
-  
+
+  function changeColorPalette(firstRender: boolean) {
+    const newColors = makeColorPalette({
+      randomColor: true,
+      format: "hex",
+      paletteType: 'analogous',
+      quantity: firstRender ? 5 : colors.length
+    }) as string[]
+
+    const newObject = newColors.map((color): Color => {
+      return createNewColor(color)
+    })
+
+    // Keep locked colors
+    const lockedIndex: number[] = []
+
+    colors.forEach((color, index) => {
+      if (color.isLocked === true) lockedIndex.push(index)
+    })
+
+    lockedIndex.forEach(color => {
+      newObject.splice(color, 1, colors[color])
+    })
+
+    setColors(newObject)
+  }
+
+  function createNewColor(color: string) {
+    const formats = colorFormatConverter(color, {
+      currentFormat: 'hex',
+      AllFormats: true,
+    })
+
+    return {
+      color: color,
+      isLocked: false,
+      contrastColor: getMainContrastColor(color),
+      id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+      formats: {
+        cmyk: formats.cmyk as Cmyk,
+        hsb: formats.hsv as Hsv,
+        hsl: formats.hsl as Hsl,
+        lab: formats.lab as Lab,
+        rgb: formats.rgb as Rgb,
+        xyz: formats.xyz as Xyz,
+      }
+    }
+  }
 
   function handleDragEnd(event: DragEndEvent) {
     const {active, over} = event
@@ -134,6 +138,38 @@ export const PaletteGenerator = () => {
       })
     }
   }
+
+  function addColor(existingColor: string, newColor: string, side: string) {
+    const mainColorIndex = colors.findIndex(clr => clr.color === existingColor)
+
+    const newObjectColor = createNewColor(newColor)
+    const newColorIndex = side === 'right' ? mainColorIndex + 1 : mainColorIndex
+    
+    const newColors = Array.from(colors)
+    newColors.splice(newColorIndex, 0, newObjectColor)
+
+    setColors(newColors)
+  }
+
+  // function addNewColor(color: string, side: string) {
+  //   // const mainColorIndex = colors.findIndex(clr => clr.color === color)
+  //   // const secondaryColorIndex = side === 'left' ? mainColorIndex - 1 : mainColorIndex + 1
+    
+  //   const color1 = colors[mainColorIndex].formats.rgb
+  //   const color2 = colors[secondaryColorIndex].formats.rgb
+    
+  //   const newColorRgb = combineColors(color1, color2)
+  //   const newColorHex = rgbToHex(newColorRgb)
+  //   // const newColor = createNewColor(newColorHex)
+  //   // const newColorIndex = side === 'right' ? secondaryColorIndex : mainColorIndex
+    
+  //   // const newColors = Array.from(colors)
+  //   // newColors.splice(newColorIndex, 0, newColor)
+
+  //   // setColors(newColors)
+  // }
+  // console.log(colors);
+  
 
   return (
     <DndContext
@@ -152,6 +188,7 @@ export const PaletteGenerator = () => {
               setColors={setColors}
               setModalContrast={setModalContrast}
               setCurrentColor={setCurrentColor}
+              addColor={addColor}
             />
           ))} 
         </SortableContext>
@@ -161,6 +198,7 @@ export const PaletteGenerator = () => {
             setColor={setCurrentColor}
             setModalContrast={setModalContrast}
             colorsLength={colors.length}
+            addColor={addColor}
           />
         }
       </main>

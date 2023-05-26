@@ -40,7 +40,7 @@ export const ContrastTable = ({ contrast }: ContrastTableProps) => {
 const Passed = () => {
   return (
     <td>
-      <span className='icon-check'></span>
+      <span className='icon icon-rounded-check'></span>
       Pass
     </td>
   )
@@ -49,7 +49,7 @@ const Passed = () => {
 const Failed = () => {
   return (
     <td>
-      <span className='icon-x'></span>
+      <span className='icon icon-rounded-x'></span>
       Fail
     </td>
   )

@@ -14,17 +14,16 @@ interface ContrastCalculatorProps {
   color: Color
   setColor: React.Dispatch<React.SetStateAction<Color>>
   setModalContrast: React.Dispatch<React.SetStateAction<boolean>>
-  colorsLength: number
   addColor: (existingColor: string, newColor: string, side: string) => void
 }
 
-export const ContrastCalculator = ({ color, setColor, setModalContrast, colorsLength, addColor }: ContrastCalculatorProps) => {
+export const ContrastCalculator = ({ color, setColor, setModalContrast, addColor }: ContrastCalculatorProps) => {
   const [openColorPicker, setOpenColorPicker] = useState<boolean>(false)
   const [secondaryColor, setSecondaryColor] = useState<Color>({
     color: color.contrastColor,
     isLocked: false,
     contrastColor: getMainContrastColor(color.contrastColor),
-    id: colorsLength,
+    id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1  ,
     formats: color.formats
   })
 

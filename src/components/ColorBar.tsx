@@ -11,11 +11,12 @@ interface ColorBarProps {
   colors: Color[]
   setColors: React.Dispatch<React.SetStateAction<Color[]>>
   setModalContrast: React.Dispatch<React.SetStateAction<boolean>>
+  setModalPicker: React.Dispatch<React.SetStateAction<boolean>>
   setCurrentColor: React.Dispatch<React.SetStateAction<Color>>
   addColor: (existingColor: string, newColor: string, side: string) => void
 }
 
-export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurrentColor, addColor }: ColorBarProps) => {
+export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalPicker, setCurrentColor, addColor }: ColorBarProps) => {
   const {
     attributes,
     listeners,
@@ -46,10 +47,6 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurren
       return clr
     })
     setColors(newColors)
-  }
-
-  const buttonColor = {
-    'color': color.contrastColor
   }
 
   function handleContrast() {
@@ -96,6 +93,20 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurren
       addColor(color, newColorHex, side)
     }
 
+  function handleRemoveColor(id: number) {
+    const newColors = Array.from(colors)
+
+    const colorIndex = newColors.findIndex(color => color.id === id)
+    newColors.splice(colorIndex, 1)
+
+    setColors(newColors)
+  }
+
+  function handleOpenPicker() {
+    setCurrentColor(color)
+    setModalPicker(modal => !modal)
+  }
+
   return (
     <div
       className='Color-Bar'
@@ -123,37 +134,64 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setCurren
         }}
         onClick={() => handleAddColor(color.color, hoverSide)}
       >
-        <span className='icon-plus'></span>
+        <span className='icon-plus' />
       </button>
+
       {isHovering &&
         <>
           <button
             className='color-button'
-            style={buttonColor}
+            style={{
+              'color': color.contrastColor
+            }}
+            onMouseDown={() => handleRemoveColor(color.id)}
+          >
+            <span className='icon-x' />
+          </button>
+
+          <button
+            className='color-button'
+            style={{
+              'color': color.contrastColor
+            }}
             onMouseDown={() => handleLockColor(color.color)}
           >
             {color.isLocked
-              ? <span className='icon-lock-close'></span>
-              : <span className='icon-lock-open'></span>
+              ? <span className='icon-lock-close' />
+              : <span className='icon-lock-open' />
             }
           </button>
 
           <button
             className='color-button'
-            style={buttonColor}
+            style={{
+            'color': color.contrastColor
+            }}
             onMouseDown={() => { setCliked(true) }}
             onMouseUp={() => { setCliked(false) }}
             {...listeners}
           >
-            <span className='icon-move'></span>
+            <span className='icon-move' />
           </button>
 
           <button
             className='color-button'
-            style={buttonColor}
+            style={{
+            'color': color.contrastColor
+            }}
             onMouseDown={() => handleContrast()}
           >
-            <span className='icon-contrast'></span>
+            <span className='icon-contrast' />
+          </button>
+
+          <button
+            className='color-button'
+            style={{
+              'color': color.contrastColor
+            }}
+            onMouseDown={() => handleOpenPicker()}
+          >
+            <span className='icon-eye-dropper' />
           </button>
         </>
       }

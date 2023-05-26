@@ -34,11 +34,11 @@
 .icon-contrast:before {
   content: "\e903";
 }
-.icon-check:before {
+.icon-rounded-check:before {
   content: "\e904";
   color: #45cb85;
 }
-.icon-x:before {
+.icon-rounded-x:before {
   content: "\e905";
   color: #c1292e;
 }
@@ -50,4 +50,10 @@
 }
 .icon-warning:before {
   content: "\e908";
+}
+.icon-x:before {
+  content: "\e909";
+}
+.icon-eye-dropper:before {
+  content: "\e90a";
 }

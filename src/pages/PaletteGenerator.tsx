@@ -11,6 +11,7 @@ import '../styles/PaletteGenerator.css'
 import { getMainContrastColor } from '../utils/getMainContrastColor'
 import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from '../lib/types'
 import { colorFormatConverter } from '../lib'
+import { ColorPicker } from '../components/colorPicker/ColorPicker'
 
 export interface Color {
   color: string
@@ -32,6 +33,7 @@ interface Formats {
 export const PaletteGenerator = () => {
   const [colors, setColors] = useState<Color[]>([])
   const [modalContrast, setModalContrast] = useState<boolean>(false)
+  const [modalPicker, setModalPicker] = useState<boolean>(false)
   const [currentColor, setCurrentColor] = useState<Color>({
     color: '',
     isLocked: false,
@@ -151,26 +153,6 @@ export const PaletteGenerator = () => {
     setColors(newColors)
   }
 
-  // function addNewColor(color: string, side: string) {
-  //   // const mainColorIndex = colors.findIndex(clr => clr.color === color)
-  //   // const secondaryColorIndex = side === 'left' ? mainColorIndex - 1 : mainColorIndex + 1
-    
-  //   const color1 = colors[mainColorIndex].formats.rgb
-  //   const color2 = colors[secondaryColorIndex].formats.rgb
-    
-  //   const newColorRgb = combineColors(color1, color2)
-  //   const newColorHex = rgbToHex(newColorRgb)
-  //   // const newColor = createNewColor(newColorHex)
-  //   // const newColorIndex = side === 'right' ? secondaryColorIndex : mainColorIndex
-    
-  //   // const newColors = Array.from(colors)
-  //   // newColors.splice(newColorIndex, 0, newColor)
-
-  //   // setColors(newColors)
-  // }
-  // console.log(colors);
-  
-
   return (
     <DndContext
       collisionDetection={closestCenter}
@@ -187,6 +169,7 @@ export const PaletteGenerator = () => {
               colors={colors}
               setColors={setColors}
               setModalContrast={setModalContrast}
+              setModalPicker={setModalPicker}
               setCurrentColor={setCurrentColor}
               addColor={addColor}
             />
@@ -197,8 +180,15 @@ export const PaletteGenerator = () => {
             color={currentColor}
             setColor={setCurrentColor}
             setModalContrast={setModalContrast}
-            colorsLength={colors.length}
             addColor={addColor}
+          />
+        }
+        {
+          modalPicker && 
+          <ColorPicker
+          setModalColorPicker={setModalPicker}
+          color={currentColor}
+          setColor={setCurrentColor}
           />
         }
       </main>

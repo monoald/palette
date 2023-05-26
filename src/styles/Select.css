@@ -13,6 +13,19 @@
   top: 100%;
   left: 0;
   width: 100%;
+  height: 200px;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+}
+.options-box::-webkit-scrollbar {
+  width: 12px;
+}
+/* .options-box::-webkit-scrollbar-track {
+  background: #f1f1f1;
+} */
+.options-box::-webkit-scrollbar-thumb {
+  background: rgba(232, 233, 243, 0.4);
+  border-radius: 10px;
+  border: 2px solid rgb(26, 27, 37);
 }

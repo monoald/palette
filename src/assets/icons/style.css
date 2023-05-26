@@ -48,3 +48,6 @@
 .icon-plus:before {
   content: "\e907";
 }
+.icon-warning:before {
+  content: "\e908";
+}

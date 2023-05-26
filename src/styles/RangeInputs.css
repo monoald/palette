@@ -63,3 +63,35 @@
 .text-input__box::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
+
+.readonly-message {
+  position: absolute;
+  top: 50px;
+  font-size: 1.4rem;
+  color: #F9C846;
+  display: flex;
+  gap: 10px;
+}
+.readonly-message .icon {
+  font-size: 2rem;
+}
+.values-container {
+  display: flex;
+  gap: 20px;
+}
+.values-container .element {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.9px;
+  cursor: default;
+}
+.values-container .text-box {
+  max-height: 33px;
+  width: 44px;
+  border-radius: 8px;
+  border: 1px solid rgba(232, 233, 243, 0.4);
+  padding: 5px 0;
+}

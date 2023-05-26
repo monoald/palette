@@ -11,6 +11,9 @@ import { getMainContrastColor } from '../../utils/getMainContrastColor';
 import '../../styles/ColorPicker.css'
 import { Canvas } from './Canvas';
 import { Color } from '../../pages/PaletteGenerator';
+import { CloseModalButton } from '../CloseModalButton';
+import { LabPicker } from '../Pickers/LabPicker';
+import { XyzPicker } from '../Pickers/XyzPicker';
 
 
 interface ColorPickerProps {
@@ -125,14 +128,24 @@ export const ColorPicker = ({ setModalColorPicker, color, setColor }: ColorPicke
                   : <></>
                 }
 
+                { pickerFormat === 'LAB'
+                  ? <LabPicker />
+                  : <></>
+                }
+
                 { pickerFormat === 'RGB'
                   ? <RgbPicker />
                   : <></>
                 }
+
+                { pickerFormat === 'XYZ'
+                  ? <XyzPicker />
+                  : <></>
+                }
               </PickerContainer>
             </div>
+              <CloseModalButton setModal={setModalColorPicker} />
           </div>
-          {/* <CloseModalButton setModal={setModalColorPicker} /> */}
         </dialog>
     </Modal>
   );

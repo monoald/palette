@@ -1,5 +1,5 @@
 .range-input {
-  width: 240px;
+  width: 100%;
   height: 11px;
   border: none;
   border-radius: 10px;
@@ -9,8 +9,8 @@
 .range-input::-webkit-slider-thumb {
   position: relative;
   -webkit-appearance: none;
-  height: 30px;
-  width: 30px;
+  height: 26px;
+  width: 26px;
   border-radius: 50%;
   background-size: contain;
   background-position: center center;
@@ -30,4 +30,36 @@
 
 .color-input {
   background: var(--background-color);
+}
+
+.text-input-container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+.text-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.text-input__label {
+  font-size: 1.2rem;
+  letter-spacing: 1.4px;
+}
+.text-input__box {
+  width: fit-content;
+  max-height: 33px;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  border: 1px solid rgba(232, 233, 243, 0.4);
+  font-size: 1.2rem;
+  text-align: center;
+}
+.text-input__box::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }

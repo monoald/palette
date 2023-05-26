@@ -38,10 +38,11 @@ export const HslPicker = ({ color, updateColor }: HslPickerProps) => {
   function handleHslChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (updateColor) {
       const target = event.target as HTMLInputElement
+      const identifier = target.name || target.id
 
-      const hueValue = target.id === 'hue' ? +target.value : hsl.h
-      const saturationValue = target.id === 'saturation' ? +target.value : hsl.s
-      const lightnessValue = target.id === 'lightness' ? +target.value : hsl.l
+      const hueValue = identifier === 'hue' ? +target.value : hsl.h
+      const saturationValue = identifier === 'saturation' ? +target.value : hsl.s
+      const lightnessValue = identifier === 'lightness' ? +target.value : hsl.l
 
       updateColor({ h: hueValue, s: saturationValue, l: lightnessValue }, 'hsl', true)
     }
@@ -75,6 +76,53 @@ export const HslPicker = ({ color, updateColor }: HslPickerProps) => {
         thumbColor={hex}
         backgroundColor={`${lightnessBackground.start}, ${lightnessBackground.end}, #fff`}
       />
+
+      <div className='text-input-container'>
+        <label className='text-input'>
+          <p className='text-input__label'>
+            H:
+          </p>
+          <input
+            className='text-input__box'
+            name='hue'
+            type="number"
+            min={0}
+            max={100}
+            value={hsl.h}
+            onChange={handleHslChange}
+          />
+        </label>
+
+        <label className='text-input'>
+          <p className='text-input__label'>
+            S:
+          </p>
+          <input
+            className='text-input__box'
+            name='saturation'
+            type="number"
+            min={0}
+            max={100}
+            value={hsl.s}
+            onChange={handleHslChange}
+          />
+        </label>
+
+        <label className='text-input'>
+          <p className='text-input__label'>
+            L:
+          </p>
+          <input
+            className='text-input__box'
+            name='lightness'
+            type="number"
+            min={0}
+            max={100}
+            value={hsl.l}
+            onChange={handleHslChange}
+          />
+        </label>
+      </div>
     </>
   )
 }

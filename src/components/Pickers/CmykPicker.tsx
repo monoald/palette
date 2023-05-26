@@ -61,11 +61,15 @@ export const CmykPicker = ({ color, updateColor }: CmykPickerProps) => {
   function handleCmykChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (updateColor) {
       const target = event.target as HTMLInputElement
+      const identifier = target.name || target.id
 
-      const cyanValue = target.id === 'cyan' ? +target.value : cmyk.c
-      const magentaValue = target.id === 'magenta' ? +target.value : cmyk.m
-      const yellowValue = target.id === 'yellow' ? +target.value : cmyk.y
-      const keyValue = target.id === 'key' ? +target.value : cmyk.k
+      const cyanValue = identifier === 'cyan' ? +target.value : cmyk.c
+
+      const magentaValue =identifier === 'magenta' ? +target.value : cmyk.m
+
+      const yellowValue =identifier === 'yellow' ? +target.value : cmyk.y
+
+      const keyValue =identifier === 'key' ? +target.value : cmyk.k
 
       updateColor({ c: cyanValue, m: magentaValue, y: yellowValue, k: keyValue }, 'cmyk', true)
     }
@@ -109,6 +113,68 @@ export const CmykPicker = ({ color, updateColor }: CmykPickerProps) => {
         thumbColor={hex}
         backgroundColor={`${keyBackground.start}, ${keyBackground.end}`}
       />
+
+      <div className='text-input-container'>
+        <label className='text-input'>
+          <p className='text-input__label'>
+            C:
+          </p>
+          <input
+            className='text-input__box'
+            name='cyan'
+            type="number"
+            min={0}
+            max={100}
+            value={cmyk.c}
+            onChange={handleCmykChange}
+          />
+        </label>
+
+        <label className='text-input'>
+          <p className='text-input__label'>
+            M:
+          </p>
+          <input
+            className='text-input__box'
+            name='magenta'
+            type="number"
+            min={0}
+            max={100}
+            value={cmyk.m}
+            onChange={handleCmykChange}
+          />
+        </label>
+
+        <label className='text-input'>
+          <p className='text-input__label'>
+            Y:
+          </p>
+          <input
+            className='text-input__box'
+            name='yellow'
+            type="number"
+            min={0}
+            max={100}
+            value={cmyk.y}
+            onChange={handleCmykChange}
+          />
+        </label>
+
+        <label className='text-input'>
+          <p className='text-input__label'>
+            K:
+          </p>
+          <input
+            className='text-input__box'
+            name='key'
+            type="number"
+            min={0}
+            max={100}
+            value={cmyk.k}
+            onChange={handleCmykChange}
+          />
+        </label>
+      </div>
     </>
   )
 }

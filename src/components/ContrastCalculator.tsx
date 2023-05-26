@@ -67,7 +67,12 @@ export const ContrastCalculator = ({ color, setColor, setModalContrast, colorsLe
   return (
     <>
       <Modal setModal={setModalContrast} backgroundOpacity={0.4}>
-        <div className='Contrast-Calculator'>
+        <div className='Contrast-Calculator'
+          style={{
+            alignSelf: openColorPicker ? 'start' : 'center',
+            marginTop: openColorPicker ? '80px' : 0
+          }}
+        >
           <div className='buttons-container'>
             <button
               className='color-button color-button--primary'
@@ -85,13 +90,15 @@ export const ContrastCalculator = ({ color, setColor, setModalContrast, colorsLe
               className='color-button color-button--secondary'
               style={{
                 backgroundColor: secondaryColor.color,
-                color: secondaryColor.contrastColor  === '#000000' ? '#1A1B25' :   '#fff',
                 border: secondaryColor.color === '#1a1b25' ? '1px solid rgba(200, 200, 200, 0.3)' : 'none'
               }}
               >
               <button
                 className='secondary-color'
                 onClick={() => handleColorPicker('secondary')}
+                style={{
+                  color: secondaryColor.contrastColor  === '#000000' ? '#1A1B25' :   '#fff',
+                }}
               >
               {secondaryColor.color}
               </button>

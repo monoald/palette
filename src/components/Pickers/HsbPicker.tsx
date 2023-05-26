@@ -38,10 +38,11 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
   function handleHsbChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (updateColor) {
       const target = event.target as HTMLInputElement
+      const identifier = target.name || target.id
 
-      const hueValue = target.id === 'hue' ? +target.value : hsb.h
-      const saturationValue = target.id === 'saturation' ? +target.value : hsb.s
-      const brightnessValue = target.id === 'brightness' ? +target.value : hsb.v
+      const hueValue = identifier === 'hue' ? +target.value : hsb.h
+      const saturationValue = identifier === 'saturation' ? +target.value : hsb.s
+      const brightnessValue = identifier === 'brightness' ? +target.value : hsb.v
 
       updateColor({ h: hueValue, s: saturationValue, v: brightnessValue }, 'hsb', true)
     }
@@ -75,6 +76,52 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
         thumbColor={hex}
         backgroundColor={`${brightnessBackground.start}, ${brightnessBackground.end}`}
       />
+      <div className='text-input-container'>
+        <label className='text-input'>
+          <p className='text-input__label'>
+            H:
+          </p>
+          <input
+            className='text-input__box'
+            name='hue'
+            type="number"
+            min={0}
+            max={100}
+            value={hsb.h}
+            onChange={handleHsbChange}
+          />
+        </label>
+
+        <label className='text-input'>
+          <p className='text-input__label'>
+            S:
+          </p>
+          <input
+            className='text-input__box'
+            name='saturation'
+            type="number"
+            min={0}
+            max={100}
+            value={hsb.s}
+            onChange={handleHsbChange}
+          />
+        </label>
+
+        <label className='text-input'>
+          <p className='text-input__label'>
+            B:
+          </p>
+          <input
+            className='text-input__box'
+            name='brightness'
+            type="number"
+            min={0}
+            max={100}
+            value={hsb.v}
+            onChange={handleHsbChange}
+          />
+        </label>
+      </div>
     </>
   )
 }

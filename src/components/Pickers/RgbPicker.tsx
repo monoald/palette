@@ -49,10 +49,11 @@ export const RgbPicker = ({ color, updateColor }: RgbPickerProps) => {
   function handleRgbChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (updateColor) {
       const target = event.target as HTMLInputElement
+      const identifier = target.name || target.id
 
-      const redValue = target.id === 'red' ? +target.value : rgb.r
-      const greenValue = target.id === 'green' ? +target.value : rgb.g
-      const blueValue = target.id === 'blue' ? +target.value : rgb.b
+      const redValue = identifier === 'red' ? +target.value : rgb.r
+      const greenValue = identifier === 'green' ? +target.value : rgb.g
+      const blueValue = identifier === 'blue' ? +target.value : rgb.b
 
       updateColor({ r: redValue, g: greenValue, b: blueValue }, 'rgb', true)
     }
@@ -87,6 +88,53 @@ export const RgbPicker = ({ color, updateColor }: RgbPickerProps) => {
         thumbColor={hex}
         backgroundColor={`${blueBackground.start}, ${blueBackground.end}`}
       />
+
+      <div className='text-input-container'>
+        <label className='text-input'>
+          <p className='text-input__label'>
+            R:
+          </p>
+          <input
+            className='text-input__box'
+            name='red'
+            type="number"
+            min={0}
+            max={255}
+            value={rgb.r}
+            onChange={handleRgbChange}
+          />
+        </label>
+
+        <label className='text-input'>
+          <p className='text-input__label'>
+            G:
+          </p>
+          <input
+            className='text-input__box'
+            name='green'
+            type="number"
+            min={0}
+            max={255}
+            value={rgb.g}
+            onChange={handleRgbChange}
+          />
+        </label>
+
+        <label className='text-input'>
+          <p className='text-input__label'>
+            B:
+          </p>
+          <input
+            className='text-input__box'
+            name='blue'
+            type="number"
+            min={0}
+            max={255}
+            value={rgb.b}
+            onChange={handleRgbChange}
+          />
+        </label>
+      </div>
     </>
   )
 }

@@ -11,7 +11,6 @@ import { getMainContrastColor } from '../../utils/getMainContrastColor';
 import '../../styles/ColorPicker.css'
 import { Canvas } from './Canvas';
 import { Color } from '../../pages/PaletteGenerator';
-import { CloseModalButton } from '../CloseModalButton';
 
 
 interface ColorPickerProps {
@@ -101,37 +100,39 @@ export const ColorPicker = ({ setModalColorPicker, color, setColor }: ColorPicke
                 showIcon: true
               }}
             />
-            <PickerContainer
-              color={color}
-              updateColor={updateColor}
-            >
-              { pickerFormat === 'HEXADECIMAL'
-                ? <HexadecimalPicker />
-                : <></>
-              }
+            <div className='format-modifiers' >
+              <PickerContainer
+                color={color}
+                updateColor={updateColor}
+              >
+                { pickerFormat === 'HEXADECIMAL'
+                  ? <HexadecimalPicker />
+                  : <></>
+                }
 
-              { pickerFormat === 'CMYK'
-                ? <CmykPicker />
-                : <></>
-              }
+                { pickerFormat === 'CMYK'
+                  ? <CmykPicker />
+                  : <></>
+                }
 
-              { pickerFormat === 'HSB'
-                ? <HsbPicker />
-                : <></>
-              }
+                { pickerFormat === 'HSB'
+                  ? <HsbPicker />
+                  : <></>
+                }
 
-              { pickerFormat === 'HSL'
-                ? <HslPicker />
-                : <></>
-              }
+                { pickerFormat === 'HSL'
+                  ? <HslPicker />
+                  : <></>
+                }
 
-              { pickerFormat === 'RGB'
-                ? <RgbPicker />
-                : <></>
-              }
-            </PickerContainer>
+                { pickerFormat === 'RGB'
+                  ? <RgbPicker />
+                  : <></>
+                }
+              </PickerContainer>
+            </div>
           </div>
-          <CloseModalButton setModal={setModalColorPicker} />
+          {/* <CloseModalButton setModal={setModalColorPicker} /> */}
         </dialog>
     </Modal>
   );

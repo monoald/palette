@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { ColorInput } from "./StyledRangeInputs"
 import { AnyFormat } from "../../lib/types"
 import { Color } from "../../pages/PaletteGenerator"
@@ -9,7 +9,13 @@ interface HexadecimalPickerProps {
 }
 
 export const HexadecimalPicker = ({ color, updateColor }: HexadecimalPickerProps) => {
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const [hexColor, setHexColor] = useState('')
+
+  useEffect(() => {
+    setHexColor(color?.color.toUpperCase() as string)
+  }, [color])
+
+  function handleHueChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (updateColor) {
       const target = event.target as HTMLInputElement
 
@@ -23,6 +29,23 @@ export const HexadecimalPicker = ({ color, updateColor }: HexadecimalPickerProps
     }
   }
 
+  const handleHexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let inputValue = event.target.value;
+
+    // Ensure the first character is "#"
+    if (inputValue.length === 0 || inputValue[0] !== '#') {
+      inputValue = '#' + inputValue;
+    }
+
+    setHexColor(inputValue)
+
+    if (updateColor && inputValue.length === 7) {
+      // validateHex(inputValue)
+
+      updateColor(inputValue, 'hex', true)
+    }
+  };
+
   return (
     <>
       <ColorInput
@@ -30,15 +53,17 @@ export const HexadecimalPicker = ({ color, updateColor }: HexadecimalPickerProps
         min={0}
         max={360}
         value={color?.formats.hsb.h as number}
-        onChange={handleChange}
+        onChange={handleHueChange}
         isHue
       />
-      <input type="text" value={color?.color.toUpperCase()}
-        onChange={() => 'a'}
+
+      <input type="text"
+        value={hexColor}
+        onChange={handleHexChange}
         style={{
           height: '33px',
           width: '180px',
-          margin: 'auto',
+          // margin: 'auto',
           borderRadius: '8px',
           border: '1px solid rgba(232, 233, 243, 0.4)',
           background: 'transparent',
@@ -46,6 +71,7 @@ export const HexadecimalPicker = ({ color, updateColor }: HexadecimalPickerProps
           letterSpacing: '1.2px',
           textAlign: 'center'
         }}
+        maxLength={7}
       />
     </>
   )

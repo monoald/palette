@@ -1,22 +1,31 @@
 .Color-Picker {
-  width: 280px;
+  width: fit-content;
+  /* width: 280px; */
   height: fit-content;
   padding: 20px;
+  margin: auto;
   border: none;
   border-radius: 18px;
-  align-self: center;
+  align-self: end;
   background: rgb(26, 27, 37);
-  box-shadow:  20px 20px 30px #08090C;
+  box-shadow:  10px 8px 20px #000000;
   letter-spacing: 0.6px;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  /* flex-direction: column; */
+  gap: 20px;
+  margin-bottom: 20px;
 }
 .format-container {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-  gap: 18px;
+  width: 300px;
+  display: grid;
+  grid-template-areas: 
+  "format-select"
+  "format-modifiers"
+  ;
+  grid-template-rows: 33px 1fr;
+}
+.Select {
+  grid-area: format-select;
 }
 .format-container .toggle-button {
   height: 22px;
@@ -50,4 +59,12 @@
   border-top: 1px solid rgba(232, 233, 243, 0.3);
   background-color: rgb(232, 233, 243);
   color: rgb(26, 27, 37);
+}
+.format-modifiers {
+  grid-area: format-modifiers;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }

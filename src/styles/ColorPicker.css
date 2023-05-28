@@ -36,12 +36,12 @@
 .toggle-button .icon {
   font-size: 22px;
 }
-.options-box {
+.Select .options-box {
   background-color: rgb(26, 27, 37);
   box-shadow:  8px 8px 20px #08090C;
   border-radius: 8px;
 }
-.option {
+.Select .option {
   background: transparent;
   padding: 12px;
   border: none;
@@ -50,11 +50,11 @@
   border-top: 1px solid rgba(232, 233, 243, 0.3);
   font-size: 1.2rem;
 }
-.option:first-child,
-.option:first-child:hover {
+.Select .option:first-child,
+.Select .option:first-child:hover {
   border-top: none;
 }
-.option:hover {
+.Select .option:hover {
   border-top: 1px solid rgba(232, 233, 243, 0.3);
   background-color: rgb(232, 233, 243);
   color: rgb(26, 27, 37);

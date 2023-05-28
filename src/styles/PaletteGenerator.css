@@ -19,5 +19,5 @@ html {
   position: relative;
   display: flex;
   height: calc(100vh - 33px);
-  margin-top: 33px;
+  grid-area: main;
 }

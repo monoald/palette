@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import '../styles/ColorBar.css'
-import { Color } from '../pages/PaletteGenerator'
+import { Color, ColorBlindSimulator } from '../pages/PaletteGenerator'
 import { Rgb } from '../lib/types'
 import { rgbToHex } from '../lib'
 
@@ -14,9 +14,10 @@ interface ColorBarProps {
   setModalPicker: React.Dispatch<React.SetStateAction<boolean>>
   setCurrentColor: React.Dispatch<React.SetStateAction<Color>>
   addColor: (existingColor: string, newColor: string, side: string) => void
+  currentColorBlind: string
 }
 
-export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalPicker, setCurrentColor, addColor }: ColorBarProps) => {
+export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalPicker, setCurrentColor, addColor, currentColorBlind }: ColorBarProps) => {
   const {
     attributes,
     listeners,
@@ -41,7 +42,8 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
           isLocked: !clr.isLocked,
           contrastColor: clr.contrastColor,
           id: clr.id,
-          formats: clr.formats
+          formats: clr.formats,
+          colorBlind: clr.colorBlind
         }
       }
       return clr
@@ -125,6 +127,16 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
       }}
       onMouseMove={handleMouseMove}
     >
+      <div className='color-blind-container'
+        style={{
+          width: '100%',
+          height: currentColorBlind === 'none'? '0' : '50%',
+          background: color.colorBlind[currentColorBlind as keyof ColorBlindSimulator]
+        }}
+      >
+
+      </div>
+
       {color.color}
       <button
         className='new-color-button'

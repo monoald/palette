@@ -57,3 +57,12 @@
 .icon-eye-dropper:before {
   content: "\e90a";
 }
+.icon-arrow-left:before {
+  content: "\e90b";
+}
+.icon-image:before {
+  content: "\e90c";
+}
+.icon-eye:before {
+  content: "\e90d";
+}

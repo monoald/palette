@@ -12,6 +12,9 @@ import { getMainContrastColor } from '../utils/getMainContrastColor'
 import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from '../lib/types'
 import { colorFormatConverter } from '../lib'
 import { ColorPicker } from '../components/colorPicker/ColorPicker'
+import colorBlind from '../lib/colorBlind'
+import { Header } from '../components/Header'
+import { OptionsBar } from '../components/OptionsBar'
 
 export interface Color {
   color: string
@@ -19,6 +22,18 @@ export interface Color {
   contrastColor: string
   id: number
   formats: Formats
+  colorBlind: ColorBlindSimulator
+}
+
+export interface ColorBlindSimulator {
+  achromatomaly: string
+  achromatopsia: string
+  deuteranomaly: string
+  deuteranopia: string
+  protanomaly: string
+  protanopia: string
+  tritanomaly: string
+  tritanopia: string
 }
 
 interface Formats {
@@ -30,10 +45,24 @@ interface Formats {
   xyz: Xyz
 }
 
+const colorBlindOptions = [
+  'achromatomaly',
+  'achromatopsia',
+  'deuteranomaly',
+  'deuteranopia',
+  'protanomaly',
+  'protanopia',
+  'tritanomaly',
+  'tritanopia',
+  'none'
+]
+
 export const PaletteGenerator = () => {
   const [colors, setColors] = useState<Color[]>([])
   const [modalContrast, setModalContrast] = useState<boolean>(false)
   const [modalPicker, setModalPicker] = useState<boolean>(false)
+  const [openColorBlind, setOpenColorBlind] = useState(false)
+  const [currentColorBlind, setCurrentColorBlind] = useState('none')
   const [currentColor, setCurrentColor] = useState<Color>({
     color: '',
     isLocked: false,
@@ -46,6 +75,16 @@ export const PaletteGenerator = () => {
       lab: { l: 0, a: 0, b: 0 },
       rgb: { r: 0, g: 0, b: 0 },
       xyz: { x: 0, y: 0, z: 0 }
+    },
+    colorBlind: {
+      achromatomaly: '',
+      achromatopsia: '',
+      deuteranomaly: '',
+      deuteranopia: '',
+      protanomaly: '',
+      protanopia: '',
+      tritanomaly: '',
+      tritanopia: '',
     }
   })
 
@@ -70,7 +109,8 @@ export const PaletteGenerator = () => {
             isLocked: clr.isLocked,
             contrastColor: getMainContrastColor(currentColor.color),
             id: clr.id,
-            formats: currentColor.formats
+            formats: currentColor.formats,
+            colorBlind: currentColor.colorBlind
           }
         }
         return clr
@@ -105,7 +145,7 @@ export const PaletteGenerator = () => {
     setColors(newObject)
   }
 
-  function createNewColor(color: string) {
+  function createNewColor(color: string): Color {
     const formats = colorFormatConverter(color, {
       currentFormat: 'hex',
       AllFormats: true,
@@ -123,6 +163,16 @@ export const PaletteGenerator = () => {
         lab: formats.lab as Lab,
         rgb: formats.rgb as Rgb,
         xyz: formats.xyz as Xyz,
+      },
+      colorBlind: {
+        achromatomaly: colorBlind.toAchromatomaly(color) as string,
+        achromatopsia: colorBlind.toAchromatopsia(color) as string,
+        deuteranomaly: colorBlind.toDeuteranomaly(color) as string,
+        deuteranopia: colorBlind.toDeuteranopia(color) as string,
+        protanomaly: colorBlind.toProtanomaly(color) as string,
+        protanopia: colorBlind.toProtanopia(color) as string,
+        tritanomaly: colorBlind.toTritanomaly(color) as string,
+        tritanopia: colorBlind.toTritanopia(color) as string
       }
     }
   }
@@ -154,44 +204,60 @@ export const PaletteGenerator = () => {
   }
 
   return (
-    <DndContext
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <main className='Palette-Generator'>
-        <SortableContext
-          items={colors}
-          strategy={horizontalListSortingStrategy}
-        >
-          {colors.map((color: Color) => (
-            <ColorBar
-              color={color}
-              colors={colors}
-              setColors={setColors}
+    <>
+      <Header
+        setOpenColorBlind={setOpenColorBlind}
+      />
+
+      {openColorBlind &&
+        <OptionsBar
+          options={colorBlindOptions}
+          currentOption={currentColorBlind}
+          setCurrentOption={setCurrentColorBlind}
+          setOpen={setOpenColorBlind}
+        />
+      }
+
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <main className='Palette-Generator'>
+          <SortableContext
+            items={colors}
+            strategy={horizontalListSortingStrategy}
+          >
+            {colors.map((color: Color) => (
+              <ColorBar
+                color={color}
+                colors={colors}
+                setColors={setColors}
+                setModalContrast={setModalContrast}
+                setModalPicker={setModalPicker}
+                setCurrentColor={setCurrentColor}
+                addColor={addColor}
+                currentColorBlind={currentColorBlind}
+              />
+            ))} 
+          </SortableContext>
+          { modalContrast &&
+            <ContrastCalculator
+              color={currentColor}
+              setColor={setCurrentColor}
               setModalContrast={setModalContrast}
-              setModalPicker={setModalPicker}
-              setCurrentColor={setCurrentColor}
               addColor={addColor}
             />
-          ))} 
-        </SortableContext>
-        { modalContrast &&
-          <ContrastCalculator
+          }
+          {
+            modalPicker && 
+            <ColorPicker
+            setModalColorPicker={setModalPicker}
             color={currentColor}
             setColor={setCurrentColor}
-            setModalContrast={setModalContrast}
-            addColor={addColor}
-          />
-        }
-        {
-          modalPicker && 
-          <ColorPicker
-          setModalColorPicker={setModalPicker}
-          color={currentColor}
-          setColor={setCurrentColor}
-          />
-        }
-      </main>
-    </DndContext>
+            />
+          }
+        </main>
+      </DndContext>
+    </>
   )
 }

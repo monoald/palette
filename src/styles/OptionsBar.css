@@ -1,0 +1,41 @@
+.OptionsBar {
+  position: fixed;
+  top: 33px;
+  width: 240px;
+  height: calc(100vh - 33px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px 30px;
+  border-top: 1px solid rgba(232,233,243, 0.5);
+  background: #1A1B25;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.OptionsBar .options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: start;
+  list-style: none;
+}
+.OptionsBar .option {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.OptionsBar .option--active {
+  color: #42D37A;
+}
+
+.OptionsBar .option:hover {
+  color: #42D37A;
+}
+
+.OptionsBar .option .icon {
+  font-size: 2.2rem;
+}

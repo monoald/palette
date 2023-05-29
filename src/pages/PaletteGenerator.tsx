@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core"
 import { arrayMove, SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable"
 import { makeColorPalette } from '../lib/palette'
@@ -63,6 +63,8 @@ export const PaletteGenerator = () => {
   const [modalPicker, setModalPicker] = useState<boolean>(false)
   const [openColorBlind, setOpenColorBlind] = useState(false)
   const [currentColorBlind, setCurrentColorBlind] = useState('none')
+  const [heightColorBlind, setHeightColorBlind] = useState(0)
+  const [resizeColorBlind, setResizeColorBlind] = useState(false)
   const [currentColor, setCurrentColor] = useState<Color>({
     color: '',
     isLocked: false,
@@ -87,6 +89,8 @@ export const PaletteGenerator = () => {
       tritanopia: '',
     }
   })
+
+  const mainRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
     changeColorPalette(true)
@@ -203,6 +207,29 @@ export const PaletteGenerator = () => {
     setColors(newColors)
   }
 
+  function handleStartResize(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    const target = event.target as HTMLElement
+    const clientHeight = target.getBoundingClientRect().height
+    const clientTop = target.getBoundingClientRect().top
+    const mouseY = event.clientY - clientTop
+    if(clientHeight - mouseY <= 8) {
+      setResizeColorBlind(true)
+    }
+  }
+
+  function handleResize(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    if (resizeColorBlind) {
+      const target = mainRef.current as HTMLElement
+      const clientTop = target.getBoundingClientRect().top
+      const mouseY = event.clientY - clientTop
+      setHeightColorBlind(mouseY)
+    }
+  }
+
+  function handleEndResize() {
+    setResizeColorBlind(false)
+  }
+
   return (
     <>
       <Header
@@ -215,6 +242,7 @@ export const PaletteGenerator = () => {
           currentOption={currentColorBlind}
           setCurrentOption={setCurrentColorBlind}
           setOpen={setOpenColorBlind}
+          setHeightColorBlind={setHeightColorBlind}
         />
       }
 
@@ -222,7 +250,12 @@ export const PaletteGenerator = () => {
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
       >
-        <main className='Palette-Generator'>
+        <main
+          className='Palette-Generator'
+          ref={mainRef}
+          onMouseMove={handleResize}
+          onMouseUp={handleEndResize}
+        >
           <SortableContext
             items={colors}
             strategy={horizontalListSortingStrategy}
@@ -237,8 +270,16 @@ export const PaletteGenerator = () => {
                 setCurrentColor={setCurrentColor}
                 addColor={addColor}
                 currentColorBlind={currentColorBlind}
+                heightColorBlind={heightColorBlind}
+                handleStartResize={handleStartResize}
+                resizeColorBlind={resizeColorBlind}
               />
             ))} 
+            {currentColorBlind === "none" &&
+              <button>
+                
+              </button>
+            }
           </SortableContext>
           { modalContrast &&
             <ContrastCalculator

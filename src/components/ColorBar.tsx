@@ -15,9 +15,12 @@ interface ColorBarProps {
   setCurrentColor: React.Dispatch<React.SetStateAction<Color>>
   addColor: (existingColor: string, newColor: string, side: string) => void
   currentColorBlind: string
+  heightColorBlind: number
+  handleStartResize: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  resizeColorBlind: boolean
 }
 
-export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalPicker, setCurrentColor, addColor, currentColorBlind }: ColorBarProps) => {
+export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalPicker, setCurrentColor, addColor, currentColorBlind, heightColorBlind, handleStartResize, resizeColorBlind }: ColorBarProps) => {
   const {
     attributes,
     listeners,
@@ -116,13 +119,15 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
       {...attributes}
       style={{
         ...style,
-        'background': color.color,
-        'zIndex': cliked || isHovering ? 1 : 0,
-        'color': color.contrastColor,
+        background: color.color,
+        zIndex: cliked || isHovering ? 1 : 0,
+        color: color.contrastColor,
+        height: `calc(100% - ${heightColorBlind})`
       }}
-      onMouseEnter={() => setIsHovering(!isHovering)}
+      onFocus={() => setIsHovering(true)}
+      onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => {
-        setIsHovering(!isHovering)
+        setIsHovering(false)
         setHoverSide('none')
       }}
       onMouseMove={handleMouseMove}
@@ -130,11 +135,11 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
       <div className='color-blind-container'
         style={{
           width: '100%',
-          height: currentColorBlind === 'none'? '0' : '50%',
+          height: currentColorBlind === 'none'? '0' : heightColorBlind,
           background: color.colorBlind[currentColorBlind as keyof ColorBlindSimulator]
         }}
+        onMouseDown={handleStartResize}
       >
-
       </div>
 
       {color.color}
@@ -149,7 +154,7 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
         <span className='icon-plus' />
       </button>
 
-      {isHovering &&
+      {isHovering && !resizeColorBlind &&
         <>
           <button
             className='color-button'

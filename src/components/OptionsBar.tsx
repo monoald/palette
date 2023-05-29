@@ -6,9 +6,21 @@ interface OptionsBarProps {
   currentOption: string
   setCurrentOption: React.Dispatch<React.SetStateAction<string>>
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setHeightColorBlind: React.Dispatch<React.SetStateAction<number>>
 }
 
-export const OptionsBar = ({ options, currentOption, setCurrentOption, setOpen }: OptionsBarProps) => {
+export const OptionsBar = ({ options, currentOption, setCurrentOption, setOpen, setHeightColorBlind }: OptionsBarProps) => {
+  function handleClick(option: string) {
+    setCurrentOption(option)
+    setHeightColorBlind(height => {
+      if (height === 0) {
+        return 280
+      } else {
+        return height
+      }
+    })
+  }
+
   return (
     <aside className='OptionsBar'>
       <nav className='navigation'>
@@ -16,7 +28,7 @@ export const OptionsBar = ({ options, currentOption, setCurrentOption, setOpen }
           {options.map(option => (
             <li
               className={`option${currentOption === option ? ' option--active' : ''}`}
-              onClick={() => setCurrentOption(option)}
+              onClick={() => handleClick(option)}
             >
               <p>{option}</p>
               {currentOption === option &&
@@ -31,7 +43,7 @@ export const OptionsBar = ({ options, currentOption, setCurrentOption, setOpen }
         className='close-button'
         onClick={() => setOpen(state => !state)}
       >
-        CANCEL
+        CLOSE
       </button>
     </aside>
   )

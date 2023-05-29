@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import '../styles/Header.css'
 
 interface HeaderProps {
@@ -6,7 +6,6 @@ interface HeaderProps {
 }
 
 export const Header = ({ setOpenColorBlind }: HeaderProps) => {
-  const [colorBlindSelected, setColorBlindSelected] = useState(false)
   return (
     <header className='Header'>
       <nav className='navigation'>

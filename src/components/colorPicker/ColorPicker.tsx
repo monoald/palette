@@ -14,6 +14,7 @@ import { Color } from '../../pages/PaletteGenerator';
 import { CloseModalButton } from '../CloseModalButton';
 import { LabPicker } from '../Pickers/LabPicker';
 import { XyzPicker } from '../Pickers/XyzPicker';
+import colorBlind from '../../lib/colorBlind';
 
 
 interface ColorPickerProps {
@@ -73,6 +74,16 @@ export const ColorPicker = ({ setModalColorPicker, color, setColor }: ColorPicke
         lab: lab,
         rgb: rgb,
         xyz: xyz,
+      },
+      colorBlind: {
+        achromatomaly: colorBlind.toAchromatomaly(hex) as string,
+        achromatopsia: colorBlind.toAchromatopsia(hex) as string,
+        deuteranomaly: colorBlind.toDeuteranomaly(hex) as string,
+        deuteranopia: colorBlind.toDeuteranopia(hex) as string,
+        protanomaly: colorBlind.toProtanomaly(hex) as string,
+        protanopia: colorBlind.toProtanopia(hex) as string,
+        tritanomaly: colorBlind.toTritanomaly(hex) as string,
+        tritanopia: colorBlind.toTritanopia(hex) as string
       }
     }))
 

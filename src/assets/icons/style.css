@@ -66,3 +66,6 @@
 .icon-eye:before {
   content: "\e90d";
 }
+.icon-palette:before {
+  content: "\e90e";
+}

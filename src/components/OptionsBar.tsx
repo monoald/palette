@@ -5,20 +5,12 @@ interface OptionsBarProps {
   options: string[]
   currentOption: string
   setCurrentOption: React.Dispatch<React.SetStateAction<string>>
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  setHeightColorBlind: React.Dispatch<React.SetStateAction<number>>
+  setOptionsBar: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const OptionsBar = ({ options, currentOption, setCurrentOption, setOpen, setHeightColorBlind }: OptionsBarProps) => {
+export const OptionsBar = ({ options, currentOption, setCurrentOption, setOptionsBar }: OptionsBarProps) => {
   function handleClick(option: string) {
     setCurrentOption(option)
-    setHeightColorBlind(height => {
-      if (height === 0) {
-        return 280
-      } else {
-        return height
-      }
-    })
   }
 
   return (
@@ -41,7 +33,7 @@ export const OptionsBar = ({ options, currentOption, setCurrentOption, setOpen, 
 
       <button
         className='close-button'
-        onClick={() => setOpen(state => !state)}
+        onClick={() => setOptionsBar('none')}
       >
         CLOSE
       </button>

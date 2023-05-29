@@ -142,7 +142,9 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
       >
       </div>
 
-      {color.color}
+      <p className='color-hex'>
+        {color.color}
+      </p>
       <button
         className='new-color-button'
         style={{

@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core"
 import { arrayMove, SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable"
-import { makeColorPalette } from '../lib/palette'
+import { PaletteType, makeColorPalette } from '../lib/palette'
 import { useKeyDown } from '../hooks/useKeyDown'
 import { ColorBar } from '../components/ColorBar'
 import { ContrastCalculator } from '../components/ContrastCalculator'
@@ -57,14 +57,25 @@ const colorBlindOptions = [
   'none'
 ]
 
+const paletteOptions = [
+  'analogous',
+  'complementary',
+  'monochromatic',
+  'split-complementary',
+  'square',
+  'tetradic',
+  'triadic'
+]
+
 export const PaletteGenerator = () => {
   const [colors, setColors] = useState<Color[]>([])
   const [modalContrast, setModalContrast] = useState<boolean>(false)
   const [modalPicker, setModalPicker] = useState<boolean>(false)
-  const [openColorBlind, setOpenColorBlind] = useState(false)
+  const [optionsBar, setOptionsBar] = useState('none')
   const [currentColorBlind, setCurrentColorBlind] = useState('none')
   const [heightColorBlind, setHeightColorBlind] = useState(0)
   const [resizeColorBlind, setResizeColorBlind] = useState(false)
+  const [paletteType, setPaletteType] = useState('analogous')
   const [currentColor, setCurrentColor] = useState<Color>({
     color: '',
     isLocked: false,
@@ -100,6 +111,12 @@ export const PaletteGenerator = () => {
     changeColorPalette(false)
   }, ['Space'])
 
+  useEffect(() => {
+    if (currentColorBlind !== 'none' && heightColorBlind === 0) {
+      setHeightColorBlind(280)
+    } 
+  }, [currentColorBlind])
+
   // Update color
   useEffect(() => {
     const newColor = colors.findIndex(color => color.color === currentColor.color)
@@ -127,7 +144,7 @@ export const PaletteGenerator = () => {
     const newColors = makeColorPalette({
       randomColor: true,
       format: "hex",
-      paletteType: 'analogous',
+      paletteType: paletteType as PaletteType,
       quantity: firstRender ? 5 : colors.length
     }) as string[]
 
@@ -233,16 +250,24 @@ export const PaletteGenerator = () => {
   return (
     <>
       <Header
-        setOpenColorBlind={setOpenColorBlind}
+        setOptionsBar={setOptionsBar}
       />
 
-      {openColorBlind &&
+      {optionsBar === 'color-blind' &&
         <OptionsBar
           options={colorBlindOptions}
           currentOption={currentColorBlind}
           setCurrentOption={setCurrentColorBlind}
-          setOpen={setOpenColorBlind}
-          setHeightColorBlind={setHeightColorBlind}
+          setOptionsBar={setOptionsBar}
+        />
+      }
+
+      {optionsBar === 'palette-type' &&
+        <OptionsBar
+          options={paletteOptions}
+          currentOption={paletteType}
+          setCurrentOption={setPaletteType}
+          setOptionsBar={setOptionsBar}
         />
       }
 
@@ -275,11 +300,7 @@ export const PaletteGenerator = () => {
                 resizeColorBlind={resizeColorBlind}
               />
             ))} 
-            {currentColorBlind === "none" &&
-              <button>
-                
-              </button>
-            }
+
           </SortableContext>
           { modalContrast &&
             <ContrastCalculator

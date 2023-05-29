@@ -11,6 +11,9 @@
   background: #1A1B25;
   font-size: 1.4rem;
   text-transform: uppercase;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none;
   z-index: 2;
 }
 

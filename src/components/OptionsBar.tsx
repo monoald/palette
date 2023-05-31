@@ -19,6 +19,7 @@ export const OptionsBar = ({ options, currentOption, setCurrentOption, setOption
         <ul className='options-container'>
           {options.map(option => (
             <li
+              key={option}
               className={`option${currentOption === option ? ' option--active' : ''}`}
               onClick={() => handleClick(option)}
             >

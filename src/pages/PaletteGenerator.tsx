@@ -10,11 +10,11 @@ import '../assets/icons/style.css'
 import '../styles/PaletteGenerator.css'
 import { getMainContrastColor } from '../utils/getMainContrastColor'
 import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from '../lib/types'
-import { colorFormatConverter } from '../lib'
 import { ColorPicker } from '../components/colorPicker/ColorPicker'
-import colorBlind from '../lib/colorBlind'
 import { Header } from '../components/Header'
 import { OptionsBar } from '../components/OptionsBar'
+import { ImageColorExtractor } from '../components/ImageColorExtractor'
+import { createNewColor } from '../utils/createNewColor'
 
 export interface Color {
   color: string
@@ -76,6 +76,7 @@ export const PaletteGenerator = () => {
   const [heightColorBlind, setHeightColorBlind] = useState(0)
   const [resizeColorBlind, setResizeColorBlind] = useState(false)
   const [paletteType, setPaletteType] = useState('analogous')
+  const [modalImageExtractor, setModalImageExtractor] = useState(false)
   const [currentColor, setCurrentColor] = useState<Color>({
     color: '',
     isLocked: false,
@@ -166,37 +167,7 @@ export const PaletteGenerator = () => {
     setColors(newObject)
   }
 
-  function createNewColor(color: string): Color {
-    const formats = colorFormatConverter(color, {
-      currentFormat: 'hex',
-      AllFormats: true,
-    })
-
-    return {
-      color: color,
-      isLocked: false,
-      contrastColor: getMainContrastColor(color),
-      id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
-      formats: {
-        cmyk: formats.cmyk as Cmyk,
-        hsb: formats.hsv as Hsv,
-        hsl: formats.hsl as Hsl,
-        lab: formats.lab as Lab,
-        rgb: formats.rgb as Rgb,
-        xyz: formats.xyz as Xyz,
-      },
-      colorBlind: {
-        achromatomaly: colorBlind.toAchromatomaly(color) as string,
-        achromatopsia: colorBlind.toAchromatopsia(color) as string,
-        deuteranomaly: colorBlind.toDeuteranomaly(color) as string,
-        deuteranopia: colorBlind.toDeuteranopia(color) as string,
-        protanomaly: colorBlind.toProtanomaly(color) as string,
-        protanopia: colorBlind.toProtanopia(color) as string,
-        tritanomaly: colorBlind.toTritanomaly(color) as string,
-        tritanopia: colorBlind.toTritanopia(color) as string
-      }
-    }
-  }
+  
 
   function handleDragEnd(event: DragEndEvent) {
     const {active, over} = event
@@ -251,6 +222,7 @@ export const PaletteGenerator = () => {
     <>
       <Header
         setOptionsBar={setOptionsBar}
+        setImageExtractor={setModalImageExtractor}
       />
 
       {optionsBar === 'color-blind' &&
@@ -310,12 +282,17 @@ export const PaletteGenerator = () => {
               addColor={addColor}
             />
           }
-          {
-            modalPicker && 
+          { modalPicker && 
             <ColorPicker
             setModalColorPicker={setModalPicker}
             color={currentColor}
             setColor={setCurrentColor}
+            />
+          }
+          { modalImageExtractor &&
+            <ImageColorExtractor
+              setModaImageExtractor={setModalImageExtractor}
+              setColors={setColors}
             />
           }
         </main>

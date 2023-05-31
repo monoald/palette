@@ -117,7 +117,7 @@ export const Canvas = ({ canvasRef, coordinates, setCoordinates, color, updateCo
 
   return (
     <div
-      className='canvas-container'
+      className='Canvas'
       onMouseDown={handleStartDrag}
       onMouseMove={handleMoveDrag}
       onMouseUp={handleEndDrag}

@@ -9,6 +9,7 @@ import '../styles/ContrastCalculator.css'
 import { getMainContrastColor } from '../utils/getMainContrastColor'
 import { Color } from '../pages/PaletteGenerator'
 import { CloseModalButton } from './CloseModalButton'
+import colorBlind from '../lib/colorBlind'
 
 interface ContrastCalculatorProps {
   color: Color
@@ -24,7 +25,17 @@ export const ContrastCalculator = ({ color, setColor, setModalContrast, addColor
     isLocked: false,
     contrastColor: getMainContrastColor(color.contrastColor),
     id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1  ,
-    formats: color.formats
+    formats: color.formats,
+    colorBlind: {
+      achromatomaly: colorBlind.toAchromatomaly(color.contrastColor) as string,
+      achromatopsia: colorBlind.toAchromatopsia(color.contrastColor) as string,
+      deuteranomaly: colorBlind.toDeuteranomaly(color.contrastColor) as string,
+      deuteranopia: colorBlind.toDeuteranopia(color.contrastColor) as string,
+      protanomaly: colorBlind.toProtanomaly(color.contrastColor) as string,
+      protanopia: colorBlind.toProtanopia(color.contrastColor) as string,
+      tritanomaly: colorBlind.toTritanomaly(color.contrastColor) as string,
+      tritanopia: colorBlind.toTritanopia(color.contrastColor) as string
+    }
   })
 
   const [updatedColor, setUpdatedColor] = useState<string>('')

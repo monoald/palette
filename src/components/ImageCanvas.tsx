@@ -5,6 +5,7 @@ import { rgbToHex } from '../lib'
 import '../styles/ImageCanvas.css'
 import { createNewColor } from '../utils/createNewColor'
 import { Color } from '../pages/PaletteGenerator'
+import { getMainContrastColor } from '../utils/getMainContrastColor'
 
 interface ImageCanvasProps {
   url: string
@@ -133,7 +134,13 @@ export const ImageCanvas = ({ url, setColors }: ImageCanvasProps) => {
                 background: color
               }}
             >
-              
+              <p
+                style={{
+                  color: getMainContrastColor(color)
+                }}
+              >
+                {color}
+              </p>
             </button>
           ))
         }

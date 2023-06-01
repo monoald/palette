@@ -53,7 +53,13 @@ export const ImageColorExtractor = ({ setModaImageExtractor, setColors }: ImageC
                 onSubmit={handleUrlSubmit}
               >
                 <label htmlFor="url" className='url-label'>URL:</label>
-                <input type="text" id="url" value={urlInput} onChange={handleUrlChange} />
+                <input
+                  id="url"
+                  type="text"
+                  placeholder='https://'
+                  value={urlInput}
+                  onChange={handleUrlChange}
+                />
                 <button className='load-button' type="submit">LOAD</button>
               </form>
 

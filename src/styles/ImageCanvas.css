@@ -17,6 +17,15 @@
   padding: 0;
   border: none;
 }
+.Image-Canvas .color p {
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  display: none;
+}
+.Image-Canvas .color:hover p {
+  display: inline;
+}
 .Image-Canvas .color:first-child {
   border-top-left-radius: 4px;
 }

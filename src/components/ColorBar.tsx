@@ -135,8 +135,9 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
       <div className='color-blind-container'
         style={{
           width: '100%',
-          height: currentColorBlind === 'none'? '0' : heightColorBlind,
-          background: color.colorBlind[currentColorBlind as keyof ColorBlindSimulator]
+          height: currentColorBlind === 'none' ? '0' : heightColorBlind,
+          display: currentColorBlind === 'none' ? 'none' : 'block',
+          background: color.colorBlind[currentColorBlind as keyof ColorBlindSimulator],
         }}
         onMouseDown={handleStartResize}
       >
@@ -166,6 +167,16 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
             onMouseDown={() => handleRemoveColor(color.id)}
           >
             <span className='icon-x' />
+          </button>
+
+          <button
+            className='color-button'
+            style={{
+              'color': color.contrastColor
+            }}
+            onMouseDown={() => navigator.clipboard.writeText(color.color)}
+          >
+            <span className='icon-clipboard' />
           </button>
 
           <button

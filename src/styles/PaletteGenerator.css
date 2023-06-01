@@ -20,4 +20,5 @@ html {
   display: flex;
   height: calc(100vh - 33px);
   grid-area: main;
+  background-color: #1A1B25;
 }

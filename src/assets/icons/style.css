@@ -69,3 +69,6 @@
 .icon-palette:before {
   content: "\e90e";
 }
+.icon-clipboard:before {
+  content: "\e90f";
+}

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useReducer, useRef, useState } from 'react'
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core"
 import { arrayMove, SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable"
 import { PaletteType, makeColorPalette } from '../lib/palette'
@@ -12,9 +12,10 @@ import { getMainContrastColor } from '../utils/getMainContrastColor'
 import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from '../lib/types'
 import { ColorPicker } from '../components/colorPicker/ColorPicker'
 import { Header } from '../components/Header'
-import { OptionsBar } from '../components/OptionsBar'
 import { ImageColorExtractor } from '../components/ImageColorExtractor'
 import { createNewColor } from '../utils/createNewColor'
+import OptionBarContainer from '../containers/OptionBarContainer'
+import { initialState, optionsReducer } from '../reducers/options'
 
 export interface Color {
   color: string
@@ -45,37 +46,13 @@ interface Formats {
   xyz: Xyz
 }
 
-const colorBlindOptions = [
-  'achromatomaly',
-  'achromatopsia',
-  'deuteranomaly',
-  'deuteranopia',
-  'protanomaly',
-  'protanopia',
-  'tritanomaly',
-  'tritanopia',
-  'none'
-]
-
-const paletteOptions = [
-  'analogous',
-  'complementary',
-  'monochromatic',
-  'split-complementary',
-  'square',
-  'tetradic',
-  'triadic'
-]
-
 export const PaletteGenerator = () => {
+  const [options, optionsDispatch] = useReducer(optionsReducer, initialState)
   const [colors, setColors] = useState<Color[]>([])
   const [modalContrast, setModalContrast] = useState<boolean>(false)
   const [modalPicker, setModalPicker] = useState<boolean>(false)
-  const [optionsBar, setOptionsBar] = useState('none')
-  const [currentColorBlind, setCurrentColorBlind] = useState('none')
   const [heightColorBlind, setHeightColorBlind] = useState(0)
   const [resizeColorBlind, setResizeColorBlind] = useState(false)
-  const [paletteType, setPaletteType] = useState('analogous')
   const [modalImageExtractor, setModalImageExtractor] = useState(false)
   const [currentColor, setCurrentColor] = useState<Color>({
     color: '',
@@ -113,10 +90,12 @@ export const PaletteGenerator = () => {
   }, ['Space'])
 
   useEffect(() => {
-    if (currentColorBlind !== 'none' && heightColorBlind === 0) {
+    if (options.colorBlind !== 'none' && heightColorBlind === 0) {
+      // if (currentColorBlind !== 'none' && heightColorBlind === 0) {
       setHeightColorBlind(280)
     } 
-  }, [currentColorBlind])
+  }, [options.colorBlind])
+  // }, [currentColorBlind])
 
   // Update color
   useEffect(() => {
@@ -145,7 +124,8 @@ export const PaletteGenerator = () => {
     const newColors = makeColorPalette({
       randomColor: true,
       format: "hex",
-      paletteType: paletteType as PaletteType,
+      paletteType: options.paletteType as PaletteType,
+      // paletteType: paletteType as PaletteType,
       quantity: firstRender ? 5 : colors.length
     }) as string[]
 
@@ -221,27 +201,14 @@ export const PaletteGenerator = () => {
   return (
     <>
       <Header
-        setOptionsBar={setOptionsBar}
+        optionsDispatch={optionsDispatch}
         setImageExtractor={setModalImageExtractor}
       />
 
-      {optionsBar === 'color-blind' &&
-        <OptionsBar
-          options={colorBlindOptions}
-          currentOption={currentColorBlind}
-          setCurrentOption={setCurrentColorBlind}
-          setOptionsBar={setOptionsBar}
-        />
-      }
-
-      {optionsBar === 'palette-type' &&
-        <OptionsBar
-          options={paletteOptions}
-          currentOption={paletteType}
-          setCurrentOption={setPaletteType}
-          setOptionsBar={setOptionsBar}
-        />
-      }
+      <OptionBarContainer
+        options={options}
+        optionsDispatch={optionsDispatch}
+      />
 
       <DndContext
         collisionDetection={closestCenter}
@@ -266,7 +233,7 @@ export const PaletteGenerator = () => {
                 setModalPicker={setModalPicker}
                 setCurrentColor={setCurrentColor}
                 addColor={addColor}
-                currentColorBlind={currentColorBlind}
+                currentColorBlind={options.colorBlind}
                 heightColorBlind={heightColorBlind}
                 handleStartResize={handleStartResize}
                 resizeColorBlind={resizeColorBlind}

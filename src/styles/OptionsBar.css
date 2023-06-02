@@ -1,6 +1,7 @@
 .OptionsBar {
   position: fixed;
   top: 33px;
+  left: -240px;
   width: 240px;
   height: calc(100vh - 33px);
   display: flex;
@@ -41,4 +42,29 @@
 
 .OptionsBar .option .icon {
   font-size: 2.2rem;
+}
+
+.fade-in {
+  animation: fadeInFromLeft 1s forwards;
+}
+.fade-out {
+  animation: fadeOutToLeft 1s forwards;
+}
+
+@keyframes fadeInFromLeft {
+  from {
+    left: -240px;
+  }
+  to {
+    left: 0px;
+  }
+}
+
+@keyframes fadeOutToLeft {
+  from {
+    left: 0px;
+  }
+  to {
+    left: -240px;
+  }
 }

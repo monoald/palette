@@ -1,25 +1,26 @@
 import React from 'react'
 import '../styles/Header.css'
+import { OptionsAction } from '../reducers/options'
 
 interface HeaderProps {
-  setOptionsBar: React.Dispatch<React.SetStateAction<string>>
+  optionsDispatch: React.Dispatch<OptionsAction>
   setImageExtractor: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const Header = ({ setOptionsBar, setImageExtractor }: HeaderProps) => {
+export const Header = ({ optionsDispatch, setImageExtractor }: HeaderProps) => {
   return (
     <header className='Header'>
       <nav className='navigation'>
         <ul className='option-container'>
           <li className='option'
-            onClick={() => setOptionsBar('color-blind')}
+            onClick={() => optionsDispatch({ type: 'option', payload: 'colorBlind'})}
           >
             <span className='icon icon-eye'/>
             COLOR BLIND SIMULATOR
           </li>
 
           <li className='option'
-            onClick={() => setOptionsBar('palette-type')}
+            onClick={() => optionsDispatch({ type: 'option', payload: 'paletteType'})}
           >
             <span className='icon icon-palette'/>
             PALETTE TYPE

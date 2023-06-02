@@ -123,85 +123,101 @@ export const ImageCanvas = ({ url, setColors }: ImageCanvasProps) => {
   }
 
   return (
-    <div className='Image-Canvas'>
-      <div className='colors-container'>
-        { extractedColors.length !== 0 &&
-          extractedColors.map(color => (
-            <button
-              className='color'
-              key={color}
-              style={{
-                background: color
-              }}
-            >
-              <p
+    <>
+      { extractedColors.length === 0 &&
+        <p
+          style={{
+            fontSize: '3.4rem',
+            letterSpacing: '5px',
+            margin: '100p auto'
+          }}
+        >LOADING...</p>
+      }
+      <div className='Image-Canvas'
+        style={{
+          display: extractedColors.length === 0 ? 'none' : 'flex'
+        }}
+      >
+        
+        <div className='colors-container'>
+          { extractedColors.length !== 0 &&
+            extractedColors.map(color => (
+              <button
+                className='color'
+                key={color}
                 style={{
-                  color: getMainContrastColor(color)
+                  background: color
                 }}
               >
-                {color}
-              </p>
-            </button>
-          ))
-        }
-      </div>
+                <p
+                  style={{
+                    color: getMainContrastColor(color)
+                  }}
+                >
+                  {color}
+                </p>
+              </button>
+            ))
+          }
+        </div>
 
-      <div
-        className='canvas-container'
-        onMouseDown={handleStartDrag}
-        onMouseMove={handleMoveDrag}
-        onMouseUp={handleEndDrag}
-      >
-        <canvas
-          className='image'
-          width={560}
-          height={400}
-          ref={imageRef}
-          onDragStart={(event) => {event.preventDefault()}}
-        />
-        { pickerActive &&
-          <span
-            className='icon'
-            ref={circleRef}
-            style={{
-              left: `${coordinates.x}px`,
-              top: `${coordinates.y}px`,
-              backgroundColor: pickerColor,
-            }}
+        <div
+          className='canvas-container'
+          onMouseDown={handleStartDrag}
+          onMouseMove={handleMoveDrag}
+          onMouseUp={handleEndDrag}
+        >
+          <canvas
+            className='image'
+            width={560}
+            height={400}
+            ref={imageRef}
+            onDragStart={(event) => {event.preventDefault()}}
           />
-        }
+          { pickerActive &&
+            <span
+              className='icon'
+              ref={circleRef}
+              style={{
+                left: `${coordinates.x}px`,
+                top: `${coordinates.y}px`,
+                backgroundColor: pickerColor,
+              }}
+            />
+          }
+        </div>
+
+        <div className='config-container'>
+          <button
+            className={`config-button${pickerActive ? ' config-button--active' : ''}`}
+            onClick={() => setPickerActive(!pickerActive)}
+          >
+            <span className='icon icon-eye-dropper' />
+            <p>PICK COLOR</p>
+          </button>
+
+          <button
+            className='config-button'
+            onClick={handleQuantitySubmit}
+          >
+            <span className='icon icon-palette' />
+            <p>EXTRACT</p>
+          </button>
+
+          <button
+            className='config-button'
+            onClick={handleAddColorsToPalette}
+          >
+            <span className='icon icon-plus' />
+            <p>ADD PALETTE</p>
+          </button>
+
+          <form className='extractor-input'>
+            <label htmlFor="quantity" className='quantity-label'>COLORS:</label>
+            <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} />
+          </form>
+        </div>
       </div>
-
-      <div className='config-container'>
-        <button
-          className={`config-button${pickerActive ? ' config-button--active' : ''}`}
-          onClick={() => setPickerActive(!pickerActive)}
-        >
-          <span className='icon icon-eye-dropper' />
-          <p>PICK COLOR</p>
-        </button>
-
-        <button
-          className='config-button'
-          onClick={handleQuantitySubmit}
-        >
-          <span className='icon icon-palette' />
-          <p>EXTRACT</p>
-        </button>
-
-        <button
-          className='config-button'
-          onClick={handleAddColorsToPalette}
-        >
-          <span className='icon icon-plus' />
-          <p>ADD PALETTE</p>
-        </button>
-
-        <form className='extractor-input'>
-          <label htmlFor="quantity" className='quantity-label'>COLORS:</label>
-          <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} />
-        </form>
-      </div>
-    </div>
+    </>
   )
 }

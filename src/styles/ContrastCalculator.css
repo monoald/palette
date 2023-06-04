@@ -27,6 +27,7 @@
   height: 33px;
   border-radius: 0;
   font-size: 1.65rem;
+  text-transform: uppercase;
 }
 .Modal .color-button--primary {
   border-top-left-radius: 12px;

@@ -3,14 +3,14 @@ import { Modal } from './Modal'
 import '../styles/ImageColorExtractor.css'
 import { CloseModalButton } from './CloseModalButton'
 import { ImageCanvas } from './ImageCanvas'
-import { Color } from '../pages/PaletteGenerator'
+import { ColorsAction } from '../reducers/colors'
 
 interface ImageColorExtractorProps {
   setModaImageExtractor: React.Dispatch<React.SetStateAction<boolean>>
-  setColors: React.Dispatch<React.SetStateAction<Color[]>>
+  colorsDispatch: React.Dispatch<ColorsAction>
 }
 
-export const ImageColorExtractor = ({ setModaImageExtractor, setColors }: ImageColorExtractorProps) => {
+export const ImageColorExtractor = ({ setModaImageExtractor, colorsDispatch }: ImageColorExtractorProps) => {
   const [urlInput, setUrlInput] = useState("");
   const [url, setUrl] = useState<string>('');
 
@@ -75,7 +75,7 @@ export const ImageColorExtractor = ({ setModaImageExtractor, setColors }: ImageC
               </div>
             </div>
           : 
-            <ImageCanvas url={url} setColors={setColors} />
+            <ImageCanvas url={url} colorsDispatch={colorsDispatch} />
         }
         <CloseModalButton setModal={setModaImageExtractor} />
       </dialog>

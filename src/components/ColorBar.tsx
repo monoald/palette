@@ -5,22 +5,22 @@ import '../styles/ColorBar.css'
 import { Color, ColorBlindSimulator } from '../pages/PaletteGenerator'
 import { Rgb } from '../lib/types'
 import { rgbToHex } from '../lib'
+import { ColorsAction } from '../reducers/colors'
 
 interface ColorBarProps {
   color: Color
   colors: Color[]
-  setColors: React.Dispatch<React.SetStateAction<Color[]>>
   setModalContrast: React.Dispatch<React.SetStateAction<boolean>>
   setModalPicker: React.Dispatch<React.SetStateAction<boolean>>
-  setCurrentColor: React.Dispatch<React.SetStateAction<Color>>
-  addColor: (existingColor: string, newColor: string, side: string) => void
   currentColorBlind: string
   heightColorBlind: number
   handleStartResize: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   resizeColorBlind: boolean
+
+  colorsDispatch: React.Dispatch<ColorsAction>
 }
 
-export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalPicker, setCurrentColor, addColor, currentColorBlind, heightColorBlind, handleStartResize, resizeColorBlind }: ColorBarProps) => {
+export const ColorBar = ({ color, colors, setModalContrast, setModalPicker, currentColorBlind, heightColorBlind, handleStartResize, resizeColorBlind, colorsDispatch }: ColorBarProps) => {
   const {
     attributes,
     listeners,
@@ -36,27 +36,14 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
     transform: CSS.Transform.toString(transform),
   }: undefined 
   
-  function handleLockColor(item: string) {
-
-    const newColors = colors.map((clr): Color => {
-      if (clr.color === item) {
-        return {
-          color: clr.color,
-          isLocked: !clr.isLocked,
-          contrastColor: clr.contrastColor,
-          id: clr.id,
-          formats: clr.formats,
-          colorBlind: clr.colorBlind
-        }
-      }
-      return clr
-    })
-    setColors(newColors)
+  function handleLockColor() {
+    colorsDispatch({ type: 'lock-color', payload: { color: color.color } })
   }
 
   function handleContrast() {
     setModalContrast(modal => !modal)
-    setCurrentColor(color)
+    colorsDispatch({ type: 'set-primary', payload: { colorObject: color } })
+    colorsDispatch({ type: 'secondary', payload: { color: color.contrastColor, format: 'hex' } })
   }
 
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -86,29 +73,24 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
   }
 
   function handleAddColor(color: string, side: string) {
-      const mainColorIndex = colors.findIndex(clr => clr.color === color)
-      const secondaryColorIndex = side === 'left' ? mainColorIndex - 1 : mainColorIndex + 1
-      
-      const color1 = colors[mainColorIndex].formats.rgb
-      const color2 = colors[secondaryColorIndex].formats.rgb
-      
-      const newColorRgb = combineColors(color1, color2)
-      const newColorHex = rgbToHex(newColorRgb)
+    const mainColorIndex = colors.findIndex(clr => clr.color === color)
+    const secondaryColorIndex = side === 'left' ? mainColorIndex - 1 : mainColorIndex + 1
+    
+    const color1 = colors[mainColorIndex].formats.rgb
+    const color2 = colors[secondaryColorIndex].formats.rgb
+    
+    const newColorRgb = combineColors(color1, color2)
+    const newColor = rgbToHex(newColorRgb)
 
-      addColor(color, newColorHex, side)
-    }
+    colorsDispatch({ type: 'add-color', payload: { color, newColor, side } })
+  }
 
   function handleRemoveColor(id: number) {
-    const newColors = Array.from(colors)
-
-    const colorIndex = newColors.findIndex(color => color.id === id)
-    newColors.splice(colorIndex, 1)
-
-    setColors(newColors)
+    colorsDispatch({ type: 'remove-color', payload: { id } })
   }
 
   function handleOpenPicker() {
-    setCurrentColor(color)
+    colorsDispatch({ type: 'set-primary', payload: { colorObject: color } })
     setModalPicker(modal => !modal)
   }
 
@@ -184,7 +166,7 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
             style={{
               'color': color.contrastColor
             }}
-            onMouseDown={() => handleLockColor(color.color)}
+            onMouseDown={handleLockColor}
           >
             {color.isLocked
               ? <span className='icon-lock-close' />
@@ -209,7 +191,7 @@ export const ColorBar = ({ color, colors, setColors, setModalContrast, setModalP
             style={{
             'color': color.contrastColor
             }}
-            onMouseDown={() => handleContrast()}
+            onMouseDown={handleContrast}
           >
             <span className='icon-contrast' />
           </button>

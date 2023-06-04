@@ -6,37 +6,17 @@ import { ContrastTable } from './ContrastTable'
 import { Modal } from './Modal'
 import { ColorPicker } from './colorPicker/ColorPicker'
 import '../styles/ContrastCalculator.css'
-import { getMainContrastColor } from '../utils/getMainContrastColor'
-import { Color } from '../pages/PaletteGenerator'
 import { CloseModalButton } from './CloseModalButton'
-import colorBlind from '../lib/colorBlind'
+import { ColorsAction, ColorsReducer } from '../reducers/colors'
 
 interface ContrastCalculatorProps {
-  color: Color
-  setColor: React.Dispatch<React.SetStateAction<Color>>
+  colors: ColorsReducer
+  colorsDispatch: React.Dispatch<ColorsAction>
   setModalContrast: React.Dispatch<React.SetStateAction<boolean>>
-  addColor: (existingColor: string, newColor: string, side: string) => void
 }
 
-export const ContrastCalculator = ({ color, setColor, setModalContrast, addColor }: ContrastCalculatorProps) => {
+export const ContrastCalculator = ({ colors, colorsDispatch, setModalContrast }: ContrastCalculatorProps) => {
   const [openColorPicker, setOpenColorPicker] = useState<boolean>(false)
-  const [secondaryColor, setSecondaryColor] = useState<Color>({
-    color: color.contrastColor,
-    isLocked: false,
-    contrastColor: getMainContrastColor(color.contrastColor),
-    id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1  ,
-    formats: color.formats,
-    colorBlind: {
-      achromatomaly: colorBlind.toAchromatomaly(color.contrastColor) as string,
-      achromatopsia: colorBlind.toAchromatopsia(color.contrastColor) as string,
-      deuteranomaly: colorBlind.toDeuteranomaly(color.contrastColor) as string,
-      deuteranopia: colorBlind.toDeuteranopia(color.contrastColor) as string,
-      protanomaly: colorBlind.toProtanomaly(color.contrastColor) as string,
-      protanopia: colorBlind.toProtanopia(color.contrastColor) as string,
-      tritanomaly: colorBlind.toTritanomaly(color.contrastColor) as string,
-      tritanopia: colorBlind.toTritanopia(color.contrastColor) as string
-    }
-  })
 
   const [updatedColor, setUpdatedColor] = useState<string>('')
   const [contrast, setContrast] = useState<WCAGRequierements>({
@@ -62,12 +42,12 @@ export const ContrastCalculator = ({ color, setColor, setModalContrast, addColor
     }
   })
   useEffect(() => {
-    const colorRgb = hexToRgb(color.color)
-    const secondaryRgb = hexToRgb(secondaryColor.color)
+    const colorRgb = hexToRgb(colors.primary.color)
+    const secondaryRgb = hexToRgb(colors.secondary.color)
     const contrast = rateContrast([colorRgb, secondaryRgb ])
 
     setContrast(contrast)
-  }, [secondaryColor, color])
+  }, [colors.secondary, colors.primary])
 
   function handleColorPicker(newColor: string) {
     setOpenColorPicker(!openColorPicker)
@@ -87,35 +67,38 @@ export const ContrastCalculator = ({ color, setColor, setModalContrast, addColor
             <button
               className='color-button color-button--primary'
               style={{
-                backgroundColor: color.color,
-                color: color.contrastColor === '#000000' ? '#1A1B25' :   '#fff',
-                border: color.color === '#1a1b25' ? '1px solid rgba(200, 200, 200, 0.3)' : 'none'
+                backgroundColor: colors.primary.color,
+                color: colors.primary.contrastColor === '#000000' ? '#1A1B25' :   '#fff',
+                border: colors.primary.color === '#1a1b25' ? '1px solid rgba(200, 200, 200, 0.3)' : 'none'
               }}
               onClick={() => handleColorPicker('primary')}
             >
-              {color.color}
+              {colors.primary.color}
             </button>
 
             <div
               className='color-button color-button--secondary'
               style={{
-                backgroundColor: secondaryColor.color,
-                border: secondaryColor.color === '#1a1b25' ? '1px solid rgba(200, 200, 200, 0.3)' : 'none'
+                backgroundColor: colors.secondary.color,
+                border: colors.secondary.color === '#1a1b25' ? '1px solid rgba(200, 200, 200, 0.3)' : 'none'
               }}
               >
               <button
                 className='secondary-color'
                 onClick={() => handleColorPicker('secondary')}
                 style={{
-                  color: secondaryColor.contrastColor  === '#000000' ? '#1A1B25' :   '#fff',
+                  color: colors.secondary.contrastColor  === '#000000' ? '#1A1B25' :   '#fff',
                 }}
               >
-              {secondaryColor.color}
+              {colors.secondary.color}
               </button>
 
               <button
                 className='secondary-add'
-                onClick={() => addColor(color.color, secondaryColor.color, 'right')}
+                onClick={() => colorsDispatch({ type: 'add-color', payload: { color: colors.primary.color, newColor: colors.secondary.color, side: 'right' } })}
+                style={{
+                  color: colors.secondary.contrastColor  === '#000000' ? '#1A1B25' :   '#fff',
+                }}
               >
                 <span className='icon-plus'></span>
               </button>
@@ -137,8 +120,9 @@ export const ContrastCalculator = ({ color, setColor, setModalContrast, addColor
       { openColorPicker &&
           <ColorPicker
             setModalColorPicker={setOpenColorPicker}
-            color={updatedColor === 'primary' ? color : secondaryColor}
-            setColor={updatedColor === 'primary' ? setColor : setSecondaryColor}
+            color={updatedColor === 'primary' ? colors.primary : colors.secondary}
+            colorsDispatch={colorsDispatch}
+            type={updatedColor === 'primary' ? 'update-primary' : 'secondary'}
           />
       }
     </>

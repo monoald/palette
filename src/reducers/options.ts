@@ -6,7 +6,7 @@ export interface OptionsReducer {
   paletteType: string
 }
 
-export const initialState: OptionsReducer = {
+export const optionsInitialState: OptionsReducer = {
   option: 'none',
   colorBlind: 'none',
   paletteType: 'analogous'
@@ -17,8 +17,6 @@ export function optionsReducer(state: OptionsReducer, action: OptionsAction) {
     case 'option':
       return { ...state, option: action.payload }
     case 'colorBlind':
-      console.log({ ...state, colorBlind: action.payload });
-      
       return { ...state, colorBlind: action.payload }
     case 'paletteType':
       return { ...state, paletteType: action.payload }

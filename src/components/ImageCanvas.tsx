@@ -4,15 +4,15 @@ import { extractColorPalette } from '../lib/fromImage/getColorPaletteFromImg'
 import { rgbToHex } from '../lib'
 import '../styles/ImageCanvas.css'
 import { createNewColor } from '../utils/createNewColor'
-import { Color } from '../pages/PaletteGenerator'
 import { getMainContrastColor } from '../utils/getMainContrastColor'
+import { ColorsAction } from '../reducers/colors'
 
 interface ImageCanvasProps {
   url: string
-  setColors: React.Dispatch<React.SetStateAction<Color[]>>
+  colorsDispatch: React.Dispatch<ColorsAction>
 }
 
-export const ImageCanvas = ({ url, setColors }: ImageCanvasProps) => {
+export const ImageCanvas = ({ url, colorsDispatch }: ImageCanvasProps) => {
   const [extract, setExtract] = useState(true)
   const [quantity, setQuantity] = useState(5)
   const [isDragging, setIsDragging] = useState(false)
@@ -27,7 +27,7 @@ export const ImageCanvas = ({ url, setColors }: ImageCanvasProps) => {
     async function extractColors() {
       const rgbColors = await extractColorPalette(url, quantity)
       const hexColors = rgbColors.map(color => rgbToHex(color))
-      console.log(hexColors);
+
       setExtractedColors(hexColors)
     }
 
@@ -72,7 +72,7 @@ export const ImageCanvas = ({ url, setColors }: ImageCanvasProps) => {
     setQuantity(+event.target.value)
   }
 
-  function handleQuantitySubmit(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function handleQuantitySubmit(event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setExtract(!extract)
   }
@@ -116,10 +116,10 @@ export const ImageCanvas = ({ url, setColors }: ImageCanvasProps) => {
 
   function handleAddColorsToPalette() {
     const newColors = extractedColors.map(color => {
-      return createNewColor(color)
+      return createNewColor(color, 'hex')
     })
 
-    setColors(newColors)
+    colorsDispatch({ type: 'replace-colors', payload: { colors: newColors } })
   }
 
   return (
@@ -212,7 +212,7 @@ export const ImageCanvas = ({ url, setColors }: ImageCanvasProps) => {
             <p>ADD PALETTE</p>
           </button>
 
-          <form className='extractor-input'>
+          <form className='extractor-input' onSubmit={handleQuantitySubmit}>
             <label htmlFor="quantity" className='quantity-label'>COLORS:</label>
             <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} />
           </form>

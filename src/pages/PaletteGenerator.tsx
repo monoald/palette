@@ -1,21 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useReducer, useRef, useState } from 'react'
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core"
-import { arrayMove, SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable"
-import { PaletteType, makeColorPalette } from '../lib/palette'
+import { SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable"
 import { useKeyDown } from '../hooks/useKeyDown'
 import { ColorBar } from '../components/ColorBar'
 import { ContrastCalculator } from '../components/ContrastCalculator'
 import '../assets/icons/style.css'
 import '../styles/PaletteGenerator.css'
-import { getMainContrastColor } from '../utils/getMainContrastColor'
 import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from '../lib/types'
 import { ColorPicker } from '../components/colorPicker/ColorPicker'
 import { Header } from '../components/Header'
 import { ImageColorExtractor } from '../components/ImageColorExtractor'
-import { createNewColor } from '../utils/createNewColor'
 import OptionBarContainer from '../containers/OptionBarContainer'
-import { initialState, optionsReducer } from '../reducers/options'
+import { optionsInitialState, optionsReducer } from '../reducers/options'
+import { colorsInitialState, colorsReducer } from '../reducers/colors'
 
 export interface Color {
   color: string
@@ -46,133 +44,92 @@ interface Formats {
   xyz: Xyz
 }
 
+// {export type ModalsTypes = 'contrast' | 'picker' | 'img-extractor'
+// export type ModalsAction = { type: ModalsTypes }
+
+// export interface ModalsReducer {
+//   contrast: boolean
+//   picker: boolean
+//   'img-extractor': boolean
+// }
+
+// export const modalsInitialState : ModalsReducer = {
+//   contrast: false,
+//   picker: false,
+//   'img-extractor': false
+// }
+
+// export function modalsReducer(state: ModalsReducer, action: ModalsAction) {
+//   switch (action.type) {
+//     case 'contrast':
+//       return { ...state, contrast: !state.contrast }
+//     case 'picker':
+//       return { ...state, picker: !state.picker }
+//     case 'img-extractor':
+//       return { ...state, 'img-extractor': !state['img-extractor'] }
+//     default:
+//       return state;
+//   }
+// }
+
+// const colorInitialState = {
+//   color: '',
+//     isLocked: false,
+//     contrastColor: '',
+//     id: 0,
+//     formats: {
+//       cmyk: { c: 0, m: 0, y: 0, k:0 },
+//       hsb: { h: 0, s: 0, v: 0 },
+//       hsl: { h: 0, s: 0, l: 0 },
+//       lab: { l: 0, a: 0, b: 0 },
+//       rgb: { r: 0, g: 0, b: 0 },
+//       xyz: { x: 0, y: 0, z: 0 }
+//     },
+//     colorBlind: {
+//       achromatomaly: '',
+//       achromatopsia: '',
+//       deuteranomaly: '',
+//       deuteranopia: '',
+//       protanomaly: '',
+//       protanopia: '',
+//       tritanomaly: '',
+//       tritanopia: '',
+//     }
+// }}
+
+
+
+
+
+
 export const PaletteGenerator = () => {
-  const [options, optionsDispatch] = useReducer(optionsReducer, initialState)
-  const [colors, setColors] = useState<Color[]>([])
+  const [colors, colorsDispatch] = useReducer(colorsReducer, colorsInitialState)
+  const [options, optionsDispatch] = useReducer(optionsReducer, optionsInitialState)
+  // const [modals, modalsDispatch] = useReducer(modalsReducer, modalsInitialState)
   const [modalContrast, setModalContrast] = useState<boolean>(false)
   const [modalPicker, setModalPicker] = useState<boolean>(false)
+  const [modalImageExtractor, setModalImageExtractor] = useState(false)
   const [heightColorBlind, setHeightColorBlind] = useState(0)
   const [resizeColorBlind, setResizeColorBlind] = useState(false)
-  const [modalImageExtractor, setModalImageExtractor] = useState(false)
-  const [currentColor, setCurrentColor] = useState<Color>({
-    color: '',
-    isLocked: false,
-    contrastColor: '',
-    id: 0,
-    formats: {
-      cmyk: { c: 0, m: 0, y: 0, k:0 },
-      hsb: { h: 0, s: 0, v: 0 },
-      hsl: { h: 0, s: 0, l: 0 },
-      lab: { l: 0, a: 0, b: 0 },
-      rgb: { r: 0, g: 0, b: 0 },
-      xyz: { x: 0, y: 0, z: 0 }
-    },
-    colorBlind: {
-      achromatomaly: '',
-      achromatopsia: '',
-      deuteranomaly: '',
-      deuteranopia: '',
-      protanomaly: '',
-      protanopia: '',
-      tritanomaly: '',
-      tritanopia: '',
-    }
-  })
 
   const mainRef = useRef<HTMLCanvasElement>(null)
 
-  useEffect(() => {
-    changeColorPalette(true)
-  }, [])
-
   useKeyDown(() => {
-    changeColorPalette(false)
+    colorsDispatch({ type: 'set-colors', payload: { paletteType: options.paletteType } })
   }, ['Space'])
 
   useEffect(() => {
     if (options.colorBlind !== 'none' && heightColorBlind === 0) {
-      // if (currentColorBlind !== 'none' && heightColorBlind === 0) {
       setHeightColorBlind(280)
     } 
   }, [options.colorBlind])
-  // }, [currentColorBlind])
 
-  // Update color
   useEffect(() => {
-    const newColor = colors.findIndex(color => color.color === currentColor.color)
-    
-    if (currentColor.color !== '' && newColor == -1 && colors.length !== 0) {
-      const updatedColors = colors.map((clr) => {
-        
-        if (clr.id === currentColor.id) {
-          return {
-            color: currentColor.color,
-            isLocked: clr.isLocked,
-            contrastColor: getMainContrastColor(currentColor.color),
-            id: clr.id,
-            formats: currentColor.formats,
-            colorBlind: currentColor.colorBlind
-          }
-        }
-        return clr
-      })
-      setColors(updatedColors)
-    }
-  }, [currentColor])
-
-  function changeColorPalette(firstRender: boolean) {
-    const newColors = makeColorPalette({
-      randomColor: true,
-      format: "hex",
-      paletteType: options.paletteType as PaletteType,
-      // paletteType: paletteType as PaletteType,
-      quantity: firstRender ? 5 : colors.length
-    }) as string[]
-
-    const newObject = newColors.map((color): Color => {
-      return createNewColor(color)
-    })
-
-    // Keep locked colors
-    const lockedIndex: number[] = []
-
-    colors.forEach((color, index) => {
-      if (color.isLocked === true) lockedIndex.push(index)
-    })
-
-    lockedIndex.forEach(color => {
-      newObject.splice(color, 1, colors[color])
-    })
-
-    setColors(newObject)
-  }
-
-  
+    colorsDispatch({ type: 'update-colors' })
+  }, [colors.primary])
 
   function handleDragEnd(event: DragEndEvent) {
-    const {active, over} = event
-    const dragged = active.id as string
-    const target = over?.id as string
-
-    if(dragged !== target) {
-      setColors((colores) => {
-        const activeIndex = colores.findIndex(item  => item.id === +dragged)
-        const overIndex = colores.findIndex(item  => item.id === +target)
-        return arrayMove(colores, activeIndex, overIndex)
-      })
-    }
-  }
-
-  function addColor(existingColor: string, newColor: string, side: string) {
-    const mainColorIndex = colors.findIndex(clr => clr.color === existingColor)
-
-    const newObjectColor = createNewColor(newColor)
-    const newColorIndex = side === 'right' ? mainColorIndex + 1 : mainColorIndex
-    
-    const newColors = Array.from(colors)
-    newColors.splice(newColorIndex, 0, newObjectColor)
-
-    setColors(newColors)
+    colorsDispatch({ type: 'reorder-colors', payload: { event } })
   }
 
   function handleStartResize(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -221,45 +178,43 @@ export const PaletteGenerator = () => {
           onMouseUp={handleEndResize}
         >
           <SortableContext
-            items={colors}
+            items={colors.colors}
             strategy={horizontalListSortingStrategy}
           >
-            {colors.map((color: Color) => (
+            { colors.colors.map((color: Color) => (
               <ColorBar
                 color={color}
-                colors={colors}
-                setColors={setColors}
+                colors={colors.colors}
                 setModalContrast={setModalContrast}
                 setModalPicker={setModalPicker}
-                setCurrentColor={setCurrentColor}
-                addColor={addColor}
                 currentColorBlind={options.colorBlind}
                 heightColorBlind={heightColorBlind}
                 handleStartResize={handleStartResize}
                 resizeColorBlind={resizeColorBlind}
+                colorsDispatch={colorsDispatch}
               />
             ))} 
 
           </SortableContext>
           { modalContrast &&
             <ContrastCalculator
-              color={currentColor}
-              setColor={setCurrentColor}
+              colors={colors}
+              colorsDispatch={colorsDispatch}
               setModalContrast={setModalContrast}
-              addColor={addColor}
             />
           }
           { modalPicker && 
             <ColorPicker
             setModalColorPicker={setModalPicker}
-            color={currentColor}
-            setColor={setCurrentColor}
+            color={colors.primary}
+            colorsDispatch={colorsDispatch}
+            type='update-primary'
             />
           }
           { modalImageExtractor &&
             <ImageColorExtractor
               setModaImageExtractor={setModalImageExtractor}
-              setColors={setColors}
+              colorsDispatch={colorsDispatch}
             />
           }
         </main>

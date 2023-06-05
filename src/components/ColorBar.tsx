@@ -1,26 +1,29 @@
 import React, { useState } from 'react'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
-import '../styles/ColorBar.css'
-import { Color, ColorBlindSimulator } from '../pages/PaletteGenerator'
 import { Rgb } from '../lib/types'
 import { rgbToHex } from '../lib'
+
+import { Color, ColorBlindSimulator } from '../pages/PaletteGenerator'
+
 import { ColorsAction } from '../reducers/colors'
+import { ModalsAction } from '../reducers/modals'
+
+import '../styles/ColorBar.css'
 
 interface ColorBarProps {
   color: Color
   colors: Color[]
-  setModalContrast: React.Dispatch<React.SetStateAction<boolean>>
-  setModalPicker: React.Dispatch<React.SetStateAction<boolean>>
   currentColorBlind: string
   heightColorBlind: number
   handleStartResize: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   resizeColorBlind: boolean
-
   colorsDispatch: React.Dispatch<ColorsAction>
+  setUpdatedColor: React.Dispatch<React.SetStateAction<string>>
+  modalsDispatch: React.Dispatch<ModalsAction>
 }
 
-export const ColorBar = ({ color, colors, setModalContrast, setModalPicker, currentColorBlind, heightColorBlind, handleStartResize, resizeColorBlind, colorsDispatch }: ColorBarProps) => {
+export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, handleStartResize, resizeColorBlind, colorsDispatch, setUpdatedColor, modalsDispatch }: ColorBarProps) => {
   const {
     attributes,
     listeners,
@@ -41,7 +44,7 @@ export const ColorBar = ({ color, colors, setModalContrast, setModalPicker, curr
   }
 
   function handleContrast() {
-    setModalContrast(modal => !modal)
+    modalsDispatch({ type: 'contrast' })
     colorsDispatch({ type: 'set-primary', payload: { colorObject: color } })
     colorsDispatch({ type: 'secondary', payload: { color: color.contrastColor, format: 'hex' } })
   }
@@ -91,7 +94,8 @@ export const ColorBar = ({ color, colors, setModalContrast, setModalPicker, curr
 
   function handleOpenPicker() {
     colorsDispatch({ type: 'set-primary', payload: { colorObject: color } })
-    setModalPicker(modal => !modal)
+    modalsDispatch({ type: 'picker' })
+    setUpdatedColor('primary')
   }
 
   return (
@@ -179,8 +183,8 @@ export const ColorBar = ({ color, colors, setModalContrast, setModalPicker, curr
             style={{
             'color': color.contrastColor
             }}
-            onMouseDown={() => { setCliked(true) }}
-            onMouseUp={() => { setCliked(false) }}
+            onMouseDown={() => setCliked(true)}
+            onMouseUp={() => setCliked(false)}
             {...listeners}
           >
             <span className='icon-move' />
@@ -201,7 +205,7 @@ export const ColorBar = ({ color, colors, setModalContrast, setModalPicker, curr
             style={{
               'color': color.contrastColor
             }}
-            onMouseDown={() => handleOpenPicker()}
+            onMouseDown={handleOpenPicker}
           >
             <span className='icon-eye-dropper' />
           </button>

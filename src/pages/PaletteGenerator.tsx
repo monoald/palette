@@ -2,18 +2,23 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react'
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core"
 import { SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable"
+import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from '../lib/types'
 import { useKeyDown } from '../hooks/useKeyDown'
+
+import { Modal } from '../containers/Modal'
+import OptionBarContainer from '../containers/OptionBarContainer'
 import { ColorBar } from '../components/ColorBar'
 import { ContrastCalculator } from '../components/ContrastCalculator'
-import '../assets/icons/style.css'
-import '../styles/PaletteGenerator.css'
-import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from '../lib/types'
 import { ColorPicker } from '../components/colorPicker/ColorPicker'
 import { Header } from '../components/Header'
 import { ImageColorExtractor } from '../components/ImageColorExtractor'
-import OptionBarContainer from '../containers/OptionBarContainer'
+
 import { optionsInitialState, optionsReducer } from '../reducers/options'
 import { colorsInitialState, colorsReducer } from '../reducers/colors'
+import { modalsInitialState, modalsReducer } from '../reducers/modals'
+
+import '../assets/icons/style.css'
+import '../styles/PaletteGenerator.css'
 
 export interface Color {
   color: string
@@ -44,73 +49,13 @@ interface Formats {
   xyz: Xyz
 }
 
-// {export type ModalsTypes = 'contrast' | 'picker' | 'img-extractor'
-// export type ModalsAction = { type: ModalsTypes }
-
-// export interface ModalsReducer {
-//   contrast: boolean
-//   picker: boolean
-//   'img-extractor': boolean
-// }
-
-// export const modalsInitialState : ModalsReducer = {
-//   contrast: false,
-//   picker: false,
-//   'img-extractor': false
-// }
-
-// export function modalsReducer(state: ModalsReducer, action: ModalsAction) {
-//   switch (action.type) {
-//     case 'contrast':
-//       return { ...state, contrast: !state.contrast }
-//     case 'picker':
-//       return { ...state, picker: !state.picker }
-//     case 'img-extractor':
-//       return { ...state, 'img-extractor': !state['img-extractor'] }
-//     default:
-//       return state;
-//   }
-// }
-
-// const colorInitialState = {
-//   color: '',
-//     isLocked: false,
-//     contrastColor: '',
-//     id: 0,
-//     formats: {
-//       cmyk: { c: 0, m: 0, y: 0, k:0 },
-//       hsb: { h: 0, s: 0, v: 0 },
-//       hsl: { h: 0, s: 0, l: 0 },
-//       lab: { l: 0, a: 0, b: 0 },
-//       rgb: { r: 0, g: 0, b: 0 },
-//       xyz: { x: 0, y: 0, z: 0 }
-//     },
-//     colorBlind: {
-//       achromatomaly: '',
-//       achromatopsia: '',
-//       deuteranomaly: '',
-//       deuteranopia: '',
-//       protanomaly: '',
-//       protanopia: '',
-//       tritanomaly: '',
-//       tritanopia: '',
-//     }
-// }}
-
-
-
-
-
-
 export const PaletteGenerator = () => {
   const [colors, colorsDispatch] = useReducer(colorsReducer, colorsInitialState)
   const [options, optionsDispatch] = useReducer(optionsReducer, optionsInitialState)
-  // const [modals, modalsDispatch] = useReducer(modalsReducer, modalsInitialState)
-  const [modalContrast, setModalContrast] = useState<boolean>(false)
-  const [modalPicker, setModalPicker] = useState<boolean>(false)
-  const [modalImageExtractor, setModalImageExtractor] = useState(false)
+  const [modals, modalsDispatch] = useReducer(modalsReducer, modalsInitialState)
   const [heightColorBlind, setHeightColorBlind] = useState(0)
   const [resizeColorBlind, setResizeColorBlind] = useState(false)
+  const [updatedColor, setUpdatedColor] = useState<string>('')
 
   const mainRef = useRef<HTMLCanvasElement>(null)
 
@@ -159,7 +104,7 @@ export const PaletteGenerator = () => {
     <>
       <Header
         optionsDispatch={optionsDispatch}
-        setImageExtractor={setModalImageExtractor}
+        modalsDispatch={modalsDispatch}
       />
 
       <OptionBarContainer
@@ -185,37 +130,45 @@ export const PaletteGenerator = () => {
               <ColorBar
                 color={color}
                 colors={colors.colors}
-                setModalContrast={setModalContrast}
-                setModalPicker={setModalPicker}
+                modalsDispatch={modalsDispatch}
                 currentColorBlind={options.colorBlind}
                 heightColorBlind={heightColorBlind}
                 handleStartResize={handleStartResize}
                 resizeColorBlind={resizeColorBlind}
                 colorsDispatch={colorsDispatch}
+                setUpdatedColor={setUpdatedColor}
               />
             ))} 
 
           </SortableContext>
-          { modalContrast &&
-            <ContrastCalculator
-              colors={colors}
-              colorsDispatch={colorsDispatch}
-              setModalContrast={setModalContrast}
-            />
+
+          { modals.contrast &&
+            <Modal modalsDispatch={modalsDispatch} type='contrast' backgroundOpacity={0.4}>
+              <ContrastCalculator
+                colors={colors}
+                colorsDispatch={colorsDispatch}
+                setUpdatedColor={setUpdatedColor}
+                modalsDispatch={modalsDispatch}
+              />
+            </Modal>
           }
-          { modalPicker && 
-            <ColorPicker
-            setModalColorPicker={setModalPicker}
-            color={colors.primary}
-            colorsDispatch={colorsDispatch}
-            type='update-primary'
-            />
+          { modals.picker && 
+            <Modal modalsDispatch={modalsDispatch} type='picker' backgroundOpacity={0}>
+              <ColorPicker
+                modalsDispatch={modalsDispatch}
+                color={updatedColor === 'primary' ? colors.primary : colors.secondary}
+                colorsDispatch={colorsDispatch}
+                type={updatedColor === 'primary' ? 'update-primary' : 'secondary'}
+              />
+            </Modal>
           }
-          { modalImageExtractor &&
-            <ImageColorExtractor
-              setModaImageExtractor={setModalImageExtractor}
-              colorsDispatch={colorsDispatch}
-            />
+          { modals['img-extractor'] &&
+            <Modal modalsDispatch={modalsDispatch} type='img-extractor' backgroundOpacity={0.4}>
+              <ImageColorExtractor
+                modalsDispatch={modalsDispatch}
+                colorsDispatch={colorsDispatch}
+              />
+            </Modal>
           }
         </main>
       </DndContext>

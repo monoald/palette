@@ -1,14 +1,16 @@
 import React from "react"
+import { ModalsAction, ModalsTypes } from "../reducers/modals"
 
 interface CloseModalButtonProps {
-  setModal: React.Dispatch<React.SetStateAction<boolean>>
+  modalsDispatch: React.Dispatch<ModalsAction>
+  type: string
 }
 
-export const CloseModalButton = ({ setModal }: CloseModalButtonProps) => {
+export const CloseModalButton = ({ modalsDispatch, type }: CloseModalButtonProps) => {
   return (
     <button
       className='close-button'
-      onClick={() => setModal(modal => !modal)}
+      onClick={() => modalsDispatch({ type: type as ModalsTypes })}
     >
       CLOSE
     </button>

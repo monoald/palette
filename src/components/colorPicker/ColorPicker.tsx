@@ -1,25 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react'
 import { AnyFormat } from '../../lib/types';
-import { Modal } from '../Modal';
-import { Select } from '../Select';
-import { CmykPicker, HexadecimalPicker, HsbPicker, HslPicker, PickerContainer, RgbPicker } from '../Pickers';
-import { drawColorCanvas } from '../../utils/drawColorCanvas';
 import { findColorCoordinates } from '../../utils/findColorCoordinates';
-import '../../styles/ColorPicker.css'
+import { drawColorCanvas } from '../../utils/drawColorCanvas';
+
+import { CmykPicker, HexadecimalPicker, HsbPicker, HslPicker, LabPicker, PickerContainer, RgbPicker, XyzPicker } from '../Pickers';
+import { Select } from '../Select';
 import { Canvas } from './Canvas';
-import { Color } from '../../pages/PaletteGenerator';
 import { CloseModalButton } from '../CloseModalButton';
-import { LabPicker } from '../Pickers/LabPicker';
-import { XyzPicker } from '../Pickers/XyzPicker';
+import { Color } from '../../pages/PaletteGenerator';
+
 import { ColorsAction, ColorsTypes } from '../../reducers/colors';
+import { ModalsAction } from '../../reducers/modals';
+
+import '../../styles/ColorPicker.css'
 
 interface ColorPickerProps {
-  setModalColorPicker: React.Dispatch<React.SetStateAction<boolean>>
-  // colors: ColorsReducer
-  colorsDispatch: React.Dispatch<ColorsAction>
   color: Color
-  // setColor: React.Dispatch<React.SetStateAction<Color>>
+  colorsDispatch: React.Dispatch<ColorsAction>
+  modalsDispatch: React.Dispatch<ModalsAction>
   type: string
 }
 
@@ -31,7 +30,7 @@ interface Coordinates {
 
 const formatSelectData = ['HEXADECIMAL', 'CMYK', 'HSB', 'HSL', 'LAB', 'RGB', 'XYZ']
 
-export const ColorPicker = ({ setModalColorPicker, color, colorsDispatch, type }: ColorPickerProps) => {
+export const ColorPicker = ({ color, colorsDispatch, modalsDispatch, type }: ColorPickerProps) => {
   const [pickerFormat, setPickerFormat] = useState('HEXADECIMAL');
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null)
   const [moveThumb, setMoveThumb] = useState(true)
@@ -50,81 +49,77 @@ export const ColorPicker = ({ setModalColorPicker, color, colorsDispatch, type }
     }
   }, [color])
 
-
   function updateColor(color: AnyFormat, format: string, moveThumb: boolean) {
     colorsDispatch({ type: type as ColorsTypes, payload: { color, format } })
     setMoveThumb(moveThumb)
   }
-  console.log(color);
-  
+
   return (
-    <Modal setModal={setModalColorPicker} backgroundOpacity={0}>
-        <dialog
-          open
-          className='Color-Picker'
-        >
-          <Canvas
-            canvasRef={colorCanvasRef}
-            coordinates={coordinates}
-            setCoordinates={setCoordinates}
+    <dialog
+      open
+      className='Color-Picker'
+    >
+      <Canvas
+        canvasRef={colorCanvasRef}
+        coordinates={coordinates}
+        setCoordinates={setCoordinates}
+        color={color}
+        updateColor={updateColor}
+      />
+
+      <div className='format-container' >
+        <Select
+          options={formatSelectData}
+          value={pickerFormat}
+          setValue={setPickerFormat}
+          configuration={{
+            showCurrentValue: true,
+            showIcon: true
+          }}
+        />
+        <div className='format-modifiers' >
+          <PickerContainer
             color={color}
             updateColor={updateColor}
-          />
+          >
+            { pickerFormat === 'HEXADECIMAL'
+              ? <HexadecimalPicker />
+              : <></>
+            }
 
-          <div className='format-container' >
-            <Select
-              options={formatSelectData}
-              value={pickerFormat}
-              setValue={setPickerFormat}
-              configuration={{
-                showCurrentValue: true,
-                showIcon: true
-              }}
-            />
-            <div className='format-modifiers' >
-              <PickerContainer
-                color={color}
-                updateColor={updateColor}
-              >
-                { pickerFormat === 'HEXADECIMAL'
-                  ? <HexadecimalPicker />
-                  : <></>
-                }
+            { pickerFormat === 'CMYK'
+              ? <CmykPicker />
+              : <></>
+            }
 
-                { pickerFormat === 'CMYK'
-                  ? <CmykPicker />
-                  : <></>
-                }
+            { pickerFormat === 'HSB'
+              ? <HsbPicker />
+              : <></>
+            }
 
-                { pickerFormat === 'HSB'
-                  ? <HsbPicker />
-                  : <></>
-                }
+            { pickerFormat === 'HSL'
+              ? <HslPicker />
+              : <></>
+            }
 
-                { pickerFormat === 'HSL'
-                  ? <HslPicker />
-                  : <></>
-                }
+            { pickerFormat === 'LAB'
+              ? <LabPicker />
+              : <></>
+            }
 
-                { pickerFormat === 'LAB'
-                  ? <LabPicker />
-                  : <></>
-                }
+            { pickerFormat === 'RGB'
+              ? <RgbPicker />
+              : <></>
+            }
 
-                { pickerFormat === 'RGB'
-                  ? <RgbPicker />
-                  : <></>
-                }
-
-                { pickerFormat === 'XYZ'
-                  ? <XyzPicker />
-                  : <></>
-                }
-              </PickerContainer>
-            </div>
-              <CloseModalButton setModal={setModalColorPicker} />
-          </div>
-        </dialog>
-    </Modal>
+            { pickerFormat === 'XYZ'
+              ? <XyzPicker />
+              : <></>
+            }
+          </PickerContainer>
+        </div>
+        <CloseModalButton modalsDispatch={modalsDispatch} type='picker' />
+      </div>
+    </dialog>
   );
 };

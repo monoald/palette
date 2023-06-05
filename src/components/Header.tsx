@@ -1,13 +1,16 @@
 import React from 'react'
-import '../styles/Header.css'
+
 import { OptionsAction } from '../reducers/options'
+import { ModalsAction } from '../reducers/modals'
+
+import '../styles/Header.css'
 
 interface HeaderProps {
   optionsDispatch: React.Dispatch<OptionsAction>
-  setImageExtractor: React.Dispatch<React.SetStateAction<boolean>>
+  modalsDispatch: React.Dispatch<ModalsAction>
 }
 
-export const Header = ({ optionsDispatch, setImageExtractor }: HeaderProps) => {
+export const Header = ({ optionsDispatch, modalsDispatch }: HeaderProps) => {
   return (
     <header className='Header'>
       <nav className='navigation'>
@@ -27,7 +30,7 @@ export const Header = ({ optionsDispatch, setImageExtractor }: HeaderProps) => {
           </li>
 
           <li className='option'
-            onClick={() => setImageExtractor(state => !state)}
+            onClick={() => modalsDispatch({ type: 'img-extractor' })}
           >
             <span className='icon icon-image'/>
             IMAGE COLOR EXTRACTOR

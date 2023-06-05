@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
-import { Modal } from './Modal'
-import '../styles/ImageColorExtractor.css'
-import { CloseModalButton } from './CloseModalButton'
+
 import { ImageCanvas } from './ImageCanvas'
+import { CloseModalButton } from './CloseModalButton'
+
 import { ColorsAction } from '../reducers/colors'
+import { ModalsAction } from '../reducers/modals'
+
+import '../styles/ImageColorExtractor.css'
 
 interface ImageColorExtractorProps {
-  setModaImageExtractor: React.Dispatch<React.SetStateAction<boolean>>
   colorsDispatch: React.Dispatch<ColorsAction>
+  modalsDispatch: React.Dispatch<ModalsAction>
 }
 
-export const ImageColorExtractor = ({ setModaImageExtractor, colorsDispatch }: ImageColorExtractorProps) => {
+export const ImageColorExtractor = ({ colorsDispatch, modalsDispatch }: ImageColorExtractorProps) => {
   const [urlInput, setUrlInput] = useState("");
   const [url, setUrl] = useState<string>('');
 
@@ -40,45 +43,43 @@ export const ImageColorExtractor = ({ setModaImageExtractor, colorsDispatch }: I
   }
 
   return (
-    <Modal setModal={setModaImageExtractor} backgroundOpacity={0.5}>
-      <dialog
-        className='Image-Color-Extractor'
-        open
-      >
-        {url === ''
-          ?
-            <div className='input-container'>
-              <form
-                className='url-input'
-                onSubmit={handleUrlSubmit}
-              >
-                <label htmlFor="url" className='url-label'>URL:</label>
-                <input
-                  id="url"
-                  type="text"
-                  placeholder='https://'
-                  value={urlInput}
-                  onChange={handleUrlChange}
-                />
-                <button className='load-button' type="submit">LOAD</button>
-              </form>
+    <dialog
+      className='Image-Color-Extractor'
+      open
+    >
+      {url === ''
+        ?
+          <div className='input-container'>
+            <form
+              className='url-input'
+              onSubmit={handleUrlSubmit}
+            >
+              <label htmlFor="url" className='url-label'>URL:</label>
+              <input
+                id="url"
+                type="text"
+                placeholder='https://'
+                value={urlInput}
+                onChange={handleUrlChange}
+              />
+              <button className='load-button' type="submit">LOAD</button>
+            </form>
 
-              <div
-                className='image-container'
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-              >
-                <p className='image-drop-placeholder'>
-                  <span className='icon icon-image' />
-                  Drop an image
-                </p>
-              </div>
+            <div
+              className='image-container'
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+            >
+              <p className='image-drop-placeholder'>
+                <span className='icon icon-image' />
+                Drop an image
+              </p>
             </div>
-          : 
-            <ImageCanvas url={url} colorsDispatch={colorsDispatch} />
-        }
-        <CloseModalButton setModal={setModaImageExtractor} />
-      </dialog>
-    </Modal>
+          </div>
+        : 
+          <ImageCanvas url={url} colorsDispatch={colorsDispatch} />
+      }
+      <CloseModalButton modalsDispatch={modalsDispatch} type='img-extractor' />
+    </dialog>
   )
 }

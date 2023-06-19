@@ -1,7 +1,6 @@
 import React from 'react'
 import { BackgroundColor, ColorInput } from './StyledRangeInputs'
-import { colorFormatConverter } from '../../lib'
-import { AnyFormat, Cmyk } from '../../lib/types'
+import { AnyFormat, Cmyk, colorFormatConverter } from 'colors-kit'
 import { Color } from '../../pages/PaletteGenerator'
 
 interface CmykPickerProps {
@@ -122,7 +121,7 @@ export const CmykPicker = ({ color, updateColor }: CmykPickerProps) => {
           <input
             className='text-input__box'
             name='cyan'
-            type="number"
+            type='number'
             min={0}
             max={100}
             value={cmyk.c}
@@ -137,7 +136,7 @@ export const CmykPicker = ({ color, updateColor }: CmykPickerProps) => {
           <input
             className='text-input__box'
             name='magenta'
-            type="number"
+            type='number'
             min={0}
             max={100}
             value={cmyk.m}
@@ -152,7 +151,7 @@ export const CmykPicker = ({ color, updateColor }: CmykPickerProps) => {
           <input
             className='text-input__box'
             name='yellow'
-            type="number"
+            type='number'
             min={0}
             max={100}
             value={cmyk.y}
@@ -167,7 +166,7 @@ export const CmykPicker = ({ color, updateColor }: CmykPickerProps) => {
           <input
             className='text-input__box'
             name='key'
-            type="number"
+            type='number'
             min={0}
             max={100}
             value={cmyk.k}

@@ -21,14 +21,14 @@ export function ColorInput({ min, max, value, onChange, isHue = false, thumbColo
     <input
       id={id}
       className={`range-input ${isHue ? 'hue' : 'color'}-input`}
-      type="range"
+      type='range'
       min={min}
       max={max}
       value={value}
       onChange={onChange}
       style={{
-        "--thumb-background": isHue ? `hsl(${value}, 100%, 50%)` : thumbColor,
-        "--background-color": isHue ? '' : `-webkit-linear-gradient(left, ${backgroundColor}`
+        '--thumb-background': isHue ? `hsl(${value}, 100%, 50%)` : thumbColor,
+        '--background-color': isHue ? '' : `-webkit-linear-gradient(left, ${backgroundColor}`
       } as React.CSSProperties}
     />
   )

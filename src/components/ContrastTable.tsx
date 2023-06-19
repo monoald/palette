@@ -1,5 +1,5 @@
 import React from 'react'
-import { WCAGRequierements } from '../lib/rate/rateContrast'
+import { WCAGRequierements } from 'colors-kit'
 import '../styles/Table.css'
 
 interface ContrastTableProps {

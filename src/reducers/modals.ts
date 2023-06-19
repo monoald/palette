@@ -22,6 +22,6 @@ export function modalsReducer(state: ModalsReducer, action: ModalsAction) {
     case 'img-extractor':
       return { ...state, 'img-extractor': !state['img-extractor'] }
     default:
-      return state;
+      return state
   }
 }

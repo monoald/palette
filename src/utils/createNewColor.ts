@@ -1,8 +1,6 @@
-import { colorFormatConverter } from "../lib"
-import colorBlind from "../lib/colorBlind"
-import { AnyFormat, BaseColor, Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from '../lib/types'
-import { Color } from "../pages/PaletteGenerator"
-import { getMainContrastColor } from "./getMainContrastColor"
+import { AnyFormat, BaseColor, Cmyk, Hsl, Hsv, Lab, Rgb, Xyz, colorFormatConverter, toColorBlind } from 'colors-kit'
+import { Color } from '../pages/PaletteGenerator'
+import { getMainContrastColor } from './getMainContrastColor'
 
 export function createNewColor(color: AnyFormat, format: string): Color {
   const hex = format === 'hex' ? color as string : colorFormatConverter(color as BaseColor, { identifyFormat: true, targetFormat: ['hex'] }).hex as string
@@ -27,14 +25,14 @@ export function createNewColor(color: AnyFormat, format: string): Color {
       xyz,
     },
     colorBlind: {
-      achromatomaly: colorBlind.toAchromatomaly(hex) as string,
-      achromatopsia: colorBlind.toAchromatopsia(hex) as string,
-      deuteranomaly: colorBlind.toDeuteranomaly(hex) as string,
-      deuteranopia: colorBlind.toDeuteranopia(hex) as string,
-      protanomaly: colorBlind.toProtanomaly(hex) as string,
-      protanopia: colorBlind.toProtanopia(hex) as string,
-      tritanomaly: colorBlind.toTritanomaly(hex) as string,
-      tritanopia: colorBlind.toTritanopia(hex) as string
+      achromatomaly: toColorBlind(hex, 'achromatomaly') as string,
+      achromatopsia: toColorBlind(hex, 'achromatopsia') as string,
+      deuteranomaly: toColorBlind(hex, 'deuteranomaly') as string,
+      deuteranopia: toColorBlind(hex, 'deuteranopia') as string,
+      protanomaly: toColorBlind(hex, 'protanomaly') as string,
+      protanopia: toColorBlind(hex, 'protanopia') as string,
+      tritanomaly: toColorBlind(hex, 'tritanomaly') as string,
+      tritanopia: toColorBlind(hex, 'tritanopia') as string
     }
   }
 }

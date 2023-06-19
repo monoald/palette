@@ -1,10 +1,9 @@
-import { DragEndEvent } from "@dnd-kit/core"
-import { AnyFormat } from "../lib/types"
-import { Color } from "../pages/PaletteGenerator"
-import { createNewColor } from "../utils/createNewColor"
-import { PaletteType, makeColorPalette } from "../lib/palette"
-import { getMainContrastColor } from "../utils/getMainContrastColor"
-import { arrayMove } from "@dnd-kit/sortable"
+import { DragEndEvent } from '@dnd-kit/core'
+import { AnyFormat, PaletteType, makeColorPalette } from 'colors-kit'
+import { Color } from '../pages/PaletteGenerator'
+import { createNewColor } from '../utils/createNewColor'
+import { getMainContrastColor } from '../utils/getMainContrastColor'
+import { arrayMove } from '@dnd-kit/sortable'
 
 export const colorInitialState: Color = {
   color: '',
@@ -103,7 +102,7 @@ export function colorsReducer(state: ColorsReducer, action: ColorsAction) {
     case 'replace-colors': 
       return { ...state, colors: action.payload?.colors as Color[] }
     default:
-      return state;
+      return state
   }
 }
 
@@ -133,7 +132,7 @@ function updateColors(colors: Color[], primary: Color): Color[] {
 function changePalette(paletteType: string, colors: Color[]) {
   const newColors = makeColorPalette({
     randomColor: true,
-    format: "hex",
+    format: 'hex',
     paletteType: paletteType as PaletteType,
     quantity: colors.length || 5
   }) as string[]

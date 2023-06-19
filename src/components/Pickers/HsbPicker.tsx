@@ -1,7 +1,6 @@
 import React from 'react'
 import { BackgroundColor, ColorInput } from './StyledRangeInputs'
-import { AnyFormat, Hsv } from '../../lib/types'
-import { colorFormatConverter } from '../../lib'
+import { AnyFormat, Hsv, colorFormatConverter } from 'colors-kit'
 import { Color } from '../../pages/PaletteGenerator'
 
 interface HsbPickerProps {
@@ -84,7 +83,7 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
           <input
             className='text-input__box'
             name='hue'
-            type="number"
+            type='number'
             min={0}
             max={100}
             value={hsb.h}
@@ -99,7 +98,7 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
           <input
             className='text-input__box'
             name='saturation'
-            type="number"
+            type='number'
             min={0}
             max={100}
             value={hsb.s}
@@ -114,7 +113,7 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
           <input
             className='text-input__box'
             name='brightness'
-            type="number"
+            type='number'
             min={0}
             max={100}
             value={hsb.v}

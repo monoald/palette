@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { WCAGRequierements, rateContrast } from '../lib/rate/rateContrast'
-import { hexToRgb } from '../lib'
+import { WCAGRequierements, rateContrast, hexToRgb } from 'colors-kit'
 
 import { ContrastTable } from './ContrastTable'
 import { CloseModalButton } from './CloseModalButton'

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useReducer, useRef, useState } from 'react'
-import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core"
-import { SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable"
-import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from '../lib/types'
+import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core'
+import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
+import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from 'colors-kit'
 import { useKeyDown } from '../hooks/useKeyDown'
 
 import { Modal } from '../containers/Modal'

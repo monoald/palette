@@ -1,5 +1,5 @@
 import React from 'react'
-import { AnyFormat } from '../../lib/types'
+import { AnyFormat } from 'colors-kit'
 import { Color } from '../../pages/PaletteGenerator'
 
 interface PickerContanerProps {

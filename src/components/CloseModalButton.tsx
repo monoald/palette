@@ -1,5 +1,5 @@
-import React from "react"
-import { ModalsAction, ModalsTypes } from "../reducers/modals"
+import React from 'react'
+import { ModalsAction, ModalsTypes } from '../reducers/modals'
 
 interface CloseModalButtonProps {
   modalsDispatch: React.Dispatch<ModalsAction>

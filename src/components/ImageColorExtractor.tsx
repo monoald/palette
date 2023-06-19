@@ -14,24 +14,24 @@ interface ImageColorExtractorProps {
 }
 
 export const ImageColorExtractor = ({ colorsDispatch, modalsDispatch }: ImageColorExtractorProps) => {
-  const [urlInput, setUrlInput] = useState("");
-  const [url, setUrl] = useState<string>('');
+  const [urlInput, setUrlInput] = useState('')
+  const [url, setUrl] = useState<string>('')
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUrlInput(event.target.value);
+    setUrlInput(event.target.value)
     
-  };
+  }
 
   const handleUrlSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setUrl(urlInput);
-  };
+    event.preventDefault()
+    setUrl(urlInput)
+  }
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const file = event.dataTransfer.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+    event.preventDefault()
+    const file = event.dataTransfer.files[0]
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
     reader.onload = () => {
       setUrl(reader.result as string)
       setUrlInput(reader.result as string)
@@ -39,7 +39,7 @@ export const ImageColorExtractor = ({ colorsDispatch, modalsDispatch }: ImageCol
   }
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
+    event.preventDefault()
   }
 
   return (
@@ -54,15 +54,15 @@ export const ImageColorExtractor = ({ colorsDispatch, modalsDispatch }: ImageCol
               className='url-input'
               onSubmit={handleUrlSubmit}
             >
-              <label htmlFor="url" className='url-label'>URL:</label>
+              <label htmlFor='url' className='url-label'>URL:</label>
               <input
-                id="url"
-                type="text"
+                id='url'
+                type='text'
                 placeholder='https://'
                 value={urlInput}
                 onChange={handleUrlChange}
               />
-              <button className='load-button' type="submit">LOAD</button>
+              <button className='load-button' type='submit'>LOAD</button>
             </form>
 
             <div

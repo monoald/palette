@@ -1,5 +1,4 @@
-import { hexToRgb } from "../lib"
-import { rateContrast } from "../lib/rate/rateContrast"
+import { hexToRgb, rateContrast } from 'colors-kit'
 
 export function getMainContrastColor(color: string): string {
   const rgb = hexToRgb(color)

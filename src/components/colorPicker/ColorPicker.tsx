@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react'
-import { AnyFormat } from '../../lib/types';
-import { findColorCoordinates } from '../../utils/findColorCoordinates';
-import { drawColorCanvas } from '../../utils/drawColorCanvas';
+import { AnyFormat } from 'colors-kit'
+import { findColorCoordinates } from '../../utils/findColorCoordinates'
+import { drawColorCanvas } from '../../utils/drawColorCanvas'
 
-import { CmykPicker, HexadecimalPicker, HsbPicker, HslPicker, LabPicker, PickerContainer, RgbPicker, XyzPicker } from '../Pickers';
-import { Select } from '../Select';
-import { Canvas } from './Canvas';
-import { CloseModalButton } from '../CloseModalButton';
-import { Color } from '../../pages/PaletteGenerator';
+import { CmykPicker, HexadecimalPicker, HsbPicker, HslPicker, LabPicker, PickerContainer, RgbPicker, XyzPicker } from '../Pickers'
+import { Select } from '../Select'
+import { Canvas } from './Canvas'
+import { CloseModalButton } from '../CloseModalButton'
+import { Color } from '../../pages/PaletteGenerator'
 
-import { ColorsAction, ColorsTypes } from '../../reducers/colors';
-import { ModalsAction } from '../../reducers/modals';
+import { ColorsAction, ColorsTypes } from '../../reducers/colors'
+import { ModalsAction } from '../../reducers/modals'
 
 import '../../styles/ColorPicker.css'
 
@@ -31,18 +31,18 @@ interface Coordinates {
 const formatSelectData = ['HEXADECIMAL', 'CMYK', 'HSB', 'HSL', 'LAB', 'RGB', 'XYZ']
 
 export const ColorPicker = ({ color, colorsDispatch, modalsDispatch, type }: ColorPickerProps) => {
-  const [pickerFormat, setPickerFormat] = useState('HEXADECIMAL');
+  const [pickerFormat, setPickerFormat] = useState('HEXADECIMAL')
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null)
   const [moveThumb, setMoveThumb] = useState(true)
-  const colorCanvasRef = useRef<HTMLCanvasElement>(null);
+  const colorCanvasRef = useRef<HTMLCanvasElement>(null)
 
   // Update Color Canvas
   useEffect(() => {
-    const canvas = colorCanvasRef.current as HTMLCanvasElement;
+    const canvas = colorCanvasRef.current as HTMLCanvasElement
     drawColorCanvas(canvas, color.formats.hsb.h)
 
     if (moveThumb) {
-      const canvas = colorCanvasRef.current as HTMLCanvasElement;
+      const canvas = colorCanvasRef.current as HTMLCanvasElement
       const { x, y } = findColorCoordinates(canvas, color.formats.rgb)
 
       setCoordinates({ x: x - 14, y: y - 14, mouseMoved: false })
@@ -121,5 +121,5 @@ export const ColorPicker = ({ color, colorsDispatch, modalsDispatch, type }: Col
         <CloseModalButton modalsDispatch={modalsDispatch} type='picker' />
       </div>
     </dialog>
-  );
-};
+  )
+}

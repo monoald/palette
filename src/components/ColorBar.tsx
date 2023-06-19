@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
-import { Rgb } from '../lib/types'
-import { rgbToHex } from '../lib'
+import { Rgb, rgbToHex } from 'colors-kit'
 
 import { Color, ColorBlindSimulator } from '../pages/PaletteGenerator'
 
@@ -51,7 +50,7 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
 
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const target = event.target as HTMLElement
-    const { offsetX } = event.nativeEvent;
+    const { offsetX } = event.nativeEvent
     const triggerWidth = 20
 
     if (target.className === 'Color-Bar') {
@@ -70,9 +69,9 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
       r: Math.round((color1.r + color2.r) / 2),
       g: Math.round((color1.g + color2.g) / 2),
       b: Math.round((color1.b + color2.b) / 2),
-    };
+    }
 
-    return combinedColor;
+    return combinedColor
   }
 
   function handleAddColor(color: string, side: string) {

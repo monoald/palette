@@ -1,8 +1,7 @@
-import React from "react"
-import { BackgroundColor, ColorInput } from "./StyledRangeInputs"
-import { AnyFormat, Rgb } from "../../lib/types"
-import { colorFormatConverter } from "../../lib"
-import { Color } from "../../pages/PaletteGenerator"
+import React from 'react'
+import { BackgroundColor, ColorInput } from './StyledRangeInputs'
+import { AnyFormat, Rgb, colorFormatConverter } from 'colors-kit'
+import { Color } from '../../pages/PaletteGenerator'
 
 interface RgbPickerProps {
   color?: Color
@@ -62,7 +61,7 @@ export const RgbPicker = ({ color, updateColor }: RgbPickerProps) => {
   return (
     <>
       <ColorInput
-        id="red"
+        id='red'
         min={0}
         max={255}
         value={rgb.r}
@@ -71,7 +70,7 @@ export const RgbPicker = ({ color, updateColor }: RgbPickerProps) => {
         backgroundColor={`${redBackground.start}, ${redBackground.end}`}
       />
       <ColorInput
-        id="green"
+        id='green'
         min={0}
         max={255}
         value={rgb.g}
@@ -80,7 +79,7 @@ export const RgbPicker = ({ color, updateColor }: RgbPickerProps) => {
         backgroundColor={`${greenBackground.start}, ${greenBackground.end}`}
       />
       <ColorInput
-        id="blue"
+        id='blue'
         min={0}
         max={255}
         value={rgb.b}
@@ -97,7 +96,7 @@ export const RgbPicker = ({ color, updateColor }: RgbPickerProps) => {
           <input
             className='text-input__box'
             name='red'
-            type="number"
+            type='number'
             min={0}
             max={255}
             value={rgb.r}
@@ -112,7 +111,7 @@ export const RgbPicker = ({ color, updateColor }: RgbPickerProps) => {
           <input
             className='text-input__box'
             name='green'
-            type="number"
+            type='number'
             min={0}
             max={255}
             value={rgb.g}
@@ -127,7 +126,7 @@ export const RgbPicker = ({ color, updateColor }: RgbPickerProps) => {
           <input
             className='text-input__box'
             name='blue'
-            type="number"
+            type='number'
             min={0}
             max={255}
             value={rgb.b}

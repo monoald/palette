@@ -21,7 +21,7 @@ export const OptionsBar = ({ objectOptions, type, options, optionsDispatch }: Op
     setFade(false)
     setTimeout(() => {
       optionsDispatch({ type: 'option', payload: 'none'})
-    }, 1000);
+    }, 1000)
   }
 
   return (

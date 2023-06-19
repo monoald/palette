@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react'
-import { extractColorPalette } from '../lib/fromImage/getColorPaletteFromImg'
-import { rgbToHex } from '../lib'
+import { extractPalette, rgbToHex } from 'colors-kit'
 import '../styles/ImageCanvas.css'
 import { createNewColor } from '../utils/createNewColor'
 import { getMainContrastColor } from '../utils/getMainContrastColor'
@@ -25,7 +24,7 @@ export const ImageCanvas = ({ url, colorsDispatch }: ImageCanvasProps) => {
 
   useEffect(() => {
     async function extractColors() {
-      const rgbColors = await extractColorPalette(url, quantity)
+      const rgbColors = await extractPalette(url, quantity)
       const hexColors = rgbColors.map(color => rgbToHex(color))
 
       setExtractedColors(hexColors)
@@ -37,7 +36,7 @@ export const ImageCanvas = ({ url, colorsDispatch }: ImageCanvasProps) => {
 
       const img = new Image()
       img.src = url
-      img.crossOrigin = "anonymous"
+      img.crossOrigin = 'anonymous'
       img.onload = () => {
         context?.drawImage(img, 0, 0, canvas.width, canvas.height)
       }
@@ -47,9 +46,9 @@ export const ImageCanvas = ({ url, colorsDispatch }: ImageCanvasProps) => {
 
   useEffect(() => {
     if (url !== '') {
-    const canvas = imageRef.current as HTMLCanvasElement;
+    const canvas = imageRef.current as HTMLCanvasElement
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-    const imageData = ctx.getImageData(coordinates.x + 15, coordinates.y + 15, 1, 1).data;
+    const imageData = ctx.getImageData(coordinates.x + 15, coordinates.y + 15, 1, 1).data
 
     const colorHex = rgbToHex({ r: imageData[0], g: imageData[1], b: imageData[2] })
 
@@ -80,32 +79,32 @@ export const ImageCanvas = ({ url, colorsDispatch }: ImageCanvasProps) => {
   const handleStartDrag = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (pickerActive) {
       moveCircleToCurrentLocation(event)
-      setIsDragging(true);
+      setIsDragging(true)
     }
-  };
+  }
 
   const handleMoveDrag = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isDragging) {
       moveCircleToCurrentLocation(event)
     }
-  };
+  }
 
   const handleEndDrag = () => {
-    setIsDragging(false);
-  };
+    setIsDragging(false)
+  }
 
   function moveCircleToCurrentLocation(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const target = circleRef.current as HTMLElement
     const parent = target.parentElement as HTMLElement
-    const containerRect = parent.getBoundingClientRect();
+    const containerRect = parent.getBoundingClientRect()
     
-    const newX = event.clientX - containerRect.left - target.clientWidth / 2;
-    const newY = event.clientY - containerRect.top - target.clientHeight / 2;
+    const newX = event.clientX - containerRect.left - target.clientWidth / 2
+    const newY = event.clientY - containerRect.top - target.clientHeight / 2
 
-    const x = Math.round(Math.max(-target.clientWidth / 2, Math.min(newX, containerRect.width - target.clientWidth / 2)));
-    const y = Math.round(Math.max(-target.clientHeight / 2, Math.min(newY, containerRect.height - target.clientHeight / 2)));
+    const x = Math.round(Math.max(-target.clientWidth / 2, Math.min(newX, containerRect.width - target.clientWidth / 2)))
+    const y = Math.round(Math.max(-target.clientHeight / 2, Math.min(newY, containerRect.height - target.clientHeight / 2)))
 
-    setCoordinates({ x, y });
+    setCoordinates({ x, y })
   }
 
   function handlePickColor() {
@@ -213,8 +212,8 @@ export const ImageCanvas = ({ url, colorsDispatch }: ImageCanvasProps) => {
           </button>
 
           <form className='extractor-input' onSubmit={handleQuantitySubmit}>
-            <label htmlFor="quantity" className='quantity-label'>COLORS:</label>
-            <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} />
+            <label htmlFor='quantity' className='quantity-label'>COLORS:</label>
+            <input type='number' id='quantity' value={quantity} onChange={handleQuantityChange} />
           </form>
         </div>
       </div>

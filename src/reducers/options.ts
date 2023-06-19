@@ -21,6 +21,6 @@ export function optionsReducer(state: OptionsReducer, action: OptionsAction) {
     case 'paletteType':
       return { ...state, paletteType: action.payload }
     default:
-      return state;
+      return state
   }
 }

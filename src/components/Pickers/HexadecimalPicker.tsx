@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"
-import { ColorInput } from "./StyledRangeInputs"
-import { AnyFormat } from "../../lib/types"
-import { Color } from "../../pages/PaletteGenerator"
+import React, { useEffect, useState } from 'react'
+import { ColorInput } from './StyledRangeInputs'
+import { AnyFormat } from 'colors-kit'
+import { Color } from '../../pages/PaletteGenerator'
 
 interface HexadecimalPickerProps {
   color?: Color
@@ -30,11 +30,11 @@ export const HexadecimalPicker = ({ color, updateColor }: HexadecimalPickerProps
   }
 
   const handleHexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let inputValue = event.target.value;
+    let inputValue = event.target.value
 
-    // Ensure the first character is "#"
+    // Ensure the first character is '#'
     if (inputValue.length === 0 || inputValue[0] !== '#') {
-      inputValue = '#' + inputValue;
+      inputValue = '#' + inputValue
     }
 
     setHexColor(inputValue)
@@ -44,12 +44,12 @@ export const HexadecimalPicker = ({ color, updateColor }: HexadecimalPickerProps
 
       updateColor(inputValue, 'hex', true)
     }
-  };
+  }
 
   return (
     <>
       <ColorInput
-        id="hue"
+        id='hue'
         min={0}
         max={360}
         value={color?.formats.hsb.h as number}
@@ -57,7 +57,7 @@ export const HexadecimalPicker = ({ color, updateColor }: HexadecimalPickerProps
         isHue
       />
 
-      <input type="text"
+      <input type='text'
         value={hexColor}
         onChange={handleHexChange}
         style={{

@@ -1,8 +1,7 @@
-import React from "react"
-import { BackgroundColor, ColorInput } from "./StyledRangeInputs"
-import { AnyFormat, Hsl } from "../../lib/types"
-import { colorFormatConverter } from "../../lib"
-import { Color } from "../../pages/PaletteGenerator"
+import React from 'react'
+import { BackgroundColor, ColorInput } from './StyledRangeInputs'
+import { AnyFormat, Hsl, colorFormatConverter } from 'colors-kit'
+import { Color } from '../../pages/PaletteGenerator'
 
 interface HslPickerProps {
   color?: Color
@@ -51,7 +50,7 @@ export const HslPicker = ({ color, updateColor }: HslPickerProps) => {
   return (
     <>
       <ColorInput
-        id="hue"
+        id='hue'
         min={0}
         max={360}
         value={hsl.h as number}
@@ -59,7 +58,7 @@ export const HslPicker = ({ color, updateColor }: HslPickerProps) => {
         isHue
       />
       <ColorInput
-        id="saturation"
+        id='saturation'
         min={0}
         max={100}
         value={hsl.s}
@@ -68,7 +67,7 @@ export const HslPicker = ({ color, updateColor }: HslPickerProps) => {
         backgroundColor={`${saturationBackground.start}, ${saturationBackground.end}`}
       />
       <ColorInput
-        id="lightness"
+        id='lightness'
         min={0}
         max={100}
         value={hsl.l}
@@ -85,7 +84,7 @@ export const HslPicker = ({ color, updateColor }: HslPickerProps) => {
           <input
             className='text-input__box'
             name='hue'
-            type="number"
+            type='number'
             min={0}
             max={100}
             value={hsl.h}
@@ -100,7 +99,7 @@ export const HslPicker = ({ color, updateColor }: HslPickerProps) => {
           <input
             className='text-input__box'
             name='saturation'
-            type="number"
+            type='number'
             min={0}
             max={100}
             value={hsl.s}
@@ -115,7 +114,7 @@ export const HslPicker = ({ color, updateColor }: HslPickerProps) => {
           <input
             className='text-input__box'
             name='lightness'
-            type="number"
+            type='number'
             min={0}
             max={100}
             value={hsl.l}

@@ -12,8 +12,10 @@
 }
 
 .Header .option-container {
+  position: relative;
   height: 100%  ;
   display: flex;
+  margin: 0 48px;
   justify-content: center;
   align-items: center;
   gap: 40px;
@@ -36,4 +38,51 @@
 }
 .Header .option .icon {
   font-size: 2rem;
+}
+.icon-container {
+  position: absolute;
+  right: 0;
+  transition: right 1s;
+}
+.github-info {
+  height: 100%;
+  position: absolute;
+  right: 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+.github-info:hover .icon-container {
+  right: 120%;
+}
+.github-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+  background-image: url("../assets/icons/github.svg");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: transform 1s;
+}
+
+.github-info:hover .github-icon {
+  transform: rotate(-360deg);
+}
+
+.name {
+  opacity: 0;
+  -webkit-transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  -o-transition: opacity 1s;
+  transition: opacity 1s;
+  color: #42D37A;
+}
+.github-info:hover .name {
+  -webkit-transition: opacity 4s;
+  -moz-transition: opacity 4s;
+  -o-transition: opacity 4s;
+  transition: opacity 4s;
+  opacity: 1;
+  color: #42D37A
 }

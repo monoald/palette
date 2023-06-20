@@ -35,6 +35,15 @@ export const Header = ({ optionsDispatch, modalsDispatch }: HeaderProps) => {
             <span className='icon icon-image'/>
             IMAGE COLOR EXTRACTOR
           </li>
+
+          <li className='github-info' >
+            <div className='icon-container'>
+              <span className='github-icon' />
+            </div>
+            <a className='name' href='https://github.com/monoald' target='_blank'>
+              By @monoald
+            </a>
+          </li>
         </ul>
       </nav>
       

@@ -40,7 +40,7 @@ export const Header = ({ optionsDispatch, modalsDispatch }: HeaderProps) => {
             <div className='icon-container'>
               <span className='github-icon' />
             </div>
-            <a className='name' href='https://github.com/monoald' target='_blank'>
+            <a className='name' href='https://github.com/monoald/palette' target='_blank'>
               By @monoald
             </a>
           </li>

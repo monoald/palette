@@ -8,10 +8,12 @@ import { ColorsAction } from '../reducers/colors'
 
 interface ImageCanvasProps {
   url: string
+  setUrl: React.Dispatch<React.SetStateAction<string>>
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>
   colorsDispatch: React.Dispatch<ColorsAction>
 }
 
-export const ImageCanvas = ({ url, colorsDispatch }: ImageCanvasProps) => {
+export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: ImageCanvasProps) => {
   const [extract, setExtract] = useState(true)
   const [quantity, setQuantity] = useState(5)
   const [isDragging, setIsDragging] = useState(false)
@@ -24,10 +26,14 @@ export const ImageCanvas = ({ url, colorsDispatch }: ImageCanvasProps) => {
 
   useEffect(() => {
     async function extractColors() {
-      const rgbColors = await extractPalette(url, quantity)
-      const hexColors = rgbColors.map(color => rgbToHex(color))
-
-      setExtractedColors(hexColors)
+      try {
+        const rgbColors = await extractPalette(url, quantity)
+        const hexColors = rgbColors.map(color => rgbToHex(color))
+        setExtractedColors(hexColors)
+      } catch (error) {
+        setUrl('')
+        setErrorMessage('Cannot access the URL, try dragging the image.')
+      }
     }
 
     if (imageRef.current !== null) {

@@ -16,10 +16,10 @@ interface ImageColorExtractorProps {
 export const ImageColorExtractor = ({ colorsDispatch, modalsDispatch }: ImageColorExtractorProps) => {
   const [urlInput, setUrlInput] = useState('')
   const [url, setUrl] = useState<string>('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUrlInput(event.target.value)
-    
   }
 
   const handleUrlSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -65,6 +65,13 @@ export const ImageColorExtractor = ({ colorsDispatch, modalsDispatch }: ImageCol
               <button className='load-button' type='submit'>LOAD</button>
             </form>
 
+            <p style={{
+              fontSize: '14px',
+              color: '#C1292E'
+            }}>
+              {errorMessage}
+            </p>
+
             <div
               className='image-container'
               onDrop={handleDrop}
@@ -77,7 +84,12 @@ export const ImageColorExtractor = ({ colorsDispatch, modalsDispatch }: ImageCol
             </div>
           </div>
         : 
-          <ImageCanvas url={url} colorsDispatch={colorsDispatch} />
+          <ImageCanvas
+            url={url}
+            setUrl={setUrl}
+            setErrorMessage={setErrorMessage}
+            colorsDispatch={colorsDispatch}
+          />
       }
       <CloseModalButton modalsDispatch={modalsDispatch} type='img-extractor' />
     </dialog>

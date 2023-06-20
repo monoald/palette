@@ -1,5 +1,5 @@
 import { DragEndEvent } from '@dnd-kit/core'
-import { AnyFormat, PaletteType, makeColorPalette } from 'colors-kit'
+import { AnyFormat, Palette, makeColorPalette } from 'colors-kit'
 import { Color } from '../pages/PaletteGenerator'
 import { createNewColor } from '../utils/createNewColor'
 import { getMainContrastColor } from '../utils/getMainContrastColor'
@@ -133,7 +133,7 @@ function changePalette(paletteType: string, colors: Color[]) {
   const newColors = makeColorPalette({
     randomColor: true,
     format: 'hex',
-    paletteType: paletteType as PaletteType,
+    paletteType: paletteType as Palette,
     quantity: colors.length || 5
   }) as string[]
 

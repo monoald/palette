@@ -19,6 +19,8 @@ import { modalsInitialState, modalsReducer } from '../reducers/modals'
 
 import '../assets/icons/style.css'
 import '../styles/PaletteGenerator.css'
+import Tooltip from '../components/Tooltip'
+import { useTooltip } from '../hooks/useTooltip'
 
 export interface Color {
   color: string
@@ -56,12 +58,15 @@ export const PaletteGenerator = () => {
   const [heightColorBlind, setHeightColorBlind] = useState(0)
   const [resizeColorBlind, setResizeColorBlind] = useState(false)
   const [updatedColor, setUpdatedColor] = useState<string>('')
+  const [tooltipMessage, setTooltipMessage] = useState('')
 
   const mainRef = useRef<HTMLCanvasElement>(null)
 
   useKeyDown(() => {
     colorsDispatch({ type: 'set-colors', payload: { paletteType: options.paletteType } })
   }, ['Space'])
+
+  useTooltip(tooltipMessage, setTooltipMessage)
 
   useEffect(() => {
     if (options.colorBlind !== 'none' && heightColorBlind === 0) {
@@ -72,6 +77,10 @@ export const PaletteGenerator = () => {
   useEffect(() => {
     colorsDispatch({ type: 'update-colors' })
   }, [colors.primary])
+
+  useEffect(() => {
+    colorsDispatch({ type: 'set-colors', payload: { paletteType: options.paletteType}})
+  }, [options.paletteType])
 
   function handleDragEnd(event: DragEndEvent) {
     colorsDispatch({ type: 'reorder-colors', payload: { event } })
@@ -137,6 +146,7 @@ export const PaletteGenerator = () => {
                 resizeColorBlind={resizeColorBlind}
                 colorsDispatch={colorsDispatch}
                 setUpdatedColor={setUpdatedColor}
+                setTooltipMessage={setTooltipMessage}
               />
             ))} 
 
@@ -170,6 +180,8 @@ export const PaletteGenerator = () => {
               />
             </Modal>
           }
+
+          <Tooltip message={tooltipMessage}/>
         </main>
       </DndContext>
     </>

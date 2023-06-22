@@ -1,0 +1,35 @@
+.Tooltip {
+  position: absolute;
+  bottom: 0;
+  left: -150px;
+  display: none;
+  width: fit-content;
+  height: fit-content;
+  padding: 12px 24px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  margin-left: 40px;
+  background-color: #1A1B25;
+  color: #E8E9F3;
+  font-size: 14px;
+}
+
+.Tooltip--active {
+  display: block;
+  animation: tooltip-animation 5s;
+}
+
+@keyframes tooltip-animation {
+  0% {
+    left: -150px;
+  }
+  20% {
+    left: 0px;
+  }
+  80% {
+    left: 0px;
+  }
+  100% {
+    left: -150px;
+  }
+}

@@ -20,9 +20,10 @@ interface ColorBarProps {
   colorsDispatch: React.Dispatch<ColorsAction>
   setUpdatedColor: React.Dispatch<React.SetStateAction<string>>
   modalsDispatch: React.Dispatch<ModalsAction>
+  setTooltipMessage: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, handleStartResize, resizeColorBlind, colorsDispatch, setUpdatedColor, modalsDispatch }: ColorBarProps) => {
+export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, handleStartResize, resizeColorBlind, colorsDispatch, setUpdatedColor, modalsDispatch, setTooltipMessage }: ColorBarProps) => {
   const {
     attributes,
     listeners,
@@ -51,7 +52,7 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const target = event.target as HTMLElement
     const { offsetX } = event.nativeEvent
-    const triggerWidth = 20
+    const triggerWidth = 60
 
     if (target.className === 'Color-Bar') {
       if (offsetX < triggerWidth) {
@@ -95,6 +96,11 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
     colorsDispatch({ type: 'set-primary', payload: { colorObject: color } })
     modalsDispatch({ type: 'picker' })
     setUpdatedColor('primary')
+  }
+
+  function handleCopyToClipboard() {
+    navigator.clipboard.writeText(color.color)
+    setTooltipMessage('Copied!')
   }
 
   return (
@@ -159,7 +165,7 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
             style={{
               'color': color.contrastColor
             }}
-            onMouseDown={() => navigator.clipboard.writeText(color.color)}
+            onMouseDown={handleCopyToClipboard}
           >
             <span className='icon-clipboard' />
           </button>

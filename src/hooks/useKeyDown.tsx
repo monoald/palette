@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-// import { KeyboardKey } from 'enums/keyboardKey'
 
 export const useKeyDown = (callback: (T?: unknown) => void, keys: string[]) => {
   useEffect(() => {

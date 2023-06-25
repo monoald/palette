@@ -2,6 +2,7 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react'
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
+import { useParams } from 'react-router-dom'
 import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from 'colors-kit'
 import { useKeyDown } from '../hooks/useKeyDown'
 
@@ -59,8 +60,18 @@ export const PaletteGenerator = () => {
   const [resizeColorBlind, setResizeColorBlind] = useState(false)
   const [updatedColor, setUpdatedColor] = useState<string>('')
   const [tooltipMessage, setTooltipMessage] = useState('')
+  const [firstRender, setFirstRender] = useState(true)
 
   const mainRef = useRef<HTMLCanvasElement>(null)
+
+  const { palette } = useParams()
+
+  useEffect(() => {
+    if (firstRender) {
+      colorsDispatch({ type: 'init-colors', payload: { url: palette } })
+      setFirstRender(false)
+    }
+  }, [colors.colors])
 
   useKeyDown(() => {
     colorsDispatch({ type: 'set-colors', payload: { paletteType: options.paletteType } })
@@ -79,7 +90,9 @@ export const PaletteGenerator = () => {
   }, [colors.primary])
 
   useEffect(() => {
-    colorsDispatch({ type: 'set-colors', payload: { paletteType: options.paletteType}})
+    if (firstRender === false) {
+      colorsDispatch({ type: 'set-colors', payload: { paletteType: options.paletteType}})
+    }
   }, [options.paletteType])
 
   function handleDragEnd(event: DragEndEvent) {
@@ -114,6 +127,9 @@ export const PaletteGenerator = () => {
       <Header
         optionsDispatch={optionsDispatch}
         modalsDispatch={modalsDispatch}
+        colorsDispatch={colorsDispatch}
+        history={colors.history}
+        setTooltipMessage={setTooltipMessage}
       />
 
       <OptionBarContainer

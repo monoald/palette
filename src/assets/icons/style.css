@@ -72,3 +72,12 @@
 .icon-clipboard:before {
   content: "\e90f";
 }
+.icon-undo:before {
+  content: "\e911";
+}
+.icon-redo:before {
+  content: "\e912";
+}
+.icon-share:before {
+  content: "\e914";
+}

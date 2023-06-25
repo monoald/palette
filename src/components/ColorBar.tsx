@@ -85,7 +85,7 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
     const newColorRgb = combineColors(color1, color2)
     const newColor = rgbToHex(newColorRgb)
 
-    colorsDispatch({ type: 'add-color', payload: { color, newColor, side } })
+    colorsDispatch({ type: 'add-color', payload: { color, addedColor: newColor, side } })
   }
 
   function handleRemoveColor(id: number) {

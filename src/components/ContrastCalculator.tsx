@@ -38,6 +38,7 @@ export const ContrastCalculator = ({ colors, colorsDispatch, setUpdatedColor, mo
       uiComponent: false
     }
   })
+
   useEffect(() => {
     const colorRgb = hexToRgb(colors.primary.color)
     const secondaryRgb = hexToRgb(colors.secondary.color)
@@ -90,7 +91,7 @@ export const ContrastCalculator = ({ colors, colorsDispatch, setUpdatedColor, mo
 
           <button
             className='secondary-add'
-            onClick={() => colorsDispatch({ type: 'add-color', payload: { color: colors.primary.color, newColor: colors.secondary.color, side: 'right' } })}
+            onClick={() => colorsDispatch({ type: 'add-color', payload: { color: colors.primary.color, addedColor: colors.secondary.color, side: 'right' } })}
             style={{
               color: colors.secondary.contrastColor  === '#000000' ? '#1A1B25' :   '#fff',
             }}

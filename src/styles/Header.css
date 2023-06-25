@@ -18,10 +18,7 @@
   margin: 0 48px;
   justify-content: center;
   align-items: center;
-  gap: 40px;
-  color: #E8E9F3;
-  font-size: 1.2rem;
-  letter-spacing: 0.8px;
+  gap: 20px;
   list-style: none;
 }
 
@@ -32,8 +29,15 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  border: none;
+  color: #E8E9F3;
+  font-size: 1.2rem;
+  letter-spacing: 0.8px;
 }
-.Header .option:hover {
+.Header .option:disabled {
+  color: rgba(232,233,243,0.5);
+}
+.Header .option:enabled:hover {
   color: #42D37A;
 }
 .Header .option .icon {

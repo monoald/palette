@@ -17,7 +17,7 @@ interface HeaderProps {
 
 export const Header = ({ optionsDispatch, modalsDispatch, colorsDispatch, history, setTooltipMessage }: HeaderProps) => {
   function handleShare() {
-    navigator.clipboard.writeText(window.location.href)
+    navigator.clipboard.writeText(`https://app-palette.vercel.app/${history.data[history.currentIndex]}`)
     setTooltipMessage('Url copied!')
   }
 

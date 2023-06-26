@@ -115,7 +115,7 @@ export function colorsReducer(state: ColorsReducer, action: ColorsAction) {
       newColor = createNewColor(color, format)
       return { ...state, secondary: { ...newColor, id: state.primary.id || newColor.id } }
     case 'update-colors':
-      newColors = updateColors(state.colors, state.primary)
+      newColors = updateColors(state.colors, state.primary, history)
       return { ...state, colors: newColors }
     case 'init-colors':
       newColors = initPalette(url, history)
@@ -148,7 +148,7 @@ export function colorsReducer(state: ColorsReducer, action: ColorsAction) {
   }
 }
 
-function updateColors(colors: Color[], primary: Color): Color[] {
+function updateColors(colors: Color[], primary: Color, history: History): Color[] {
   const newColor = colors.findIndex(color => color.color === primary.color)
 
   if (primary.color !== '' && newColor == -1 && colors.length !== 0) {
@@ -166,6 +166,10 @@ function updateColors(colors: Color[], primary: Color): Color[] {
       }
       return clr
     })
+    const paletteId = paletteToId(updatedColors)
+    history.data.push(paletteId)
+    history.currentIndex = history.data.length - 1
+
     return updatedColors
   }
   return colors

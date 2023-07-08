@@ -5,32 +5,74 @@
   flex-direction: column;
   gap: 10px;
 }
-.Image-Canvas .colors-container {
+.extracted-colors {
   width: 100%;
   height: fit-content;
   display: flex;
 }
-.Image-Canvas .color {
+.extracted-colors__color {
   width: 100%;
   height: 24px;
   border-radius: 0;
   padding: 0;
   border: none;
 }
-.Image-Canvas .color p {
+.extracted-colors__color:first-child {
+  border-top-left-radius: 8px;
+}
+.extracted-colors__color:last-child {
+  border-top-right-radius: 8px;
+}
+.extracted-colors__name {
   font-size: 1.4rem;
   text-transform: uppercase;
   letter-spacing: 0.8px;
   display: none;
 }
-.Image-Canvas .color:hover p {
+.extracted-colors__color:hover .extracted-colors__name {
   display: inline;
 }
-.Image-Canvas .color:first-child {
-  border-top-left-radius: 4px;
+.canvas {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  user-select: none;
 }
-.Image-Canvas .color:last-child {
-  border-top-right-radius: 4px;
+.canvas__image {
+  width: 100%;
+  height: 100%;
+  margin: '0 auto'
+}
+.canvas__thumb {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-image: url("../assets/icons/pickerThumb.svg");
+  padding: 0;
+  border: none;
+}
+.config {
+  display: flex;
+  justify-content: space-between;
+}
+.config__button {
+  width: 120px;
+  border: 1px solid var(--txt-inactive);
+  border-radius: 8px;
+  padding: 12px 0;
+  background: transparent;
+  font-size: 1.2rem;
+  letter-spacing: 0.8px;
+}
+.config__button-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.config__button .icon {
+  font-size: 2rem;
 }
 .extractor-input {
   display: flex;
@@ -48,47 +90,4 @@
 .extractor-input #quantity::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-.canvas-container {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  user-select: none;
-}
-.canvas-container .image {
-  width: 100%;
-  height: 100%;
-  margin: '0 auto'
-}
-.canvas-container .icon {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-image: url("../assets/icons/pickerThumb.svg");
-}
-.config-container {
-  display: flex;
-  justify-content: space-between;
-}
-.config-container .config-button {
-  width: 120px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid rgba(232, 233, 243, 0.4);
-  border-radius: 8px;
-  padding: 12px 0;
-  background: transparent;
-  font-size: 1.2rem;
-  letter-spacing: 0.8px;
-}
-.config-container .config-button:hover,
-.config-container .config-button--active {
-  color: #42D37A;
-  border: 1px solid #42D37A;
-}
-.config-container .config-button .icon {
-  font-size: 2rem;
 }

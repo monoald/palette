@@ -7,8 +7,9 @@ import { drawColorCanvas } from '../../utils/drawColorCanvas'
 import { CmykPicker, HexadecimalPicker, HsbPicker, HslPicker, LabPicker, PickerContainer, RgbPicker, XyzPicker } from '../Pickers'
 import { Select } from '../Select'
 import { Canvas } from './Canvas'
-import { CloseModalButton } from '../CloseModalButton'
+import { SecondaryButton } from '../buttons/SecondaryButton'
 import { Color } from '../../pages/PaletteGenerator'
+import { DraggableModal } from '../../containers/DraggableModal'
 
 import { ColorsAction, ColorsTypes } from '../../reducers/colors'
 import { ModalsAction } from '../../reducers/modals'
@@ -42,7 +43,6 @@ export const ColorPicker = ({ color, colorsDispatch, modalsDispatch, type }: Col
     drawColorCanvas(canvas, color.formats.hsb.h)
 
     if (moveThumb) {
-      const canvas = colorCanvasRef.current as HTMLCanvasElement
       const { x, y } = findColorCoordinates(canvas, color.formats.rgb)
 
       setCoordinates({ x: x - 14, y: y - 14, mouseMoved: false })
@@ -55,10 +55,7 @@ export const ColorPicker = ({ color, colorsDispatch, modalsDispatch, type }: Col
   }
 
   return (
-    <dialog
-      open
-      className='Color-Picker'
-    >
+    <DraggableModal nameClass="Color-Picker">
       <Canvas
         canvasRef={colorCanvasRef}
         coordinates={coordinates}
@@ -118,8 +115,11 @@ export const ColorPicker = ({ color, colorsDispatch, modalsDispatch, type }: Col
             }
           </PickerContainer>
         </div>
-        <CloseModalButton modalsDispatch={modalsDispatch} type='picker' />
+        <SecondaryButton
+          event={() => modalsDispatch({ type: 'picker' })}
+          content='Close'
+        />
       </div>
-    </dialog>
+    </DraggableModal>
   )
 }

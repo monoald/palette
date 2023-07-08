@@ -5,14 +5,16 @@ import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortabl
 import { useParams } from 'react-router-dom'
 import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from 'colors-kit'
 import { useKeyDown } from '../hooks/useKeyDown'
+import { useTooltip } from '../hooks/useTooltip'
 
-import { Modal } from '../containers/Modal'
+import { Header } from '../components/Header'
+import { SideBar } from '../components/SideBar'
 import OptionBarContainer from '../containers/OptionBarContainer'
 import { ColorBar } from '../components/ColorBar'
 import { ContrastCalculator } from '../components/ContrastCalculator'
 import { ColorPicker } from '../components/colorPicker/ColorPicker'
-import { Header } from '../components/Header'
-import { ImageColorExtractor } from '../components/ImageColorExtractor'
+import { ImageColorExtractor } from '../components/imageExtractor/ImageColorExtractor'
+import Tooltip from '../components/tooltips/Tooltip'
 
 import { optionsInitialState, optionsReducer } from '../reducers/options'
 import { colorsInitialState, colorsReducer } from '../reducers/colors'
@@ -20,8 +22,6 @@ import { modalsInitialState, modalsReducer } from '../reducers/modals'
 
 import '../assets/icons/style.css'
 import '../styles/PaletteGenerator.css'
-import Tooltip from '../components/Tooltip'
-import { useTooltip } from '../hooks/useTooltip'
 
 export interface Color {
   color: string
@@ -124,7 +124,9 @@ export const PaletteGenerator = () => {
 
   return (
     <>
-      <Header
+      <Header />
+
+      <SideBar
         optionsDispatch={optionsDispatch}
         modalsDispatch={modalsDispatch}
         colorsDispatch={colorsDispatch}
@@ -169,32 +171,26 @@ export const PaletteGenerator = () => {
           </SortableContext>
 
           { modals.contrast &&
-            <Modal modalsDispatch={modalsDispatch} type='contrast' backgroundOpacity={0.4}>
               <ContrastCalculator
                 colors={colors}
                 colorsDispatch={colorsDispatch}
                 setUpdatedColor={setUpdatedColor}
                 modalsDispatch={modalsDispatch}
               />
-            </Modal>
           }
           { modals.picker && 
-            <Modal modalsDispatch={modalsDispatch} type='picker' backgroundOpacity={0}>
               <ColorPicker
                 modalsDispatch={modalsDispatch}
                 color={updatedColor === 'primary' ? colors.primary : colors.secondary}
                 colorsDispatch={colorsDispatch}
                 type={updatedColor === 'primary' ? 'update-primary' : 'secondary'}
               />
-            </Modal>
           }
           { modals['img-extractor'] &&
-            <Modal modalsDispatch={modalsDispatch} type='img-extractor' backgroundOpacity={0.4}>
               <ImageColorExtractor
                 modalsDispatch={modalsDispatch}
                 colorsDispatch={colorsDispatch}
               />
-            </Modal>
           }
 
           <Tooltip message={tooltipMessage}/>

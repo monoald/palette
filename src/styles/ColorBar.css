@@ -17,7 +17,6 @@
   align-items: center;
   justify-content: center;
   padding: 10px;
-  z-index: 1;
 }
 .color-hex {
   margin-top: 40px;
@@ -32,7 +31,7 @@
   border: none;
   border-radius: 50%;
   background-color: rgb(26, 27, 37);
-  color: rgb(232, 233, 243);
+  color: var(--txt-main);
   position: absolute;
   top: calc(50% - 50px);
   justify-content: center;
@@ -53,5 +52,4 @@
   bottom: -10px;
   left: 0;
   cursor: n-resize;
-  /* pointer-events: none; */
 }

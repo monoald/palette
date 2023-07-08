@@ -1,0 +1,12 @@
+.Draggable-Modal {
+  position: absolute;
+  height: fit-content;
+  z-Index: 1;
+  border: none;
+  border-Radius: 8px;
+  padding: 20px;
+  gap: 20px;
+  background: var(--main);
+  box-Shadow:  8px 6px 14px rgba(0,0,0,0.4);
+  letter-Spacing: 0.6px;
+}

@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
+
 import { AnyFormat, Cmyk, Hsl, Hsv, Lab, Rgb, Xyz, rgbToHsv } from 'colors-kit'
-import '../../styles/Canvas.css'
 import { Color } from '../../pages/PaletteGenerator'
+
+import '../../styles/Canvas.css'
 
 interface Coordinates {
   x: number
@@ -36,7 +38,7 @@ interface CanvasProps {
 
 export const Canvas = ({ canvasRef, coordinates, setCoordinates, color, updateColor }: CanvasProps) => {
   const [isDragging, setIsDragging] = useState(false)
-  const circleRef = useRef<HTMLDivElement>(null)
+  const circleRef = useRef<HTMLButtonElement>(null)
   
   // Update Color hen mouse moved
   useEffect(() => {
@@ -66,7 +68,7 @@ export const Canvas = ({ canvasRef, coordinates, setCoordinates, color, updateCo
     setIsDragging(false)
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLElement
     const parent = target.parentElement as HTMLElement
     const step = 1
@@ -122,15 +124,15 @@ export const Canvas = ({ canvasRef, coordinates, setCoordinates, color, updateCo
       onMouseUp={handleEndDrag}
     >
       <canvas
-        className='color-canvas'
+        className='Canvas__draw'
         width={240}
         height={240}
         ref={canvasRef}
       />
 
       { coordinates &&
-        <div
-          className='thumb'
+        <button
+          className='Canvas__thumb'
           style={{
             left: `${coordinates.x}px`,
             top: `${coordinates.y}px`,
@@ -139,13 +141,13 @@ export const Canvas = ({ canvasRef, coordinates, setCoordinates, color, updateCo
           ref={circleRef}
         >
           <div
-          className='thumb-center'
+          className='Canvas__thumb-bg'
             style={{
               background: color.color,
             }}
           >
           </div>
-        </div>
+        </button>
       }
     </div>
   )

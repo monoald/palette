@@ -1,8 +1,8 @@
 .Table {
   width: 510px;
-  margin: 20px auto;
+  margin: 0 auto;
   table-layout: fixed;
-  color: rgb(232, 233, 243);
+  color: var(--txt-main);
   letter-spacing: 0.8px;
 }
 .Table th,
@@ -13,7 +13,7 @@
 .Table th {
   padding: 14px;
   font-size: 1.5rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 .Table td {
   padding: 8px;

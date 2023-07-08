@@ -1,6 +1,6 @@
 .Tooltip {
   position: absolute;
-  bottom: 0;
+  bottom: 20px;
   left: -150px;
   display: none;
   width: fit-content;
@@ -9,9 +9,10 @@
   border-radius: 10px;
   margin-bottom: 40px;
   margin-left: 40px;
-  background-color: #1A1B25;
+  background-color: var(--main);
   color: #E8E9F3;
   font-size: 14px;
+  z-index: 1;
 }
 
 .Tooltip--active {

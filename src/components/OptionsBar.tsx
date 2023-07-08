@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import '../styles/OptionsBar.css'
+import { SecondaryButton } from './buttons/SecondaryButton'
 import { OptionTypes, OptionsAction, OptionsReducer } from '../reducers/options'
+import '../styles/OptionsBar.css'
 
 interface OptionsBarProps {
   objectOptions: string[]
@@ -31,7 +32,13 @@ export const OptionsBar = ({ objectOptions, type, options, optionsDispatch }: Op
           {objectOptions.map(option => (
             <li
               key={option}
-              className={`option${options[type as keyof OptionsReducer] === option ? ' option--active' : ''}`}
+              className={`
+                txt-hover-primary
+                option${options[type as keyof OptionsReducer] === option
+                  ? ' option--active  txt-primary'
+                  : ''
+                }`
+              }
               onClick={() => handleClick(option)}
             >
               <p>{option}</p>
@@ -43,12 +50,7 @@ export const OptionsBar = ({ objectOptions, type, options, optionsDispatch }: Op
         </ul>
       </nav>
 
-      <button
-        className='close-button'
-        onClick={handleCloseBar}
-      >
-        CLOSE
-      </button>
+      <SecondaryButton event={handleCloseBar} content='Close' />
     </aside>
   )
 }

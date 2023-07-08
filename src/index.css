@@ -1,26 +1,36 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+html {
+  font-size: 62.5%;
+  font-family: 'Roboto', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Roboto, sans-serif; */
+  line-height: 1.5;
+  font-weight: 400;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-}
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  --main: #111217;
+  --secondary: #2FD312;
+  --txt-main: #ffffff;
+  --txt-inactive: rgba(255,255,255,0.45);
+  --gradient-primary: -webkit-linear-gradient(left, #2FD312, #03BCCC);
+  --gradient-secondary: -webkit-linear-gradient(left, #03BCCC, #2FD312);
+  --gradient-tertiary: -webkit-linear-gradient(bottom, #03BCCC, #2FD312);
 }
 
 body {
@@ -30,47 +40,94 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
-
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
+  border: none;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
 }
-button:hover {
-  border-color: #646cff;
+button:disabled {
+  cursor: default;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"] {
+  border: 1px solid var(--txt-main);
+  background: transparent;
+  border-radius: 6px;
+  outline: none;
+}
+input[type="text"]:focus-visible, 
+input[type="number"]:focus-visible,
+input[type="email"]:focus-visible,
+input[type="password"]:focus-visible {
+  border-color: transparent;
+  border-width: 2px;
+  border-style: solid;
+  background:
+    linear-gradient(var(--main) 0 0) padding-box,
+    var(--gradient-secondary) border-box; 
+}
+input[type="range"] {
+  border: 1px solid var(--txt-inactive);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.txt-primary {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-#root {
-  display: grid;
-  grid-template-areas: 
-  "header"
-  "main";
-  grid-template-rows: 33px 1fr;
+.txt-secondary {
+  background: var(--gradient-secondary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.txt-hover-primary:hover {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.txt-hover-secondary:hover {
+  background: var(--gradient-secondary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.border-primary {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--main) 0 0) padding-box,
+    var(--gradient-primary) border-box; 
+}
+.border-secondary {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--main) 0 0) padding-box,
+    var(--gradient-secondary) border-box; 
+}
+.border-hover-primary:hover {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--main) 0 0) padding-box,
+    var(--gradient-primary) border-box; 
+}
+.border-hover-secondary:hover {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--main) 0 0) padding-box,
+    var(--gradient-secondary) border-box; 
+}
+
+.logo {
+  color: var(--txt-main);
+  text-decoration: none;
+  font-size: 3.4rem;
+  font-weight: 700;
 }

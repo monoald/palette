@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { WCAGRequierements, rateContrast, hexToRgb } from 'colors-kit'
 
 import { ContrastTable } from './ContrastTable'
-import { CloseModalButton } from './CloseModalButton'
+import { SecondaryButton } from './buttons/SecondaryButton'
+import { DraggableModal } from '../containers/DraggableModal'
 
 import { ColorsAction, ColorsReducer } from '../reducers/colors'
 import { ModalsAction } from '../reducers/modals'
 import '../styles/ContrastCalculator.css'
+import { DescriptionTooltip } from './tooltips/DescriptionTooltip'
 
 interface ContrastCalculatorProps {
   colors: ColorsReducer
@@ -53,19 +55,14 @@ export const ContrastCalculator = ({ colors, colorsDispatch, setUpdatedColor, mo
   }
 
   return (
-    <dialog className='Contrast-Calculator' open
-      style={{
-        alignSelf: 'start',
-        marginTop: '80px'
-      }}
-    >
+    <DraggableModal nameClass="Contrast-Calculator">
       <div className='buttons-container'>
         <button
           className='color-button color-button--primary'
           style={{
             backgroundColor: colors.primary.color,
-            color: colors.primary.contrastColor === '#000000' ? '#1A1B25' :   '#fff',
-            border: colors.primary.color === '#1a1b25' ? '1px solid rgba(200, 200, 200, 0.3)' : 'none'
+            color: colors.primary.contrastColor === '#000000' ? 'var(--main)' :   'var(--color-txt-main)',
+            border: colors.primary.color === 'var(--main)' ? '1px solid var(--txt-inactive)' : 'none'
           }}
           onClick={() => handleColorPicker('primary')}
         >
@@ -76,14 +73,14 @@ export const ContrastCalculator = ({ colors, colorsDispatch, setUpdatedColor, mo
           className='color-button color-button--secondary'
           style={{
             backgroundColor: colors.secondary.color,
-            border: colors.secondary.color === '#1a1b25' ? '1px solid rgba(200, 200, 200, 0.3)' : 'none'
+            border: colors.secondary.color === 'var(--main)' ? '1px solid var(--txt-inactive)' : 'none'
           }}
           >
           <button
             className='secondary-color'
             onClick={() => handleColorPicker('secondary')}
             style={{
-              color: colors.secondary.contrastColor  === '#000000' ? '#1A1B25' :   '#fff',
+              color: colors.secondary.contrastColor  === '#000000' ? 'var(--main)' :   'var(--color-txt-main)',
             }}
           >
           {colors.secondary.color}
@@ -93,7 +90,7 @@ export const ContrastCalculator = ({ colors, colorsDispatch, setUpdatedColor, mo
             className='secondary-add'
             onClick={() => colorsDispatch({ type: 'add-color', payload: { color: colors.primary.color, addedColor: colors.secondary.color, side: 'right' } })}
             style={{
-              color: colors.secondary.contrastColor  === '#000000' ? '#1A1B25' :   '#fff',
+              color: colors.secondary.contrastColor  === '#000000' ? 'var(--main)' :   'var(--color-txt-main)',
             }}
           >
             <span className='icon-plus'></span>
@@ -102,15 +99,23 @@ export const ContrastCalculator = ({ colors, colorsDispatch, setUpdatedColor, mo
       </div>
 
       <div className='wcag-info'>
-        <div className='contrast-container'>
-          <p className='value'>
-            <b>CONTRAST RATIO:</b> {contrast.contrastValue}:1
+        <div className='wcag-info__container txt-hover-primary' data-tooltip>
+          <p>
+            {contrast.contrastValue}:1
           </p>
+          <span className='wcag-info__icon icon-info' />
+          <DescriptionTooltip
+            text='Web Content Accessibility Guidelines contrast rate'
+            tipPosition='bottom'
+          />
         </div>
         <ContrastTable contrast={contrast} />
       </div>
 
-      <CloseModalButton modalsDispatch={modalsDispatch} type='contrast'/>
-    </dialog>
+      <SecondaryButton
+        event={() => modalsDispatch({ type: 'contrast' })}
+        content='Close'
+      />
+    </DraggableModal>
   )
 }

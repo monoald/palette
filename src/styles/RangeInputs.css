@@ -56,7 +56,7 @@
   background: transparent;
   border: none;
   border-radius: 8px;
-  border: 1px solid rgba(232, 233, 243, 0.4);
+  border: 1px solid var(--txt-inactive);
   font-size: 1.2rem;
   text-align: center;
 }
@@ -92,6 +92,6 @@
   max-height: 33px;
   width: 44px;
   border-radius: 8px;
-  border: 1px solid rgba(232, 233, 243, 0.4);
+  border: 1px solid var(--txt-inactive);
   padding: 5px 0;
 }

@@ -4,6 +4,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { Rgb, rgbToHex } from 'colors-kit'
 
 import { Color, ColorBlindSimulator } from '../pages/PaletteGenerator'
+import { DescriptionTooltip } from './tooltips/DescriptionTooltip'
 
 import { ColorsAction } from '../reducers/colors'
 import { ModalsAction } from '../reducers/modals'
@@ -131,6 +132,7 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
           background: color.colorBlind[currentColorBlind as keyof ColorBlindSimulator],
         }}
         onMouseDown={handleStartResize}
+        data-tooltip
       >
       </div>
 
@@ -156,8 +158,10 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
               'color': color.contrastColor
             }}
             onMouseDown={() => handleRemoveColor(color.id)}
+            data-tooltip
           >
             <span className='icon-x' />
+            <DescriptionTooltip text='Remove' tipPosition='bottom' />
           </button>
 
           <button
@@ -166,8 +170,10 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
               'color': color.contrastColor
             }}
             onMouseDown={handleCopyToClipboard}
+            data-tooltip
           >
             <span className='icon-clipboard' />
+            <DescriptionTooltip text='Add to clip-board' tipPosition='bottom' />
           </button>
 
           <button
@@ -176,11 +182,13 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
               'color': color.contrastColor
             }}
             onMouseDown={handleLockColor}
+            data-tooltip
           >
             {color.isLocked
               ? <span className='icon-lock-close' />
               : <span className='icon-lock-open' />
             }
+            <DescriptionTooltip text={color.isLocked ? 'Unlock' : 'Lock'} tipPosition='bottom' />
           </button>
 
           <button
@@ -189,10 +197,12 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
             'color': color.contrastColor
             }}
             onMouseDown={() => setCliked(true)}
+            data-tooltip
             onMouseUp={() => setCliked(false)}
             {...listeners}
           >
             <span className='icon-move' />
+            <DescriptionTooltip text='Move' tipPosition='bottom' />
           </button>
 
           <button
@@ -201,8 +211,10 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
             'color': color.contrastColor
             }}
             onMouseDown={handleContrast}
+            data-tooltip
           >
             <span className='icon-contrast' />
+            <DescriptionTooltip text='Contrast calculator' tipPosition='bottom' />
           </button>
 
           <button
@@ -211,8 +223,10 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
               'color': color.contrastColor
             }}
             onMouseDown={handleOpenPicker}
+            data-tooltip
           >
             <span className='icon-eye-dropper' />
+            <DescriptionTooltip text='Color picker' tipPosition='bottom' />
           </button>
         </>
       }

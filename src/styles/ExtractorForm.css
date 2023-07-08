@@ -1,0 +1,46 @@
+.Extractor-Form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.Extractor-Form .text-input {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  color: var(--txt-main);
+  font-size: 1.4rem;
+  font-weight: 300;
+  letter-spacing: 0.9px;
+}
+.Extractor-Form__error-message {
+  font-size: 14px;
+  color: #C1292E;
+}
+.image-input {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  padding: 20px;
+  border: 2px dashed var(--txt-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--txt-main);
+}
+.image-input--dragging-over {
+  border: 2px dashed var(--main);
+  background:
+    linear-gradient(var(--main) 0 0) padding-box,
+    var(--gradient-secondary) border-box; 
+  opacity: 0.7;
+}
+.image-input__placeholder {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.4rem;
+}
+.image-input__icon {
+  font-size: 3.4rem;
+}

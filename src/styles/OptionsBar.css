@@ -1,6 +1,6 @@
 .OptionsBar {
   position: fixed;
-  top: 33px;
+  top: 54px;
   left: -240px;
   width: 240px;
   height: calc(100vh - 33px);
@@ -8,10 +8,10 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 40px 30px;
-  border-top: 1px solid rgba(232,233,243, 0.5);
-  background: #1A1B25;
-  font-size: 1.4rem;
-  text-transform: uppercase;
+  background: var(--main);
+  font-size: 1.5rem;
+  text-transform: capitalize;
+  letter-spacing: 0.7px;
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none;
@@ -32,13 +32,6 @@
   align-items: center;
   cursor: pointer;
 }
-.OptionsBar .option--active {
-  color: #42D37A;
-}
-
-.OptionsBar .option:hover {
-  color: #42D37A;
-}
 
 .OptionsBar .option .icon {
   font-size: 2.2rem;
@@ -49,6 +42,9 @@
 }
 .fade-out {
   animation: fadeOutToLeft 1s forwards;
+}
+.OptionsBar .Secondary-Button {
+  width: 120px;
 }
 
 @keyframes fadeInFromLeft {

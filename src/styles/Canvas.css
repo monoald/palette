@@ -3,30 +3,33 @@
   width: 239px;
   height: 240px;
 }
-.color-canvas {
-  border-radius: 12px;
+.Canvas__draw {
+  border-radius: 6px;
   overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.3)
 }
-.thumb {
+.Canvas__thumb {
   position: absolute;
   width: 30px;
   height: 30px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background-color: rgb(26, 27, 37);
+  background-color: var(--main);
   cursor: grab;
-  border: 1px solid rgba(232, 233, 243, 0.4);
+  border: 1px solid var(--txt-inactive);
 }
 
-.thumb:active {
+.Canvas__thumb:active {
   cursor: grabbing;
 }
 
-.thumb-center {
+.Canvas__thumb-bg {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 1px solid rgba(232, 233, 243, 0.4);
+  border: 1px solid var(--txt-inactive);
+  pointer-events: none;
 }

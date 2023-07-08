@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { ColorInput } from './StyledRangeInputs'
 import { AnyFormat } from 'colors-kit'
+
+import { ColorInput } from './StyledRangeInputs'
 import { Color } from '../../pages/PaletteGenerator'
+
+import '../../styles/HexadecimalPicker.css'
 
 interface HexadecimalPickerProps {
   color?: Color
@@ -57,20 +60,11 @@ export const HexadecimalPicker = ({ color, updateColor }: HexadecimalPickerProps
         isHue
       />
 
-      <input type='text'
+      <input
+        className='input'
+        type='text'
         value={hexColor}
         onChange={handleHexChange}
-        style={{
-          height: '33px',
-          width: '180px',
-          // margin: 'auto',
-          borderRadius: '8px',
-          border: '1px solid rgba(232, 233, 243, 0.4)',
-          background: 'transparent',
-          fontSize: '20px',
-          letterSpacing: '1.2px',
-          textAlign: 'center'
-        }}
         maxLength={7}
       />
     </>

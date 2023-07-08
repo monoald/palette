@@ -1,10 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react'
 import { extractPalette, rgbToHex } from 'colors-kit'
-import '../styles/ImageCanvas.css'
-import { createNewColor } from '../utils/createNewColor'
-import { getMainContrastColor } from '../utils/getMainContrastColor'
-import { ColorsAction } from '../reducers/colors'
+
+import { ColorsAction } from '../../reducers/colors'
+
+import { createNewColor } from '../../utils/createNewColor'
+import { getMainContrastColor } from '../../utils/getMainContrastColor'
+
+import '../../styles/ImageCanvas.css'
 
 interface ImageCanvasProps {
   url: string
@@ -22,7 +25,7 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
   const [extractedColors, setExtractedColors] = useState<string[]>([])
   const [pickerActive, setPickerActive] = useState(false)
   const imageRef = useRef<HTMLCanvasElement>(null)
-  const circleRef = useRef<HTMLDivElement>(null)
+  const circleRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     async function extractColors() {
@@ -143,18 +146,18 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
           display: extractedColors.length === 0 ? 'none' : 'flex'
         }}
       >
-        
-        <div className='colors-container'>
+        <div className='extracted-colors'>
           { extractedColors.length !== 0 &&
             extractedColors.map(color => (
               <button
-                className='color'
+                className='extracted-colors__color'
                 key={color}
                 style={{
                   background: color
                 }}
               >
                 <p
+                  className='extracted-colors__name'
                   style={{
                     color: getMainContrastColor(color)
                   }}
@@ -167,54 +170,68 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
         </div>
 
         <div
-          className='canvas-container'
+          className='canvas'
           onMouseDown={handleStartDrag}
           onMouseMove={handleMoveDrag}
           onMouseUp={handleEndDrag}
         >
           <canvas
-            className='image'
+            className='canvas__image'
             width={560}
             height={400}
             ref={imageRef}
             onDragStart={(event) => {event.preventDefault()}}
           />
           { pickerActive &&
-            <span
-              className='icon'
+            <button
+              className='canvas__thumb'
               ref={circleRef}
               style={{
                 left: `${coordinates.x}px`,
                 top: `${coordinates.y}px`,
                 backgroundColor: pickerColor,
               }}
-            />
+            ></button>
           }
         </div>
 
-        <div className='config-container'>
+        <div className='config'>
           <button
-            className={`config-button${pickerActive ? ' config-button--active' : ''}`}
+            className={`
+              config__button
+              border-hover-primary
+              ${pickerActive ? 'border-primary' : ''}
+            `}
             onClick={() => setPickerActive(!pickerActive)}
           >
-            <span className='icon icon-eye-dropper' />
-            <p>PICK COLOR</p>
+            <div className={`
+              config__button-content
+              txt-hover-primary
+              ${pickerActive ? 'txt-primary' : ''}
+            `}>
+              <span className='icon icon-eye-dropper' />
+              <p>PICK COLOR</p>
+            </div>
           </button>
 
           <button
-            className='config-button'
+            className='config__button border-hover-primary'
             onClick={handleQuantitySubmit}
           >
-            <span className='icon icon-palette' />
-            <p>EXTRACT</p>
+            <div className='config__button-content txt-hover-primary'>
+              <span className='icon icon-palette' />
+              <p>EXTRACT</p>
+            </div>
           </button>
 
           <button
-            className='config-button'
+            className='config__button border-hover-primary'
             onClick={handleAddColorsToPalette}
           >
-            <span className='icon icon-plus' />
-            <p>ADD PALETTE</p>
+            <div className='config__button-content txt-hover-primary'>
+              <span className='icon icon-plus' />
+              <p>ADD PALETTE</p>
+            </div>
           </button>
 
           <form className='extractor-input' onSubmit={handleQuantitySubmit}>

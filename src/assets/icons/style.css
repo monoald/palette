@@ -84,3 +84,21 @@
 .icon-info:before {
   content: "\e915";
 }
+.icon-circle:before {
+  content: "\e916";
+}
+.icon-rectangle-v:before {
+  content: "\e917";
+}
+.icon-rectangle-h:before {
+  content: "\e918";
+}
+.icon-number:before {
+  content: "\e919";
+}
+.icon-heart-filled:before {
+  content: "\e91a";
+}
+.icon-heart:before {
+  content: "\e91b";
+}

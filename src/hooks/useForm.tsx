@@ -1,32 +1,20 @@
 import React, { useState } from 'react'
-import { AxiosError } from 'axios'
 import { UserSignup } from '../services/user'
 import { formFields } from '../data/formFields'
+import { isFetchBaseQueryError } from '../utils/isFetchBaseQueryError'
 
 type Callback = (data: UserSignup) => void
 
-interface Elements {
-  [key: string]: HTMLElement | null
-}
+type ErrorType = 'format' | 'invalid'
 
 export const useForm = () => {
-  const [element, setElement] = useState<Elements>({
-    email: null
-  })
+  const [data, setData] = useState<UserSignup>({} as UserSignup)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [data, setData] = useState<UserSignup>({
-    email: '',
-    username: '',
-    password: '',
-  })
+  const [errorType, setErrorType] = useState<ErrorType | null>(null)
 
-  const invalidField = (target: HTMLElement, type: keyof UserSignup, errorMessage: string) => {
-    target.classList.add('Form__input--invalid')
+  const invalidField = (errorMessage: string, target?: HTMLElement) => {
     setErrorMessage(errorMessage)
-    setData(newData => {
-      newData[type] = ''
-      return newData
-    })
+    target?.classList.add('Form__input--invalid')
   }
 
   const validator = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,18 +22,17 @@ export const useForm = () => {
     const type = target.id as keyof UserSignup
     const value = target.value.trim()
 
-    // Save input element
-    if (!element[type]) setElement({ ...element, [type]: target})
-
     // Validator
     for (const input of formFields[type]) {
       if (!input.regEx.test(value)) {
-        invalidField(target, type, input.errorMessage)
+        setErrorType('format')
+        invalidField(input.errorMessage, target)
         break
       }
       
       target.classList.remove('Form__input--invalid')
       setErrorMessage(null)
+      setErrorType(null)
       setData(newData => {
         newData[type] = value
         return newData
@@ -53,33 +40,22 @@ export const useForm = () => {
     }
   }
 
-  const handleSubmit = (callback: Callback) => {
+  const handleSubmit = (callback: Callback, form: React.RefObject<HTMLFormElement>) => {
     return async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
 
-      for (const item of Object.keys(data)) {
-        if (data[item as keyof UserSignup] === '') return
-      }
+      if (errorType === 'format') return
 
       try {
         await callback(data)
+
+        form.current?.reset()
+        setData({} as UserSignup)
       } catch (error) {
-        if (error instanceof AxiosError) {
-          let inputError = ''
-
-          if (error.response?.data.message.toLowerCase().includes('email')) {
-            inputError = 'email'
-          } else if (error.response?.data.message.toLowerCase().includes('username')) {
-            inputError = 'username'
-          } else if (error.response?.data.message.toLowerCase().includes('password')) {
-            inputError = 'password'
-          }
-          const currentElement = element[inputError] as HTMLElement
-          const errorMessage = error.response?.data.message as string
-
-          invalidField(
-            currentElement,
-            inputError as keyof UserSignup, errorMessage)
+        if (isFetchBaseQueryError(error)) {
+          setErrorType('invalid')
+          const errorMessage = 'error' in error ? error.error : JSON.stringify(error.data)
+          invalidField(errorMessage)
         }
       }
     }

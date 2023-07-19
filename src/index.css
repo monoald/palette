@@ -10,6 +10,8 @@ html {
 }
 
 :root {
+  width: 100vw;
+  height: 100vh;
   /* font-family: Roboto, sans-serif; */
   line-height: 1.5;
   font-weight: 400;
@@ -31,6 +33,7 @@ html {
   --gradient-primary: -webkit-linear-gradient(left, #2FD312, #03BCCC);
   --gradient-secondary: -webkit-linear-gradient(left, #03BCCC, #2FD312);
   --gradient-tertiary: -webkit-linear-gradient(bottom, #03BCCC, #2FD312);
+  --gradient-v-secondary: -webkit-linear-gradient(top, #03BCCC, #2FD312);
 }
 
 body {

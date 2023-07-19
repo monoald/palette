@@ -7,22 +7,26 @@ interface Configuration {
 }
 
 interface SelectProps {
-  options: string[]
+  options: Options
   value: string
   setValue: React.Dispatch<React.SetStateAction<string>>
   configuration: Configuration
+  additionalIcon?: string
 }
 
-export const Select = ({ options, value, setValue, configuration }: SelectProps) => {
+export interface Options {
+  [key: string]: string | null
+}
+
+export const Select = ({ options, value, setValue, configuration, additionalIcon }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   function handleOpenSelect() {
     setIsOpen(!isOpen)
   }
 
-  function handleSelect(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    const target = event.target as HTMLButtonElement
-    setValue(target.value)
+  function handleSelect(value: string) {
+    setValue(value)
     setIsOpen(!isOpen)
   }
 
@@ -36,24 +40,32 @@ export const Select = ({ options, value, setValue, configuration }: SelectProps)
         }}
       >
         { configuration.showCurrentValue && 
-          <span className='current-value'>{value}</span>
+          <p className='current-value'>
+            { options[value] &&
+              <span className={`icon ${options[value]}`} />
+            }
+            { additionalIcon &&
+              <span className={`icon ${additionalIcon}`} />
+            }
+            <span>{value}</span>
+          </p>
         }
         { configuration.showIcon &&
           <span
-            className='icon icon-arrow-down'
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: 0
-            }}
+            className='icon-arrow icon-arrow-down'
           ></span>
         }
       </button>
       {isOpen &&
-        <div className='box' onClick={handleSelect} style={{ zIndex: 1 }}>
-          {options.map(option => (
-            <button key={option} className='box__option' value={option}>
-              {option}
+        <div className='box' style={{ zIndex: 1 }}>
+          {Object.keys(options).map(option => (
+            <button key={option} className='box__option' onClick={() => handleSelect(option)}>
+              {options[option] &&
+                <span className={`icon ${options[option]}`} />
+              }
+              <span className='content'>
+                {option}
+              </span>
             </button>
           ))}
         </div>

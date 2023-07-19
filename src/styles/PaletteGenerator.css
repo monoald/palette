@@ -5,8 +5,8 @@
   grid-area: main;
   background-color: var(--main);
 }
-#root {
-  width: 100%;
+.palette-layout {
+  width: 100vw;
   height: 100vh;
   display: grid;
   grid-template-columns: 44px 1fr;

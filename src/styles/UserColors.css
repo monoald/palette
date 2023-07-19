@@ -1,0 +1,11 @@
+.user-colors .item__clr-container {
+  padding: 10px;
+}
+.user-colors  .item__clr-container:hover .item__name {
+  opacity: 0.8;
+  display: inline;
+}
+/* Circle item */
+.user-colors .items__list--circle .item__name {
+  margin: auto;
+}

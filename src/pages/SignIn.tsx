@@ -1,12 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-import { PrimaryButton } from '../components/buttons/PrimaryButton'
 import { SignLayer } from '../containers/SignLayer'
 import { Field, Form } from '../components/Form'
 
 import '../styles/SignIn.css'
-import { UserSignup, signin } from '../services/user'
+import { UserSignup } from '../services/user'
+import { useLoginMutation } from '../features/auth/authApiSlice'
+import { useAppDispatch } from '../app/hooks'
+import { setCredentials } from '../features/auth/authSlice'
 
 const fields: Field[] = [
   {
@@ -23,8 +25,19 @@ const fields: Field[] = [
   }
 ]
 export const SignIn = () => {
+  const [login, { isLoading }] = useLoginMutation()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
   const submit = async (data: UserSignup) => {
-    const user = await signin(data)
+    const user = await login(data).unwrap()
+
+    dispatch(setCredentials({
+      user: data.email,
+      token: user.token,
+    }))
+
+    navigate('/user/')
   }
 
   return (

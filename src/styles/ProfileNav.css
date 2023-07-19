@@ -1,0 +1,36 @@
+.Profile-Nav {
+  position: relative;
+  grid-area: nav;
+  width: 100%;
+  height: 100%;
+}
+.Profile-Nav::before {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 100%;
+  display: block;
+  background: var(--gradient-v-secondary);
+}
+.nav-container {
+  width: 100%;
+  height: 100%;
+  }
+.nav {
+  width: inherit;
+  height: inherit;
+  padding: 40px;
+  list-style: none;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.nav__button {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: var(--txt-main);
+  font-size: 1.6rem;
+  letter-spacing: 0.4px;
+  text-decoration: none;
+}

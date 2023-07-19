@@ -1,0 +1,113 @@
+.User-Profile {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-areas: 
+  "header"
+  "main";
+  grid-template-rows: 54px 1fr;
+  grid-template-columns: 1fr;
+  background-color: var(--main);
+  overflow-x: hidden;
+}
+.User-Profile__content {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-areas: 
+  "main nav";
+  grid-template-columns: 4fr 1fr;
+  grid-template-rows: 1fr;
+}
+.User-Profile__main {
+  grid-area: main;
+  padding: 40px;
+}
+.config {
+  list-style: none;
+  display: flex;
+  gap: 40px;
+}
+.config__item {
+  width: auto;
+  z-index: 0;
+}
+.items__list {
+  padding-block: 40px;
+  list-style: none;
+  display: grid;
+  gap: 60px;
+}
+.item__clr-container {
+  display: flex;
+  overflow: hidden;
+  border-radius: 18px;
+}
+.item .button-container {
+  margin-top: 14px;
+  display: flex;
+  /* gap: 10px; */
+  justify-content: space-between;
+  font-size: 1.4rem;
+}
+.item .color-button {
+  position: relative;
+  background-color: transparent;
+  z-index: 1;
+}
+.item :is(.color-button:hover)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background-color: rgba(100, 100, 100, 0.2);
+  z-index: -1;
+}
+.item .color-button .icon {
+  font-size: 2.4rem;
+}
+.item__name {
+  display: none;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+.item__color:hover .item__name {
+  display: block;
+}
+.item__color {
+  padding: 10px;
+}
+/* Horizontal item */
+.items__list--horizontal {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+.items__list--horizontal .item__clr-container {
+  min-width: 240px;
+  max-width: 400px;
+  height: 150px;
+}
+/* Vertical item */
+.items__list--vertical {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.items__list--vertical .item__clr-container {
+  max-width: 240px;
+  height: 300px;
+  flex-direction: column;
+}
+/* Circle item */
+.items__list--circle {
+  grid-template-columns: repeat(auto-fill, 200px);
+  justify-content: center;
+}
+.items__list--circle .item__clr-container {
+  max-width: 200px;
+  height: 200px;
+  flex-direction: column;
+  border-radius: 50%;
+}

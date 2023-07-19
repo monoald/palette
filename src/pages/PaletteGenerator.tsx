@@ -123,7 +123,7 @@ export const PaletteGenerator = () => {
   }
 
   return (
-    <>
+    <div className='palette-layout'>
       <Header />
 
       <SideBar
@@ -196,6 +196,6 @@ export const PaletteGenerator = () => {
           <Tooltip message={tooltipMessage}/>
         </main>
       </DndContext>
-    </>
+    </div>
   )
 }

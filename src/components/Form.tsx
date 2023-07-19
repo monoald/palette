@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useForm } from '../hooks/useForm'
 import { UserSignup } from '../services/user'
 import { PrimaryButton } from './buttons/PrimaryButton'
@@ -17,11 +17,12 @@ export interface Field {
 }
 
 export const Form = ({ fields, submitEvent }: SignFormProps) => {
+  const formRef = useRef<HTMLFormElement>(null)
   const { handleValidator, handleSubmit, errorMessage } = useForm()
 
-  const submitHandler =  handleSubmit(submitEvent)
+  const submitHandler =  handleSubmit(submitEvent, formRef)
   return (
-    <form className='Form' onSubmit={submitHandler}>
+    <form className='Form' onSubmit={submitHandler} ref={formRef}>
       <div className='error'>
         <p className='error__message'>{errorMessage}</p>
       </div>

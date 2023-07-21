@@ -1,0 +1,226 @@
+body {
+  overflow-x: hidden;
+  height: 100vh;
+  max-height: 100vh;
+  background-color: var(--main);
+}
+#root {
+  width: 100%;
+  height: auto;
+  height: 100vh;
+}
+.color {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-areas:
+  "header"
+  "main";
+  grid-template-columns: 1fr;
+  grid-template-rows: 54px calc(100vh - 54px);
+}
+.scroll-layer {
+  width: 100%;
+  height: 100%;
+  max-height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-top: 40px;
+}
+.scroll-layer::-webkit-scrollbar {
+  width: 12px;
+}
+.scroll-layer::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 10px;
+  border: 3px solid var(--main);
+  margin: 54px;
+}
+.color__main {
+  width: 100%;
+  max-width: 1640px;
+  height: 100%;
+  padding-inline: 80px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+.color__subtitle {
+  margin-bottom: 60px;
+  font-size: 2.4rem;
+  text-align: center;
+}
+.basic-info {
+  width: 100%;
+  margin: auto;
+  display: grid;
+  align-content: center;
+  gap: 40px;
+}
+.basic-info__name {
+  font-size: 3.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  opacity: 0.8;
+}
+.basic-info__color {
+  width: auto;
+  max-width: 400px;
+  height: 160px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+.formats {
+  height: fit-content;
+  font-size: 1.6rem;
+}
+.table {
+  width: 100%;
+  color: var(--txt-main);
+}
+.table__row {
+  width: 100%;
+  height: 38px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.table__value {
+  text-transform: uppercase;
+}
+.palette-name {
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  text-transform: capitalize;
+}
+.basic-palettes .items__list--horizontal {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  padding-block: 0;
+}
+.basic-palettes .items__list--horizontal .item__clr-container {
+  max-width: none;
+}
+.contrast {
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.contrast__content {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 60px;
+}
+.contrast .Table {
+  max-width: 450px;
+  max-height: 300px;
+}
+.contrast .Table th {
+  height: 42px;
+  padding: 0;
+}
+.contrast .Table td {
+  width: auto;
+  text-align: center;
+}
+.contrast__colors {
+  height: 300px;
+  max-width: 800px;
+  display: flex;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.contrast__colors .main-color,
+.contrast__colors .secondary-color {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.contrast__name {
+  font-size: 2.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  opacity: 0.8;
+}
+.contrast__colors .secondary-color input {
+  width: 150px;
+  padding: 10px 20px;
+  text-align: center;
+  outline: none;
+  border: none;
+}
+.color-blind {
+  padding-bottom: 80px;
+}
+.color-blind__content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 60px;
+  list-style: none;
+}
+.blindness {
+  max-width: 400px;
+}
+.blindness__name{ 
+  margin-bottom: 10px;
+  text-transform: capitalize;
+  font-size: 1.6rem;
+}
+.blindness__value {
+  width: 100%;
+  height: 160px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.blindness__value .color-name {
+  display: none;
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+}
+.blindness__value:hover .color-name {
+  display: inline;
+}
+
+@media (min-width: 768px) {
+  .scroll-layer {
+    padding-top: 80px;
+  }
+  .basic-info {
+    min-width: 600px;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 100px;
+  }
+  .basic-info__color {
+    height: 360px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .color__main {
+    padding-inline: 150px;
+  }
+  .basic-info {
+    height: fit-content;
+    min-height: auto;
+  }
+}
+@media (min-width: 1640px) {
+  .color__main {
+    gap: 200px;
+    padding-block: 200px;
+  }
+}

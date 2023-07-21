@@ -2,6 +2,7 @@ import { useShapeLength } from '../../features/auth/UserTab'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
 
 import '../../styles/UserColors.css'
+import { useNavigate } from 'react-router-dom'
 
 const colors = [
   '#45f2aa',
@@ -15,7 +16,8 @@ const colors = [
 ]
 
 export const UserColors = () => {
-  const { shape, length } = useShapeLength()
+  const { shape } = useShapeLength()
+  const navigate = useNavigate()
 
   return (
     <section className='user-colors'>
@@ -26,12 +28,17 @@ export const UserColors = () => {
               className='item__clr-container'
               style={{ background: color }}
             >
-              <p className='item__name'
-              style={{
-                color: getMainContrastColor(color)
-              }}>
-                {color}
-              </p>
+              <button
+                className='item__button'
+                onClick={() => navigate(`/color/${color.substring(1)}`)}
+                style={{
+                  color: getMainContrastColor(color)
+                }}
+              >
+                <span className='item__name'>
+                  {color}
+                </span>
+              </button>
             </li>
 
             <div className='button-container'>

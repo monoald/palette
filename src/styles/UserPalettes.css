@@ -1,12 +1,14 @@
 /* Horizontal item */
-.user-palettes .items__list--horizontal .item__color {
+.user-palettes .items__list--horizontal .item__color,
+.basic-palettes .items__list--horizontal .item__color {
   width: 50%;
   -webkit-transition: width 0.5s ease-in-out;
   -moz-transition: width 0.5s ease-in-out;
   -o-transition: width 0.5s ease-in-out;
   transition: width 0.5s ease-in-out
 }
-.user-palettes .items__list--horizontal .item__color:hover {
+.user-palettes .items__list--horizontal .item__color:hover,
+.basic-palettes .items__list--horizontal .item__color:hover {
   width: 280px;
 }
 /* Vertical item */

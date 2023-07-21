@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { useShapeLength } from '../../features/auth/UserTab'
 import '../../styles/UserPalettes.css'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
@@ -51,6 +52,7 @@ uniqueLengths.forEach(length => {
 
 export const UserPalettes = () => {
   const { shape, length } = useShapeLength()
+  const navigate = useNavigate()
 
   const filteredPalettes = palettes.filter(palette => {
     if (length === 'all') {
@@ -67,16 +69,20 @@ export const UserPalettes = () => {
           <div className='item' key={palette.colors.join()}>
             <li className='item__clr-container'>
               { palette.colors.map(color => (
-                  <div key={color} className='item__color' style={{
-                    background: color
-                  }}>
-                    <p className='item__name'
+                  <button key={color}
+                    className='item__color'
+                    onClick={() => navigate(`/color/${color.substring(1)}`)}
+                    style={{
+                      background: color
+                    }}
+                  >
+                    <span className='item__name'
                     style={{
                       color: getMainContrastColor(color)
                     }}>
                       {color}
-                    </p>
-                  </div>
+                    </span>
+                  </button>
                 ))
               }
             </li>

@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import { store } from '../app/store'
 import RequireAuth from '../features/auth/RequireAuth'
 import { UserRoutes } from './UserRoutes'
+import { Color } from '../pages/Color'
 
 export const App = () => {
   return (
@@ -22,6 +23,10 @@ export const App = () => {
 
           <Route element={<RequireAuth />}>
             <Route path='/user/*' element={<UserRoutes />} />
+          </Route>
+
+          <Route path='/color'>
+              <Route path='/color/:id' element={<Color />} />
           </Route>
         </Routes>
       </BrowserRouter>

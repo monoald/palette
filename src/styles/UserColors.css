@@ -9,3 +9,8 @@
 .user-colors .items__list--circle .item__name {
   margin: auto;
 }
+.item__button {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}

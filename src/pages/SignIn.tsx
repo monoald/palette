@@ -33,7 +33,7 @@ export const SignIn = () => {
     const user = await login(data).unwrap()
 
     dispatch(setCredentials({
-      user: data.email,
+      user: data,
       token: user.token,
     }))
 

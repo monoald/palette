@@ -2,14 +2,14 @@
   --_p-inline: 2ch;
   --_p-block: 1.5ch;
   --_triangle-size: 2px;
-  --_shadow-alpha: 50%;
+  --_shadow-alpha: 30%;
 
   opacity: 1;
   position: absolute;
   padding: var(--_p-block) var(--_p-inline);
   border-radius: 6px;
-  background-color: var(--main);
-  color: var(--txt-main);
+  background-color: var(--txt-main);
+  color: var(--main);
   text-align: center;
   inline-size: max-content;
   font-size: 1.4rem;
@@ -17,7 +17,7 @@
   letter-spacing: 0.8px;
   filter: 
     drop-shadow(0 3px 3px hsl(0 0% 0% / var(--_shadow-alpha))) 
-    drop-shadow(0 12px 12px hsl(0 0% 0% / var(--_shadow-alpha)));
+    drop-shadow(0 8px 8px hsl(0 0% 0% / var(--_shadow-alpha)));
   transform: translateX(var(--_x, 0)) translateY(var(--_y, 0));
   transition: opacity .2s ease, transform .2s ease;
   pointer-events: none;
@@ -76,7 +76,7 @@
 }
 #tool-tip:is([tip-position="right"], [tip-position="inline-end"])::after {
   left: calc(var(--_p-inline) * -1);
-  border-color: transparent var(--main) transparent transparent;
+  border-color: transparent var(--txt-main) transparent transparent;
 }
 
 #tool-tip:is([tip-position="bottom"], [tip-position="block-end"]) {
@@ -87,7 +87,7 @@
 #tool-tip:is([tip-position="bottom"], [tip-position="block-end"])::after {
   left: var(--_p-inline);
   top: calc(var(--_p-inline) * -0.5);
-  border-color: transparent transparent var(--main) transparent;
+  border-color: transparent transparent var(--txt-main) transparent;
 }
 
 #tool-tip:is([tip-position="left"], [tip-position="inline-start"]) {

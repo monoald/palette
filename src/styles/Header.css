@@ -24,10 +24,35 @@
 }
 .user-nav__list {
   display: flex;
-  gap: 24px;
+  gap: 34px;
   list-style: none;
 }
 .user-nav__list .Secondary-Button {
   width: 90px;
   height: 30px;
+}
+.user-nav__item {
+  display: flex;
+  align-items: center;
+}
+.user-nav__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 0;
+}
+.avatar-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.icon-button {
+  background: transparent;
+  font-size: 2.5rem;
+  padding: 0px;
+  color: var(--txt-main);
 }

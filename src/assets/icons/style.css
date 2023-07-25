@@ -22,83 +22,92 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-lock-open:before {
-  content: "\e900";
+.icon-thumb:before {
+  content: "\e91c";
 }
 .icon-lock-close:before {
+  content: "\e914";
+}
+.icon-lock-open:before {
+  content: "\e915";
+}
+.icon-moon:before {
+  content: "\e900";
+}
+.icon-sunny:before {
   content: "\e901";
 }
-.icon-move:before {
+.icon-image:before {
   content: "\e902";
 }
-.icon-contrast:before {
+.icon-palette:before {
   content: "\e903";
 }
-.icon-rounded-check:before {
+.icon-undo:before {
   content: "\e904";
+}
+.icon-redo:before {
+  content: "\e905";
+}
+.icon-arrow-left:before {
+  content: "\e906";
+}
+.icon-arrow-down:before {
+  content: "\e907";
+}
+.icon-move:before {
+  content: "\e908";
+}
+.icon-eye-dropper:before {
+  content: "\e909";
+}
+.icon-warning:before {
+  content: "\e90a";
+}
+.icon-info:before {
+  content: "\e90b";
+}
+.icon-rounded-check:before {
+  content: "\e90c";
   color: #45cb85;
 }
 .icon-rounded-x:before {
-  content: "\e905";
+  content: "\e90d";
   color: #c1292e;
 }
-.icon-arrow-down:before {
-  content: "\e906";
-}
-.icon-plus:before {
-  content: "\e907";
-}
-.icon-warning:before {
-  content: "\e908";
-}
-.icon-x:before {
-  content: "\e909";
-}
-.icon-eye-dropper:before {
-  content: "\e90a";
-}
-.icon-arrow-left:before {
-  content: "\e90b";
-}
-.icon-image:before {
-  content: "\e90c";
-}
-.icon-eye:before {
-  content: "\e90d";
-}
-.icon-palette:before {
+.icon-share:before {
   content: "\e90e";
 }
 .icon-clipboard:before {
   content: "\e90f";
 }
-.icon-undo:before {
+.icon-eye:before {
+  content: "\e910";
+}
+.icon-x:before {
   content: "\e911";
 }
-.icon-redo:before {
+.icon-plus:before {
   content: "\e912";
 }
-.icon-share:before {
-  content: "\e914";
-}
-.icon-info:before {
-  content: "\e915";
+.icon-heart:before {
+  content: "\e913";
 }
 .icon-circle:before {
   content: "\e916";
 }
-.icon-rectangle-v:before {
+.icon-rectangle-h:before {
   content: "\e917";
 }
-.icon-rectangle-h:before {
+.icon-rectangle-v:before {
   content: "\e918";
 }
-.icon-number:before {
+.icon-hash:before {
   content: "\e919";
 }
 .icon-heart-filled:before {
   content: "\e91a";
 }
-.icon-heart:before {
+.icon-contrast:before {
   content: "\e91b";
 }

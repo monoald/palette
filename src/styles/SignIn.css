@@ -3,6 +3,7 @@
   margin-top: 16px;
   font-size: 1.2rem;
   letter-spacing: 0.3px;
+  color: var(--txt-main);
 }
 .Sign__footer a {
   background: var(--gradient-secondary);

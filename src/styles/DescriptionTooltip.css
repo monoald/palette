@@ -14,7 +14,7 @@
   inline-size: max-content;
   font-size: 1.4rem;
   font-weight: 500;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.4px;
   filter: 
     drop-shadow(0 3px 3px hsl(0 0% 0% / var(--_shadow-alpha))) 
     drop-shadow(0 8px 8px hsl(0 0% 0% / var(--_shadow-alpha)));

@@ -53,6 +53,7 @@
 .item .color-button {
   position: relative;
   background-color: transparent;
+  color: var(--txt-main);
   z-index: 1;
 }
 .item :is(.color-button:hover)::before {
@@ -63,7 +64,7 @@
   width: 100%;
   height: 100%;
   border-radius: 8px;
-  background-color: rgba(100, 100, 100, 0.2);
+  background-color: var(--main-inactive);
   z-index: -1;
 }
 .item .color-button .icon {

@@ -9,6 +9,7 @@
   justify-content: space-between;
   padding: 40px 30px;
   background: var(--main);
+  color: var(--txt-main);
   font-size: 1.5rem;
   text-transform: capitalize;
   letter-spacing: 0.7px;

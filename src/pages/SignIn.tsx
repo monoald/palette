@@ -44,7 +44,7 @@ export const SignIn = () => {
     <SignLayer>
       <Form fields={fields} submitEvent={submit} />
 
-      <div className='form-option'>
+      <div className='Sign__footer'>
         <p>Don't have an account? <Link to='/signup'>Sign up</Link></p>
       </div>
     </SignLayer>

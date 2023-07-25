@@ -9,10 +9,24 @@ html {
   font-family: 'Noto Sans', sans-serif;
 }
 
+#light {
+  --main: #fafafa;
+  --main-inactive: rgba(40, 40, 40, 0.2) ;
+  --txt-main: #000;
+  --txt-inactive: rgba(0,0,0,0.6);
+  --primary-g: #27A112;
+  --secondary-g: #02B4C4;
+  --gradient-primary: -webkit-linear-gradient(left, var(--primary-g), var(--secondary-g));
+  --gradient-secondary: -webkit-linear-gradient(left, var(--secondary-g), var(--primary-g));
+  --gradient-tertiary: -webkit-linear-gradient(bottom, var(--secondary-g), var(--primary-g));
+  --gradient-v-secondary: -webkit-linear-gradient(top, var(--secondary-g), var(--primary-g));
+}
+
 :root {
   width: 100vw;
   height: 100vh;
   /* font-family: Roboto, sans-serif; */
+  font-family: 'Noto Sans', sans-serif;
   line-height: 1.5;
   font-weight: 400;
   line-height: 1.5;
@@ -27,13 +41,15 @@ html {
   -webkit-text-size-adjust: 100%;
 
   --main: #111217;
-  --secondary: #2FD312;
+  --main-inactive: rgba(100, 100, 100, 0.2) ;
+  --primary-g: #19E51C;
+  --secondary-g: #00CECB;
   --txt-main: #ffffff;
   --txt-inactive: rgba(255,255,255,0.45);
-  --gradient-primary: -webkit-linear-gradient(left, #2FD312, #03BCCC);
-  --gradient-secondary: -webkit-linear-gradient(left, #03BCCC, #2FD312);
-  --gradient-tertiary: -webkit-linear-gradient(bottom, #03BCCC, #2FD312);
-  --gradient-v-secondary: -webkit-linear-gradient(top, #03BCCC, #2FD312);
+  --gradient-primary: -webkit-linear-gradient(left, var(--primary-g), var(--secondary-g));
+  --gradient-secondary: -webkit-linear-gradient(left, var(--secondary-g), var(--primary-g));
+  --gradient-tertiary: -webkit-linear-gradient(bottom, var(--secondary-g), var(--primary-g));
+  --gradient-v-secondary: -webkit-linear-gradient(top, var(--secondary-g), var(--primary-g));
 }
 
 body {
@@ -67,6 +83,7 @@ input[type="password"] {
   background: transparent;
   border-radius: 6px;
   outline: none;
+  color: var(--txt-main);
 }
 input[type="text"]:focus-visible, 
 input[type="number"]:focus-visible,

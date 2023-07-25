@@ -133,12 +133,7 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
   return (
     <>
       { extractedColors.length === 0 &&
-        <p
-          style={{
-            fontSize: '3.4rem',
-            letterSpacing: '5px',
-            margin: '100p auto'
-          }}
+        <p className='loading txt-primary'
         >LOADING...</p>
       }
       <div className='Image-Canvas'
@@ -199,7 +194,6 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
           <button
             className={`
               config__button
-              border-hover-primary
               ${pickerActive ? 'border-primary' : ''}
             `}
             onClick={() => setPickerActive(!pickerActive)}
@@ -210,32 +204,35 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
               ${pickerActive ? 'txt-primary' : ''}
             `}>
               <span className='icon icon-eye-dropper' />
-              <p>PICK COLOR</p>
+              <p>Color Picker</p>
             </div>
           </button>
 
           <button
-            className='config__button border-hover-primary'
-            onClick={handleQuantitySubmit}
-          >
-            <div className='config__button-content txt-hover-primary'>
-              <span className='icon icon-palette' />
-              <p>EXTRACT</p>
-            </div>
-          </button>
-
-          <button
-            className='config__button border-hover-primary'
+            className='config__button'
             onClick={handleAddColorsToPalette}
           >
             <div className='config__button-content txt-hover-primary'>
               <span className='icon icon-plus' />
-              <p>ADD PALETTE</p>
+              <p>Add to palette</p>
+            </div>
+          </button>
+
+          <button
+            className='config__button'
+            onClick={handleQuantitySubmit}
+          >
+            <div className='config__button-content txt-hover-primary'>
+              <span className='icon icon-palette' />
+              <p>Extract</p>
             </div>
           </button>
 
           <form className='extractor-input' onSubmit={handleQuantitySubmit}>
-            <label htmlFor='quantity' className='quantity-label'>COLORS:</label>
+            <label htmlFor='quantity' className='quantity-label'>
+              Quantity:
+            </label>
+
             <input type='number' id='quantity' value={quantity} onChange={handleQuantityChange} />
           </form>
         </div>

@@ -46,7 +46,7 @@ export const UserProfile = () => {
                     showCurrentValue: true,
                     showIcon: true
                   }}
-                  additionalIcon='icon-number'
+                  additionalIcon='icon-hash'
                 />
               </li>
             </ul>

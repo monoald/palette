@@ -61,10 +61,10 @@
   gap: 12px;
   font-size: 1.9rem;
   font-weight: 600;
+  color: var(--txt-main);
 }
 .wcag-info__icon {
   font-size: 2.2rem;
-  color: var(--txt-main);
 }
 .wcag-info__container #tool-tip {
   -webkit-text-fill-color: var(--main);

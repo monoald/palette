@@ -57,27 +57,39 @@
   justify-content: space-between;
 }
 .Image-Canvas .config__button {
-  width: 120px;
-  border: 1px solid var(--txt-inactive);
+  /* min-width: 130px; */
+  width: auto;
+  height: 40px;
   border-radius: 8px;
-  padding: 12px 0;
+  padding: 0;
   background: transparent;
   font-size: 1.2rem;
   letter-spacing: 0.8px;
+  color: var(--txt-main);
+}
+.Image-Canvas .config__button:hover {
+  background-color: var(--main-inactive);
 }
 .Image-Canvas .config__button-content {
+  width: 100%;
+  height: 100%;
+  padding-inline: 10px;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 .Image-Canvas .config__button .icon {
   font-size: 2rem;
 }
 .extractor-input {
+  position: absolute;
+  right: 0;
+  height: 100%;
   display: flex;
   align-items: center;
   gap: 16px;
+  color: var(--txt-main);
 }
 .extractor-input #quantity {
   width: 40px;
@@ -90,4 +102,15 @@
 .extractor-input #quantity::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+.loading {
+  font-size: 3.4rem;
+  letter-spacing: 5px;
+  margin: 100px auto;
+  color: (--txt-main);
+}
+.Draggable-Modal .config {
+  position: relative;
+  justify-content: initial;
+  gap: 14px;
 }

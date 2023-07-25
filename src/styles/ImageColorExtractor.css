@@ -9,6 +9,14 @@ main .Image-Color-Extractor {
 #quantity {
   height: 28px;
   padding: 4px 10px;
+  color: var(--txt-main);
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--txt-main);
+  -webkit-box-shadow: 0 0 0px 40rem var(--main) inset;
+  border: 1px solid var(--txt-main) !important;
 }
 #url:focus-visible,
 #quantity:focus-visible {

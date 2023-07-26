@@ -1,7 +1,6 @@
-import { EntityState, createEntityAdapter, createSelector } from "@reduxjs/toolkit";
+import { EntityState, createEntityAdapter } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice";
 import { idToPalette } from "../../utils/idToPalette";
-import { RootState } from "../../app/store";
 
 export interface Palette {
   colors: string
@@ -24,8 +23,6 @@ export const paletteApiSlice = apiSlice.injectEndpoints({
           if (typeof palette.colors === 'string') palette.colorsArr = idToPalette(palette.colors)
           return palette
         })
-        console.log(loadedPalettes);
-        
 
         return paletteAdapter.setAll(initialState, loadedPalettes)
       },

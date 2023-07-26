@@ -1,15 +1,18 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Provider } from 'react-redux'
 
 import { PaletteGenerator } from '../pages/PaletteGenerator'
 import { SignIn } from '../pages/SignIn'
 import { SignUp } from '../pages/SignUp'
-import { Provider } from 'react-redux'
+import { Color } from '../pages/Color'
+import Palettes from '../features/palettes/Palettes'
+import { Colors } from '../features/colors/Colors'
+
 import { store } from '../app/store'
 import RequireAuth from '../features/auth/RequireAuth'
+
 import { UserRoutes } from './UserRoutes'
-import { Color } from '../pages/Color'
-import Palettes from '../pages/Palettes'
 
 export const App = () => {
   return (
@@ -31,6 +34,7 @@ export const App = () => {
           </Route>
 
           <Route path='/palettes' element={<Palettes />} />
+          <Route path='/colors' element={<Colors />} />
         </Routes>
       </BrowserRouter>
     </Provider>

@@ -42,11 +42,11 @@
   display: flex;
   overflow: hidden;
   border-radius: 18px;
+  border: 1px solid var(--main-inactive);
 }
 .item .button-container {
   margin-top: 14px;
   display: flex;
-  /* gap: 10px; */
   justify-content: space-between;
   font-size: 1.4rem;
 }

@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom'
-import { getMainContrastColor } from '../utils/getMainContrastColor'
+import { getMainContrastColor } from '../../utils/getMainContrastColor'
 
-import { useFilter } from '../hooks/useFilter'
+import { useFilter } from '../../hooks/useFilter'
 
-import { useGetPalettesQuery } from '../features/palettes/palettesSlice'
-import { CollectionLayout } from '../containers/CollectionLayout'
+import { useGetPalettesQuery } from './palettesSlice'
+import { CollectionLayout } from '../../containers/CollectionLayout'
 
-import '../styles/Layout-Pal.css'
+import '../../styles/Layout-Pal.css'
 
 const Palettes = () => {
   const navigate = useNavigate()

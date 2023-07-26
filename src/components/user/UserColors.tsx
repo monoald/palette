@@ -53,10 +53,6 @@ export const UserColors = () => {
                 <button className='color-button'>
                   <span className='icon icon-heart-filled txt-primary' />
                 </button>
-
-                <button className='color-button txt-hover-secondary'>
-                  Edit
-                </button>
               </div>
             </div>
           ))

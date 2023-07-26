@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import { RootState } from '../../app/store'
 
 export interface User {
+  id: string
   email: string
   name?: string
   username: string

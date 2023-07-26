@@ -51,7 +51,6 @@ uniqueLengths.forEach(length => {
 })
 
 export const UserPalettes = () => {
-  // const { shape, length } = useShapeLength()
   const { shape, quantity, CollectionFilter } = useFilter({
     options: {
       shape: true,

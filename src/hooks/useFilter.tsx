@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Options, Select } from '../Select'
+import { Options, Select } from '../components/Select'
 
 const shapesSelect = {
   horizontal: 'icon-rectangle-h',

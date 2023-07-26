@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
 
 import '../../styles/UserColors.css'
-import { useFilter } from '../filters/CollectionFilter'
+import { useFilter } from '../../hooks/useFilter'
 
 const colors = [
   '#45f2aa',

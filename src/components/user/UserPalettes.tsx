@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import '../../styles/UserPalettes.css'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
 import { Options } from '../Select'
-import { useFilter } from '../filters/CollectionFilter'
+import { useFilter } from '../../hooks/useFilter'
 
 interface Palettes {
   colors: string[],

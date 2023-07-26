@@ -9,6 +9,7 @@ import { store } from '../app/store'
 import RequireAuth from '../features/auth/RequireAuth'
 import { UserRoutes } from './UserRoutes'
 import { Color } from '../pages/Color'
+import Palettes from '../pages/Palettes'
 
 export const App = () => {
   return (
@@ -28,6 +29,8 @@ export const App = () => {
           <Route path='/color'>
               <Route path='/color/:id' element={<Color />} />
           </Route>
+
+          <Route path='/palettes' element={<Palettes />} />
         </Routes>
       </BrowserRouter>
     </Provider>

@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-import { useShapeLength } from '../../features/auth/UserTab'
 import '../../styles/UserPalettes.css'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
 import { Options } from '../Select'
+import { useFilter } from '../filters/CollectionFilter'
 
 interface Palettes {
   colors: string[],
@@ -45,61 +45,71 @@ const palettes: Palettes[] = [
 ]
 
 const uniqueLengths = [...new Set(palettes.map(palette => palette.length.toString()))]
-export const lengthOptions: Options = {}
+const quantityOptions: Options = {}
 uniqueLengths.forEach(length => {
-  lengthOptions[length] = null
+  quantityOptions[length] = null
 })
 
 export const UserPalettes = () => {
-  const { shape, length } = useShapeLength()
+  // const { shape, length } = useShapeLength()
+  const { shape, quantity, CollectionFilter } = useFilter({
+    options: {
+      shape: true,
+      quantity: true,
+      quantityOptions: quantityOptions
+    }
+  })
   const navigate = useNavigate()
 
   const filteredPalettes = palettes.filter(palette => {
-    if (length === 'all') {
+    if (quantity === 'all') {
       return palette
     } 
 
-    return palette.length === Number(length)
+    return palette.length === Number(quantity)
   })
 
   return (
-    <section className='user-palettes'>
-      <ul className={`items__list items__list--${shape}`}>
-        { filteredPalettes.map(palette => (
-          <div className='item' key={palette.colors.join()}>
-            <li className='item__clr-container'>
-              { palette.colors.map(color => (
-                  <button key={color}
-                    className='item__color'
-                    onClick={() => navigate(`/color/${color.substring(1)}`)}
-                    style={{
-                      background: color
-                    }}
-                  >
-                    <span className='item__name'
-                    style={{
-                      color: getMainContrastColor(color)
-                    }}>
-                      {color}
-                    </span>
-                  </button>
-                ))
-              }
-            </li>
+    <>
+      <CollectionFilter />
+      <section className='user-palettes'>
+        <ul className={`items__list items__list--${shape}`}>
+          { filteredPalettes.map(palette => (
+            <div className='item' key={palette.colors.join()}>
+              <li className='item__clr-container'>
+                { palette.colors.map(color => (
+                    <button key={color}
+                      className='item__color'
+                      onClick={() => navigate(`/color/${color.substring(1)}`)}
+                      style={{
+                        background: color
+                      }}
+                    >
+                      <span className='item__name'
+                      style={{
+                        color: getMainContrastColor(color)
+                      }}>
+                        {color}
+                      </span>
+                    </button>
+                  ))
+                }
+              </li>
 
-            <div className='button-container'>
-              <button className='color-button'>
-                <span className='icon icon-heart-filled txt-primary' />
-              </button>
+              <div className='button-container'>
+                <button className='color-button'>
+                  <span className='icon icon-heart-filled txt-primary' />
+                </button>
 
-              <button className='color-button txt-hover-secondary'>
-                Edit
-              </button>
+                <button className='color-button txt-hover-secondary'>
+                  Edit
+                </button>
+              </div>
             </div>
-          </div>
-        ))
-        }
-      </ul>
-    </section>
+          ))
+          }
+        </ul>
+      </section>
+    </>
   )
 }

@@ -1,8 +1,8 @@
-import { useShapeLength } from '../../features/auth/UserTab'
+import { useNavigate } from 'react-router-dom'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
 
 import '../../styles/UserColors.css'
-import { useNavigate } from 'react-router-dom'
+import { useFilter } from '../filters/CollectionFilter'
 
 const colors = [
   '#45f2aa',
@@ -16,44 +16,53 @@ const colors = [
 ]
 
 export const UserColors = () => {
-  const { shape } = useShapeLength()
   const navigate = useNavigate()
 
+  const { shape, CollectionFilter } = useFilter({
+    options: {
+      shape: true
+    }
+  })
+
   return (
-    <section className='user-colors'>
-      <ul className={`items__list items__list--${shape}`}>
-        { colors.map(color => (
-          <div className='item' key={color}>
-            <li
-              className='item__clr-container'
-              style={{ background: color }}
-            >
-              <button
-                className='item__button'
-                onClick={() => navigate(`/color/${color.substring(1)}`)}
-                style={{
-                  color: getMainContrastColor(color)
-                }}
+    <>
+      <CollectionFilter />
+
+      <section className='user-colors'>
+        <ul className={`items__list items__list--${shape}`}>
+          { colors.map(color => (
+            <div className='item' key={color}>
+              <li
+                className='item__clr-container'
+                style={{ background: color }}
               >
-                <span className='item__name'>
-                  {color}
-                </span>
-              </button>
-            </li>
+                <button
+                  className='item__button'
+                  onClick={() => navigate(`/color/${color.substring(1)}`)}
+                  style={{
+                    color: getMainContrastColor(color)
+                  }}
+                >
+                  <span className='item__name'>
+                    {color}
+                  </span>
+                </button>
+              </li>
 
-            <div className='button-container'>
-              <button className='color-button'>
-                <span className='icon icon-heart-filled txt-primary' />
-              </button>
+              <div className='button-container'>
+                <button className='color-button'>
+                  <span className='icon icon-heart-filled txt-primary' />
+                </button>
 
-              <button className='color-button txt-hover-secondary'>
-                Edit
-              </button>
+                <button className='color-button txt-hover-secondary'>
+                  Edit
+                </button>
+              </div>
             </div>
-          </div>
-        ))
-        }
-      </ul>
-    </section>
+          ))
+          }
+        </ul>
+      </section>
+    </>
   )
 }

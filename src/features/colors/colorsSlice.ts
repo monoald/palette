@@ -1,12 +1,16 @@
-import { EntityState, createEntityAdapter } from "@reduxjs/toolkit";
+import { EntityState, createEntityAdapter, createSelector } from "@reduxjs/toolkit";
+import Cookies from 'js-cookie'
+
 import { apiSlice } from "../../app/api/apiSlice";
+import { RootState } from "../../app/store";
+import { User } from "../auth/authSlice";
 
 export interface Color {
   id: string
   name: string
   users: string[]
   savedCount: number
-  userLike?: boolean
+  saved?: boolean
 }
 
 const colorAdapter = createEntityAdapter<Color>()
@@ -15,20 +19,18 @@ const initialState = colorAdapter.getInitialState()
 
 export const colorApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getColors: builder.query<EntityState<Color>, { page: number; userId?: string}>({
+    getColors: builder.query<EntityState<Color>, { page: number }>({
       query: ({ page }) => `/colors?page=${page}`,
-      transformResponse: (response: Color[], meta, arg) => {
-        const userId = arg.userId
-
-        if (!userId) return colorAdapter.setAll(initialState, response)
+      transformResponse: (response: Color[]) => {
+        let user: User
+        const userCookie = Cookies.get('user')?.substring(2)
+        if (userCookie) user = JSON.parse(userCookie)
 
         const loadedColors = response.map(color => {
-          if (color.users.includes(userId)) color.userLike = true
+          if (user && color.users.includes(user.id)) color.saved = true
           color.name = `#${color.name}`
           return color
         })
-
-        console.log(loadedColors);
 
         return colorAdapter.setAll(initialState, loadedColors)
       },
@@ -39,8 +41,65 @@ export const colorApiSlice = apiSlice.injectEndpoints({
               ...result.ids.map(id => ({ type: 'Color' as const, id }))
             ]
           : [{ type: 'Color', id: 'LIST' }]
+    }),
+    saveColor: builder.mutation({
+      query: ({ name }) => ({
+        url: '/colors/save',
+        method: 'POST',
+        body: { name }
+      }),
+      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          colorApiSlice.util.updateQueryData('getColors', { page : 1 }, draft => {
+            const color = draft.entities[id]
+            if (color) color.saved = true
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch (error) {
+          patchResult.undo()
+        }
+      },
+    }),
+    unsaveColor: builder.mutation({
+      query: ({ name }) => ({
+        url: '/colors/unsave',
+        method: 'POST',
+        body: { name }
+      }),
+      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          colorApiSlice.util.updateQueryData('getColors', { page : 1 }, draft => {
+            const color = draft.entities[id]
+            if (color) color.saved = false
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch (error) {
+          patchResult.undo()
+        }
+      },
     })
   })
 })
 
-export const { useGetColorsQuery } = colorApiSlice
+export const {
+  useGetColorsQuery,
+  useSaveColorMutation,
+  useUnsaveColorMutation
+} = colorApiSlice
+
+export const selectColorsResult = colorApiSlice.endpoints.getColors.select({ page: 1 })
+
+const selectColorsData = createSelector(
+  selectColorsResult,
+  result => result.data
+)
+
+export const {
+  selectAll: selectAllColors
+} = colorAdapter.getSelectors((state: RootState) => selectColorsData(state) ?? initialState)

@@ -1,13 +1,19 @@
-import { EntityState, createEntityAdapter } from "@reduxjs/toolkit";
-import { apiSlice } from "../../app/api/apiSlice";
+import { EntityState, createEntityAdapter, createSelector } from "@reduxjs/toolkit";
+import Cookies from 'js-cookie'
 import { idToPalette } from "../../utils/idToPalette";
 
+import { apiSlice } from "../../app/api/apiSlice";
+import { RootState } from "../../app/store";
+import { User } from "../auth/authSlice";
+
 export interface Palette {
+  id: string
   colors: string
   colorsArr: string[]
+  users: string[]
   length: number
   savedCount: number
-  id: string
+  saved: boolean
 }
 
 const paletteAdapter = createEntityAdapter<Palette>()
@@ -16,10 +22,15 @@ const initialState = paletteAdapter.getInitialState()
 
 export const paletteApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getPalettes: builder.query<EntityState<Palette>, number>({
-      query: (page) => `/palettes?page=${page}`,
+    getPalettes: builder.query<EntityState<Palette>, { page: number }>({
+      query: ({ page }) => `/palettes?page=${page}`,
       transformResponse: (response: Palette[]) => {
+        let user: User
+        const userCookie = Cookies.get('user')?.substring(2)
+        if (userCookie) user = JSON.parse(userCookie)
+
         const loadedPalettes = response.map(palette => {
+          if (user && palette.users.includes(user.id)) palette.saved = true
           if (typeof palette.colors === 'string') palette.colorsArr = idToPalette(palette.colors)
           return palette
         })
@@ -33,23 +44,69 @@ export const paletteApiSlice = apiSlice.injectEndpoints({
               ...result.ids.map(id => ({ type: 'Palette' as const, id }))
             ]
           : [{ type: 'Palette', id: 'LIST' }]
+    }),
+    savePalette: builder.mutation({
+      query: ({ colors }) => ({
+        url: '/palettes/save',
+        method: 'POST',
+        body: { colors }
+      }),
+      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          paletteApiSlice.util.updateQueryData('getPalettes', { page : 1 }, draft => {
+            const palette = draft.entities[id]
+            if (palette) palette.saved = true
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch (error) {
+          patchResult.undo()
+        }
+      },
+    }),
+    unsavePalette: builder.mutation({
+      query: ({ colors }) => ({
+        url: '/palettes/unsave',
+        method: 'POST',
+        body: { colors }
+      }),
+      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          paletteApiSlice.util.updateQueryData('getPalettes', { page : 1 }, draft => {
+            const palette = draft.entities[id]
+            if (palette) palette.saved = false
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch (error) {
+          patchResult.undo()
+        }
+      },
     })
   })
 })
 
-export const { useGetPalettesQuery } = paletteApiSlice
+export const {
+  useGetPalettesQuery,
+  useSavePaletteMutation,
+  useUnsavePaletteMutation
+} = paletteApiSlice
 
-// export const selectPalettesResult = paletteApiSlice.endpoints.getPalettes.select()
+export const selectPalettesResult = paletteApiSlice.endpoints.getPalettes.select({ page: 1 })
 
-// const selectPaletteData = createSelector(
-//   selectPalettesResult,
-//   result => result.data
-// )
+const selectPaletteData = createSelector(
+  selectPalettesResult,
+  result => result.data
+)
 
-// export const {
-//   selectAll: selectAllPalettes,
-//   selectById: selectPaletteById,
-//   selectIds: selectPalettesIds
-// } =  paletteAdapter.getSelectors((state: RootState) =>
-//   selectPaletteData(state) ?? initialState
-// )
+export const {
+  selectAll: selectAllPalettes,
+  selectById: selectPaletteById,
+  selectIds: selectPalettesIds
+} =  paletteAdapter.getSelectors((state: RootState) =>
+  selectPaletteData(state) ?? initialState
+)

@@ -3,20 +3,25 @@ import { getMainContrastColor } from '../../utils/getMainContrastColor'
 
 import { useFilter } from '../../hooks/useFilter'
 
-import { useGetPalettesQuery } from './palettesSlice'
 import { CollectionLayout } from '../../containers/CollectionLayout'
 
+import { useAppSelector } from '../../app/hooks'
+import { selectAllPalettes, useGetPalettesQuery } from './palettesSlice'
+
 import '../../styles/Layout-Pal.css'
+import { useSave } from '../../hooks/useSave'
+import Tooltip from '../../components/tooltips/Tooltip'
+import { useState } from 'react'
+import { useTooltip } from '../../hooks/useTooltip'
 
 const Palettes = () => {
-  const navigate = useNavigate()
   const {
-    data: palettes,
     isLoading,
     isSuccess,
     isError,
     error
-  } = useGetPalettesQuery(1)
+  } = useGetPalettesQuery({ page: 1 })
+  const palettes = useAppSelector(selectAllPalettes)
 
   const { shape, CollectionFilter } = useFilter({
     options: {
@@ -24,16 +29,20 @@ const Palettes = () => {
     }
   })
 
+  const [tooltipMessage, setTooltipMessage] = useTooltip()
+  const likeHandler = useSave(setTooltipMessage)
+  const navigate = useNavigate()
+
   return (
     <CollectionLayout asideNavigation={false}>
       <CollectionFilter />
 
-      <section className='user-palettes'>
+      <section className='user-palettes' onClick={likeHandler}>
         <ul className={`items__list items__list--${shape}`}>
-          { isSuccess && palettes.ids.map(paletteId => (
-              <div className='item' key={palettes.entities[paletteId]?.colors}>
+          { isSuccess && palettes.map(palette => (
+              <div className='item' key={palette.id}>
                 <li className='item__clr-container'>
-                  { palettes.entities[paletteId]?.colorsArr.map(color => (
+                  { palette.colorsArr.map(color => (
                       <button key={color}
                         className='item__color'
                         onClick={() => navigate(`/color/${color.substring(1)}`)}
@@ -53,8 +62,19 @@ const Palettes = () => {
                 </li>
 
                 <div className='button-container'>
-                  <button className='color-button'>
-                    <span className='icon icon-heart-filled txt-primary' />
+                  <button
+                    className='color-button palette-like'
+                    data-colors={palette.colors}
+                    data-saved={palette.saved}
+                    data-id={palette.id}
+                  >
+                    <span
+                      className={`
+                        icon
+                        txt-primary
+                        icon-heart${palette.saved ? '-filled' : ''}
+                      `}
+                    />
                   </button>
 
                   <button className='color-button txt-hover-secondary'>
@@ -65,6 +85,7 @@ const Palettes = () => {
           ))}
         </ul>
       </section>
+      <Tooltip message={tooltipMessage} />
     </CollectionLayout>
   )
 }

@@ -1,28 +1,31 @@
 .Tooltip {
   position: absolute;
   bottom: 20px;
-  left: -150px;
+  left: -450px;
   display: none;
   width: fit-content;
+  max-width: 200px;
   height: fit-content;
-  padding: 12px 24px;
+  padding: 16px 28px;
   border-radius: 10px;
   margin-bottom: 40px;
   margin-left: 40px;
-  background-color: var(--main);
-  color: #E8E9F3;
+  background-color: var(--txt-main);
+  color: var(--main);
   font-size: 14px;
+  text-align: center;
+  font-weight: 600;
   z-index: 1;
 }
 
 .Tooltip--active {
   display: block;
-  animation: tooltip-animation 5s;
+  animation: tooltip-animation 7s;
 }
 
 @keyframes tooltip-animation {
   0% {
-    left: -150px;
+    left: -450px;
   }
   20% {
     left: 0px;
@@ -31,6 +34,6 @@
     left: 0px;
   }
   100% {
-    left: -150px;
+    left: -450px;
   }
 }

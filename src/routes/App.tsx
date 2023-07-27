@@ -13,6 +13,11 @@ import { store } from '../app/store'
 import RequireAuth from '../features/auth/RequireAuth'
 
 import { UserRoutes } from './UserRoutes'
+import { colorApiSlice } from '../features/colors/colorsSlice'
+import { paletteApiSlice } from '../features/palettes/palettesSlice'
+
+store.dispatch(colorApiSlice.endpoints.getColors.initiate({ page: 1 }));
+store.dispatch(paletteApiSlice.endpoints.getPalettes.initiate({ page: 1 }));
 
 export const App = () => {
   return (

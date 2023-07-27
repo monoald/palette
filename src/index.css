@@ -151,3 +151,6 @@ input[type="range"] {
   font-size: 3.4rem;
   font-weight: 700;
 }
+.icon {
+  pointer-events: none;
+}

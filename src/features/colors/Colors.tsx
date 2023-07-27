@@ -1,22 +1,24 @@
-import { CollectionLayout } from '../../containers/CollectionLayout'
-
-import { useAppSelector } from '../../app/hooks'
-import { useGetColorsQuery } from './colorsSlice'
-import { selectCurrentUser } from '../auth/authSlice'
-import { useFilter } from '../../hooks/useFilter'
 import { useNavigate } from 'react-router-dom'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
 
-export const Colors = () => {
-  const user = useAppSelector(selectCurrentUser)
+import { useFilter } from '../../hooks/useFilter'
+import { useSave } from '../../hooks/useSave'
 
+import { CollectionLayout } from '../../containers/CollectionLayout'
+
+import { useAppSelector } from '../../app/hooks'
+import { selectAllColors, useGetColorsQuery } from './colorsSlice'
+import { useTooltip } from '../../hooks/useTooltip'
+import Tooltip from '../../components/tooltips/Tooltip'
+
+export const Colors = () => {
   const {
-    data: colors,
     isLoading,
     isSuccess,
     isError,
     error
-  } = useGetColorsQuery({ page: 1, userId: user?.id})
+  } = useGetColorsQuery({ page: 1 })
+  const colors = useAppSelector(selectAllColors)
 
   const { shape, CollectionFilter } = useFilter({
     options: {
@@ -24,38 +26,48 @@ export const Colors = () => {
     }
   })
 
+  const [tooltipMessage, setTooltipMessage] = useTooltip()
+  const likeHandler = useSave(setTooltipMessage)
   const navigate = useNavigate()
 
   return (
     <CollectionLayout asideNavigation={false}>
       <CollectionFilter />
 
-      <section className='user-colors'>
+      <section className='user-colors' onClick={likeHandler}>
         <ul className={`items__list items__list--${shape}`}>
-          { isSuccess && colors.ids.map(colorId => (
-            <div className='item' key={colorId}>
+          { isSuccess && colors.map(color => (
+            <div className='item' key={color.id}>
               <li
                 className='item__clr-container'
-                style={{ background: colors.entities[colorId]?.name }}
+                style={{ background: color.name }}
               >
                 <button
                   className='item__button'
-                  onClick={() => navigate(`/color/${colors.entities[colorId]?.name.substring(1)}`)}
+                  onClick={() => navigate(`/color/${color.name.substring(1)}`)}
                   style={{
-                    color: getMainContrastColor(colors.entities[colorId]?.name as string)
+                    color: getMainContrastColor(color.name as string)
                   }}
                 >
                   <span className='item__name'>
-                    {colors.entities[colorId]?.name}
+                    {color.name}
                   </span>
                 </button>
               </li>
 
               <div className='button-container'>
-                <button className='color-button'>
-                  <span className={`icon
-                    txt-primary
-                    icon-heart${colors.entities[colorId]?.userLike ? '-filled' : ''}`}
+                <button
+                  className='color-button color-like'
+                  data-name={color.name.substring(1)}
+                  data-saved={color.saved}
+                  data-id={color.id}
+                >
+                  <span
+                    className={`
+                      icon
+                      txt-primary
+                      icon-heart${color.saved ? '-filled' : ''}
+                    `}
                   />
                 </button>
               </div>
@@ -64,6 +76,8 @@ export const Colors = () => {
           }
         </ul>
       </section>
+
+      <Tooltip message={tooltipMessage} />
     </CollectionLayout>
   )
 }

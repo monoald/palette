@@ -50,7 +50,7 @@ export const UserColors = () => {
               </li>
 
               <div className='button-container'>
-                <button className='color-button'>
+                <button className='color-button like-button'>
                   <span className='icon icon-heart-filled txt-primary' />
                 </button>
               </div>

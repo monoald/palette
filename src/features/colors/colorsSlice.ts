@@ -3,7 +3,8 @@ import Cookies from 'js-cookie'
 
 import { apiSlice } from "../../app/api/apiSlice";
 import { RootState } from "../../app/store";
-import { User } from "../auth/authSlice";
+import { User, setSavedColors } from "../auth/authSlice";
+import { authApiSlice } from "../auth/authApiSlice";
 
 export interface Color {
   id: string
@@ -48,7 +49,7 @@ export const colorApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: { name }
       }),
-      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, unsavedColor }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           colorApiSlice.util.updateQueryData('getColors', { page : 1 }, draft => {
             const color = draft.entities[id]
@@ -56,10 +57,23 @@ export const colorApiSlice = apiSlice.injectEndpoints({
           })
         )
 
+        let patchUserResult
+        if (unsavedColor) {
+          patchUserResult = dispatch(
+            authApiSlice.util.updateQueryData('getSaved', undefined, draft => {
+              const newColors = [...draft.colors as Partial<Color>[]]
+              newColors.splice(unsavedColor.index, 0, unsavedColor.color)
+              draft.colors = newColors
+              dispatch(setSavedColors(newColors))
+            })
+          )
+        }
+
         try {
           await queryFulfilled
         } catch (error) {
           patchResult.undo()
+          patchUserResult?.undo()
         }
       },
     }),
@@ -77,10 +91,19 @@ export const colorApiSlice = apiSlice.injectEndpoints({
           })
         )
 
+        const patchUserResult = dispatch(
+          authApiSlice.util.updateQueryData('getSaved', undefined, draft => {
+            const newColors = draft.colors?.filter(color => color.id !== id)
+            draft.colors = newColors
+            dispatch(setSavedColors(newColors as Partial<Color>[]))
+          })
+        )
+
         try {
           await queryFulfilled
         } catch (error) {
           patchResult.undo()
+          patchUserResult.undo()
         }
       },
     })

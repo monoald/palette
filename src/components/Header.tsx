@@ -4,14 +4,14 @@ import { PrimaryButton } from './buttons/PrimaryButton'
 import { SecondaryButton } from './buttons/SecondaryButton'
 
 import { useAppSelector } from '../app/hooks'
-import { selectCurrentUser } from '../features/auth/authSlice'
+import { selectUser } from '../features/auth/authSlice'
 
 import '../styles/Header.css'
 import useTheme from '../hooks/useTheme'
 import { DescriptionTooltip } from './tooltips/DescriptionTooltip'
 
 export const Header = () => {
-  const user = useAppSelector(selectCurrentUser)
+  const user = useAppSelector(selectUser)
   const navigate = useNavigate()
 
   const { theme, toggleTheme } = useTheme()

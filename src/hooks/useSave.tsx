@@ -1,5 +1,5 @@
 import { useAppSelector } from "../app/hooks"
-import { selectCurrentUser } from "../features/auth/authSlice"
+import { selectUser } from "../features/auth/authSlice"
 import { useSaveColorMutation, useUnsaveColorMutation } from "../features/colors/colorsSlice"
 import { useSavePaletteMutation, useUnsavePaletteMutation } from "../features/palettes/palettesSlice"
 
@@ -10,13 +10,14 @@ export const useSave = (setTooltipMessage: React.Dispatch<React.SetStateAction<s
   const [savePalette] = useSavePaletteMutation()
   const [unsavePalette] = useUnsavePaletteMutation()
 
-  const user = useAppSelector(selectCurrentUser)
+  const user = useAppSelector(selectUser)
 
   const likeHandler = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     if (user) {
       const target = e.target as HTMLElement
       if (target.classList.contains('color-like')) {
         if (target.dataset.saved === 'true') {
+          if (target.dataset.section === 'user') setTooltipMessage('Press "z" to undo.')
           await unsaveColor({
             name: target.dataset.name,
             id: target.dataset.id
@@ -31,6 +32,7 @@ export const useSave = (setTooltipMessage: React.Dispatch<React.SetStateAction<s
 
       if (target.classList.contains('palette-like')) {
         if (target.dataset.saved === 'true') {
+          if (target.dataset.section === 'user') setTooltipMessage('Press "z" to undo.')
           await unsavePalette({
             colors: target.dataset.colors,
             id: target.dataset.id

@@ -4,7 +4,8 @@ import { idToPalette } from "../../utils/idToPalette";
 
 import { apiSlice } from "../../app/api/apiSlice";
 import { RootState } from "../../app/store";
-import { User } from "../auth/authSlice";
+import { User, setSavedPalettes } from "../auth/authSlice";
+import { authApiSlice } from "../auth/authApiSlice";
 
 export interface Palette {
   id: string
@@ -51,7 +52,7 @@ export const paletteApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: { colors }
       }),
-      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, unsavedPalette }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           paletteApiSlice.util.updateQueryData('getPalettes', { page : 1 }, draft => {
             const palette = draft.entities[id]
@@ -59,10 +60,23 @@ export const paletteApiSlice = apiSlice.injectEndpoints({
           })
         )
 
+        let patchUserResult
+        if (unsavedPalette) {
+          patchUserResult = dispatch(
+            authApiSlice.util.updateQueryData('getSaved', undefined, draft => {
+              const newPalettes = [...draft.palettes as Partial<Palette>[]]
+              newPalettes.splice(unsavedPalette.index, 0, unsavedPalette.palette)
+              draft.palettes = newPalettes
+              dispatch(setSavedPalettes(newPalettes))
+            })
+          )
+        }
+
         try {
           await queryFulfilled
         } catch (error) {
           patchResult.undo()
+          patchUserResult?.undo()
         }
       },
     }),
@@ -80,10 +94,19 @@ export const paletteApiSlice = apiSlice.injectEndpoints({
           })
         )
 
+        const patchUserResult = dispatch(
+          authApiSlice.util.updateQueryData('getSaved', undefined, draft => {
+            const newPalettes = draft.palettes?.filter(palette => palette.id !== id)
+            draft.palettes = newPalettes
+            dispatch(setSavedPalettes(newPalettes as Partial<Palette>[]))
+          })
+        )
+
         try {
           await queryFulfilled
         } catch (error) {
           patchResult.undo()
+          patchUserResult.undo()
         }
       },
     })

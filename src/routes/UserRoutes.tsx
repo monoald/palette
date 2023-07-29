@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import { CollectionLayout } from "../containers/CollectionLayout"
-import { UserPalettes } from "../components/user/UserPalettes"
-import { UserColors } from "../components/user/UserColors"
+import { UserPalettes } from "../features/auth/UserPalettes"
+import { UserColors } from "../features/colors/UserColors"
 
 
 export const UserRoutes = () => {

@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
+import { useSave } from '../hooks/useSave'
+import { useCheckSavedPalettes } from '../hooks/useCheckSavedPalette'
 
 import { DescriptionTooltip } from './tooltips/DescriptionTooltip'
 
@@ -18,10 +20,12 @@ interface HeaderProps {
 }
 
 export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, history, setTooltipMessage }: HeaderProps) => {
-  function handleShare() {
+  const handleShare = () => {
     navigator.clipboard.writeText(`https://app-palette.vercel.app/${history.data[history.currentIndex]}`)
     setTooltipMessage('Url copied!')
   }
+  const [isSaved, savedId] = useCheckSavedPalettes(history)
+  const saveHandler = useSave(setTooltipMessage, { new: true })
 
   return (
     <aside className='SideBar'>
@@ -81,6 +85,25 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
             <span className='option__icon icon-redo'/>
           </button>
         </li>
+
+        <li>
+          <button
+            className='option palette-like'
+            onClick={saveHandler}
+            data-tooltip
+            data-colors={history.data[history.currentIndex]}
+            data-saved={isSaved}
+            data-id={savedId}
+          >
+            <DescriptionTooltip text="Save palette" tipPosition="right"/>
+            <span
+              className={`
+                option__icon icon
+                icon-heart${isSaved ? '-filled' : ''}
+              `}
+            />
+          </button>
+        </li>
         
         <li>
           <button
@@ -92,15 +115,6 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
             <span className='option__icon icon-share'/>
           </button>
         </li>
-
-        {/* <li className='github-info'>
-          <div className='icon-container'>
-            <span className='github-icon' />
-          </div>
-          <a className='name' href='https://github.com/monoald/palette' target='_blank'>
-            By @monoald
-          </a>
-        </li> */}
       </ul>
     </aside>
   )

@@ -1,7 +1,9 @@
 import Cookies from "js-cookie";
 import { apiSlice } from "../../app/api/apiSlice";
 import { idToPalette } from "../../utils/idToPalette";
-import { User } from "./authSlice";
+import { User, setSavedColors, setSavedPalettes } from "./authSlice";
+import { Color } from "../colors/colorsSlice";
+import { Palette } from "../palettes/palettesSlice";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -36,6 +38,15 @@ export const authApiSlice = apiSlice.injectEndpoints({
           })
         }
         return response
+      },
+      onQueryStarted: async (_undefined, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(setSavedColors(data.colors as Partial<Color>[]))
+          dispatch(setSavedPalettes(data.palettes as Partial<Palette>[]))
+        } catch (err) {
+          return
+        }
       }
     }),
   })

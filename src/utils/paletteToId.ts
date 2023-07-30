@@ -5,5 +5,5 @@ export function paletteToId(colors: Color[]): string {
     return color.color.slice(1)
   }).join('-')
   
-  return url
+  return url.toLowerCase()
 }

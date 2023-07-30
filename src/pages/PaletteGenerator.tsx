@@ -59,7 +59,6 @@ export const PaletteGenerator = () => {
   const [heightColorBlind, setHeightColorBlind] = useState(0)
   const [resizeColorBlind, setResizeColorBlind] = useState(false)
   const [updatedColor, setUpdatedColor] = useState<string>('')
-  // const [tooltipMessage, setTooltipMessage] = useState('')
   const [firstRender, setFirstRender] = useState(true)
 
   const mainRef = useRef<HTMLCanvasElement>(null)

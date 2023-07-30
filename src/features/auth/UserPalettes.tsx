@@ -60,7 +60,8 @@ export const UserPalettes = () => {
       savePalette({
         colors: unsavedPalette?.palette.colors,
         id: unsavedPalette?.palette.id,
-        unsavedPalette: unsavedPalette
+        unsavedPalette: unsavedPalette,
+        undoAction: true
       }).unwrap()
       setAbleKeyUndo(false)
     }

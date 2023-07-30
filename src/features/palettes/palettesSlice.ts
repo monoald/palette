@@ -52,7 +52,7 @@ export const paletteApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: { colors }
       }),
-      async onQueryStarted({ id, unsavedPalette }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, unsavedPalette, undoAction, isNew, colors }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           paletteApiSlice.util.updateQueryData('getPalettes', { page : 1 }, draft => {
             const palette = draft.entities[id]
@@ -61,11 +61,22 @@ export const paletteApiSlice = apiSlice.injectEndpoints({
         )
 
         let patchUserResult
-        if (unsavedPalette) {
+        if (unsavedPalette && undoAction) {
           patchUserResult = dispatch(
             authApiSlice.util.updateQueryData('getSaved', undefined, draft => {
               const newPalettes = [...draft.palettes as Partial<Palette>[]]
               newPalettes.splice(unsavedPalette.index, 0, unsavedPalette.palette)
+              draft.palettes = newPalettes
+              dispatch(setSavedPalettes(newPalettes))
+            })
+          )
+        }
+
+        if (isNew) {
+          patchUserResult = dispatch(
+            authApiSlice.util.updateQueryData('getSaved', undefined, draft => {
+              const newPalettes = [...draft.palettes as Partial<Palette>[]]
+              newPalettes.push({ colors })
               draft.palettes = newPalettes
               dispatch(setSavedPalettes(newPalettes))
             })

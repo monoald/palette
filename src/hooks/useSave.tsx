@@ -3,7 +3,10 @@ import { selectUser } from "../features/auth/authSlice"
 import { useSaveColorMutation, useUnsaveColorMutation } from "../features/colors/colorsSlice"
 import { useSavePaletteMutation, useUnsavePaletteMutation } from "../features/palettes/palettesSlice"
 
-export const useSave = (setTooltipMessage: React.Dispatch<React.SetStateAction<string>>) => {
+export const useSave = (
+  setTooltipMessage: React.Dispatch<React.SetStateAction<string>>,
+  options?: { new?: boolean }
+) => {
   const [saveColor] = useSaveColorMutation()
   const [unsaveColor] = useUnsaveColorMutation()
 
@@ -25,7 +28,7 @@ export const useSave = (setTooltipMessage: React.Dispatch<React.SetStateAction<s
         } else {
           saveColor({
             name: target.dataset.name,
-            id: target.dataset.id
+            id: target.dataset.id,
           }).unwrap()
         }
       }
@@ -40,7 +43,8 @@ export const useSave = (setTooltipMessage: React.Dispatch<React.SetStateAction<s
         } else {
           savePalette({
             colors: target.dataset.colors,
-            id: target.dataset.id
+            id: target.dataset.id,
+            isNew: options?.new || null
           }).unwrap()
         }
       }

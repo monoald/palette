@@ -55,7 +55,7 @@ const authSlice = createSlice({
         state.user.palettes = palettes
       }
     },
-    logOut: (state) => {
+    signOut: (state) => {
       state.user = null
       state.token = null
       Cookies.remove('user')
@@ -68,7 +68,7 @@ export const {
   setCredentials,
   setSavedColors,
   setSavedPalettes,
-  logOut
+  signOut
 } = authSlice.actions
 
 export const authReducer = authSlice.reducer

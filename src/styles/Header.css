@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 2;
 }
 .Header::after {
   content: "";
@@ -22,7 +23,8 @@
 .user-nav {
   margin-right: 52px;
 }
-.user-nav__list {
+.user-nav__list,
+.header-nav__list {
   display: flex;
   gap: 34px;
   list-style: none;
@@ -31,7 +33,9 @@
   width: 90px;
   height: 30px;
 }
-.user-nav__item {
+.user-nav__item,
+.header-nav__item {
+  position: relative;
   display: flex;
   align-items: center;
 }
@@ -55,4 +59,13 @@
   font-size: 2.5rem;
   padding: 0px;
   color: var(--txt-main);
+}
+.nav-link {
+  text-decoration: none;
+  color: var(--txt-main);
+}
+.header-nav__item {
+  font-size: 1.6rem;
+  font-weight: 500;
+  padding:  8px 14px;
 }

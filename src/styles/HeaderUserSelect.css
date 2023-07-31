@@ -1,0 +1,22 @@
+.user-select {
+  position: absolute;
+  top: 100%;
+  right: 0%;
+  margin-top: 6px;
+  border-radius: 8px;
+  background-color: var(--main);
+  font-size: 1.4rem;
+  letter-spacing: 0.3px;
+  z-index: 1;
+  overflow: hidden;
+  box-shadow: 2px 2px 12px rgba(20,20,20,0.7);
+}
+.user-select__option {
+  width: 100%;
+  padding: 10px 20px;
+}
+.user-select__option:hover {
+  color: var(--main);
+  -webkit-text-fill-color: var(--main);
+  background: var(--gradient-primary);
+}

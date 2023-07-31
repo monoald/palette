@@ -1,16 +1,19 @@
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import useTheme from '../hooks/useTheme'
 
 import { PrimaryButton } from './buttons/PrimaryButton'
 import { SecondaryButton } from './buttons/SecondaryButton'
+import { DescriptionTooltip } from './tooltips/DescriptionTooltip'
 
 import { useAppSelector } from '../app/hooks'
 import { selectUser } from '../features/auth/authSlice'
 
 import '../styles/Header.css'
-import useTheme from '../hooks/useTheme'
-import { DescriptionTooltip } from './tooltips/DescriptionTooltip'
+import HeaderUserSelect from '../features/auth/HeaderUserSelect'
+import { useState } from 'react'
 
 export const Header = () => {
+  const [toggleUserOptions, setToggleOptions] = useState(false)
   const user = useAppSelector(selectUser)
   const navigate = useNavigate()
 
@@ -21,6 +24,43 @@ export const Header = () => {
       <a href="/" className='logo txt-primary'>
         Palette
       </a>
+
+      <nav className='header-nav'>
+        <ul className='header-nav__list'>
+          <li className='header-nav__item txt-hover-primary'>
+            <NavLink
+              to='/palettes'
+              className={({ isActive }) => 
+                isActive ? 'txt-primary' : 'nav-link'
+              }
+            >
+              Palettes
+            </NavLink>
+          </li>
+
+          <li className='header-nav__item txt-hover-primary'>
+            <NavLink
+              to='/colors'
+              className={({ isActive }) => 
+                isActive ? 'txt-primary' : 'nav-link'
+              }
+            >
+              Colors
+            </NavLink>
+          </li>
+
+          <li className='header-nav__item txt-hover-primary'>
+            <NavLink
+              to='/'
+              className={({ isActive }) => 
+                isActive ? 'txt-primary' : 'nav-link'
+              }
+            >
+              Palette Generator
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
       
       <nav className='user-nav'>
         <ul className='user-nav__list'>
@@ -38,11 +78,16 @@ export const Header = () => {
           { user
             ? (
               <li className='user-nav__item'>
-                <button className='user-nav__avatar'>
+                <button
+                  className='user-nav__avatar'
+                  onClick={() => setToggleOptions(!toggleUserOptions)}
+                >
                   <span className='avatar-icon' style={{
                     backgroundImage: `url(${user.avatar})`
                   }} />
                 </button>
+
+                { toggleUserOptions &&  <HeaderUserSelect />}
               </li>
             )
             : (

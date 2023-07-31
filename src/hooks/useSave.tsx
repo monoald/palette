@@ -29,6 +29,7 @@ export const useSave = (
           saveColor({
             name: target.dataset.name,
             id: target.dataset.id,
+            isNew: options?.new || null
           }).unwrap()
         }
       }

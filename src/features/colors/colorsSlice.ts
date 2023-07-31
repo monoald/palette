@@ -49,7 +49,7 @@ export const colorApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: { name }
       }),
-      async onQueryStarted({ id, unsavedColor }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, unsavedColor, isNew, name }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           colorApiSlice.util.updateQueryData('getColors', { page : 1 }, draft => {
             const color = draft.entities[id]
@@ -63,6 +63,17 @@ export const colorApiSlice = apiSlice.injectEndpoints({
             authApiSlice.util.updateQueryData('getSaved', undefined, draft => {
               const newColors = [...draft.colors as Partial<Color>[]]
               newColors.splice(unsavedColor.index, 0, unsavedColor.color)
+              draft.colors = newColors
+              dispatch(setSavedColors(newColors))
+            })
+          )
+        }
+
+        if (isNew) {
+          patchUserResult = dispatch(
+            authApiSlice.util.updateQueryData('getSaved', undefined, draft => {
+              const newColors = [...draft.colors as Partial<Color>[]]
+              newColors.push({ name: `#${name}` })
               draft.colors = newColors
               dispatch(setSavedColors(newColors))
             })

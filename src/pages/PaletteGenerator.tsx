@@ -22,6 +22,7 @@ import { modalsInitialState, modalsReducer } from '../reducers/modals'
 
 import '../assets/icons/style.css'
 import '../styles/PaletteGenerator.css'
+import { useSave } from '../hooks/useSave'
 
 export interface Color {
   color: string
@@ -121,6 +122,8 @@ export const PaletteGenerator = () => {
     setResizeColorBlind(false)
   }
 
+  const saveHandler = useSave(setTooltipMessage, { new: true })
+
   return (
     <div className='palette-layout'>
       <Header />
@@ -147,6 +150,7 @@ export const PaletteGenerator = () => {
           ref={mainRef}
           onMouseMove={handleResize}
           onMouseUp={handleEndResize}
+          onClick={saveHandler}
         >
           <SortableContext
             items={colors.colors}

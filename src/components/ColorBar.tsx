@@ -10,6 +10,7 @@ import { ColorsAction } from '../reducers/colors'
 import { ModalsAction } from '../reducers/modals'
 
 import '../styles/ColorBar.css'
+import { useCheckSavedColor } from '../hooks/useCheckSavedColor'
 
 interface ColorBarProps {
   color: Color
@@ -32,10 +33,9 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
     transform,
   } = useSortable({ id: color.id })
 
-  const [cliked, setCliked] = useState<boolean>(false)
-  const [isHovering, setIsHovering] = useState<boolean>(false)
   const [hoverSide, setHoverSide] = useState<string>('none')
 
+  const [isSaved, savedId] = useCheckSavedColor(color.color)
   const style = transform ? {
     transform: CSS.Transform.toString(transform),
   }: undefined 
@@ -112,14 +112,10 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
       style={{
         ...style,
         background: color.color,
-        zIndex: cliked || isHovering ? 1 : 0,
         color: color.contrastColor,
         height: `calc(100% - ${heightColorBlind})`
       }}
-      onFocus={() => setIsHovering(true)}
-      onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => {
-        setIsHovering(false)
         setHoverSide('none')
       }}
       onMouseMove={handleMouseMove}
@@ -150,7 +146,7 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
         <span className='icon-plus' />
       </button>
 
-      {isHovering && !resizeColorBlind &&
+      { !resizeColorBlind &&
         <>
           <button
             className='color-button'
@@ -162,6 +158,26 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
           >
             <span className='icon-x' />
             <DescriptionTooltip text='Remove' tipPosition='bottom' />
+          </button>
+
+          <button
+            className='color-button color-like'
+            style={{
+              'color': color.contrastColor
+            }}
+            // onMouseDown={saveHandler}
+            data-tooltip
+            data-name={color.color.substring(1)}
+            data-saved={isSaved}
+            data-id={savedId}
+          >
+            <span
+              className={`
+                icon
+                icon-heart${isSaved ? '-filled' : ''}
+              `}
+            />
+            <DescriptionTooltip text='Add to clip-board' tipPosition='bottom' />
           </button>
 
           <button
@@ -196,9 +212,7 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
             style={{
             'color': color.contrastColor
             }}
-            onMouseDown={() => setCliked(true)}
             data-tooltip
-            onMouseUp={() => setCliked(false)}
             {...listeners}
           >
             <span className='icon-move' />

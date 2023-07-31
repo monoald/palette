@@ -7,16 +7,27 @@
   align-items: center;
   gap: 10px;
   user-select: none;
+  z-index: 0;
+}
+.Color-Bar:hover,
+.Color-Bar:focus,
+.Color-Bar:active {
+  z-index: 1;
 }
 .Color-Bar .color-button {
   width: fit-content;
   background-color: transparent;
   font-size: 2.4rem;
   border: none;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 10px;
+}
+.Color-Bar:hover .color-button,
+.Color-Bar:focus .color-button,
+.Color-Bar:active .color-button {
+  display: flex;
 }
 .color-hex {
   margin-top: 40px;

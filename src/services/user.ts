@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3000/api/v1/users'
+const baseUrl = 'https://localhost:3000/api/v1/users'
 
 export interface UserSignup {
   email: string

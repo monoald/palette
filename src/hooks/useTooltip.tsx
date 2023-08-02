@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react'
 
 export const useTooltip = (): [string, React.Dispatch<React.SetStateAction<string>>] => {
-  // export const useTooltip = (message: string, setMessage: React.Dispatch<React.SetStateAction<string>>) => {
   const [message, setMessage] = useState('')
 
   useEffect(() => {

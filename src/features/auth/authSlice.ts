@@ -17,8 +17,9 @@ export interface User {
 }
 
 interface LoginResponse {
-  user: Partial<User> | null,
-  token: string | null,
+  user: Partial<User> | null
+  token: string | null
+  collectionModified: boolean
 }
 
 let user = null
@@ -29,7 +30,8 @@ const token = Cookies.get('token') || null
 
 const initialState: LoginResponse = {
   user: user,
-  token: token
+  token: token,
+  collectionModified: false
 }
 
 const authSlice = createSlice({
@@ -60,7 +62,14 @@ const authSlice = createSlice({
       state.token = null
       Cookies.remove('user')
       Cookies.remove('token')
-    }
+    },
+    setCollectionModified: (state) => {
+      state.collectionModified = true
+      
+    },
+    resetCollectionModified: (state) => {
+      state.collectionModified = false
+    },
   }
 })
 
@@ -68,7 +77,9 @@ export const {
   setCredentials,
   setSavedColors,
   setSavedPalettes,
-  signOut
+  signOut,
+  setCollectionModified,
+  resetCollectionModified,
 } = authSlice.actions
 
 export const authReducer = authSlice.reducer
@@ -77,3 +88,4 @@ export const selectUser = (state: RootState) => state.auth.user
 export const selectToken = (state: RootState) => state.auth.token
 export const selectSavedColors = (state: RootState) => state.auth.user?.colors
 export const selectSavedPalettes = (state: RootState) => state.auth.user?.palettes
+export const selectCollectionModified = (state: RootState) => state.auth.collectionModified

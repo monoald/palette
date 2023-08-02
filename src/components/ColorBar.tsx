@@ -165,7 +165,6 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
             style={{
               'color': color.contrastColor
             }}
-            // onMouseDown={saveHandler}
             data-tooltip
             data-name={color.color.substring(1)}
             data-saved={isSaved}

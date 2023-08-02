@@ -15,7 +15,7 @@ import RequireAuth from '../features/auth/RequireAuth'
 import { UserRoutes } from './UserRoutes'
 import { authApiSlice } from '../features/auth/authApiSlice'
 
-store.dispatch(authApiSlice.endpoints.getSaved.initiate());
+store.dispatch(authApiSlice.endpoints.getSaved.initiate())
 
 export const App = () => {
   return (

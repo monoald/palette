@@ -45,7 +45,6 @@ export const DraggableModal = ({ children, nameClass }: DraggableModalProps) => 
       target.tagName == 'INPUT' ||
       target.tagName == 'CANVAS'
     ) return 
-    // if (target.tagName == 'INPUT') return
       setIsDragging(true)
   }
   

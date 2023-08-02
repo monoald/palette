@@ -1,10 +1,10 @@
-import { EntityState, createEntityAdapter, createSelector } from "@reduxjs/toolkit";
+import { EntityState, createEntityAdapter, createSelector } from '@reduxjs/toolkit'
 import Cookies from 'js-cookie'
 
-import { apiSlice } from "../../app/api/apiSlice";
-import { RootState } from "../../app/store";
-import { User, setSavedColors } from "../auth/authSlice";
-import { authApiSlice } from "../auth/authApiSlice";
+import { apiSlice } from '../../app/api/apiSlice'
+import { RootState } from '../../app/store'
+import { User, setSavedColors } from '../auth/authSlice'
+import { authApiSlice } from '../auth/authApiSlice'
 
 export interface Color {
   id: string

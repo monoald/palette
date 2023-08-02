@@ -1,9 +1,9 @@
-import Cookies from "js-cookie";
-import { apiSlice } from "../../app/api/apiSlice";
-import { idToPalette } from "../../utils/idToPalette";
-import { User, setSavedColors, setSavedPalettes } from "./authSlice";
-import { Color } from "../colors/colorsSlice";
-import { Palette } from "../palettes/palettesSlice";
+import Cookies from 'js-cookie'
+import { apiSlice } from '../../app/api/apiSlice'
+import { idToPalette } from '../../utils/idToPalette'
+import { User, setSavedColors, setSavedPalettes } from './authSlice'
+import { Color } from '../colors/colorsSlice'
+import { Palette } from '../palettes/palettesSlice'
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -47,7 +47,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
         } catch (err) {
           return
         }
-      }
+      },
+      providesTags: () => [{ type: 'Collection', id: 'LIST' }]
     }),
   })
 })

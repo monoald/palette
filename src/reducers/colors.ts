@@ -170,6 +170,8 @@ function updateColors(colors: Color[], primary: Color, history: History): Color[
     history.data.push(paletteId)
     history.currentIndex = history.data.length - 1
 
+    window.history.replaceState({}, '', `/${paletteId}`)
+
     return updatedColors
   }
   return colors
@@ -202,6 +204,8 @@ function changePalette(paletteType: string, colors: Color[], history: History): 
   history.data.push(paletteId)
   history.currentIndex = history.data.length - 1
 
+  window.history.replaceState({}, '', `/${paletteId}`)
+
   return newObject
 }
 
@@ -219,6 +223,8 @@ function reorderColors(event: DragEndEvent, colors: Color[], history: History): 
     const paletteId = paletteToId(newColors)
     history.data.push(paletteId)
     history.currentIndex = history.data.length - 1
+
+    window.history.replaceState({}, '', `/${paletteId}`)
 
     return newColors
   }
@@ -238,6 +244,8 @@ function addNewColor(colors: Color[], color: string, newColor: string, side: str
   const paletteId = paletteToId(newColors)
   history.data.push(paletteId)
   history.currentIndex = history.data.length - 1
+
+  window.history.replaceState({}, '', `/${paletteId}`)
 
   return newColors
 }
@@ -269,6 +277,8 @@ function removeColor(colors: Color[], id: number, history: History): Color[] {
   const paletteId = paletteToId(newColors)
   history.data.push(paletteId)
   history.currentIndex = history.data.length - 1
+
+  window.history.replaceState({}, '', `/${paletteId}`)
 
   return newColors
 }

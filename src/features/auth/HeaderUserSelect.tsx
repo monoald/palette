@@ -1,28 +1,45 @@
 import { useNavigate } from 'react-router-dom'
-import '../../styles/HeaderUserSelect.css'
+
 import { useAppDispatch } from '../../app/hooks'
 import { signOut } from './authSlice'
+
+import '../../styles/HeaderUserSelect.css'
 
 const HeaderUserSelect = () => {
   const navigation = useNavigate()
   const dispatch = useAppDispatch()
 
   return (
-    <div className='user-select'>
-      <button
-        className='user-select__option txt-primary'
-        onClick={() => navigation('/user')}
-      >
-        Collections
-      </button>
+    <ul className='user-select'>
+      <div className='user-select__mask'>
+        <li>
+          <button
+            className='user-select__option txt-primary'
+            onClick={() => navigation('/user/')}
+          >
+            My Palettes
+          </button>
+        </li>
 
-      <button
-        className='user-select__option txt-primary'
-        onClick={() => dispatch(signOut())}
-      >
-        Sign Out
-      </button>
-    </div>
+        <li>
+          <button
+            className='user-select__option txt-primary'
+            onClick={() => navigation('/user/colors')}
+          >
+            My Colors
+          </button>
+        </li>
+
+        <li>
+          <button
+            className='user-select__option txt-primary'
+            onClick={() => dispatch(signOut())}
+          >
+            Sign Out
+          </button>
+        </li>
+      </div>
+    </ul>
   )
 }
 

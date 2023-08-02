@@ -57,18 +57,27 @@ export const Select = ({ options, value, setValue, configuration, additionalIcon
         }
       </button>
       {isOpen &&
-        <div className='box' style={{ zIndex: 1 }}>
-          {Object.keys(options).map(option => (
-            <button key={option} className='box__option' onClick={() => handleSelect(option)}>
-              {options[option] &&
-                <span className={`icon ${options[option]}`} />
-              }
-              <span className='content'>
-                {option}
-              </span>
-            </button>
-          ))}
-        </div>
+        <ul className='box' style={{ zIndex: 1 }}>
+          <div className='box__mask'>
+            {Object.keys(options).map(option => (
+              <li className='box__item'>
+                <button key={option} className='box__option' onClick={() => handleSelect(option)}>
+                  {options[option] &&
+                    <span className={`icon ${options[option]}`} />
+                  }
+                  <span
+                    className='content'
+                    style={{
+                      textAlign: options[option] ? 'start' : 'center'
+                    }}
+                  >
+                    {option}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </div>
+        </ul>
       }
     </div>
   )

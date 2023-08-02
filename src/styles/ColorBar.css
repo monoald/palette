@@ -9,9 +9,7 @@
   user-select: none;
   z-index: 0;
 }
-.Color-Bar:hover,
-.Color-Bar:focus,
-.Color-Bar:active {
+.Color-Bar:hover {
   z-index: 1;
 }
 .Color-Bar .color-button {

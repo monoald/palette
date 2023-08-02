@@ -80,6 +80,10 @@ export const UserPalettes = () => {
     setAbleKeyUndo(true)
   }
 
+  const editPaletteHandler = (colors: string) => {
+    navigate(`/${colors}`)
+  }
+
   return (
     <>
       <CollectionFilter />
@@ -125,7 +129,10 @@ export const UserPalettes = () => {
                   />
                 </button>
 
-                <button className='color-button txt-hover-secondary'>
+                <button
+                  className='color-button txt-hover-secondary'
+                  onClick={() => editPaletteHandler(palette.colors as string)}
+                >
                   Edit
                 </button>
               </div>

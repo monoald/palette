@@ -25,6 +25,9 @@
   font-size: 1.4rem;
   text-transform: capitalize;
 }
+.Select .current-value span {
+  width: 100%;
+}
 .Select .current-value .icon {
   font-size: 2rem;
 }

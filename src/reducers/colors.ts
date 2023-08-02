@@ -136,6 +136,8 @@ export function colorsReducer(state: ColorsReducer, action: ColorsAction) {
       newColors = removeColor(state.colors, id, history)
       return { ...state, colors: newColors }
     case 'replace-colors':
+      const paletteId = paletteToId(colors)
+      window.history.replaceState({}, '', `/${paletteId}`)
       return { ...state, colors: colors }
     case 'back-palette':
       newColors = historyPalette(history, 'back')

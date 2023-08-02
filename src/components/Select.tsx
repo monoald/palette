@@ -60,7 +60,7 @@ export const Select = ({ options, value, setValue, configuration, additionalIcon
         <ul className='box' style={{ zIndex: 1 }}>
           <div className='box__mask'>
             {Object.keys(options).map(option => (
-              <li className='box__item'>
+              <li className='box__item' key={option}>
                 <button key={option} className='box__option' onClick={() => handleSelect(option)}>
                   {options[option] &&
                     <span className={`icon ${options[option]}`} />

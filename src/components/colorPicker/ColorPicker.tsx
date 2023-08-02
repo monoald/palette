@@ -29,7 +29,15 @@ interface Coordinates {
   mouseMoved: boolean
 }
 
-const formatSelectData = ['HEXADECIMAL', 'CMYK', 'HSB', 'HSL', 'LAB', 'RGB', 'XYZ']
+const formatSelectData = {
+  'HEXADECIMAL': null,
+  'CMYK': null,
+  'HSB': null,
+  'HSL': null,
+  'LAB': null,
+  'RGB': null,
+  'XYZ': null,
+}
 
 export const ColorPicker = ({ color, colorsDispatch, modalsDispatch, type }: ColorPickerProps) => {
   const [pickerFormat, setPickerFormat] = useState('HEXADECIMAL')

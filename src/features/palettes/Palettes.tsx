@@ -2,17 +2,16 @@ import { useNavigate } from 'react-router-dom'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
 
 import { useFilter } from '../../hooks/useFilter'
+import { useSave } from '../../hooks/useSave'
+import { useTooltip } from '../../hooks/useTooltip'
 
 import { CollectionLayout } from '../../containers/CollectionLayout'
+import Tooltip from '../../components/tooltips/Tooltip'
 
 import { useAppSelector } from '../../app/hooks'
 import { selectAllPalettes, useGetPalettesQuery } from './palettesSlice'
 
 import '../../styles/Layout-Pal.css'
-import { useSave } from '../../hooks/useSave'
-import Tooltip from '../../components/tooltips/Tooltip'
-import { useState } from 'react'
-import { useTooltip } from '../../hooks/useTooltip'
 
 const Palettes = () => {
   const {
@@ -32,6 +31,10 @@ const Palettes = () => {
   const [tooltipMessage, setTooltipMessage] = useTooltip()
   const likeHandler = useSave(setTooltipMessage)
   const navigate = useNavigate()
+
+  const editPaletteHandler = (colors: string) => {
+    navigate(`/${colors}`)
+  }
 
   return (
     <CollectionLayout asideNavigation={false}>
@@ -77,9 +80,12 @@ const Palettes = () => {
                     />
                   </button>
 
-                  <button className='color-button txt-hover-secondary'>
-                    Edit
-                  </button>
+                  <button
+                  className='color-button txt-hover-secondary'
+                  onClick={() => editPaletteHandler(palette.colors as string)}
+                >
+                  Edit
+                </button>
                 </div>
               </div>
           ))}

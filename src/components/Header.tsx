@@ -15,6 +15,8 @@ import { useState } from 'react'
 export const Header = () => {
   const [toggleUserOptions, setToggleOptions] = useState(false)
   const user = useAppSelector(selectUser)
+  console.log(user);
+  
   const navigate = useNavigate()
 
   const { theme, toggleTheme } = useTheme()
@@ -82,9 +84,18 @@ export const Header = () => {
                   className='user-nav__avatar'
                   onClick={() => setToggleOptions(!toggleUserOptions)}
                 >
-                  <span className='avatar-icon' style={{
-                    backgroundImage: `url(${user.avatar})`
-                  }} />
+                  <span
+                    className={
+                      user.avatar?.includes('http')
+                        ? 'avatar'
+                        : `avatar-icon avatar-${user.avatar}`
+                    }
+                    style={
+                      user.avatar?.includes('http')
+                        ? { backgroundImage: `url(${user.avatar})` }
+                        : {}
+                    }
+                  />
                 </button>
 
                 { toggleUserOptions &&  <HeaderUserSelect />}
@@ -93,7 +104,7 @@ export const Header = () => {
             : (
                 <>
                   <li className='user-nav__item'>
-                    <SecondaryButton event={() => navigate('/')} content='Sign Up' />
+                    <SecondaryButton event={() => navigate('/signup')} content='Sign Up' />
                   </li>
                   <li className='user-nav__item'>
                     <PrimaryButton event={() => navigate('/signin')} content='Sign In' />

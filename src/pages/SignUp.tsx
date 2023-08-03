@@ -1,11 +1,18 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { UserSignup, signup } from '../services/user'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Field, Form } from '../components/Form'
 import { SignLayer } from '../containers/SignLayer'
 
+import { useSignUpMutation } from '../features/auth/authApiSlice'
+
 import '../styles/SignIn.css'
+
+interface UserSignup {
+  email: string
+  username: string
+  password: string
+}
 
 const fileds: Field[] = [
   {
@@ -29,8 +36,13 @@ const fileds: Field[] = [
 ]
 
 export const SignUp = () => {
+  const [signUp, { isLoading }] = useSignUpMutation()
+  const navigate = useNavigate()
+
   const submit = async (data: UserSignup) => {
-    await signup(data)
+    await signUp(data).unwrap()
+
+    navigate('/signin')
   }
 
   const handleGoogleSignIn = () => {

@@ -6,7 +6,7 @@ import { Field, Form } from '../components/Form'
 
 import '../styles/SignIn.css'
 import { UserSignup } from '../services/user'
-import { useLoginMutation } from '../features/auth/authApiSlice'
+import { useSignInMutation } from '../features/auth/authApiSlice'
 import { useAppDispatch } from '../app/hooks'
 import { setCredentials } from '../features/auth/authSlice'
 
@@ -25,24 +25,25 @@ const fields: Field[] = [
   }
 ]
 export const SignIn = () => {
-  const [login, { isLoading }] = useLoginMutation()
+  const [signIn, { isLoading }] = useSignInMutation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const submit = async (data: UserSignup) => {
-    const user = await login(data).unwrap()
+    const user = await signIn(data).unwrap()
 
     dispatch(setCredentials({
       user: data,
       token: user.token,
+      collectionModified: false
     }))
 
-    navigate('/user/')
+    navigate('/')
   }
 
   const handleGoogleSignIn = () => {
     const win: Window = window;
-    win.location = 'https://localhost:3000/api/v1/auth/google/callback'
+    win.location = 'http://localhost:3000/api/v1/auth/google/callback'
   }
 
   const handleFacebookSignIn = () => {

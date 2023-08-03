@@ -40,16 +40,19 @@
   align-items: center;
 }
 .user-nav__avatar {
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  align-content: center;
+  justify-content: center;
   border-radius: 50%;
   overflow: hidden;
   padding: 0;
 }
-.avatar-icon {
+.avatar {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: inherit;
+  height: inherit;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -68,4 +71,69 @@
   font-size: 1.6rem;
   font-weight: 500;
   padding:  8px 14px;
+}
+
+.avatar-icon {
+  width: 50px;
+  height: 50px;
+  background-image: url('../assets/avatars/bear.png');
+  background-position: center;
+  background-size: contain;
+}
+.avatar-bear {
+  background-image: url('../assets/avatars/bear.png');
+}
+.avatar-bee {
+  background-image: url('../assets/avatars/bee.png');
+}
+.avatar-bull {
+  background-image: url('../assets/avatars/bull.png');
+}
+.avatar-cat {
+  background-image: url('../assets/avatars/cat.png');
+}
+.avatar-chicken {
+  background-image: url('../assets/avatars/chicken.png');
+}
+.avatar-frog {
+  background-image: url('../assets/avatars/frog.png');
+}
+.avatar-gorilla {
+  background-image: url('../assets/avatars/gorilla.png');
+}
+.avatar-hedgehog {
+  background-image: url('../assets/avatars/hedgehog.png');
+}
+.avatar-jaguar {
+  background-image: url('../assets/avatars/jaguar.png');
+}
+.avatar-jellyfish {
+  background-image: url('../assets/avatars/jellyfish.png');
+}
+.avatar-lizard {
+  background-image: url('../assets/avatars/lizard.png');
+}
+.avatar-orangutan {
+  background-image: url('../assets/avatars/orangutan.png');
+}
+.avatar-owl {
+  background-image: url('../assets/avatars/owl.png');
+}
+.avatar-penguin {
+  background-image: url('../assets/avatars/penguin.png');
+}
+.avatar-pig {
+  background-image: url('../assets/avatars/pig.png');
+}
+.avatar-polar-bear {
+  background-image: url('../assets/avatars/polar-bear.png');
+}
+.avatar-rabbit {
+  background-image: url('../assets/avatars/rabbit.png');
+}
+.avatar-walrus {
+  background-image: url('../assets/avatars/walrus.png');
+}
+.avatar-wolf {
+  background-image: url('../assets/avatars/wolf.png');
 }

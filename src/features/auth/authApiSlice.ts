@@ -7,9 +7,16 @@ import { Palette } from '../palettes/palettesSlice'
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    login: builder.mutation({
+    signIn: builder.mutation({
       query: (credentials) => ({
         url: 'users/signin',
+        method: 'POST',
+        body: { ...credentials }
+      })
+    }),
+    signUp: builder.mutation({
+      query: (credentials) => ({
+        url: 'users/signup',
         method: 'POST',
         body: { ...credentials }
       })
@@ -54,7 +61,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
-  useLoginMutation,
+  useSignInMutation,
+  useSignUpMutation,
   useGetSavedQuery
 } = authApiSlice
 

@@ -10,10 +10,16 @@
   height: 100vh;
   display: grid;
   grid-template-columns: 54px 1fr;
-  grid-template-rows: 54px 1fr;
+  grid-template-rows: 64px 1fr;
   grid-template-areas: 
   "header header"
   "sidebar main";
   overflow: hidden;
   text-align: center;
+}
+.palette-layout .user-select::before {
+  display: none;
+}
+.palette-layout .user-select__mask {
+  box-shadow: 2px 2px 10px rgba(4,4,4, 0.8);
 }

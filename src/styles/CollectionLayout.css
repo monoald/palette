@@ -5,7 +5,7 @@
   grid-template-areas: 
   "header"
   "main";
-  grid-template-rows: 54px 1fr;
+  grid-template-rows: 64px 1fr;
   grid-template-columns: 1fr;
   background-color: var(--main);
   overflow-x: hidden;

@@ -4,8 +4,10 @@ import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import { useParams } from 'react-router-dom'
 import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz } from 'colors-kit'
+
 import { useKeyDown } from '../hooks/useKeyDown'
 import { useTooltip } from '../hooks/useTooltip'
+import { useSave } from '../hooks/useSave'
 
 import { Header } from '../components/Header'
 import { SideBar } from '../components/SideBar'
@@ -22,7 +24,6 @@ import { modalsInitialState, modalsReducer } from '../reducers/modals'
 
 import '../assets/icons/style.css'
 import '../styles/PaletteGenerator.css'
-import { useSave } from '../hooks/useSave'
 
 export interface Color {
   color: string
@@ -156,7 +157,7 @@ export const PaletteGenerator = () => {
             items={colors.colors}
             strategy={horizontalListSortingStrategy}
           >
-            { colors.colors.map((color: Color) => (
+            { colors.colors.map((color: Color, index: number) => (
               <ColorBar
                 color={color}
                 colors={colors.colors}
@@ -168,6 +169,7 @@ export const PaletteGenerator = () => {
                 colorsDispatch={colorsDispatch}
                 setUpdatedColor={setUpdatedColor}
                 setTooltipMessage={setTooltipMessage}
+                index={index}
               />
             ))} 
 

@@ -7,10 +7,6 @@
   align-items: center;
   gap: 10px;
   user-select: none;
-  z-index: 0;
-}
-.Color-Bar:hover {
-  z-index: 1;
 }
 .Color-Bar .color-button {
   width: fit-content;
@@ -34,24 +30,9 @@
   text-transform: uppercase;
   letter-spacing: 1.4px;
 }
-.new-color-button {
-  width: 50px;
-  height: 50px;
-  border: none;
-  border-radius: 50%;
-  background-color: rgb(26, 27, 37);
-  color: var(--txt-main);
-  position: absolute;
-  top: calc(50% - 50px);
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-}
-
 .color-blind-container {
   position: absolute;
 }
-
 .color-blind-container::before {
   position: absolute;
   content: '';
@@ -61,4 +42,31 @@
   bottom: -10px;
   left: 0;
   cursor: n-resize;
+}
+.add-new-container {
+  position: absolute;
+  top: 0;
+  right: -40px;
+  width: 80px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  z-index: 2;
+}
+.new-color-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  padding: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--main);
+  color: var(--txt-main);
+  font-size: 2.4rem;
+}
+.add-new-container:hover .new-color-button {
+  display: flex;
 }

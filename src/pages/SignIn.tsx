@@ -4,11 +4,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { SignLayer } from '../containers/SignLayer'
 import { Field, Form } from '../components/Form'
 
-import '../styles/SignIn.css'
-import { UserSignup } from '../services/user'
-import { useSignInMutation } from '../features/auth/authApiSlice'
 import { useAppDispatch } from '../app/hooks'
-import { setCredentials } from '../features/auth/authSlice'
+import { useSignInMutation } from '../features/auth/authApiSlice'
+import { User, setCredentials } from '../features/auth/authSlice'
+
+import '../styles/SignIn.css'
 
 const fields: Field[] = [
   {
@@ -29,11 +29,11 @@ export const SignIn = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const submit = async (data: UserSignup) => {
+  const submit = async (data: Partial<User>) => {
     const user = await signIn(data).unwrap()
 
     dispatch(setCredentials({
-      user: data,
+      user: user,
       token: user.token,
       collectionModified: false
     }))
@@ -42,19 +42,25 @@ export const SignIn = () => {
   }
 
   const handleGoogleSignIn = () => {
-    const win: Window = window;
+    const win: Window = window
     win.location = 'http://localhost:3000/api/v1/auth/google/callback'
   }
 
   const handleFacebookSignIn = () => {
-    const win: Window = window;
+    const win: Window = window
     win.location = 'https://localhost:3000/api/v1/auth/facebook/callback'
   }
 
   return (
     <SignLayer>
 
-      <div>
+      { isLoading && 
+        <div className='loader-container'>
+          <span className='loader' />
+        </div>
+      }
+
+      <div className='main'>
         <Form fields={fields} submitEvent={submit} />
 
         <div className='Sign__footer'>

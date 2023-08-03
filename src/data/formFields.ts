@@ -5,7 +5,7 @@ interface Field {
   errorMessage: string
 }
 
-type FormFields = {
+export type FormFields = {
   [key in ValidFields]: Field[]
 }
 

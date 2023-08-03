@@ -68,3 +68,23 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+.SignLayer .loader-container {
+  grid-area: main;
+  display: grid;
+  align-items: center;
+  background-color: var(--main);
+  z-index: 2;
+}
+.SignLayer .loader {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  display: block;
+  background-image: url('../assets/icons/loader.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.SignLayer .main {
+  grid-area: main;
+}

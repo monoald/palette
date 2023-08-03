@@ -1,12 +1,12 @@
 import React, { useRef } from 'react'
 import { useForm } from '../hooks/useForm'
-import { UserSignup } from '../services/user'
 import { PrimaryButton } from './buttons/PrimaryButton'
 import '../styles/Form.css'
+import { User } from '../features/auth/authSlice'
 
 interface SignFormProps {
   fields: Field[]
-  submitEvent: (data: UserSignup) => void
+  submitEvent: (data: Partial<User>) => void
 }
 
 export interface Field {
@@ -23,13 +23,10 @@ export const Form = ({ fields, submitEvent }: SignFormProps) => {
   const submitHandler =  handleSubmit(submitEvent, formRef)
   return (
     <form className='Form' onSubmit={submitHandler} ref={formRef}>
-      <div className='error'>
-        <p className='error__message'>{errorMessage}</p>
-      </div>
 
       { fields.map(field => (
         <div className='Form__item' key={field.name}>
-          <label className='Form__label' htmlFor="email">
+          <label className='Form__label' htmlFor='email'>
             {field.name}
           </label>
 
@@ -42,6 +39,10 @@ export const Form = ({ fields, submitEvent }: SignFormProps) => {
           />
         </div>
       ))}
+
+      <div className='error'>
+        <p className='error__message'>{errorMessage}</p>
+      </div>
 
       <PrimaryButton type='submit' content='Sign Up' />
     </form>

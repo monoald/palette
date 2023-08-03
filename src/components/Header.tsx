@@ -15,7 +15,6 @@ import { useState } from 'react'
 export const Header = () => {
   const [toggleUserOptions, setToggleOptions] = useState(false)
   const user = useAppSelector(selectUser)
-  console.log(user);
   
   const navigate = useNavigate()
 

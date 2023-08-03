@@ -7,12 +7,7 @@ import { SignLayer } from '../containers/SignLayer'
 import { useSignUpMutation } from '../features/auth/authApiSlice'
 
 import '../styles/SignIn.css'
-
-interface UserSignup {
-  email: string
-  username: string
-  password: string
-}
+import { User } from '../features/auth/authSlice'
 
 const fileds: Field[] = [
   {
@@ -39,7 +34,7 @@ export const SignUp = () => {
   const [signUp, { isLoading }] = useSignUpMutation()
   const navigate = useNavigate()
 
-  const submit = async (data: UserSignup) => {
+  const submit = async (data: Partial<User>) => {
     await signUp(data).unwrap()
 
     navigate('/signin')

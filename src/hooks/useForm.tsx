@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import { UserSignup } from '../services/user'
-import { formFields } from '../data/formFields'
+import { FormFields, formFields } from '../data/formFields'
 import { isFetchBaseQueryError } from '../utils/isFetchBaseQueryError'
+import { User } from '../features/auth/authSlice'
 
-type Callback = (data: UserSignup) => void
+type Callback = (data: Partial<User>) => void
 
 type ErrorType = 'format' | 'invalid'
 
 export const useForm = () => {
-  const [data, setData] = useState<UserSignup>({} as UserSignup)
+  const [data, setData] = useState<Partial<User>>({} as Partial<User>)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [errorType, setErrorType] = useState<ErrorType | null>(null)
 
@@ -19,7 +19,7 @@ export const useForm = () => {
 
   const validator = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target
-    const type = target.id as keyof UserSignup
+    const type = target.id as keyof FormFields
     const value = target.value.trim()
 
     // Validator
@@ -50,12 +50,12 @@ export const useForm = () => {
         await callback(data)
 
         form.current?.reset()
-        setData({} as UserSignup)
+        setData({} as Partial<User>)
       } catch (error) {
+        
         if (isFetchBaseQueryError(error)) {
           setErrorType('invalid')
-          const errorMessage = 'error' in error ? error.error : JSON.stringify(error.data)
-          invalidField(errorMessage)
+          setErrorMessage((error.data as { message: string })?.message)
         }
       }
     }

@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { Rgb, rgbToHex } from 'colors-kit'
+
+import { useCheckSavedColor } from '../hooks/useCheckSavedColor'
 
 import { Color, ColorBlindSimulator } from '../pages/PaletteGenerator'
 import { DescriptionTooltip } from './tooltips/DescriptionTooltip'
@@ -10,7 +12,6 @@ import { ColorsAction } from '../reducers/colors'
 import { ModalsAction } from '../reducers/modals'
 
 import '../styles/ColorBar.css'
-import { useCheckSavedColor } from '../hooks/useCheckSavedColor'
 
 interface ColorBarProps {
   color: Color
@@ -23,17 +24,28 @@ interface ColorBarProps {
   setUpdatedColor: React.Dispatch<React.SetStateAction<string>>
   modalsDispatch: React.Dispatch<ModalsAction>
   setTooltipMessage: React.Dispatch<React.SetStateAction<string>>
+  index: number
 }
 
-export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, handleStartResize, resizeColorBlind, colorsDispatch, setUpdatedColor, modalsDispatch, setTooltipMessage }: ColorBarProps) => {
+export const ColorBar = ({
+  color,
+  colors,
+  currentColorBlind,
+  heightColorBlind,
+  handleStartResize,
+  resizeColorBlind,
+  colorsDispatch,
+  setUpdatedColor,
+  modalsDispatch,
+  setTooltipMessage,
+  index
+}: ColorBarProps) => {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
   } = useSortable({ id: color.id })
-
-  const [hoverSide, setHoverSide] = useState<string>('none')
 
   const [isSaved, savedId] = useCheckSavedColor(color.color)
   const style = transform ? {
@@ -50,22 +62,6 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
     colorsDispatch({ type: 'secondary', payload: { color: color.contrastColor, format: 'hex' } })
   }
 
-  function handleMouseMove(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    const target = event.target as HTMLElement
-    const { offsetX } = event.nativeEvent
-    const triggerWidth = 60
-
-    if (target.className === 'Color-Bar') {
-      if (offsetX < triggerWidth) {
-        setHoverSide('left')
-      } else if (offsetX > (target.clientWidth - triggerWidth)) {
-        setHoverSide('right')
-      } else {
-        setHoverSide('none')
-      }
-    }
-  }
-
   function combineColors(color1: Rgb, color2: Rgb) {
     const combinedColor = {
       r: Math.round((color1.r + color2.r) / 2),
@@ -76,17 +72,16 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
     return combinedColor
   }
 
-  function handleAddColor(color: string, side: string) {
-    const mainColorIndex = colors.findIndex(clr => clr.color === color)
-    const secondaryColorIndex = side === 'left' ? mainColorIndex - 1 : mainColorIndex + 1
+  function handleAddColor(color: string) {
+    const secondaryColorIndex = index + 1
     
-    const color1 = colors[mainColorIndex].formats.rgb
+    const color1 = colors[index].formats.rgb
     const color2 = colors[secondaryColorIndex].formats.rgb
     
     const newColorRgb = combineColors(color1, color2)
     const newColor = rgbToHex(newColorRgb)
 
-    colorsDispatch({ type: 'add-color', payload: { color, addedColor: newColor, side } })
+    colorsDispatch({ type: 'add-color', payload: { color, addedColor: newColor, side: 'right' } })
   }
 
   function handleRemoveColor(id: number) {
@@ -104,6 +99,9 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
     setTooltipMessage('Copied!')
   }
 
+  console.log(color, colors);
+  
+
   return (
     <div
       className='Color-Bar'
@@ -115,11 +113,18 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
         color: color.contrastColor,
         height: `calc(100% - ${heightColorBlind})`
       }}
-      onMouseLeave={() => {
-        setHoverSide('none')
-      }}
-      onMouseMove={handleMouseMove}
     >
+      { index + 1 !== colors.length &&
+        <div className='add-new-container'>
+          <button
+            className='new-color-button'
+            onClick={() => handleAddColor(color.color)}
+          >
+            <span className='icon-plus' />
+          </button>
+        </div>
+      }
+
       <div className='color-blind-container'
         style={{
           width: '100%',
@@ -135,16 +140,6 @@ export const ColorBar = ({ color, colors, currentColorBlind, heightColorBlind, h
       <p className='color-hex'>
         {color.color}
       </p>
-      <button
-        className='new-color-button'
-        style={{
-          left: hoverSide === 'left' ? '-25px' : 'calc(100% - 25px)',
-          display: hoverSide === 'none' ? 'none' : 'flex',
-        }}
-        onClick={() => handleAddColor(color.color, hoverSide)}
-      >
-        <span className='icon-plus' />
-      </button>
 
       { !resizeColorBlind &&
         <>

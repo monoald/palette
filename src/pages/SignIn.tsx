@@ -43,12 +43,12 @@ export const SignIn = () => {
 
   const handleGoogleSignIn = () => {
     const win: Window = window
-    win.location = 'http://localhost:3000/api/v1/auth/google/callback'
+    win.location = 'https://palette.onrender.com/api/v1/auth/google/callback'
   }
 
   const handleFacebookSignIn = () => {
     const win: Window = window
-    win.location = 'https://localhost:3000/api/v1/auth/facebook/callback'
+    win.location = 'https://palette.onrender.com/api/v1/auth/facebook/callback'
   }
 
   return (

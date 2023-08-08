@@ -14,32 +14,38 @@ import RequireAuth from '../features/auth/RequireAuth'
 
 import { UserRoutes } from './UserRoutes'
 import { authApiSlice } from '../features/auth/authApiSlice'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import Loader from '../pages/Loader'
 
 store.dispatch(authApiSlice.endpoints.getSaved.initiate())
 
 export const App = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<PaletteGenerator />} />
-          <Route path='/:palette' element={<PaletteGenerator />} />
+      <GoogleOAuthProvider clientId='1086718373961-eerfusg737ja6bce29959c7p4bua3qka.apps.googleusercontent.com'>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<PaletteGenerator />} />
+            <Route path='/:palette' element={<PaletteGenerator />} />
 
-          <Route path='/signin'  element={<SignIn />} />
-          <Route path='/signup'  element={<SignUp />} />
+            <Route path='/signin'  element={<SignIn />} />
+            <Route path='/signup'  element={<SignUp />} />
 
-          <Route element={<RequireAuth />}>
-            <Route path='/user/*' element={<UserRoutes />} />
-          </Route>
+            <Route element={<RequireAuth />}>
+              <Route path='/user/*' element={<UserRoutes />} />
+            </Route>
 
-          <Route path='/color'>
-              <Route path='/color/:id' element={<Color />} />
-          </Route>
+            <Route path='/color'>
+                <Route path='/color/:id' element={<Color />} />
+            </Route>
 
-          <Route path='/palettes' element={<Palettes />} />
-          <Route path='/colors' element={<Colors />} />
-        </Routes>
-      </BrowserRouter>
+            <Route path='/palettes' element={<Palettes />} />
+            <Route path='/colors' element={<Colors />} />
+
+            <Route path='/loader' element={<Loader />} />
+          </Routes>
+        </BrowserRouter>
+      </GoogleOAuthProvider>
     </Provider>
   )
 }

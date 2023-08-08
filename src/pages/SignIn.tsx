@@ -1,11 +1,12 @@
-import React from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { openPopUp } from '../utils/openPopUp'
 
 import { SignLayer } from '../containers/SignLayer'
 import { Field, Form } from '../components/Form'
 
 import { useAppDispatch } from '../app/hooks'
-import { useSignInMutation } from '../features/auth/authApiSlice'
+import { useSignInMutation, useSmSignInMutation } from '../features/auth/authApiSlice'
 import { User, setCredentials } from '../features/auth/authSlice'
 
 import '../styles/SignIn.css'
@@ -25,9 +26,12 @@ const fields: Field[] = [
   }
 ]
 export const SignIn = () => {
-  const [signIn, { isLoading }] = useSignInMutation()
-  const dispatch = useAppDispatch()
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+
+  const [signIn, { isLoading }] = useSignInMutation()
+  const [smSignIn] = useSmSignInMutation()
+  const dispatch = useAppDispatch()
 
   const submit = async (data: Partial<User>) => {
     const user = await signIn(data).unwrap()
@@ -41,20 +45,52 @@ export const SignIn = () => {
     navigate('/')
   }
 
+  const messageListener = async(e: MessageEvent) => {
+    if (e.data === 'error') {
+      setLoading(false)
+    }
+
+    const key = e.data.length === 20 ? e.data : null
+
+    if (key) {
+      window.history.replaceState({}, '', '/signin')
+
+      const user = await smSignIn(key).unwrap()
+
+      dispatch(setCredentials({
+        user: user.user,
+        token: user.token,
+        collectionModified: false
+      }))
+
+      navigate('/')
+    }
+  }
+
   const handleGoogleSignIn = () => {
-    const win: Window = window
-    win.location = 'https://palette.onrender.com/api/v1/auth/google/callback'
+    setLoading(true)
+
+    openPopUp(
+      'http://localhost:3000/api/v1/auth/google/callback',
+      'signin',
+      messageListener
+    )
   }
 
   const handleFacebookSignIn = () => {
-    const win: Window = window
-    win.location = 'https://palette.onrender.com/api/v1/auth/facebook/callback'
+    setLoading(true)
+
+    openPopUp(
+      'http://localhost:3000/api/v1/auth/facebook/callback',
+      'signin',
+      messageListener
+    )
   }
 
   return (
     <SignLayer>
 
-      { isLoading && 
+      { isLoading || loading && 
         <div className='loader-container'>
           <span className='loader' />
         </div>

@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie'
 import { apiSlice } from '../../app/api/apiSlice'
 import { idToPalette } from '../../utils/idToPalette'
 import { User, setSavedColors, setSavedPalettes } from './authSlice'
@@ -21,11 +20,16 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: { ...credentials }
       })
     }),
+    smSignIn: builder.mutation({
+      query: (key) => ({
+        url: 'auth/signin',
+        method: 'POST',
+        body: { key: key }
+      })
+    }),
     getSaved: builder.query<Partial<User>, void>({
       query: () => {
-        let user = null
-        const userCookie = Cookies.get('user')?.substring(2)
-        if (userCookie) user = JSON.parse(userCookie)
+        const user = JSON.parse(localStorage.getItem('user') as string)
         return `users/${user.id}`
       },
       transformResponse: (response: Partial<User>) => {
@@ -63,6 +67,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 export const {
   useSignInMutation,
   useSignUpMutation,
+  useSmSignInMutation,
   useGetSavedQuery
 } = authApiSlice
 

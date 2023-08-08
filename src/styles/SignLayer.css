@@ -45,6 +45,7 @@
 }
 .google-sign,
 .facebook-sign {
+  position: relative;
   width: 50px;
   height: 50px;
   padding: 12px;
@@ -73,7 +74,7 @@
   display: grid;
   align-items: center;
   background-color: var(--main);
-  z-index: 2;
+  z-index: 1;
 }
 .SignLayer .loader {
   width: 200px;
@@ -84,6 +85,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  z-index: 2;
 }
 .SignLayer .main {
   grid-area: main;

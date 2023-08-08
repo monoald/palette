@@ -1,0 +1,22 @@
+.loader-page {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+}
+.loader-page .loader-container {
+  display: grid;
+  align-items: center;
+  place-self: center;
+  background-color: var(--main);
+  z-index: 2;
+}
+.loader-page .loader {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  display: block;
+  background-image: url('../assets/icons/loader.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

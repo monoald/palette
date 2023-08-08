@@ -1,5 +1,4 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import Cookies from 'js-cookie'
 
 import { RootState } from '../../app/store'
 import { Color } from '../colors/colorsSlice'
@@ -22,11 +21,9 @@ interface LoginResponse {
   collectionModified: boolean
 }
 
-let user = null
-const userCookie = Cookies.get('user')?.substring(2)
-if (userCookie) user = JSON.parse(userCookie)
+const user = JSON.parse(localStorage.getItem('user') as string) || null
 
-const token = Cookies.get('token') || null
+const token = localStorage.getItem('token') || null
 
 const initialState: LoginResponse = {
   user: user,
@@ -42,6 +39,9 @@ const authSlice = createSlice({
       const { user, token } = action.payload
       state.user = user
       state.token = token
+
+      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('token', token as string)
     },
     setSavedColors: (state, action: PayloadAction<Partial<Color>[]>) => {
       const colors = action.payload
@@ -60,8 +60,8 @@ const authSlice = createSlice({
     signOut: (state) => {
       state.user = null
       state.token = null
-      Cookies.remove('user')
-      Cookies.remove('token')
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
     },
     setCollectionModified: (state) => {
       state.collectionModified = true

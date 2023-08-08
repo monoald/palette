@@ -1,9 +1,8 @@
 import { EntityState, createEntityAdapter, createSelector } from '@reduxjs/toolkit'
-import Cookies from 'js-cookie'
 
 import { apiSlice } from '../../app/api/apiSlice'
 import { RootState } from '../../app/store'
-import { User, setSavedColors } from '../auth/authSlice'
+import { setSavedColors } from '../auth/authSlice'
 import { authApiSlice } from '../auth/authApiSlice'
 
 export interface Color {
@@ -23,9 +22,7 @@ export const colorApiSlice = apiSlice.injectEndpoints({
     getColors: builder.query<EntityState<Color>, { page: number }>({
       query: ({ page }) => `/colors?page=${page}`,
       transformResponse: (response: Color[]) => {
-        let user: User
-        const userCookie = Cookies.get('user')?.substring(2)
-        if (userCookie) user = JSON.parse(userCookie)
+        const user = JSON.parse(localStorage.getItem('user') as string)
 
         const loadedColors = response.map(color => {
           if (user && color.users.includes(user.id)) color.saved = true

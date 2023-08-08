@@ -1,10 +1,9 @@
 import { EntityState, createEntityAdapter, createSelector } from "@reduxjs/toolkit";
-import Cookies from 'js-cookie'
 import { idToPalette } from "../../utils/idToPalette";
 
 import { apiSlice } from "../../app/api/apiSlice";
 import { RootState } from "../../app/store";
-import { User, setSavedPalettes } from "../auth/authSlice";
+import { setSavedPalettes } from "../auth/authSlice";
 import { authApiSlice } from "../auth/authApiSlice";
 
 export interface Palette {
@@ -26,9 +25,7 @@ export const paletteApiSlice = apiSlice.injectEndpoints({
     getPalettes: builder.query<EntityState<Palette>, { page: number }>({
       query: ({ page }) => `/palettes?page=${page}`,
       transformResponse: (response: Palette[]) => {
-        let user: User
-        const userCookie = Cookies.get('user')?.substring(2)
-        if (userCookie) user = JSON.parse(userCookie)
+        const user = JSON.parse(localStorage.getItem('user') as string)
 
         const loadedPalettes = response.map(palette => {
           if (user && palette.users.includes(user.id)) palette.saved = true

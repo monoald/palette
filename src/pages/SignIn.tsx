@@ -53,8 +53,6 @@ export const SignIn = () => {
     const key = e.data.length === 20 ? e.data : null
 
     if (key) {
-      window.history.replaceState({}, '', '/signin')
-
       const user = await smSignIn(key).unwrap()
 
       dispatch(setCredentials({
@@ -87,10 +85,19 @@ export const SignIn = () => {
     )
   }
 
+  const handleGithubSignIn = () => {
+    setLoading(true)
+
+    openPopUp(
+      'http://localhost:3000/api/v1/auth/github/callback',
+      'signin',
+      messageListener
+    )
+  }
+
   return (
     <SignLayer>
-
-      { isLoading || loading && 
+      { (isLoading || loading) && 
         <div className='loader-container'>
           <span className='loader' />
         </div>
@@ -110,14 +117,21 @@ export const SignIn = () => {
                 className='google-sign border-hover-primary'
                 onClick={handleGoogleSignIn}
               >
-                <span className='google-icon' />
+                <span className='google-icon sm-icon' />
               </button>
 
               <button
                 className='facebook-sign border-hover-primary'
                 onClick={handleFacebookSignIn}
               >
-                <span className='facebook-icon' />
+                <span className='facebook-icon sm-icon' />
+              </button>
+
+              <button
+                className='github-sign border-hover-primary'
+                onClick={handleGithubSignIn}
+              >
+                <span className='github-icon sm-icon' />
               </button>
             </div>
           </div>

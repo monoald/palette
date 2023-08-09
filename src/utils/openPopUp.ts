@@ -8,7 +8,7 @@ export const openPopUp = (url: string, name: string, callback: (e: MessageEvent)
   const top = (screen.height - 500) / 2;
 
   const strWindowFeatures =
-    `toolbar=no, menubar=no, width=400, height=500, top=100, left=${left}, top=${top}`;
+    `toolbar=no, menubar=no, location=no, width=400, height=500, top=100, left=${left}, top=${top}`;
 
   if (windowObjectReference === null || windowObjectReference.closed) {
     windowObjectReference = window.open(url, name, strWindowFeatures);

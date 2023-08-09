@@ -69,7 +69,7 @@ export const SignIn = () => {
     setLoading(true)
 
     openPopUp(
-      'http://localhost:3000/api/v1/auth/google/callback',
+      'https://palette.onrender.com/api/v1/auth/google/callback',
       'signin',
       messageListener
     )
@@ -79,7 +79,7 @@ export const SignIn = () => {
     setLoading(true)
 
     openPopUp(
-      'http://localhost:3000/api/v1/auth/facebook/callback',
+      'https://palette.onrender.com/api/v1/auth/facebook/callback',
       'signin',
       messageListener
     )
@@ -89,7 +89,7 @@ export const SignIn = () => {
     setLoading(true)
 
     openPopUp(
-      'http://localhost:3000/api/v1/auth/github/callback',
+      'https://palette.onrender.com/api/v1/auth/github/callback',
       'signin',
       messageListener
     )

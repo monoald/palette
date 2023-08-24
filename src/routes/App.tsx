@@ -15,6 +15,7 @@ import RequireAuth from '../features/auth/RequireAuth'
 import { UserRoutes } from './UserRoutes'
 import { authApiSlice } from '../features/auth/authApiSlice'
 import Loader from '../pages/Loader'
+import { Gradient } from '../pages/Gradient'
 
 store.dispatch(authApiSlice.endpoints.getSaved.initiate())
 
@@ -39,6 +40,8 @@ export const App = () => {
 
           <Route path='/palettes' element={<Palettes />} />
           <Route path='/colors' element={<Colors />} />
+
+          <Route path='/gradient' element={<Gradient />} />
 
           <Route path='/loader' element={<Loader />} />
         </Routes>

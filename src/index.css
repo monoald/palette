@@ -11,7 +11,7 @@ html {
 
 #light {
   --main: #fafafa;
-  --main-inactive: rgba(40, 40, 40, 0.2) ;
+  --main-inactive: rgba(40, 40, 40, 0.4) ;
   --txt-main: #000;
   --txt-inactive: rgba(0,0,0,0.6);
   --primary-g: #27A112;
@@ -41,11 +41,12 @@ html {
   -webkit-text-size-adjust: 100%;
 
   --main: #111217;
-  --main-inactive: rgba(100, 100, 100, 0.2) ;
+  --main-inactive: rgba(100, 100, 100, 0.4) ;
   --primary-g: #19E51C;
   --secondary-g: #00CECB;
   --txt-main: #ffffff;
   --txt-inactive: rgba(255,255,255,0.45);
+  --txt-secondary: #acacac;
   --gradient-primary: -webkit-linear-gradient(left, var(--primary-g), var(--secondary-g));
   --gradient-secondary: -webkit-linear-gradient(left, var(--secondary-g), var(--primary-g));
   --gradient-tertiary: -webkit-linear-gradient(bottom, var(--secondary-g), var(--primary-g));
@@ -97,7 +98,7 @@ input[type="password"]:focus-visible {
     var(--gradient-secondary) border-box; 
 }
 input[type="range"] {
-  border: 1px solid var(--txt-inactive);
+  border: 1px solid var(--main-inactive);
 }
 
 .txt-primary {

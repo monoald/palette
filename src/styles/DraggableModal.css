@@ -1,7 +1,7 @@
 .Draggable-Modal {
   position: absolute;
   height: fit-content;
-  z-Index: 1;
+  z-Index: 3;
   border: none;
   border-Radius: 8px;
   padding: 20px;

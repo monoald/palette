@@ -111,3 +111,15 @@
 .icon-contrast:before {
   content: "\e91b";
 }
+.icon-gradient-horizontal:before {
+  content: "\e91d";
+}
+.icon-gradient-grid:before {
+  content: "\e91e";
+}
+.icon-gradient-vertical:before {
+  content: "\e91f";
+}
+.icon-gradient-circle:before {
+  content: "\e920";
+}

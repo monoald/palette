@@ -1,18 +1,23 @@
-import { useEffect, useRef, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, Over, UniqueIdentifier, closestCorners, useDroppable } from '@dnd-kit/core'
 import { SortableContext, arrayMove,  rectSortingStrategy, useSortable } from '@dnd-kit/sortable'
 
 import { getStops } from '../utils/getStops'
-
-import { DescriptionTooltip } from '../components/tooltips/DescriptionTooltip'
-import { AngleInput } from '../components/gradient/AngleInput'
-
-import '../styles/Gradient.css'
 import { isArrayAscending } from '../utils/isArrayAscending'
 
+import { Header } from '../components/Header'
+import { AngleInput } from '../components/gradient/AngleInput'
+import { ColorPicker, PickerColor } from '../components/picker/ColorPicker'
+
+import '../styles/Gradient.css'
+
+interface Color {
+  color: string
+  id: number
+}
 interface GradientColor {
-  colors: string[]
-  stops: number[]
+  colors: Color[]
+  stops: number[],
 }
 
 interface GradientColors {
@@ -23,18 +28,47 @@ interface GradientColors {
 function makeGradient(container: GradientColor) {
   let basicGradient = ''
   container.colors.map((color, index) => {
-    basicGradient += `, ${color} ${container.stops[index]}%`
+    basicGradient += `, ${color.color} ${container.stops[index]}%`
   })
 
   return basicGradient
 }
 
+function findIdInColors(id: string, colors: Color[]): number {
+  let colorIndex = -1
+  colors.forEach((color, index) => {
+    if (color.id === +id) colorIndex = index
+  })
+
+  return colorIndex
+}
+
 export const Gradient = () => {
   const [type, setType] = useState('horizontal')
   const [angle, setAngle] = useState(90)
-  const [activeId, setActiveId] = useState<UniqueIdentifier>()
+  const [activeId, setActiveId] = useState<Color>()
   const [firstRow, setFirstRow] = useState<GradientColor>({
-    colors: ['#294eb8', '#d2395c', '#a9d237', '#37d2ae', '#6137d2'],
+    colors: [
+      {
+        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+        color: '#294eb8'
+      },
+      { id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+        color: '#d2395c'
+      },
+      {
+        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+        color: '#a9d237'
+      },
+      {
+        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+        color: '#37d2ae'
+      },
+      {
+        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+        color: '#6137d2'
+      }
+    ],
     stops: [0, 25, 50, 75, 100]
   })
   const [secondRow, setSecondRow] = useState<GradientColor>()
@@ -43,7 +77,7 @@ export const Gradient = () => {
     `${makeGradient(firstRow)})`
   ])
   const [gridGradient, setGridGradient] = useState(['',''])
-
+  const [openPicker, setOpenPicker] = useState<boolean>(false)
 
   useEffect(() => {
     // Change colors and stops
@@ -52,7 +86,7 @@ export const Gradient = () => {
       && secondRow
     ) {
       setFirstRow(prev => {
-        const newColors = [ ...prev.colors, ...secondRow.colors as string[]]
+        const newColors = [ ...prev.colors, ...secondRow.colors as Color[]]
 
         const newStops = getStops(100 / (newColors.length - 1))
 
@@ -118,6 +152,17 @@ export const Gradient = () => {
         return newGradient
       })
     }
+
+    if (openPicker && activeId) {
+      const isOnFirstRow = findIdInColors(`${activeId.id}`, firstRow.colors)
+      const isOnSecondRow = secondRow ? findIdInColors(`${activeId.id}`, secondRow?.colors as Color[]) : -1
+
+      const activeC = firstRow.colors[isOnFirstRow] || secondRow?.colors[isOnSecondRow]
+
+      if (activeC.color !== activeId.color) {
+        setActiveId({ id: activeId.id, color: activeC.color })
+      }
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firstRow, secondRow])
 
@@ -136,15 +181,20 @@ export const Gradient = () => {
     const { active } = e
     const { id } = active
 
-    setActiveId(id)
+    const isOnFirstRow = findIdInColors(id as string, firstRow.colors)
+    const isOnSecondRow = secondRow ? findIdInColors(id as string, secondRow?.colors as Color[]) : -1
+
+    const activeC = firstRow.colors[isOnFirstRow] || secondRow?.colors[isOnSecondRow]
+
+    setActiveId(activeC)
   }
 
   const findContainer = (id: UniqueIdentifier) => {
     if (id === 'firsRow' || id === 'secondRow') return id
 
-    if (firstRow.colors.includes(id as string)) return 'firstRow'
+    if (findIdInColors(id as string, firstRow.colors) !== -1) return 'firstRow'
 
-    if (secondRow?.colors.includes(id as string)) return 'secondRow'
+    if (secondRow?.colors && findIdInColors(id as string, secondRow?.colors) !== -1) return 'secondRow'
   }
 
   const handleDragEnd = (e: DragEndEvent) => {
@@ -167,11 +217,9 @@ export const Gradient = () => {
       const activeColors = activeContainer === 'firstRow' ? [...firstRow.colors] : [...secondRow.colors]
       const overColors = overContainer === 'secondRow' ? [...secondRow.colors] : [...firstRow.colors]
       
-      const activeIndex = activeColors.indexOf(id as string)
-      const overIndex = overColors.indexOf(overId as string)
-      
-      console.log(activeColors, activeIndex);
-      console.log(overColors, overIndex);
+      const activeIndex = findIdInColors(id as string, activeColors)
+      const overIndex = findIdInColors(overId as string, overColors)
+
       const activeColor = activeColors[activeIndex]
 
       activeColors.splice(activeIndex as number, 1)
@@ -191,8 +239,8 @@ export const Gradient = () => {
 
     if (activeContainer === 'firstRow' && overContainer === 'firstRow') {
       setFirstRow(prev => {
-        const activeIndex = prev.colors.indexOf(id as string)
-        const overIndex = prev.colors.indexOf(overId as string)
+        const activeIndex = findIdInColors(id as string, prev.colors)
+        const overIndex = findIdInColors(overId as string, prev.colors)
 
         const newColors = arrayMove(prev.colors, activeIndex, overIndex)
         
@@ -204,8 +252,8 @@ export const Gradient = () => {
     } else if (activeContainer === 'secondRow' && overContainer === 'secondRow') {
       setSecondRow(prev => {
         if (prev) {
-          const activeIndex = prev.colors.indexOf(id as string)
-          const overIndex = prev.colors.indexOf(overId as string)
+          const activeIndex = findIdInColors(id as string, prev.colors)
+          const overIndex = findIdInColors(overId as string, prev.colors)
   
           const newColors = arrayMove(prev.colors, activeIndex, overIndex)
           
@@ -223,166 +271,327 @@ export const Gradient = () => {
     setAngle(+target.value)
   }
 
+  const updateColor = (color: PickerColor) => {
+    const isOnFirstRow = findIdInColors(color.id as string, firstRow.colors)
+    const isOnSecondRow = secondRow ? findIdInColors(color.id as string, secondRow?.colors as Color[]) : -1
+
+    if (isOnFirstRow !== -1) {
+      setFirstRow(prev => {
+        const newColors = [...prev.colors]
+        newColors[isOnFirstRow] = {
+          id: +color.id,
+          color: color.formats.hex as string
+        }
+        return {
+          colors: newColors,
+          stops: prev.stops
+        }
+      })
+    } else if (isOnSecondRow !== -1) {
+      setSecondRow(prev => {
+        if (prev) {
+          const newColors = [...prev.colors]
+          newColors[isOnSecondRow] = {
+            id: +color.id,
+            color: color.formats.hex as string
+          }
+          return {
+            colors: newColors,
+            stops: prev.stops
+          }
+        }
+      })
+    }
+  }
+
+  const handleRemoveColor = () => {
+    if (activeId) {
+      const isOnFirstRow = findIdInColors(`${activeId.id}`, firstRow.colors)
+      const isOnSecondRow = secondRow ? findIdInColors(`${activeId.id}`, secondRow?.colors as Color[]) : -1
+
+      if (isOnFirstRow !== -1) {
+        setFirstRow(prev => {
+          const newRow = { ...prev }
+          newRow.colors.splice(isOnFirstRow, 1)
+          newRow.stops.splice(isOnFirstRow, 1)
+          return newRow
+        })
+      } else if (isOnSecondRow !== -1) {
+        setSecondRow(prev => {
+          if (prev) {
+            const newRow = { ...prev }
+            newRow.colors.splice(isOnSecondRow, 1)
+            newRow.stops.splice(isOnSecondRow, 1)
+            return newRow
+          }
+        })
+      }
+    }
+
+    setActiveId(undefined)
+  }
+
+  const handleAddColor = (row: string) => {
+    if (row === 'first') {
+      setFirstRow(prev => {
+        const newRow = { ...prev }
+        newRow.colors.push({
+          id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+          color: '#ffffff'
+        })
+        newRow.stops = getStops(100 / (newRow.colors.length - 1))
+        return newRow
+      })
+    } else if (row === 'second') {
+      setSecondRow(prev => {
+        if (prev) {
+          const newRow = { ...prev }
+          newRow.colors.push({
+            id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+            color: '#ffffff'
+          })
+          newRow.stops = getStops(100 / (newRow.colors.length - 1))
+          return newRow
+        }
+      })
+    }
+  }
+
+  const handleClosePicker = () => {
+    setOpenPicker(false)
+  }
+
   return (
     <div className='gradient'>
-      <section className='gradient__setup'>
-        <DndContext
-          collisionDetection={closestCorners}
-          onDragEnd={handleDragEnd}
-          onDragStart={handleDragStart}
-        >
-          <div className='gradient__re-order'>
-            <Container
-              items={firstRow.colors}
-              type={type}
-              id='firstRow'
-            />
-
-            { secondRow &&
-              <Container
-                items={secondRow.colors as string[]}
-                type={type}
-                id='secondRoe'
-              />
-            }
-            <DragOverlay>{activeId ? <Color color={activeId as string} /> : null}</DragOverlay>
-          </div>
-        </DndContext>
-        <div className='setup__section types'>
-          <ul className='setup__types'>
-            <li>
-              <button
-                className={`
-                  type
-                  txt-hover-primary
-                  ${type === 'horizontal'
-                    ? 'type--active'
-                    : ''
-                  }
-                `}
-                onClick={() => setType('horizontal')}
-              >
-                <span className='type__icon icon-gradient-horizontal'/>
-
-                <span className='type__name'>
-                  Horizontal
-                </span>
-              </button>
-            </li>
-
-            <li>
-              <button
-                className={`
-                  type
-                  txt-hover-primary
-                  ${type === 'vertical'
-                    ? 'type--active'
-                    : ''
-                  }
-                `}
-                onClick={() => setType('vertical')}
-              >
-                <span className='type__icon icon-gradient-vertical'/>
-
-                <span className='type__name'>
-                  Vertical
-                </span>
-              </button>
-            </li>
-
-            <li>
-              <button
-                className={`
-                  type
-                  txt-hover-primary
-                  ${type === 'grid'
-                    ? 'type--active'
-                    : ''
-                  }
-                `}
-                onClick={() => setType('grid')}
-              >
-                <span className='type__icon icon-gradient-grid'/>
-
-                <span className='type__name'>
-                  Grid
-                </span>
-              </button>
-            </li>
-
-            <li>
-              <button
-                className={`
-                  type
-                  txt-hover-primary
-                  ${type === 'circle'
-                    ? 'type--active'
-                    : ''
-                  }
-                `}
-                onClick={() => setType('circle')}
-              >
-                <span className='type__icon icon-gradient-circle'/>
-
-                <span className='type__name'>
-                  Circle
-                </span>
-              </button>
-            </li>
-          </ul>
-        </div>
-        
-        <div className='setup__section angle'>
-          <div className='angle-container'>
-            <AngleInput angle={angle} setAngle={setAngle} />
-            
-            <div className='angle-input-container'>
-              <label htmlFor="angle">Angle</label>
-              <input
-                className='angle-number'
-                name='angle'
-                type='number'
-                value={angle}
-                onChange={handleAngleChanged}
-                min={0}
-                max={360}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div className='slider'>
-        {/* <div className='custom-input__thumb'></div> */}
-        <CustomSlider
-          row={firstRow}
-          setRow={setFirstRow}
-          background={gradient}
-        />
-
-        { secondRow && 
-          <CustomSlider
-            row={secondRow}
-            setRow={setSecondRow as React.Dispatch<React.SetStateAction<GradientColor>>}
-            background={gridGradient}
+      <Header />
+      <div className='gradient__generator'>
+        { openPicker && activeId &&
+          <ColorPicker
+            id={`${activeId.id}`}
+            color={activeId.color}
+            updateColor={updateColor}
+            handleClosePicker={handleClosePicker}
           />
         }
+        <section className='setup'>
+          <div className='setup__head'>
+            <ul className='types'>
+              <li>
+                <button
+                  className={`
+                    type
+                    txt-hover-primary
+                    ${type === 'horizontal'
+                      ? 'type--active'
+                      : ''
+                    }
+                  `}
+                  onClick={() => setType('horizontal')}
+                >
+                  <span className='type__icon icon-gradient-horizontal'/>
+
+                  <span className='type__name'>
+                    Horizontal
+                  </span>
+                </button>
+              </li>
+
+              <li>
+                <button
+                  className={`
+                    type
+                    txt-hover-primary
+                    ${type === 'vertical'
+                      ? 'type--active'
+                      : ''
+                    }
+                  `}
+                  onClick={() => setType('vertical')}
+                >
+                  <span className='type__icon icon-gradient-vertical'/>
+
+                  <span className='type__name'>
+                    Vertical
+                  </span>
+                </button>
+              </li>
+
+              <li>
+                <button
+                  className={`
+                    type
+                    txt-hover-primary
+                    ${type === 'grid'
+                      ? 'type--active'
+                      : ''
+                    }
+                  `}
+                  onClick={() => setType('grid')}
+                >
+                  <span className='type__icon icon-gradient-grid'/>
+
+                  <span className='type__name'>
+                    Grid
+                  </span>
+                </button>
+              </li>
+
+              <li>
+                <button
+                  className={`
+                    type
+                    txt-hover-primary
+                    ${type === 'circle'
+                      ? 'type--active'
+                      : ''
+                    }
+                  `}
+                  onClick={() => setType('circle')}
+                >
+                  <span className='type__icon icon-gradient-circle'/>
+
+                  <span className='type__name'>
+                    Circle
+                  </span>
+                </button>
+              </li>
+            </ul>
+
+            <div className='angle'>
+              <AngleInput angle={angle} setAngle={setAngle} />
+              
+              <div className='angle__input'>
+                <label htmlFor='angle'>Angle</label>
+                <input
+                  className='angle__number'
+                  name='angle'
+                  type='number'
+                  value={angle}
+                  onChange={handleAngleChanged}
+                  min={0}
+                  max={360}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className='edit'>
+            <div
+              className='row-color edit__current'
+              style={{
+                background: activeId?.color
+              }}
+            ></div>
+
+            <button
+              className='edit__button border-hover-secondary'
+              onClick={() => setOpenPicker(true)}
+            >
+              <span className='edit__text txt-hover-primary'>
+                Edit
+              </span>
+            </button>
+
+            <button
+              className='edit__button border-hover-secondary'
+              onClick={handleRemoveColor}
+            >
+              <span className='edit__text txt-hover-primary'>
+                Remove
+              </span>
+            </button>
+          </div>
+
+          <DndContext
+            collisionDetection={closestCorners}
+            onDragEnd={handleDragEnd}
+            onDragStart={handleDragStart}
+          >
+            <div className='re-order'>
+              <Container
+                items={firstRow.colors}
+                id='firstRow'
+              >
+                <>
+                  { firstRow.colors.map(color => (
+                    <>
+                      <Color
+                        color={color}
+                      />
+                    </>
+                  ))}
+
+                  { !secondRow &&
+                    <button
+                      className='row__color row__color--add'
+                      onClick={() => handleAddColor('first')}
+                    >
+                      <span className='icon-plus'/>
+                    </button>
+                  }
+                </>
+              </Container>
+
+              { secondRow &&
+                <Container
+                  items={secondRow.colors}
+                  id='secondRow'
+                >
+                  <>
+                    { secondRow.colors.map(color => (
+                      <Color
+                        color={color}
+                      />
+                    ))}
+
+                    <button
+                      className='row__color row__color--add'
+                      onClick={() => handleAddColor('second')}
+                    >
+                      <span className='icon-plus'/>
+                    </button>
+                  </>
+                </Container>
+              }
+              <DragOverlay>{activeId ? <Color color={activeId} /> : null}</DragOverlay>
+            </div>
+          </DndContext>
+        </section>
+
+        <div className='gradient__view'>
+          <div
+            className={`view ${type === 'grid' ? 'view--grid' : ''}`}
+            style={{
+              background: gradient[0] + gradient[1],
+              '--grid-background': gridGradient[0] + gridGradient[1],
+            } as React.CSSProperties}
+          >
+          </div>
+
+          <div className='slider'>
+            <CustomSlider
+              row={firstRow}
+              setRow={setFirstRow}
+              background={gradient}
+            />
+
+            { secondRow && 
+              <CustomSlider
+                row={secondRow}
+                setRow={setSecondRow as React.Dispatch<React.SetStateAction<GradientColor>>}
+                background={gridGradient}
+              />
+            }
+          </div>
+        </div>
       </div>
 
-      <div
-        className={`gradient__view ${type === 'grid' ? 'gradient__view--grid' : ''}`}
-        style={{
-          background: gradient[0] + gradient[1],
-          '--grid-background': gridGradient[0] + gridGradient[1],
-        } as React.CSSProperties}
-      >
-      </div>
     </div>
   )
 }
 
 interface ColorProps {
-  color: string
+  color: Color
 }
 
 export const Color = ({ color }: ColorProps) => {
@@ -390,28 +599,29 @@ export const Color = ({ color }: ColorProps) => {
     attributes,
     listeners,
     setNodeRef,
-  } = useSortable({ id: color })
+  } = useSortable({ id: color.id })
 
   return (
     <div
-      className='color-grad'
-      id={color}
-      key={color}
-      style={{  background: color }}
+      className='row__color'
+      id={`${color.id}`}
+      key={color.id}
+      style={{  background: color.color }}
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-    ></div>
+    >
+    </div>
   )
 }
 
 interface ContainerProps {
-  items: string[]
-  type: string
-  id: string
+  items: Color[]
+  id: string,
+  children: ReactNode
 }
 
-const Container = ({ items, type, id }: ContainerProps) => {
+const Container = ({ items, id, children }: ContainerProps) => {
   const { setNodeRef } = useDroppable({ id })
 
   return (
@@ -421,15 +631,10 @@ const Container = ({ items, type, id }: ContainerProps) => {
       strategy={rectSortingStrategy}
     >
       <div
-        className={`colors-container colors-container--${type}`}
+        className='row'
         ref={setNodeRef}
       >
-        { items.map(color => (
-          <Color
-            color={color}
-          />
-        ))
-        }
+        { children }
       </div>
     </SortableContext>
   )
@@ -455,7 +660,8 @@ const CustomSlider = ({ row, setRow, background }: CustomSliderProps) => {
     const newPositions: Positions = {}
 
     row.stops.forEach((stop, index:  keyof string[]) => {
-      newPositions[row.colors[index] as keyof Positions] = stop / (100 / slider.clientWidth)
+      const color = row.colors[index] as Color
+      newPositions[color.color as keyof Positions] = stop / (100 / slider.clientWidth) - 7
     })
 
     setThumbPosition(newPositions)
@@ -472,23 +678,25 @@ const CustomSlider = ({ row, setRow, background }: CustomSliderProps) => {
       const newPosition = Math.min(Math.max(0, thumbPosition[id] + offsetX), slider.clientWidth)
 
       const currentValue = Math.round((100 / slider.clientWidth) * newPosition)
-
       setThumbPosition(prev => ({
         ...prev,
         [id]: newPosition
       }))
       setRow(prev => {
-        const index = prev.colors.indexOf(id) as number
+        let colorIndex = 0
+        prev.colors.forEach((color, index) => {
+          if (color.color === id) colorIndex = index
+        })
 
         const newStops = prev.stops as number[]
-        newStops[index] = currentValue
+        newStops[colorIndex] = currentValue
 
         const unorderIndex = isArrayAscending(newStops)
-        const newColors = prev.colors as string[]
+        const newColors = prev.colors as Color[]
 
         if (unorderIndex !== -1) {
-          const changeColor1 = prev.colors[unorderIndex - 1] as string
-          const changeColor2 = prev.colors[unorderIndex] as string
+          const changeColor1 = prev.colors[unorderIndex - 1] as Color
+          const changeColor2 = prev.colors[unorderIndex] as Color
           newColors[unorderIndex] = changeColor1
           newColors[unorderIndex - 1] = changeColor2
 
@@ -518,7 +726,7 @@ const CustomSlider = ({ row, setRow, background }: CustomSliderProps) => {
     <div
       className='custom-slider'
       ref={sliderRef}
-      style={{ background: background[0] + background[1] }}
+      style={{ background: `linear-gradient(${90}deg` + background[1] }}
     >
       { sliderRef && Object.keys(thumbPosition).map(color => (
         <div
@@ -534,3 +742,4 @@ const CustomSlider = ({ row, setRow, background }: CustomSliderProps) => {
     </div>
   )
 }
+

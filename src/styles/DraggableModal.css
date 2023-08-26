@@ -7,6 +7,6 @@
   padding: 20px;
   gap: 20px;
   background: var(--main);
-  box-Shadow:  8px 6px 14px rgba(0,0,0,0.4);
+  box-Shadow: 2px 2px 18px rgba(0,0,0,1);
   letter-Spacing: 0.6px;
 }

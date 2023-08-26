@@ -37,7 +37,7 @@
 }
 .box {
   position: absolute;
-  top: 140%;
+  top: 120%;
   left: 0;
   min-width: 100%;
   width: auto;
@@ -52,32 +52,30 @@
   overflow: hidden;
   overflow-y: auto;
 }
-.box:before {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 96%;
-  height: 96%;
-  display: flex;
-  align-self: center;
-  background: var(--gradient-primary);
-  z-index: -1;
-  filter: blur(6px);
+.box__mask {
+  box-shadow: 2px 2px 14px rgba(0,0,0,1);
 }
-.box::-webkit-scrollbar {
-  width: 12px;
+.box__mask::-webkit-scrollbar-track {
+  margin: 8px;
+  width: 20px;
 }
-.box::-webkit-scrollbar-thumb {
-  background: white;
+.box__mask::-webkit-scrollbar {
+  width: 18px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background: var(--main);
+}
+.box__mask::-webkit-scrollbar-thumb {
+  background: var(--txt-inactive);
   border-radius: 10px;
-  border: 3px solid var(--main);
+  border: 7px solid var(--main);
 }
 .box__option {
   width: 100%;
   display: flex;
   align-items: center;
   gap: 14px;
+  
   border-bottom: 1px solid transparent;
   border-color: transparent;
   background: var(--main);

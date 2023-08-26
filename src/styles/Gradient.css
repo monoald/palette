@@ -1,45 +1,42 @@
 .gradient {
-  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 51px 420px;
+  grid-template-areas: 
+  "header"
+  "generator";
+  gap: 100px;
+}
+.gradient__generator {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 80px;
 }
-.gradient__setup {
-  width: 70%;
-  display: flex;
-  justify-content: space-between;
-}
-.gradient .colors-container {
-  width: auto;
-  height: 50px;
-  display: flex;
-  gap: 18px;
-}
-.gradient .color-grad {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  cursor: move;
-}
 .setup {
-  display: flex;
-  gap: 40px;
-}
-.gradient__re-order {
+  width: fit-content;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  gap: 30px;
 }
-.setup__types {
-  width: 160px;
-  list-style: none;
+.setup__head {
+  display: flex;
+  gap: 30px;
+}
+.setup .types {
+  width: 188px;
   display: flex;
   flex-wrap: wrap;
-  column-gap: 20px;
+  column-gap: 10px;
   row-gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--txt-inactive);
+  border-radius: 8px;
+  list-style: none;
 }
 .type {
   position: relative;
@@ -57,61 +54,120 @@
 }
 .type--active {
   background: var(--gradient-primary);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .type__name {
   font-size: 1.2rem;
 }
+.angle {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 18px;
+  border: 1px solid var(--txt-inactive);
+  border-radius: 8px
+}
+.angle__input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+.angle__number {
+  width: 50px;
+  height: 30px;
+  text-align: center;
+}
+.setup .edit {
+  width: 100%;
+  height: 76px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 18px;
+  border: 1px solid var(--txt-inactive);
+  border-radius: 8px
+}
+.edit__current {
+  margin-inline-end: 14px;
+  border: 1px solid var(--txt-inactive);
+}
+.edit__button {
+  width: 84px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  border: 1px solid var(--txt-inactive);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--txt-main);
+  font-size: 1.2rem;
+  letter-spacing: 0.4px;
+}
+.edit__text {
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.setup .row {
+  width: auto;
+  height: 50px;
+  display: flex;
+  gap: 18px;
+}
+.row__color,
+.row-color {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: grab;
+}
+.row__color--add {
+  background: transparent;
+  border: 1px solid var(--txt-inactive);
+  padding: 0;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+.setup .re-order {
+  width: 100%;
+  height: 136px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 18px;
+  border: 1px solid var(--txt-inactive);
+  border-radius: 8px
+}
 .gradient__view {
-  width: 80%;
-  height: 300px;
+  width: 40%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.view {
+  width: 100%;
+  min-height: 338px;
+  height: 100%;
   display: block;
   border-radius: 12px;
   overflow: hidden;
 }
-.setup__section {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  font-size: 1.4rem;
-  text-align: center;
-}
-.setup__section .subtitle {
-  font-weight: 500;
-}
-.angle-input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.angle-container {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px
-}
-.angle-number {
-  width: 50px;
-  height: 30px;;
-  text-align: center;
-}
-.angle-number::-webkit-outer-spin-button,
-.angle-number::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.angle-number[type=number] {
-  -moz-appearance: textfield;
-}
-.gradient__view--grid {
+.view--grid {
   position: relative;
 }
-.gradient__view--grid::before {
+.view--grid::before {
   content: "";
   position: absolute;
   top: 0;
@@ -123,7 +179,9 @@
   background: var(--grid-background);	
 }
 .slider {
-  width: 70%;
+  width: 100%;
+  height: fit-content;
+  max-width: 940px;
   display: flex;
   flex-direction: column;
   gap: 24px;

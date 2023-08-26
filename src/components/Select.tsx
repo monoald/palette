@@ -36,7 +36,8 @@ export const Select = ({ options, value, setValue, configuration, additionalIcon
         className='Select__toggle-button'
         onClick={handleOpenSelect}
         style={{
-          position: 'relative'
+          position: 'relative',
+          gridTemplateColumns: configuration.showIcon ? '1fr 30px' : '1fr'
         }}
       >
         { configuration.showCurrentValue && 

@@ -45,7 +45,7 @@ export interface ColorBlindSimulator {
   tritanopia: string
 }
 
-interface Formats {
+export interface Formats {
   cmyk: Cmyk
   hsb: Hsv
   hsl: Hsl

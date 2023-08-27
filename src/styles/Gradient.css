@@ -1,20 +1,46 @@
 .gradient {
   width: 100vw;
+  height: 100vh;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 51px 420px;
-  grid-template-areas: 
+  grid-template-rows: 68px 418px 1fr;
+  grid-template-areas:
   "header"
-  "generator";
-  gap: 100px;
-}
-.gradient__generator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  "generator"
+  "css";
   gap: 80px;
+  padding-bottom: 80px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.gradient::-webkit-scrollbar {
+  width: 10px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background: transparent;
+}
+.gradient::-webkit-scrollbar-thumb {
+  background: var(--txt-inactive);
+  border-radius: 10px;
+  border: 3px solid var(--main);
+}
+.gradient::-webkit-scrollbar-track {
+  margin: 10px;
+}
+
+.gradient .generator {
+  display: grid;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+  grid-template-columns: auto 40%;
+  grid-template-rows: 1fr;
+  grid-template-areas:
+  "setup view";
+  column-gap: 80px;
 }
 .setup {
+  grid-area: setup;
   width: fit-content;
   height: 100%;
   display: flex;
@@ -27,6 +53,7 @@
   display: flex;
   gap: 30px;
 }
+
 .setup .types {
   width: 188px;
   display: flex;
@@ -61,6 +88,7 @@
 .type__name {
   font-size: 1.2rem;
 }
+
 .angle {
   height: 100%;
   display: flex;
@@ -83,6 +111,7 @@
   height: 30px;
   text-align: center;
 }
+
 .setup .edit {
   width: 100%;
   height: 76px;
@@ -118,9 +147,22 @@
   justify-content: center;
   align-items: center;
 }
+
+.setup .re-order {
+  width: 100%;
+  height: 136px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid var(--txt-inactive);
+  border-radius: 8px
+}
 .setup .row {
   width: auto;
-  height: 50px;
+  height: fit-content;
   display: flex;
   gap: 18px;
 }
@@ -138,19 +180,46 @@
   font-size: 1.6rem;
   cursor: pointer;
 }
-.setup .re-order {
-  width: 100%;
-  height: 136px;
+
+.view-types {
+  width: fit-content;
+  grid-area: view-type;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 18px;
-  border: 1px solid var(--txt-inactive);
-  border-radius: 8px
+  gap: 20px;
+  margin: 0 auto;
+  font-size: 1.4rem;
+  padding: 12px 40px;
+  background-color: #23252F;
+  border-radius: 14px;
 }
+.type-button {
+  width: 100px;
+  height: 40px;
+  padding: 0;
+  border-radius: 8px;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+.view-types .Secondary-Button {
+  width: 82px;
+  height: 40px;
+  border: 1px solid var(--txt-inactive);
+  font-size: 1.3rem;
+}
+.view-types .secondary-button--active {
+  border-color: transparent;
+  border-style: solid;
+  border-width: 1px;
+  background:
+    linear-gradient(var(--main) 0 0) padding-box,
+    var(--gradient-primary) border-box; 
+}
+
 .gradient__view {
-  width: 40%;
+  grid-area: view;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -158,10 +227,9 @@
 }
 .view {
   width: 100%;
-  min-height: 338px;
   height: 100%;
   display: block;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
 }
 .view--grid {
@@ -176,7 +244,7 @@
   right: 0;
   mask-image: linear-gradient(to bottom, transparent 50%, black);
   -webkit-mask-image: linear-gradient(to bottom, transparent 30%, black);
-  background: var(--grid-background);	
+  background: var(--grid-background);
 }
 .slider {
   width: 100%;
@@ -217,4 +285,53 @@
 }
 .custom-slider__thumb:active {
   cursor: grabbing;
+}
+
+.gradient .Header {
+  background-color: #00CECB;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+}
+.gradient .Header::after {
+  content: none;
+}
+.gradient .Header .logo {
+  color: var(--main);
+  -webkit-text-fill-color: var(--main);
+}
+.gradient .Header .nav-link {
+  color: var(--main);
+  font-weight: 600;
+}
+.gradient .Header .button-icon {
+  color: var(--main);
+}
+.setup .types,
+.setup .angle,
+.setup .edit,
+.setup .re-order {
+  border: none;
+  background-color: #1A1C23;
+  border-radius: 14px;
+}
+
+.gradient .css {
+  width: 88%;
+  max-width: 1050px;
+  margin: 0 auto;
+}
+.gradient .css pre::-webkit-scrollbar-track {
+  margin: 8px;
+  width: 20px;
+}
+.gradient .css pre::-webkit-scrollbar {
+  height: 18px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background: #1A1C23;
+}
+.gradient .css pre::-webkit-scrollbar-thumb {
+  background: var(--txt-inactive);
+  border-radius: 10px;
+  border: 7px solid #1A1C23;
 }

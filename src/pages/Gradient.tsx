@@ -1,6 +1,8 @@
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, Over, UniqueIdentifier, closestCorners, useDroppable } from '@dnd-kit/core'
 import { SortableContext, arrayMove,  rectSortingStrategy, useSortable } from '@dnd-kit/sortable'
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { vs2015 } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 import { getStops } from '../utils/getStops'
 import { isArrayAscending } from '../utils/isArrayAscending'
@@ -10,6 +12,7 @@ import { AngleInput } from '../components/gradient/AngleInput'
 import { ColorPicker, PickerColor } from '../components/picker/ColorPicker'
 
 import '../styles/Gradient.css'
+import { SecondaryButton } from '../components/buttons/SecondaryButton'
 
 interface Color {
   color: string
@@ -361,10 +364,32 @@ export const Gradient = () => {
     setOpenPicker(false)
   }
 
+  const code = `
+  .my-object {
+    background: ${gradient[0]}${gradient[1]};
+    background: -moz-${gradient[0]}${gradient[1]};
+    background: -webkit-${gradient[0]}${gradient[1]};
+  }
+  ${ type === 'grid' ?
+    `.my-object::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      mask-image: linear-gradient(to bottom, transparent 50%, black);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 30%, black);
+      background: ${gridGradient[0]}${gridGradient[1]};
+      background: -moz-${gridGradient[0]}${gridGradient[1]};
+      background: -webkit-${gridGradient[0]}${gridGradient[1]};
+    }`
+    : ''
+  }
+  `
+
   return (
     <div className='gradient'>
       <Header />
-      <div className='gradient__generator'>
+
+      <div className='generator'>
         { openPicker && activeId &&
           <ColorPicker
             id={`${activeId.id}`}
@@ -558,7 +583,7 @@ export const Gradient = () => {
           </DndContext>
         </section>
 
-        <div className='gradient__view'>
+        <section className='gradient__view'>
           <div
             className={`view ${type === 'grid' ? 'view--grid' : ''}`}
             style={{
@@ -583,9 +608,24 @@ export const Gradient = () => {
               />
             }
           </div>
-        </div>
+        </section>
       </div>
 
+      <section className='css'>
+        <SyntaxHighlighter
+          language="css"
+          style={vs2015}
+          customStyle={{
+            height: 'fit-content',
+            background: '#1A1C23',
+            fontSize: '1.4rem',
+            padding: '10px 14px 0px',
+            borderRadius: '14px'
+          }}
+        >
+          {code}
+        </SyntaxHighlighter>
+      </section>
     </div>
   )
 }

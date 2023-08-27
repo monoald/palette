@@ -16,6 +16,7 @@ import { UserRoutes } from './UserRoutes'
 import { authApiSlice } from '../features/auth/authApiSlice'
 import Loader from '../pages/Loader'
 import { Gradient } from '../pages/Gradient'
+import { Test } from '../pages/Test'
 
 store.dispatch(authApiSlice.endpoints.getSaved.initiate())
 

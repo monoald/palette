@@ -1,14 +1,9 @@
-body {
-  overflow-x: hidden;
-  height: 100vh;
-  max-height: 100vh;
-  background-color: var(--main);
-}
-#root {
+
+/* #root {
   width: 100%;
   height: auto;
   height: 100vh;
-}
+} */
 .color {
   width: 100vw;
   height: 100vh;

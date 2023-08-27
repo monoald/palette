@@ -1,53 +1,54 @@
 .gradient {
-  width: 100vw;
-  height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 68px 418px 1fr;
-  grid-template-areas:
-  "header"
-  "generator"
-  "css";
-  gap: 80px;
+  max-width: 100vw;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
   padding-bottom: 80px;
-  overflow-y: auto;
   overflow-x: hidden;
+  overflow-y: auto;
 }
-.gradient::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 10px;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   background: transparent;
 }
-.gradient::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: var(--txt-inactive);
   border-radius: 10px;
   border: 3px solid var(--main);
 }
-.gradient::-webkit-scrollbar-track {
-  margin: 10px;
-}
 
 .gradient .generator {
+  width: 100%;
+  max-width: 1050px;
+  height: fit-content;
   display: grid;
-  align-items: center;
-  align-self: center;
   justify-content: center;
-  grid-template-columns: auto 40%;
-  grid-template-rows: 1fr;
+  justify-items: center;
+  grid-template-columns: 1fr;
+  grid-template-rows: 40vh auto;
   grid-template-areas:
-  "setup view";
-  column-gap: 80px;
+  "view"
+  "setup";
+  column-gap: 40px;
+  row-gap: 40px;
+  margin: 0 auto;
 }
 .setup {
   grid-area: setup;
   width: fit-content;
+  max-width: 100vw;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 30px;
+  padding-inline: 20px;
 }
 .setup__head {
   display: flex;
@@ -58,6 +59,7 @@
   width: 188px;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   column-gap: 10px;
   row-gap: 10px;
   padding: 18px;
@@ -92,6 +94,7 @@
 .angle {
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 20px;
@@ -180,50 +183,15 @@
   font-size: 1.6rem;
   cursor: pointer;
 }
-
-.view-types {
-  width: fit-content;
-  grid-area: view-type;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin: 0 auto;
-  font-size: 1.4rem;
-  padding: 12px 40px;
-  background-color: #23252F;
-  border-radius: 14px;
-}
-.type-button {
-  width: 100px;
-  height: 40px;
-  padding: 0;
-  border-radius: 8px;
-  font-weight: 400;
-  letter-spacing: 0.4px;
-}
-.view-types .Secondary-Button {
-  width: 82px;
-  height: 40px;
-  border: 1px solid var(--txt-inactive);
-  font-size: 1.3rem;
-}
-.view-types .secondary-button--active {
-  border-color: transparent;
-  border-style: solid;
-  border-width: 1px;
-  background:
-    linear-gradient(var(--main) 0 0) padding-box,
-    var(--gradient-primary) border-box; 
-}
-
 .gradient__view {
   grid-area: view;
   width: 100%;
+  max-width: 100vw;
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 30px;
+  padding-inline: 20px;
 }
 .view {
   width: 100%;
@@ -316,9 +284,11 @@
 }
 
 .gradient .css {
-  width: 88%;
+  grid-area: css;
+  width: 100%;
   max-width: 1050px;
   margin: 0 auto;
+  padding-inline: 20px;
 }
 .gradient .css pre::-webkit-scrollbar-track {
   margin: 8px;
@@ -334,4 +304,37 @@
   background: var(--txt-inactive);
   border-radius: 10px;
   border: 7px solid #1A1C23;
+}
+
+@media (min-width: 820px) {
+  .gradient {
+    grid-template-rows: 68px 418px 1fr;
+    gap: 80px;
+    overflow-y: overlay;
+  }
+  .gradient .generator {
+    width: 80%;
+    grid-template-columns: auto 50%;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+    "setup view";
+  }
+  .setup {
+    padding: 0px;
+  }
+  .angle {
+    flex-direction: row;
+  }
+  .gradient__view {
+    padding: 0px;
+  }
+  .gradient .css {
+    width: 88%;
+    padding: 0;
+  }
+}
+@media (min-width: 900px) {
+  .gradient .generator {
+    column-gap: 80px;
+  }
 }

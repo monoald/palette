@@ -12,7 +12,6 @@ import { AngleInput } from '../components/gradient/AngleInput'
 import { ColorPicker, PickerColor } from '../components/picker/ColorPicker'
 
 import '../styles/Gradient.css'
-import { SecondaryButton } from '../components/buttons/SecondaryButton'
 
 interface Color {
   color: string
@@ -367,9 +366,12 @@ export const Gradient = () => {
   const code = `
   .my-object {
     background: ${gradient[0]}${gradient[1]};
+    background: -o-${gradient[0]}${gradient[1]};
     background: -moz-${gradient[0]}${gradient[1]};
     background: -webkit-${gradient[0]}${gradient[1]};
+    ${ type === 'grid' ? 'position: relative;' : ''}
   }
+
   ${ type === 'grid' ?
     `.my-object::after {
       content: "";
@@ -378,6 +380,7 @@ export const Gradient = () => {
       mask-image: linear-gradient(to bottom, transparent 50%, black);
       -webkit-mask-image: linear-gradient(to bottom, transparent 30%, black);
       background: ${gridGradient[0]}${gridGradient[1]};
+      background: -o-${gridGradient[0]}${gridGradient[1]};
       background: -moz-${gridGradient[0]}${gridGradient[1]};
       background: -webkit-${gridGradient[0]}${gridGradient[1]};
     }`
@@ -770,6 +773,7 @@ const CustomSlider = ({ row, setRow, background }: CustomSliderProps) => {
     >
       { sliderRef && Object.keys(thumbPosition).map(color => (
         <div
+        key={color}
           className='custom-slider__thumb'
           onPointerDown={(e) => handleThumbMouseDown(e, color)}
           style={{

@@ -1,4 +1,3 @@
-import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
 
@@ -6,16 +5,16 @@ import { PaletteGenerator } from '../pages/PaletteGenerator'
 import { SignIn } from '../pages/SignIn'
 import { SignUp } from '../pages/SignUp'
 import { Color } from '../pages/Color'
-import Palettes from '../features/palettes/Palettes'
-import { Colors } from '../features/colors/Colors'
+import { Gradient } from '../pages/Gradient'
+import Loader from '../pages/Loader'
 
 import { store } from '../app/store'
+import Palettes from '../features/palettes/Palettes'
+import { Colors } from '../features/colors/Colors'
+import { authApiSlice } from '../features/auth/authApiSlice'
 import RequireAuth from '../features/auth/RequireAuth'
 
 import { UserRoutes } from './UserRoutes'
-import { authApiSlice } from '../features/auth/authApiSlice'
-import Loader from '../pages/Loader'
-import { Gradient } from '../pages/Gradient'
 import { Test } from '../pages/Test'
 
 store.dispatch(authApiSlice.endpoints.getSaved.initiate())
@@ -42,7 +41,7 @@ export const App = () => {
           <Route path='/palettes' element={<Palettes />} />
           <Route path='/colors' element={<Colors />} />
 
-          <Route path='/gradient' element={<Gradient />} />
+          <Route path='/gradient/:id' element={<Gradient />} />
 
           <Route path='/loader' element={<Loader />} />
         </Routes>

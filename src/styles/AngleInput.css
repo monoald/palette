@@ -2,7 +2,7 @@
   position: relative;
   width: 80px;
   height: 80px;
-  border: 1px solid var(--txt-main);
+  border: 1px solid var(--txt-inactive);
   border-radius: 50%;
   background-color: transparent;
 }
@@ -10,8 +10,11 @@
   position: absolute;
   width: 10px;
   height: 10px;
-  border: 1px solid var(--txt-main);
+  border: 1px solid var(--txt-inactive);
   border-radius: 50%;
   background-color: transparent;
   pointer-events: none;
+}
+.angle-input:active .angle-input__inner {
+  border-color: #5BC3EB;
 }

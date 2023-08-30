@@ -115,6 +115,13 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+input[type="text"]:focus, 
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #5BC3EB;
+}
+
 .txt-primary {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
@@ -176,4 +183,34 @@ input[type="number"] {
 }
 .icon {
   pointer-events: none;
+}
+
+.secondary-button {
+  width: 98px;
+  height: 40px;
+  border: 1px solid var(--txt-inactive);
+  font-size: 1.2rem;
+  background: transparent;
+  border-radius: 10px;
+}
+.secondary-button--active,
+.secondary-button:hover {
+  color: #5BC3EB;
+  border-color: #5BC3EB;
+}
+
+.primary-button {
+  width: 110px;
+  height: 44px;
+  padding: 0;
+  border-radius: 14px;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  background: var(--txt-main);
+  color: var(--main);
+}
+.primary-button--active,
+.primary-button:hover {
+  background: #5BC3EB;
 }

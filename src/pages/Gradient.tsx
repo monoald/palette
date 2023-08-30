@@ -1,31 +1,35 @@
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, Over, UniqueIdentifier, closestCorners, useDroppable } from '@dnd-kit/core'
-import { SortableContext, arrayMove,  rectSortingStrategy, useSortable } from '@dnd-kit/sortable'
+import { SortableContext, rectSortingStrategy, useSortable } from '@dnd-kit/sortable'
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { vs2015 } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { vs2015, darcula } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 import { getStops } from '../utils/getStops'
-import { isArrayAscending } from '../utils/isArrayAscending'
 
 import { Header } from '../components/Header'
-import { AngleInput } from '../components/gradient/AngleInput'
 import { ColorPicker, PickerColor } from '../components/picker/ColorPicker'
+import { Select } from '../components/Select';
+import { AngleInput } from '../components/gradient/AngleInput';
+import { CustomRange } from '../components/gradient/CustomRange';
 
 import '../styles/Gradient.css'
 
-interface Color {
+
+export interface Color {
   color: string
   id: number
 }
-interface GradientColor {
+export interface GradientColor {
   colors: Color[]
   stops: number[],
 }
 
 interface GradientColors {
-  firstRow: GradientColor
-  secondRow?: GradientColor
+  firstRow?: GradientColor[]
+  secondRow?: GradientColor[]
 }
+
 
 function makeGradient(container: GradientColor) {
   let basicGradient = ''
@@ -45,158 +49,293 @@ function findIdInColors(id: string, colors: Color[]): number {
   return colorIndex
 }
 
-export const Gradient = () => {
-  const [type, setType] = useState('horizontal')
-  const [angle, setAngle] = useState(90)
-  const [activeId, setActiveId] = useState<Color>()
-  const [firstRow, setFirstRow] = useState<GradientColor>({
-    colors: [
-      {
-        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
-        color: '#294eb8'
-      },
-      { id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
-        color: '#d2395c'
-      },
-      {
-        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
-        color: '#a9d237'
-      },
-      {
-        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
-        color: '#37d2ae'
-      },
-      {
-        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
-        color: '#6137d2'
-      }
-    ],
-    stops: [0, 25, 50, 75, 100]
-  })
-  const [secondRow, setSecondRow] = useState<GradientColor>()
-  const [gradient, setGradient] = useState([
-    `linear-gradient(${angle}deg`,
-    `${makeGradient(firstRow)})`
-  ])
-  const [gridGradient, setGridGradient] = useState(['',''])
-  const [openPicker, setOpenPicker] = useState<boolean>(false)
+export interface GradientType {
+  type: string
+  angle: number
+  firstRow?: GradientColor
+  secondRow?: GradientColor
+  activeId?: Color
+}
 
+export interface GradientStyles {
+  firstRow: string[]
+  secondRow: string[]
+  animationType: string
+  animationTiming: string
+  animationDuration: number
+}
+
+const timingSelect = {
+  linear: null,
+  ease: null,
+  'ease-in': null,
+  'ease-out': null,
+  'ease-in-out': null
+}
+
+export const Gradient = () => {
+  const [gradient, setGradient] = useState<GradientType>({
+    type: 'horizontal',
+    angle: 90
+  })
+  const [gradientStyle, setGradientStyle] = useState<GradientStyles>({
+    firstRow: [],
+    secondRow: ['linear-gradient(90deg',''],
+    animationType: 'horizontal',
+    animationTiming: 'linear',
+    animationDuration: 5
+  })
+
+  const [openPicker, setOpenPicker] = useState<boolean>(false)
+  const [mode, setMode] = useState<string>('gradient')
+  const [codeTech, setCodeTech] = useState('css')
+
+  const { id } = useParams()
+
+  // Update gradient when type changed
   useEffect(() => {
-    // Change colors and stops
+    const type = gradient.type
+    let newFirstRow = gradient.firstRow
+    let newSecondRow = gradient.secondRow
+    
     if (
       (type === 'vertical' || type === 'horizontal' || type === 'circle')
-      && secondRow
+      && newFirstRow && newSecondRow
     ) {
-      setFirstRow(prev => {
-        const newColors = [ ...prev.colors, ...secondRow.colors as Color[]]
+      const newColors = [ ...newFirstRow.colors, ...newSecondRow.colors as Color[] ]
+      const newStops = getStops(100 / (newColors.length - 1))
 
-        const newStops = getStops(100 / (newColors.length - 1))
+      newFirstRow = { colors: newColors, stops: newStops }
+      newSecondRow = undefined
+    } else
+    if (type === 'grid' && newFirstRow && !newSecondRow){
+      const middleIndex = Math.ceil(newFirstRow.colors.length / 2)
 
-        return {
-          colors: newColors,
-          stops: newStops,
-        }
-      })
+      const newFirstColors = [...newFirstRow.colors]
+      const newSecondColors = newFirstColors.splice(middleIndex)
 
-      setSecondRow(undefined)
-    } else if (type === 'grid' && !secondRow){
-      setFirstRow(prev => {
-        const middleIndex = Math.ceil(prev.colors.length / 2)
-        const newColors = prev.colors.splice(middleIndex)
+      const newStopsFirstRow = getStops(100 / (newFirstColors.length - 1))
+      const newStopsSecondRow = getStops(100 / (newSecondColors.length - 1))
 
-        const newStopsFirstRow = getStops(100 / (prev.colors.length - 1))
-
-        const newStopsSecondRow = getStops(100 / (newColors.length - 1))
-
-        setSecondRow({
-          colors: newColors,
-          stops: newStopsSecondRow
-        })
-
-        return {
-          colors: prev.colors,
-          stops: newStopsFirstRow
-        }
-      })
+      newFirstRow = { colors: newFirstColors, stops: newStopsFirstRow }
+      newSecondRow = { colors: newSecondColors, stops: newStopsSecondRow }
     }
 
-    const newAngle = type === 'vertical' ? 0 : 90
+    const newAngle = type === 'vertical' ? 180 : 90
     const newGradient = type === 'circle' ? 'radial-gradient(circle' : `linear-gradient(${newAngle}deg`
 
-    setAngle(newAngle)
-    setGradient(prev => {
-      const newGrad = [...prev]
-      newGrad[0] = newGradient
-      return newGrad
+    setGradient({
+      type: type,
+      angle: newAngle,
+      firstRow: newFirstRow,
+      secondRow: newSecondRow
     })
 
-    if (type === 'grid') {
-      setGridGradient(prev => {
-        const newGradient = [...prev]
-        newGradient[0] = `linear-gradient(${90}deg`
-        newGradient[1] = secondRow ? makeGradient(secondRow): ''
-        return newGradient
-      })
-    }
-  }, [secondRow, type])
+    setGradientStyle(prev => {
+      const newFirstRowStyle = [...prev.firstRow]
+      newFirstRowStyle[0] = newGradient
+      newFirstRowStyle[1] = newFirstRow ? makeGradient(newFirstRow): ''
 
-  useEffect(() => {
-    setGradient(prev => {
-      const newGradient = [...prev]
-      newGradient[1] = makeGradient(firstRow)
-      return newGradient
-    })
-
-    if (type === 'grid') {
-      setGridGradient(prev => {
-        const newGradient = [...prev]
-        newGradient[1] = secondRow ? makeGradient(secondRow): ''
-        return newGradient
-      })
-    }
-
-    if (openPicker && activeId) {
-      const isOnFirstRow = findIdInColors(`${activeId.id}`, firstRow.colors)
-      const isOnSecondRow = secondRow ? findIdInColors(`${activeId.id}`, secondRow?.colors as Color[]) : -1
-
-      const activeC = firstRow.colors[isOnFirstRow] || secondRow?.colors[isOnSecondRow]
-
-      if (activeC.color !== activeId.color) {
-        setActiveId({ id: activeId.id, color: activeC.color })
+      const newSecondRowStyle = [...prev.secondRow]
+      if (type === 'grid') {
+        newSecondRowStyle[1] = newSecondRow ? makeGradient(newSecondRow): ''
       }
-    }
+
+      return {
+        ...prev,
+        firstRow: newFirstRowStyle,
+        secondRow: newSecondRowStyle
+      }
+    })
+
+    gradientToUrl({
+      type: type,
+      angle: newAngle,
+      firstRow: newFirstRow,
+      secondRow: newSecondRow
+    })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firstRow, secondRow])
+  }, [gradient.type])
 
   useEffect(() => {
-    if (type === 'horizontal' || type === 'vertical') {
-      setGradient(prev => {
-        const newGradient = [...prev]
-        newGradient[0] = `linear-gradient(${angle}deg`
-        return newGradient
+    if (gradient.firstRow) {
+      setGradientStyle(prev => {
+        const newGradient = [...prev.firstRow]
+        newGradient[1] = makeGradient(gradient.firstRow as GradientColor)
+
+        return {
+          ...prev, firstRow: newGradient
+        }
       })
+
+      if (gradient.type === 'grid') {
+        setGradientStyle(prev => {
+          const newGradient = [...prev.secondRow]
+          newGradient[1] = makeGradient(gradient.secondRow as GradientColor)
+  
+          return {
+            ...prev, secondRow: newGradient
+          }
+        })
+      }
+  
+      if (openPicker && gradient.activeId) {
+        const isOnFirstRow = findIdInColors(`${gradient.activeId.id}`, gradient.firstRow.colors)
+        const isOnSecondRow = gradient.secondRow ? findIdInColors(`${gradient.activeId.id}`, gradient.secondRow?.colors as Color[]) : -1
+  
+        const activeColor = gradient.firstRow.colors[isOnFirstRow] || gradient.secondRow?.colors[isOnSecondRow]
+  
+        if (activeColor.color !== gradient.activeId.color) {
+          setGradient(prev => ({
+            ...prev,
+            activeId: {
+              id: gradient.activeId?.id as number,
+              color: activeColor.color
+            }
+          }))
+        }
+      }
+  
+      gradientToUrl(gradient)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [angle])
+  }, [gradient.firstRow, gradient.secondRow])
+
+  useEffect(() => {
+    if (gradient.type === 'horizontal' || gradient.type === 'vertical') {
+      setGradientStyle(prev => {
+        const newGradient = [...prev.firstRow]
+        newGradient[0] = `linear-gradient(${gradient.angle}deg`
+
+        return {
+          ...prev,
+          firstRow: newGradient
+        }
+      })
+    }
+
+    gradientToUrl(gradient)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gradient.angle])
+
+  // Set gradient by url
+  useEffect(() => {
+    const urlParams = new URLSearchParams(id)
+
+    const newType = urlParams.get('t')
+    const newAngle = urlParams.get('a')
+    const newFirstRow: GradientColor = {
+      colors: [],
+      stops: []
+    }
+
+    urlParams.get('r1')?.split('_').forEach(color => {
+      const obj = color.split('-')
+
+      newFirstRow.colors.push({
+        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+        color: `#${obj[0]}`
+      })
+      newFirstRow.stops.push(+obj[1])
+    })
+
+    const newDGradient: GradientType = {
+      type: gradient.type,
+      angle: gradient.angle
+    }
+
+    newDGradient.firstRow = newFirstRow
+
+    if (newType !== null) {
+      newDGradient.type = newType
+    }
+    if (newAngle !== null) {
+      newDGradient.angle = +newAngle
+    }
+
+    if (urlParams.get('r2') && newType === 'grid') {
+      const newSecondRow: GradientColor = {
+        colors: [],
+        stops: []
+      }
+  
+      urlParams.get('r2')?.split('_').forEach(color => {
+        const obj = color.split('-')
+  
+        newSecondRow.colors.push({
+          id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+          color: `#${obj[0]}`
+        })
+        newSecondRow.stops.push(+obj[1])
+      })
+  
+      newDGradient.secondRow = newSecondRow
+    }
+
+    setGradient(newDGradient)
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const gradientToUrl = ({type, angle, firstRow, secondRow }: GradientType) => {
+    let newType = ''
+    let newAngle = ''
+    let newRow1 = 'r1='
+    let newRow2 = ''
+
+    if (
+      (type === 'horizontal' && angle === 90) ||
+      (type === 'vertical' && angle === 180) ||
+      type === 'grid' || type === 'circle'
+    ) {
+      newType = `t=${type}&`
+    }
+
+    if (
+      (type === 'horizontal' && angle !== 90) ||
+      (type === 'vertical' && angle !== 180)
+    ) {
+      newAngle = `a=${angle}&`
+    }
+
+    firstRow?.colors.forEach((color, index) => {
+      newRow1 += `${color.color.substring(1)}-${firstRow?.stops[index]}_`
+    })
+    newRow1 = newRow1.slice(0, -1)
+
+    if (secondRow) {
+      newRow2 = '&r2='
+      secondRow.colors.forEach((color, index) => {
+        newRow2 += `${color.color.substring(1)}-${secondRow?.stops[index]}_`
+      })
+      newRow2 = newRow2.slice(0, -1)
+    }
+
+    const newUrl = '/gradient/' + newType + newAngle + newRow1 + newRow2
+
+    window.history.replaceState({}, '', newUrl)
+  }
 
   const handleDragStart = (e: DragStartEvent) => {
     const { active } = e
     const { id } = active
 
-    const isOnFirstRow = findIdInColors(id as string, firstRow.colors)
-    const isOnSecondRow = secondRow ? findIdInColors(id as string, secondRow?.colors as Color[]) : -1
-
-    const activeC = firstRow.colors[isOnFirstRow] || secondRow?.colors[isOnSecondRow]
-
-    setActiveId(activeC)
+    if (gradient.firstRow) {
+      const isOnFirstRow = findIdInColors(id as string, gradient.firstRow.colors)
+      const isOnSecondRow = gradient.secondRow ? findIdInColors(id as string, gradient.secondRow?.colors as Color[]) : -1
+  
+      const activeColor = gradient.firstRow.colors[isOnFirstRow] || gradient.secondRow?.colors[isOnSecondRow]
+  
+      setGradient(prev => ({ ...prev, activeId: activeColor }))
+    }
   }
 
   const findContainer = (id: UniqueIdentifier) => {
     if (id === 'firsRow' || id === 'secondRow') return id
 
-    if (findIdInColors(id as string, firstRow.colors) !== -1) return 'firstRow'
+    if (gradient.firstRow && findIdInColors(id as string, gradient.firstRow.colors) !== -1) return 'firstRow'
 
-    if (secondRow?.colors && findIdInColors(id as string, secondRow?.colors) !== -1) return 'secondRow'
+    if (gradient.secondRow && findIdInColors(id as string, gradient.secondRow.colors) !== -1) return 'secondRow'
   }
 
   const handleDragEnd = (e: DragEndEvent) => {
@@ -215,147 +354,119 @@ export const Gradient = () => {
       return
     }
 
-    if (secondRow) {
-      const activeColors = activeContainer === 'firstRow' ? [...firstRow.colors] : [...secondRow.colors]
-      const overColors = overContainer === 'secondRow' ? [...secondRow.colors] : [...firstRow.colors]
-      
-      const activeIndex = findIdInColors(id as string, activeColors)
-      const overIndex = findIdInColors(overId as string, overColors)
+    setGradient(prev => {
+      const activeIndex = findIdInColors(id as string, prev[activeContainer]?.colors as Color[])
+      const overIndex = findIdInColors(overId as string, prev[overContainer]?.colors as Color[])
 
-      const activeColor = activeColors[activeIndex]
+      const activeColor = prev[activeContainer]?.colors.splice(activeIndex as number, 1)[0] as Color
 
-      activeColors.splice(activeIndex as number, 1)
-      overColors.splice(overIndex as number, 0, activeColor)
+      prev[overContainer]?.colors.splice(overIndex, 0, activeColor)
 
-      const activeStops = getStops(100 / (activeColors.length - 1))
-      const overStops = getStops(100 / (overColors.length - 1))
-
-      if (activeContainer === 'firstRow' && overContainer === 'secondRow') {
-        setFirstRow({ colors: activeColors, stops: activeStops })
-        setSecondRow({ colors: overColors, stops: overStops })
-      } else if (activeContainer === 'secondRow' && overContainer === 'firstRow') {
-        setFirstRow({ colors: overColors, stops: overStops })
-        setSecondRow({ colors: activeColors, stops: activeStops })
+      return {
+        ...prev,
+        [overContainer]: {
+          ...prev[overContainer],
+          stops: getStops(100 / (prev[overContainer]?.colors.length as number - 1))
+        }
       }
-    }
-
-    if (activeContainer === 'firstRow' && overContainer === 'firstRow') {
-      setFirstRow(prev => {
-        const activeIndex = findIdInColors(id as string, prev.colors)
-        const overIndex = findIdInColors(overId as string, prev.colors)
-
-        const newColors = arrayMove(prev.colors, activeIndex, overIndex)
-        
-        return {
-          ...prev,
-          colors: newColors
-        }
-      })
-    } else if (activeContainer === 'secondRow' && overContainer === 'secondRow') {
-      setSecondRow(prev => {
-        if (prev) {
-          const activeIndex = findIdInColors(id as string, prev.colors)
-          const overIndex = findIdInColors(overId as string, prev.colors)
-  
-          const newColors = arrayMove(prev.colors, activeIndex, overIndex)
-          
-          return {
-            ...prev,
-            colors: newColors
-          }
-        }
-      })
-    }
-  }
-
-  const handleAngleChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement
-    setAngle(+target.value)
+    })
   }
 
   const updateColor = (color: PickerColor) => {
-    const isOnFirstRow = findIdInColors(color.id as string, firstRow.colors)
-    const isOnSecondRow = secondRow ? findIdInColors(color.id as string, secondRow?.colors as Color[]) : -1
-
-    if (isOnFirstRow !== -1) {
-      setFirstRow(prev => {
-        const newColors = [...prev.colors]
-        newColors[isOnFirstRow] = {
-          id: +color.id,
-          color: color.formats.hex as string
-        }
-        return {
-          colors: newColors,
-          stops: prev.stops
-        }
-      })
-    } else if (isOnSecondRow !== -1) {
-      setSecondRow(prev => {
-        if (prev) {
-          const newColors = [...prev.colors]
+    if (gradient.firstRow) {
+      const isOnFirstRow = findIdInColors(color.id as string, gradient.firstRow.colors)
+      const isOnSecondRow = gradient.secondRow ? findIdInColors(color.id as string, gradient.secondRow?.colors as Color[]) : -1
+  
+      if (isOnFirstRow !== -1) {
+        setGradient(prev => {
+          const newColors = [...prev.firstRow?.colors as Color[]]
+          newColors[isOnFirstRow] = {
+            id: +color.id,
+            color: color.formats.hex as string
+          }
+          return {
+            ...prev,
+            firstRow: {
+              colors: newColors,
+              stops: prev.firstRow?.stops as number[]
+            }
+          }
+        })
+      } else if (isOnSecondRow !== -1) {
+        setGradient(prev => {
+          const newColors = [...prev.secondRow?.colors as Color[]]
           newColors[isOnSecondRow] = {
             id: +color.id,
             color: color.formats.hex as string
           }
           return {
-            colors: newColors,
-            stops: prev.stops
-          }
-        }
-      })
-    }
-  }
-
-  const handleRemoveColor = () => {
-    if (activeId) {
-      const isOnFirstRow = findIdInColors(`${activeId.id}`, firstRow.colors)
-      const isOnSecondRow = secondRow ? findIdInColors(`${activeId.id}`, secondRow?.colors as Color[]) : -1
-
-      if (isOnFirstRow !== -1) {
-        setFirstRow(prev => {
-          const newRow = { ...prev }
-          newRow.colors.splice(isOnFirstRow, 1)
-          newRow.stops.splice(isOnFirstRow, 1)
-          return newRow
-        })
-      } else if (isOnSecondRow !== -1) {
-        setSecondRow(prev => {
-          if (prev) {
-            const newRow = { ...prev }
-            newRow.colors.splice(isOnSecondRow, 1)
-            newRow.stops.splice(isOnSecondRow, 1)
-            return newRow
+            ...prev,
+            secondRow: {
+              colors: newColors,
+              stops: prev.secondRow?.stops as number[]
+            }
           }
         })
       }
     }
+  }
 
-    setActiveId(undefined)
+  const handleRemoveColor = () => {
+    if (gradient.activeId && gradient.firstRow) {
+      const isOnFirstRow = findIdInColors(`${gradient.activeId.id}`, gradient.firstRow.colors)
+      const isOnSecondRow = gradient.secondRow ? findIdInColors(`${gradient.activeId.id}`, gradient.secondRow?.colors as Color[]) : -1
+
+      if (isOnFirstRow !== -1) {
+        setGradient(prev => {
+          const newRow = { ...prev.firstRow } as GradientColor
+          newRow.colors.splice(isOnFirstRow, 1)
+          newRow.stops.splice(isOnFirstRow, 1)
+
+          return { ...prev, firstRow: newRow }
+        })
+      } else if (isOnSecondRow !== -1) {
+        setGradient(prev => {
+          const newRow = { ...prev.secondRow } as GradientColor
+          newRow.colors.splice(isOnSecondRow, 1)
+          newRow.stops.splice(isOnSecondRow, 1)
+
+          return { ...prev, secondRow: newRow }
+        })
+      }
+    }
+
+    setGradient(prev => ({ ...prev, activeId: undefined }))
   }
 
   const handleAddColor = (row: string) => {
     if (row === 'first') {
-      setFirstRow(prev => {
-        const newRow = { ...prev }
-        newRow.colors.push({
-          id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
-          color: '#ffffff'
-        })
-        newRow.stops = getStops(100 / (newRow.colors.length - 1))
-        return newRow
-      })
-    } else if (row === 'second') {
-      setSecondRow(prev => {
-        if (prev) {
-          const newRow = { ...prev }
-          newRow.colors.push({
-            id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
-            color: '#ffffff'
-          })
-          newRow.stops = getStops(100 / (newRow.colors.length - 1))
-          return newRow
+      setGradient(prev => ({
+        ...prev,
+        firstRow: {
+          colors: [
+            ...prev.firstRow?.colors as Color[],
+            {
+              id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+              color: '#ffffff'
+            }
+          ],
+          stops: getStops(100 / (prev.firstRow?.colors.length as number))
         }
-      })
+      }))
+    } else if (row === 'second') {
+      setGradient(prev => ({
+        ...prev,
+        secondRow: {
+          colors: [
+            ...prev.secondRow?.colors as Color[],
+            {
+              id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+              color: '#ffffff'
+            }
+          ],
+          stops: getStops(100 / (prev.secondRow?.colors.length as number))
+        }
+      }))
     }
   }
 
@@ -363,251 +474,476 @@ export const Gradient = () => {
     setOpenPicker(false)
   }
 
-  const code = `
-  .my-object {
-    background: ${gradient[0]}${gradient[1]};
-    background: -o-${gradient[0]}${gradient[1]};
-    background: -moz-${gradient[0]}${gradient[1]};
-    background: -webkit-${gradient[0]}${gradient[1]};
-    ${ type === 'grid' ? 'position: relative;' : ''}
+  const setTiming = (timing: string) => {
+    setGradientStyle(prev => ({ ...prev, animationTiming: timing }))
   }
 
-  ${ type === 'grid' ?
-    `.my-object::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; bottom: 0; right: 0;
-      mask-image: linear-gradient(to bottom, transparent 50%, black);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 30%, black);
-      background: ${gridGradient[0]}${gridGradient[1]};
-      background: -o-${gridGradient[0]}${gridGradient[1]};
-      background: -moz-${gridGradient[0]}${gridGradient[1]};
-      background: -webkit-${gridGradient[0]}${gridGradient[1]};
-    }`
+  const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setGradientStyle(prev => ({ ...prev, animationDuration: +e.target.value }))
+  }
+
+  const animation = mode === 'animation'
+    ? `${gradientStyle.animationType} ${gradientStyle.animationDuration}s ${gradientStyle.animationTiming} infinite`
+    : ''
+
+  let backgroundSize = '100% 100%'
+  if (mode === 'animation') {
+    if (gradient.firstRow) {
+      let number = gradient.firstRow.colors.length
+      if (gradient.secondRow) {
+        number = gradient.firstRow.colors.length > gradient.secondRow.colors.length
+          ? gradient.firstRow.colors.length : gradient.secondRow.colors.length
+      }
+      if (gradientStyle.animationType === 'horizontal' || gradientStyle.animationType === 'vertical') {
+        backgroundSize = `${number * 100 * 2}% ${number * 100 * 2}%`
+      } else if (gradientStyle.animationType === 'spin') {
+        backgroundSize = '100% 100%'
+      }
+    }
+  }
+
+  const cssCode = `
+  ${mode === 'animation' && gradient.type === 'grid' && gradientStyle.animationType === 'spin' ?
+  `.my-object {
+    width: 300px;
+    height: 300px;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    overflow: hidden;
+  }`
+  : ''
+  }
+  .${ mode === 'animation' && gradient.type === 'grid' && gradientStyle.animationType === 'spin' ? 'gradient' : 'my-object'} {
+    width: ${mode === 'animation' && gradientStyle.animationType === 'spin' ? '155%' : '300px'};
+    height: ${mode === 'animation' && gradientStyle.animationType === 'spin' ? '155%' : '300px'};
+    background: ${gradientStyle.firstRow[0]}${gradientStyle.firstRow[1]});
+    background: -o-${gradientStyle.firstRow[0]}${gradientStyle.firstRow[1]});
+    background: -ms-${gradientStyle.firstRow[0]}${gradientStyle.firstRow[1]});
+    background: -moz-${gradientStyle.firstRow[0]}${gradientStyle.firstRow[1]});
+    background-size: ${backgroundSize};
+    ${ gradient.type === 'grid' ? 'position: relative;' : ''}
+    ${mode === 'animation' ? `animation: ${animation};` : ''}
+  }
+  ${ gradient.type === 'grid' ?
+    `.${ mode === 'animation' && gradient.type === 'grid' && gradientStyle.animationType === 'spin' ? 'gradient' : 'my-object'}::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+
+    mask-image: linear-gradient(to bottom, transparent 50%, black);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 30%, black);
+
+    background: ${gradientStyle.secondRow[0]}${gradientStyle.secondRow[1]});
+    background: -o-${gradientStyle.secondRow[0]}${gradientStyle.secondRow[1]});
+    background: -ms-${gradientStyle.secondRow[0]}${gradientStyle.secondRow[1]});
+    background: -moz-${gradientStyle.secondRow[0]}${gradientStyle.secondRow[1]});
+    background-size: ${backgroundSize};
+    ${mode === 'animation' ? `animation: ${animation};` : ''}
+  }`
+    : ''
+  }
+  ${ mode === 'animation' && gradientStyle.animationType === 'horizontal' ?
+    `@keyframes horizontal {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+  }
+  @-o-keyframes horizontal {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+  }
+  @-moz-keyframes horizontal {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+  }
+  @-webkit-keyframes horizontal {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+  }`
+    : ''
+  }
+  ${ mode === 'animation' && gradientStyle.animationType === 'vertical' ?
+    `@keyframes vertical {
+    0% { background-position: 50% 0% }
+    50% { background-position: 50% 100% }
+    100% { background-position: 50% 0% }
+  }
+  @-o-keyframes vertical {
+    0% { background-position: 50% 0% }
+    50% { background-position: 50% 100% }
+    100% { background-position: 50% 0% }
+  }
+  @-moz-keyframes vertical {
+    0% { background-position: 50% 0% }
+    50% { background-position: 50% 100% }
+    100% { background-position: 50% 0% }
+  }
+  @-webkit-keyframes vertical {
+    0% { background-position: 50% 0% }
+    50% { background-position: 50% 100% }
+    100% { background-position: 50% 0% }
+  }`
+    : ''
+  }
+  ${ mode === 'animation' && gradientStyle.animationType === 'spin' ?
+    `@keyframes spin {
+    0% { transform: rotate(0deg) }
+    50% { transform: rotate(180deg) }
+    100% { transform: rotate(360deg) }
+  }
+  @-o-keyframes spin {
+    0% { transform: rotate(0deg) }
+    50% { transform: rotate(180deg) }
+    100% { transform: rotate(360deg) }
+  }
+  @-moz-keyframes spin {
+    0% { transform: rotate(0deg) }
+    50% { transform: rotate(180deg) }
+    100% { transform: rotate(360deg) }
+  }
+  @-webkit-keyframes spin {
+    0% { transform: rotate(0deg) }
+    50% { transform: rotate(180deg) }
+    100% { transform: rotate(360deg) }
+  }`
     : ''
   }
   `
 
+  const htmlCode = `
+  <div class="my-object">
+    ${ mode === 'animation' && gradient.type === 'grid' && gradientStyle.animationType === 'spin'
+      ?
+    `<div class="gradient">
+    </div>`
+      : ''
+    }
+  </div>
+  `
   return (
     <div className='gradient'>
       <Header />
 
       <div className='generator'>
-        { openPicker && activeId &&
+        { openPicker && gradient.activeId &&
           <ColorPicker
-            id={`${activeId.id}`}
-            color={activeId.color}
+            id={`${gradient.activeId.id}`}
+            color={gradient.activeId.color}
             updateColor={updateColor}
             handleClosePicker={handleClosePicker}
           />
         }
         <section className='setup'>
-          <div className='setup__head'>
-            <ul className='types'>
-              <li>
-                <button
-                  className={`
-                    type
-                    txt-hover-primary
-                    ${type === 'horizontal'
-                      ? 'type--active'
-                      : ''
-                    }
-                  `}
-                  onClick={() => setType('horizontal')}
-                >
-                  <span className='type__icon icon-gradient-horizontal'/>
+          { mode === 'gradient' &&
+            <>
+              <div className='setup__head'>
+                <ul className='types'>
+                  <li>
+                    <button
+                      className={`
+                        type
+                        ${gradient.type === 'horizontal'
+                          ? 'type--active'
+                          : ''
+                        }
+                      `}
+                      onClick={() => setGradient(prev => ({ ...prev, type: 'horizontal' }))}
+                    >
+                      <span className='type__icon icon-gradient-horizontal'/>
 
-                  <span className='type__name'>
-                    Horizontal
-                  </span>
-                </button>
-              </li>
+                      <span className='type__name'>
+                        Horizontal
+                      </span>
+                    </button>
+                  </li>
 
-              <li>
-                <button
-                  className={`
-                    type
-                    txt-hover-primary
-                    ${type === 'vertical'
-                      ? 'type--active'
-                      : ''
-                    }
-                  `}
-                  onClick={() => setType('vertical')}
-                >
-                  <span className='type__icon icon-gradient-vertical'/>
+                  <li>
+                    <button
+                      className={`
+                        type
+                        ${gradient.type === 'vertical'
+                          ? 'type--active'
+                          : ''
+                        }
+                      `}
+                      onClick={() => setGradient(prev => ({ ...prev, type: 'vertical' }))}
+                    >
+                      <span className='type__icon icon-gradient-vertical'/>
 
-                  <span className='type__name'>
-                    Vertical
-                  </span>
-                </button>
-              </li>
+                      <span className='type__name'>
+                        Vertical
+                      </span>
+                    </button>
+                  </li>
 
-              <li>
-                <button
-                  className={`
-                    type
-                    txt-hover-primary
-                    ${type === 'grid'
-                      ? 'type--active'
-                      : ''
-                    }
-                  `}
-                  onClick={() => setType('grid')}
-                >
-                  <span className='type__icon icon-gradient-grid'/>
+                  <li>
+                    <button
+                      className={`
+                        type
+                        ${gradient.type === 'grid'
+                          ? 'type--active'
+                          : ''
+                        }
+                      `}
+                      onClick={() => setGradient(prev => ({ ...prev, type: 'grid' }))}
+                    >
+                      <span className='type__icon icon-gradient-grid'/>
 
-                  <span className='type__name'>
-                    Grid
-                  </span>
-                </button>
-              </li>
+                      <span className='type__name'>
+                        Grid
+                      </span>
+                    </button>
+                  </li>
 
-              <li>
-                <button
-                  className={`
-                    type
-                    txt-hover-primary
-                    ${type === 'circle'
-                      ? 'type--active'
-                      : ''
-                    }
-                  `}
-                  onClick={() => setType('circle')}
-                >
-                  <span className='type__icon icon-gradient-circle'/>
+                  <li>
+                    <button
+                      className={`
+                        type
+                        ${gradient.type === 'circle'
+                          ? 'type--active'
+                          : ''
+                        }
+                      `}
+                      onClick={() => setGradient(prev => ({ ...prev, type: 'circle' }))}
+                    >
+                      <span className='type__icon icon-gradient-circle'/>
 
-                  <span className='type__name'>
-                    Circle
-                  </span>
-                </button>
-              </li>
-            </ul>
+                      <span className='type__name'>
+                        Circle
+                      </span>
+                    </button>
+                  </li>
+                </ul>
 
-            <div className='angle'>
-              <AngleInput angle={angle} setAngle={setAngle} />
-              
-              <div className='angle__input'>
-                <label htmlFor='angle'>Angle</label>
-                <input
-                  className='angle__number'
-                  name='angle'
-                  type='number'
-                  value={angle}
-                  onChange={handleAngleChanged}
-                  min={0}
-                  max={360}
-                />
+                <AngleInput angle={gradient.angle} setGradient={setGradient} />
               </div>
-            </div>
-          </div>
 
-          <div className='edit'>
-            <div
-              className='row-color edit__current'
-              style={{
-                background: activeId?.color
-              }}
-            ></div>
+              <div className='edit'>
+                <div
+                  className='row-color edit__current'
+                  style={{
+                    background: gradient.activeId?.color
+                  }}
+                ></div>
 
-            <button
-              className='edit__button border-hover-secondary'
-              onClick={() => setOpenPicker(true)}
-            >
-              <span className='edit__text txt-hover-primary'>
-                Edit
-              </span>
-            </button>
+                <button
+                  className='secondary-button'
+                  onClick={() => setOpenPicker(true)}
+                >Edit</button>
 
-            <button
-              className='edit__button border-hover-secondary'
-              onClick={handleRemoveColor}
-            >
-              <span className='edit__text txt-hover-primary'>
-                Remove
-              </span>
-            </button>
-          </div>
+                <button
+                  className='secondary-button'
+                  onClick={handleRemoveColor}
+                >Remove</button>
+              </div>
 
-          <DndContext
-            collisionDetection={closestCorners}
-            onDragEnd={handleDragEnd}
-            onDragStart={handleDragStart}
-          >
-            <div className='re-order'>
-              <Container
-                items={firstRow.colors}
-                id='firstRow'
+              <DndContext
+                collisionDetection={closestCorners}
+                onDragEnd={handleDragEnd}
+                onDragStart={handleDragStart}
               >
-                <>
-                  { firstRow.colors.map(color => (
-                    <>
-                      <Color
-                        color={color}
-                      />
-                    </>
-                  ))}
-
-                  { !secondRow &&
-                    <button
-                      className='row__color row__color--add'
-                      onClick={() => handleAddColor('first')}
+                <div className='re-order'>
+                  { gradient.firstRow &&
+                    <Container
+                      items={gradient.firstRow.colors as Color[]}
+                      id='firstRow'
                     >
-                      <span className='icon-plus'/>
-                    </button>
+                      <>
+                        { gradient.firstRow.colors.map(color => (
+                          <>
+                            <Color
+                              color={color}
+                            />
+                          </>
+                        ))}
+
+                        { !gradient.secondRow &&
+                          <button
+                            className='row__color row__color--add'
+                            onClick={() => handleAddColor('first')}
+                          >
+                            <span className='icon-plus'/>
+                          </button>
+                        }
+                      </>
+                    </Container>
                   }
-                </>
-              </Container>
 
-              { secondRow &&
-                <Container
-                  items={secondRow.colors}
-                  id='secondRow'
-                >
-                  <>
-                    { secondRow.colors.map(color => (
-                      <Color
-                        color={color}
-                      />
-                    ))}
-
-                    <button
-                      className='row__color row__color--add'
-                      onClick={() => handleAddColor('second')}
+                  { gradient.secondRow &&
+                    <Container
+                      items={gradient.secondRow.colors}
+                      id='secondRow'
                     >
-                      <span className='icon-plus'/>
+                      <>
+                        { gradient.secondRow.colors.map(color => (
+                          <Color
+                            color={color}
+                          />
+                        ))}
+
+                        <button
+                          className='row__color row__color--add'
+                          onClick={() => handleAddColor('second')}
+                        >
+                          <span className='icon-plus'/>
+                        </button>
+                      </>
+                    </Container>
+                  }
+                  <DragOverlay>{gradient.activeId ? <Color color={gradient.activeId} /> : null}</DragOverlay>
+                </div>
+              </DndContext>
+            </>
+          }
+
+          { mode === 'animation' &&
+            <>
+              <div className='setup__head'>
+                <ul className='types'>
+                  <li>
+                    <button
+                      className={`
+                        type
+                        ${gradientStyle.animationType === 'horizontal'
+                          ? 'type--active'
+                          : ''
+                        }
+                      `}
+                      onClick={() => setGradientStyle(prev => ({ ...prev, animationType: 'horizontal' }))}
+                    >
+                      <span className='type__icon icon-move'/>
+
+                      <span className='type__name'>
+                        Horizontal
+                      </span>
                     </button>
-                  </>
-                </Container>
-              }
-              <DragOverlay>{activeId ? <Color color={activeId} /> : null}</DragOverlay>
-            </div>
-          </DndContext>
+                  </li>
+
+                  <li>
+                    <button
+                      className={`
+                        type
+                        ${gradientStyle.animationType === 'vertical'
+                          ? 'type--active'
+                          : ''
+                        }
+                      `}
+                      onClick={() => setGradientStyle(prev => ({ ...prev, animationType: 'vertical' }))}
+                      disabled={gradient.type === 'grid'}
+                    >
+                      <span className='type__icon icon-vertical'/>
+
+                      <span className='type__name'>
+                        Vertical
+                      </span>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      className={`
+                        type
+                        ${gradientStyle.animationType === 'spin'
+                          ? 'type--active'
+                          : ''
+                        }
+                      `}
+                      onClick={() => setGradientStyle(prev => ({ ...prev, animationType: 'spin' }))}
+                      disabled={gradient.type === 'circle'}
+                    >
+                      <span className='type__icon icon-spin'/>
+
+                      <span className='type__name'>
+                        Spin
+                      </span>
+                    </button>
+                  </li>
+                </ul>
+
+                <div className='timing'>
+                  <p className='timing__label'>Timing Function</p>
+                  <Select
+                    options={timingSelect}
+                    value={gradientStyle.animationTiming}
+                    setValue={setTiming as React.Dispatch<React.SetStateAction<string>>}
+                    configuration={{
+                      showIcon: false,
+                      showCurrentValue: true
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className='speed'>
+                {/* <label className='speed__label' htmlFor="speed">Speed</label> */}
+                <p className='speed__value'>1s</p>
+                  <input
+                    className='speed__input'
+                    type="range"
+                    min={1}
+                    max={100}
+                    value={gradientStyle.animationDuration}
+                    onChange={handleDurationChange}
+                  />
+                <p className='speed__value'>100s</p>
+              </div>
+            </>
+          }
+
+          <div className='mode'>
+            <button
+              onClick={() => setMode('gradient')}
+              className={`primary-button ${mode === 'gradient' ? 'primary-button--active' : ''}`}
+            >Gradient</button>
+
+            <button
+              onClick={() => setMode('animation')}
+              className={`primary-button ${mode === 'animation' ? 'primary-button--active' : ''}`}
+            >Animation</button>
+          </div>
         </section>
 
         <section className='gradient__view'>
           <div
-            className={`view ${type === 'grid' ? 'view--grid' : ''}`}
-            style={{
-              background: gradient[0] + gradient[1],
-              '--grid-background': gridGradient[0] + gridGradient[1],
-            } as React.CSSProperties}
+            className={`view`}
           >
+            <div
+              className={`view__canvas ${gradient.type === 'grid' ? 'view__canvas--grid' : ''}`}
+              style={{
+                width: mode === 'animation' && gradientStyle.animationType === 'spin'
+                ? '155%' : '100%',
+                height: mode === 'animation' && gradientStyle.animationType === 'spin'
+                ? '155%' : '100%',
+                backgroundSize: backgroundSize,
+                'background': gradientStyle.firstRow.length !== 0 ? gradientStyle.firstRow[0] + gradientStyle.firstRow[1] : '',
+                '--grid-background': gradientStyle.secondRow[0] + gradientStyle.secondRow[1] + ')',
+                animation: animation,
+                '--my-animation': animation,
+                '--my-backsize': backgroundSize
+              } as React.CSSProperties}
+            ></div>
           </div>
 
           <div className='slider'>
-            <CustomSlider
-              row={firstRow}
-              setRow={setFirstRow}
-              background={gradient}
-            />
+            { gradient.firstRow &&
+              <CustomRange
+                row={gradient.firstRow}
+                rowName='firstRow'
+                setGradient={setGradient}
+                background={gradientStyle.firstRow}
+              />
+            }
 
-            { secondRow && 
-              <CustomSlider
-                row={secondRow}
-                setRow={setSecondRow as React.Dispatch<React.SetStateAction<GradientColor>>}
-                background={gridGradient}
+            { gradient.secondRow && 
+              <CustomRange
+                row={gradient.secondRow}
+                rowName='secondRow'
+                setGradient={setGradient}
+                background={gradientStyle.secondRow}
               />
             }
           </div>
@@ -615,19 +951,72 @@ export const Gradient = () => {
       </div>
 
       <section className='css'>
-        <SyntaxHighlighter
-          language="css"
-          style={vs2015}
-          customStyle={{
-            height: 'fit-content',
-            background: '#1A1C23',
-            fontSize: '1.4rem',
-            padding: '10px 14px 0px',
-            borderRadius: '14px'
-          }}
-        >
-          {code}
-        </SyntaxHighlighter>
+        <div className='css__code'>
+          <button
+            className={`
+              primary-button
+              ${codeTech === 'css' ? 'primary-button--active' : ''}
+            `}
+            onClick={() => setCodeTech('css')}
+          >
+            <span>
+              CSS
+            </span>
+          </button>
+          <button
+            className={`
+              primary-button
+              ${codeTech === 'html' ? 'primary-button--active' : ''}
+            `}
+            onClick={() => setCodeTech('html')}
+          >
+            <span>
+              HTML
+            </span>
+          </button>
+        </div>
+
+        { codeTech === 'css' &&
+          <SyntaxHighlighter
+            language="css"
+            style={vs2015}
+            customStyle={{
+              width: '100%',
+              height: '250px',
+              minHeight: '250px',
+              padding: '10px 14px 0px',
+              borderRadius: '14px',
+              background: '#1A1C23',
+              fontSize: '1.4rem',
+              overflowX: 'auto',
+              overflowY: 'auto'
+            }}
+          >
+            {cssCode}
+          </SyntaxHighlighter>
+        }
+
+        { codeTech === 'html' &&
+          <SyntaxHighlighter
+            language="html"
+            style={darcula}
+            customStyle={{
+              width: '100%',
+              height: '250px',
+              minHeight: '250px',
+              padding: '10px 14px 0px',
+              borderRadius: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              background: '#1A1C23',
+              fontSize: '1.4rem',
+              overflowX: 'auto',
+              overflowY: 'auto'
+            }}
+          >
+            {htmlCode}
+          </SyntaxHighlighter>
+        }
       </section>
     </div>
   )
@@ -682,108 +1071,3 @@ const Container = ({ items, id, children }: ContainerProps) => {
     </SortableContext>
   )
 }
-
-interface CustomSliderProps {
-  row: GradientColor
-  setRow: React.Dispatch<React.SetStateAction<GradientColor>>
-  background: string[]
-}
-
-interface Positions {
-  [key: string]: number
-}
-
-const CustomSlider = ({ row, setRow, background }: CustomSliderProps) => {
-  const sliderRef = useRef<HTMLDivElement>(null)
-  const [thumbPosition, setThumbPosition] = useState<Positions>({})
-
-  useEffect(() => {
-    const slider = sliderRef.current as HTMLDivElement
-
-    const newPositions: Positions = {}
-
-    row.stops.forEach((stop, index:  keyof string[]) => {
-      const color = row.colors[index] as Color
-      newPositions[color.color as keyof Positions] = stop / (100 / slider.clientWidth) - 7
-    })
-
-    setThumbPosition(newPositions)
-
-  }, [sliderRef, row])
-
-  const handleThumbMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
-    const initialThumbX = event.clientX
-
-    const slider = sliderRef.current as HTMLDivElement
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      const offsetX = e.clientX - initialThumbX
-      const newPosition = Math.min(Math.max(0, thumbPosition[id] + offsetX), slider.clientWidth)
-
-      const currentValue = Math.round((100 / slider.clientWidth) * newPosition)
-      setThumbPosition(prev => ({
-        ...prev,
-        [id]: newPosition
-      }))
-      setRow(prev => {
-        let colorIndex = 0
-        prev.colors.forEach((color, index) => {
-          if (color.color === id) colorIndex = index
-        })
-
-        const newStops = prev.stops as number[]
-        newStops[colorIndex] = currentValue
-
-        const unorderIndex = isArrayAscending(newStops)
-        const newColors = prev.colors as Color[]
-
-        if (unorderIndex !== -1) {
-          const changeColor1 = prev.colors[unorderIndex - 1] as Color
-          const changeColor2 = prev.colors[unorderIndex] as Color
-          newColors[unorderIndex] = changeColor1
-          newColors[unorderIndex - 1] = changeColor2
-
-          const changeStop1 = prev.stops[unorderIndex - 1] as number
-          const changeStop2 = prev.stops[unorderIndex] as number
-          newStops[unorderIndex] = changeStop1
-          newStops[unorderIndex - 1] = changeStop2
-        }
-
-        return {
-          colors: newColors,
-          stops: newStops
-        }
-      })
-    }
-    
-    const handleMouseUp = () => {
-      document.removeEventListener('pointermove', handleMouseMove)
-      document.removeEventListener('pointerup', handleMouseUp)
-    }
-
-    document.addEventListener('pointermove', handleMouseMove)
-    document.addEventListener('pointerup', handleMouseUp)
-  }
-
-  return (
-    <div
-      className='custom-slider'
-      ref={sliderRef}
-      style={{ background: `linear-gradient(${90}deg` + background[1] }}
-    >
-      { sliderRef && Object.keys(thumbPosition).map(color => (
-        <div
-        key={color}
-          className='custom-slider__thumb'
-          onPointerDown={(e) => handleThumbMouseDown(e, color)}
-          style={{
-            left: `${thumbPosition[color as keyof Positions]}px`,
-            background: color
-          }}
-        ></div>
-      ))
-      }
-    </div>
-  )
-}
-

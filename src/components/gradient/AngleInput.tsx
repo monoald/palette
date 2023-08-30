@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import { useState } from "react"
+import { GradientType } from "../../pages/Gradient"
 
 import '../../styles/AngleInput.css'
 
 interface AngleInputProps {
   angle: number
-  setAngle: React.Dispatch<React.SetStateAction<number>>
+  setGradient: React.Dispatch<React.SetStateAction<GradientType>>
 }
 
-export const AngleInput = ({ angle, setAngle }: AngleInputProps) => {
+export const AngleInput = ({ angle, setGradient }: AngleInputProps) => {
   const [isClicked, setIsClicked] = useState(false)
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -32,7 +33,10 @@ export const AngleInput = ({ angle, setAngle }: AngleInputProps) => {
       degrees += 360
     }
 
-    setAngle(Math.round(degrees))
+    degrees = Math.abs(degrees - 450)
+    degrees = degrees > 360 ? Math.abs(degrees - 360) : degrees
+
+    setGradient(prev => ({ ...prev, angle: Math.round(degrees) }))
   }
 
   const handleMouseUp = () => {
@@ -59,25 +63,48 @@ export const AngleInput = ({ angle, setAngle }: AngleInputProps) => {
       if (degrees < 0) {
         degrees += 360
       }
+
+      degrees = Math.abs(degrees - 450)
+      degrees = degrees > 360 ? Math.abs(degrees - 360) : degrees
   
-      setAngle(Math.floor(degrees))
+      setGradient(prev => ({ ...prev, angle: Math.floor(degrees) }))
     }
   }
 
+  const handleAngleChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement
+    setGradient(prev => ({ ...prev, angle: +target.value }))
+  }
+
   return (
-    <div
-      className='angle-input'
-      onPointerDown={handleMouseDown}
-      onPointerUp={handleMouseUp}
-      onPointerMove={handleMouseMove}
-    >
+    <div className='angle'>
       <div
-        className='angle-input__inner'
-        style={{
-          left: 'calc(50% + 24px * cos(' + angle + 'deg) - 4px)',
-          top: 'calc(50% - 24px * sin(' + angle + 'deg) - 4px)',
-        }}
-      ></div>
+        className='angle-input'
+        onPointerDown={handleMouseDown}
+        onPointerUp={handleMouseUp}
+        onPointerMove={handleMouseMove}
+      >
+        <div
+          className='angle-input__inner'
+          style={{
+            left: 'calc(50% + 24px * cos(' + Math.abs(angle - 450) + 'deg) - 4px)',
+            top: 'calc(50% - 24px * sin(' + Math.abs(angle - 450) + 'deg) - 4px)',
+          }}
+        ></div>
+      </div>
+
+      <div className='angle__input'>
+        <label htmlFor='angle'>Angle</label>
+        <input
+          className='angle__number'
+          name='angle'
+          type='number'
+          value={angle}
+          onChange={handleAngleChanged}
+          min={0}
+          max={360}
+        />
+      </div>
     </div>
   )
 }

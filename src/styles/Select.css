@@ -53,7 +53,7 @@
   overflow-y: auto;
 }
 .box__mask {
-  box-shadow: 2px 2px 14px rgba(0,0,0,1);
+  box-shadow: 2px 2px 18px rgba(0,0,0,0.8);
 }
 .box__mask::-webkit-scrollbar-track {
   margin: 8px;
@@ -78,12 +78,12 @@
   
   border-bottom: 1px solid transparent;
   border-color: transparent;
-  background: var(--main);
+  background: #1A1C23;
   color: var(--txt-main);
   text-transform: capitalize;
 }
 .box__option:hover {
-  background: var(--gradient-primary);
+  background: #5BC3EB;
   color: var(--main);
 }
 .box__option .icon {

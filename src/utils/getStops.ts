@@ -4,7 +4,7 @@ export function getStops(step: number): number[] {
   const newStops: number[] = []
 
   while (newStop <= 100) {
-    newStops.push(newStop)
+    newStops.push(Math.round(newStop))
     newStop += step
   }
 

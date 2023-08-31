@@ -94,7 +94,7 @@ export const UserColors = () => {
                   data-id={color.id}
                   data-section='user'
                 >
-                  <span className='icon icon-heart-filled txt-primary' />
+                  <span className='icon icon-heart-filled' />
                 </button>
               </div>
             </div>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import '../../styles/ExtractorForm.css'
-import { PrimaryButton } from '../buttons/PrimaryButton'
 
 interface ExtractorFormProps {
   setUrl: React.Dispatch<React.SetStateAction<string>>
@@ -35,18 +34,12 @@ export const ExtractorForm = ({ setUrl, errorMessage }: ExtractorFormProps) => {
     event.preventDefault()
     const target = event.target as HTMLElement
     target.classList.add('image-input--dragging-over')
-
-    const text = target.firstChild as HTMLElement
-    text.classList.add('txt-secondary')
   }
 
   const handleDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     const target = event.target as HTMLElement
     target.classList.remove('image-input--dragging-over')
-
-    const text = target.firstChild as HTMLElement
-    text.classList.remove('txt-secondary')
   }
 
   return (
@@ -66,7 +59,8 @@ export const ExtractorForm = ({ setUrl, errorMessage }: ExtractorFormProps) => {
           value={urlInput}
           onChange={handleUrlChange}
         />
-        <PrimaryButton type='submit' content='Load' />
+
+        <input type='submit' value={'Load'} className='primary-button' />
       </form>
 
       <p className='Extractor-Form__error-message'>

@@ -3,10 +3,10 @@
   height: fit-content;
   z-Index: 3;
   border: none;
-  border-Radius: 8px;
+  border-Radius: 18px;
   padding: 20px;
   gap: 20px;
-  background: var(--main);
+  background: #1E2029;
   box-Shadow: 2px 2px 18px rgba(0,0,0,1);
   letter-Spacing: 0.6px;
 }

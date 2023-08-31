@@ -5,7 +5,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 10px;
+  border-radius: 18px;
   user-select: none;
 }
 .Color-Bar .color-button {
@@ -24,9 +26,11 @@
   display: flex;
 }
 .color-hex {
-  margin-top: 40px;
+  position: absolute;
+  top: 40px;
   z-index: 1;
   font-size: 1.6rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.4px;
 }

@@ -3,25 +3,21 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 22px;
 }
 .extracted-colors {
   width: 100%;
   height: fit-content;
   display: flex;
+  border: 1px solid var(--main-inactive);
+  border-radius: 8px;
+  overflow: hidden;
 }
 .extracted-colors__color {
   width: 100%;
   height: 24px;
-  border-radius: 0;
   padding: 0;
   border: none;
-}
-.extracted-colors__color:first-child {
-  border-top-left-radius: 8px;
-}
-.extracted-colors__color:last-child {
-  border-top-right-radius: 8px;
 }
 .extracted-colors__name {
   font-size: 1.4rem;
@@ -57,27 +53,23 @@
   justify-content: space-between;
 }
 .Image-Canvas .config__button {
-  /* min-width: 130px; */
   width: auto;
-  height: 40px;
-  border-radius: 8px;
-  padding: 0;
-  background: transparent;
-  font-size: 1.2rem;
-  letter-spacing: 0.8px;
-  color: var(--txt-main);
-}
-.Image-Canvas .config__button:hover {
-  background-color: var(--main-inactive);
-}
-.Image-Canvas .config__button-content {
-  width: 100%;
-  height: 100%;
-  padding-inline: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  padding: 18px;
+  border: 1px solid var(--txt-inactive);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--txt-main);
+  font-size: 1.2rem;
+  letter-spacing: 0.8px;
+}
+.Image-Canvas .config__button:hover,
+.Image-Canvas .config__button--active {
+  border-color: #5BC3EB;
+  color: #5BC3EB;
 }
 .Image-Canvas .config__button .icon {
   font-size: 2rem;

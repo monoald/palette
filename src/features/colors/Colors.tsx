@@ -65,7 +65,6 @@ export const Colors = () => {
                   <span
                     className={`
                       icon
-                      txt-primary
                       icon-heart${color.saved ? '-filled' : ''}
                     `}
                   />

@@ -48,17 +48,12 @@ export const HexadecimalPicker = ({ color, updateColor }: HexadecimalPickerProps
   return (
     <>
       <input
-        className='input'
+        className='input input--hex'
         type='text'
         value={hexColor}
         onChange={handleHexChange}
         maxLength={7}
-        style={{
-          width: '100%',
-          border: '1px solid var(--txt-inactive)',
-          fontSize: '1.6rem',
-          letterSpacing: '0.6px'
-        }}
+        style={{ width: '100%', fontSize: '1.8rem' }}
       />
 
       <ColorInput

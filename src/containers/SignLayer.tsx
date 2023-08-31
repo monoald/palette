@@ -11,7 +11,7 @@ export const SignLayer = ({ children }: SignLayerProps) => {
     <main className='SignLayer'>
       <div className='SignLayer__container'>
         <div className='SignLayer__header'>
-          <h1 className='logo txt-primary'>
+          <h1 className='logo'>
             Palette
           </h1>
         </div>

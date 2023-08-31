@@ -14,27 +14,23 @@
   grid-auto-rows: 1fr;
   gap: 20px;
 }
-.color-picker .Select {
-  border: 1px solid var(--txt-inactive);
-  border-radius: 6px;
-}
 .color-picker .Select__toggle-button {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.color-picker .close-button {
+.close-button {
   width: 34px;
   height: 34px;
   padding: 0;
   font-size: 1.8rem;
-  border-radius: 5px;
-  background: transparent;
-  border: 1px solid var(--txt-inactive);
+  border-radius: 10px;
+  background: #5BC3EB;
+  color: var(--main);
 }
 
-.color-picker .close-button__icon {
+.close-button__icon {
   height: 100%;
   width: 100%;
   display: flex;

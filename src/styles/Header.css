@@ -8,16 +8,10 @@
   align-items: center;
   justify-content: space-between;
   padding-inline: 20px;
+  background: #1E2029;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
   z-index: 2;
-}
-.Header::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 1px;
-  display: block;
-  background: var(--gradient-primary);
 }
 .Header .logo {
   font-size: 2rem;
@@ -63,11 +57,17 @@
   background: transparent;
   font-size: 2.5rem;
   padding: 0px;
-  color: var(--txt-main);
+  color: var(--main);
 }
 .nav-link {
-  text-decoration: none;
   color: var(--txt-main);
+  text-decoration: none;
+  font-weight: 600;
+}
+.nav-link--active {
+  outline: none;
+  text-decoration: none;
+  color: #5BC3EB;
 }
 .header-nav__item {
   font-size: 1.6rem;
@@ -146,6 +146,7 @@
   }
   .Header .logo {
     margin-left: 52px;
+    font-size: 2.8rem;
   }
   .header-nav {
     display: block;

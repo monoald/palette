@@ -6,15 +6,22 @@
   place-items: center;
 }
 .SignLayer__container {
-  width: 300px;
-  height: 85%;
+  width: 380px;
+  height: fit-content;
   display: grid;
   grid-template-areas: 
   "header"
   "main"
   "footer";
-  grid-template-rows: 1fr auto 1fr;
+  grid-template-rows: 70px auto 1fr;
+  gap: 40px;
+  padding: 60px 40px;
+  background: #1E2029;
+  border-radius: 18px;
   text-align: center;
+}
+.SignLayer .logo {
+  color: #5BC3EB;
 }
 .SignLayer__header {
   grid-area: header;
@@ -22,17 +29,17 @@
 .SignLayer__container .logo {
   font-size: 6rem;
 }
-.Sign__options {
-  margin-block: 46px 32px;
-}
 .Sign__subtitle {
   width: 100%; 
   text-align: center; 
-  border-bottom: 1px solid var(--txt-inactive); 
+  border-bottom: 1px solid #5BC3EB; 
   line-height: 0.1em;
-  margin: 10px 0 20px; 
+  margin: 10px 0 30px; 
   font-size: 1.4rem;
 } 
+.Sign__options {
+  margin-top: 20px;
+}
 .sign-options-container {
   display: flex;
   align-items: center;
@@ -40,7 +47,8 @@
   gap: 20px;
 }
 .Sign__subtitle span { 
-  background-color: var(--main);
+  background-color: #1E2029;
+  color: #5BC3EB;
   padding:0 10px; 
 }
 .google-sign,
@@ -52,10 +60,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 14px;
   border-radius: 50%;
   background: transparent;
   border: 1px solid var(--txt-inactive);
+}
+.google-sign:hover,
+.facebook-sign:hover,
+.github-sign:hover {
+  border-color: #5BC3EB;
 }
 .sm-icon {
   width: 100%;
@@ -95,4 +108,12 @@
 }
 .SignLayer .main {
   grid-area: main;
+}
+
+.SignLayer .primary-button {
+  width: 100%;
+  height: 33px;
+  border-radius: 10px;
+  font-size: 1.4rem;
+  font-weight: 500;
 }

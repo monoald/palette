@@ -3,7 +3,13 @@ main .Image-Color-Extractor {
   height: auto;
   display: flex;
   flex-direction: column;
-  padding: 40px;
+  gap: 10px;
+  padding: 60px 40px 40px;
+}
+.Image-Color-Extractor .close-button {
+  position: absolute;
+  top: 20px;
+  right: 40px;
 }
 #url,
 #quantity {
@@ -17,12 +23,4 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--txt-main);
   -webkit-box-shadow: 0 0 0px 40rem var(--main) inset;
   border: 1px solid var(--txt-main) !important;
-}
-#url:focus-visible,
-#quantity:focus-visible {
-  border-color: transparent;
-  border-width: 2px;
-  background:
-    linear-gradient(var(--main) 0 0) padding-box,
-    var(--gradient-secondary) border-box; 
 }

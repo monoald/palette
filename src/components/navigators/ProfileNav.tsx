@@ -6,22 +6,22 @@ export const ProfileNav = () => {
     <aside className='Profile-Nav'>
       <nav className='nav-container'>
         <ul className='nav'>
-          <li className='nav__item txt-hover-secondary'>
+          <li className='nav__item'>
             <NavLink
-              to="/user/"
+              to='/user/'
               className={({ isActive }) =>
-                isActive ? "nav__button txt-secondary" : "nav__button"
+                isActive ? 'nav__button nav__button--active' : 'nav__button'
               }
             >
               Palettes
             </NavLink>
           </li>
 
-          <li className='nav__item txt-hover-secondary'>
+          <li className='nav__item'>
           <NavLink
-              to="/user/colors"
+              to='/user/colors'
               className={({ isActive }) =>
-                isActive ? "nav__button txt-primary" : "nav__button"
+                isActive ? 'nav__button nav__button--active' : 'nav__button'
               }
             >
               Colors

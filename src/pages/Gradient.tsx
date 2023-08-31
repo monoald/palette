@@ -1,17 +1,17 @@
 import { ReactNode, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom'
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, Over, UniqueIdentifier, closestCorners, useDroppable } from '@dnd-kit/core'
 import { SortableContext, rectSortingStrategy, useSortable } from '@dnd-kit/sortable'
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { vs2015, darcula } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import SyntaxHighlighter from 'react-syntax-highlighter'
+import { vs2015, darcula } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 
 import { getStops } from '../utils/getStops'
 
 import { Header } from '../components/Header'
 import { ColorPicker, PickerColor } from '../components/picker/ColorPicker'
-import { Select } from '../components/Select';
-import { AngleInput } from '../components/gradient/AngleInput';
-import { CustomRange } from '../components/gradient/CustomRange';
+import { Select } from '../components/Select'
+import { AngleInput } from '../components/gradient/AngleInput'
+import { CustomRange } from '../components/gradient/CustomRange'
 
 import '../styles/Gradient.css'
 
@@ -879,11 +879,10 @@ export const Gradient = () => {
               </div>
 
               <div className='speed'>
-                {/* <label className='speed__label' htmlFor="speed">Speed</label> */}
                 <p className='speed__value'>1s</p>
                   <input
                     className='speed__input'
-                    type="range"
+                    type='range'
                     min={1}
                     max={100}
                     value={gradientStyle.animationDuration}
@@ -978,7 +977,7 @@ export const Gradient = () => {
 
         { codeTech === 'css' &&
           <SyntaxHighlighter
-            language="css"
+            language='css'
             style={vs2015}
             customStyle={{
               width: '100%',
@@ -986,7 +985,7 @@ export const Gradient = () => {
               minHeight: '250px',
               padding: '10px 14px 0px',
               borderRadius: '14px',
-              background: '#1A1C23',
+              background: '#1E2029',
               fontSize: '1.4rem',
               overflowX: 'auto',
               overflowY: 'auto'
@@ -998,7 +997,7 @@ export const Gradient = () => {
 
         { codeTech === 'html' &&
           <SyntaxHighlighter
-            language="html"
+            language='html'
             style={darcula}
             customStyle={{
               width: '100%',
@@ -1008,7 +1007,7 @@ export const Gradient = () => {
               borderRadius: '14px',
               display: 'flex',
               alignItems: 'center',
-              background: '#1A1C23',
+              background: '#1E2029',
               fontSize: '1.4rem',
               overflowX: 'auto',
               overflowY: 'auto'

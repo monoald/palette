@@ -123,14 +123,13 @@ export const UserPalettes = () => {
                   <span
                     className={`
                       icon
-                      txt-primary
                       icon-heart${palette.saved ? '-filled' : ''}
                     `}
                   />
                 </button>
 
                 <button
-                  className='color-button txt-hover-secondary'
+                  className='color-button'
                   onClick={() => editPaletteHandler(palette.colors as string)}
                 >
                   Edit

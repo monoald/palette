@@ -1,8 +1,7 @@
 .SideBar {
   grid-area: sidebar;
-  width: 100%;
-  height: 100%;
-  background-color: var(--main);
+  padding-left: 30px;
+  padding-bottom: 30px;
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none;
@@ -11,12 +10,15 @@
 
 .SideBar__nav {
   position: relative;
+  width: 60px;
   height: 100%  ;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 10px;
+  border-radius: 14px;
+  background: #1E2029;
   list-style: none;
 }
 
@@ -30,11 +32,9 @@
 .SideBar .option:disabled {
   color: var(--txt-inactive);
 }
+.SideBar .option:hover {
+  color: #5BC3EB;
+}
 .SideBar .option__icon {
   font-size: 2.5rem;
-}
-:is(.SideBar .option:enabled):hover .option__icon {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }

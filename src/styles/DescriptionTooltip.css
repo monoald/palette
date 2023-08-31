@@ -1,13 +1,13 @@
 #tool-tip {
-  --_p-inline: 2ch;
+  --_p-inline: 1.8ch;
   --_p-block: 1.5ch;
-  --_triangle-size: 2px;
+  --_triangle-size: 0px;
   --_shadow-alpha: 30%;
 
   opacity: 1;
   position: absolute;
   padding: var(--_p-block) var(--_p-inline);
-  border-radius: 6px;
+  border-radius: 14px;
   background-color: var(--txt-main);
   color: var(--main);
   text-align: center;
@@ -74,20 +74,10 @@
   inset-block-end: 50%;
   --_y: 50%;
 }
-#tool-tip:is([tip-position="right"], [tip-position="inline-end"])::after {
-  left: calc(var(--_p-inline) * -1);
-  border-color: transparent var(--txt-main) transparent transparent;
-}
 
 #tool-tip:is([tip-position="bottom"], [tip-position="block-end"]) {
   inset-inline-start: 0%;
   inset-block-start: calc(100% + var(--_p-block) + var(--_triangle-size));
-}
-
-#tool-tip:is([tip-position="bottom"], [tip-position="block-end"])::after {
-  left: var(--_p-inline);
-  top: calc(var(--_p-inline) * -0.5);
-  border-color: transparent transparent var(--txt-main) transparent;
 }
 
 #tool-tip:is([tip-position="left"], [tip-position="inline-start"]) {

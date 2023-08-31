@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import { ImageCanvas } from './ImageCanvas'
-import { SecondaryButton } from '../buttons/SecondaryButton'
 import { DraggableModal } from '../../containers/DraggableModal'
 import { ExtractorForm } from './ExtractorForm'
 
@@ -21,7 +20,14 @@ export const ImageColorExtractor = ({ colorsDispatch, modalsDispatch }: ImageCol
   
 
   return (
-    <DraggableModal nameClass="Image-Color-Extractor">
+    <DraggableModal nameClass='Image-Color-Extractor'>
+      <button
+        className='close-button'
+        onClick={() => modalsDispatch({ type: 'img-extractor' })}
+      >
+        <span className='close-button__icon icon-x'/>
+      </button>
+      
       { url === ''
         ?
           <ExtractorForm
@@ -36,10 +42,6 @@ export const ImageColorExtractor = ({ colorsDispatch, modalsDispatch }: ImageCol
             colorsDispatch={colorsDispatch}
           />
       }
-      <SecondaryButton
-        event={() => modalsDispatch({ type: 'img-extractor' })}
-        content='Close'
-      />
     </DraggableModal>
   )
 }

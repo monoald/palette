@@ -1,21 +1,24 @@
 .Palette-Generator {
-  position: relative;
-  display: flex;
-  height: 100vh;
   grid-area: main;
+  position: relative;
+  width: 100%;
+  display: flex;
   background-color: var(--main);
+  gap: 10px;
+  padding: 0 30px 30px 0;
 }
 .palette-layout {
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   display: grid;
-  grid-template-columns: 54px 1fr;
-  grid-template-rows: 64px 1fr;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 68px calc(100vh - 98px);
   grid-template-areas: 
   "header header"
   "sidebar main";
   overflow: hidden;
   text-align: center;
+  gap: 30px;
 }
 .palette-layout .user-select::before {
   display: none;

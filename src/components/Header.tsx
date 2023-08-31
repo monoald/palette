@@ -1,16 +1,15 @@
+import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import useTheme from '../hooks/useTheme'
+// import useTheme from '../hooks/useTheme'
 
 import { PrimaryButton } from './buttons/PrimaryButton'
 import { SecondaryButton } from './buttons/SecondaryButton'
-import { DescriptionTooltip } from './tooltips/DescriptionTooltip'
 
 import { useAppSelector } from '../app/hooks'
 import { selectUser } from '../features/auth/authSlice'
+import HeaderUserSelect from '../features/auth/HeaderUserSelect'
 
 import '../styles/Header.css'
-import HeaderUserSelect from '../features/auth/HeaderUserSelect'
-import { useState } from 'react'
 
 export const Header = () => {
   const [toggleUserOptions, setToggleOptions] = useState(false)
@@ -18,43 +17,43 @@ export const Header = () => {
   
   const navigate = useNavigate()
 
-  const { theme, toggleTheme } = useTheme()
+  // const { theme, toggleTheme } = useTheme()
 
   return (
     <header className='Header'>
-      <a href="/" className='logo txt-primary'>
+      <a href='/' className='logo'>
         Palette
       </a>
 
       <nav className='header-nav'>
         <ul className='header-nav__list'>
-          <li className='header-nav__item txt-hover-primary'>
+          <li className='header-nav__item'>
             <NavLink
               to='/palettes'
               className={({ isActive }) => 
-                isActive ? 'txt-primary' : 'nav-link'
+                isActive ? 'nav-link--active' : 'nav-link'
               }
             >
               Palettes
             </NavLink>
           </li>
 
-          <li className='header-nav__item txt-hover-primary'>
+          <li className='header-nav__item'>
             <NavLink
               to='/colors'
               className={({ isActive }) => 
-                isActive ? 'txt-primary' : 'nav-link'
+                isActive ? 'nav-link--active' : 'nav-link'
               }
             >
               Colors
             </NavLink>
           </li>
 
-          <li className='header-nav__item txt-hover-primary'>
+          <li className='header-nav__item'>
             <NavLink
               to='/'
               className={({ isActive }) => 
-                isActive ? 'txt-primary' : 'nav-link'
+                isActive ? 'nav-link--active' : 'nav-link'
               }
             >
               Palette Generator
@@ -65,16 +64,16 @@ export const Header = () => {
       
       <nav className='user-nav'>
         <ul className='user-nav__list'>
-          <li className='user-nav__item'>
+          {/* <li className='user-nav__item'>
             <button
               className='button-icon'
               onClick={toggleTheme}
               data-tooltip
             >
-              <span className={`${theme === 'light' ? 'icon-sunny' : 'icon-moon'} txt-hover-primary`} />
+              <span className={`${theme === 'light' ? 'icon-sunny' : 'icon-moon'}`} />
               <DescriptionTooltip text='Change theme' tipPosition='bottom' />
             </button>
-          </li>
+          </li> */}
 
           { user
             ? (

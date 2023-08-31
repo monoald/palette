@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { SecondaryButton } from './buttons/SecondaryButton'
 import { OptionTypes, OptionsAction, OptionsReducer } from '../reducers/options'
+
 import '../styles/OptionsBar.css'
 
 interface OptionsBarProps {
@@ -27,30 +27,32 @@ export const OptionsBar = ({ objectOptions, type, options, optionsDispatch }: Op
 
   return (
     <aside className={`OptionsBar ${fade ? 'fade-in': 'fade-out'}`}>
+      <button
+        className='close-button'
+        onClick={handleCloseBar}
+      >
+        <span className='close-button__icon icon-x'/>
+      </button>
+
       <nav className='navigation'>
         <ul className='options-container'>
           {objectOptions.map(option => (
             <li
               key={option}
               className={`
-                txt-hover-primary
-                option${options[type as keyof OptionsReducer] === option
-                  ? ' option--active  txt-primary'
+                option
+                ${options[type as keyof OptionsReducer] === option
+                  ? 'option--active'
                   : ''
                 }`
               }
               onClick={() => handleClick(option)}
             >
-              <p>{option}</p>
-              {options[type] === option &&
-                <span className='icon icon-rounded-check' />
-              }
+              {option}
             </li>
           ))}
         </ul>
       </nav>
-
-      <SecondaryButton event={handleCloseBar} content='Close' />
     </aside>
   )
 }

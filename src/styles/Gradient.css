@@ -34,12 +34,6 @@
   flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
-  /* justify-items: center; */
-  /* grid-template-columns: 1fr;
-  grid-template-rows: 40vh auto;
-  grid-template-areas:
-  "view"
-  "setup"; */
   column-gap: 40px;
   row-gap: 40px;
   margin: 0 auto;
@@ -204,18 +198,12 @@
   letter-spacing: 0.2px;
 }
 .timing .Select {
-  width: 150px;
-  height: 40px;
-  border: 1px solid var(--txt-inactive);
-  border-radius: 14px;
+  width: 140px;
+  height: 33px;
 }
 .timing .Select__toggle-button {
   height: 100%;
   align-items: center;
-}
-.timing .Select:hover,
-.timing .Select:active {
-  border-color: #5BC3EB;
 }
 
 .gradient .speed {
@@ -231,40 +219,44 @@
   -webkit-appearance: none;
   appearance: none; 
   width: 220px;
-  cursor: pointer;
+  height: 20px;
+  border-radius: 16px;
+  background: var(--main);
   outline: none;
   overflow: hidden;
-  border-radius: 16px;
+  cursor: pointer;
 }
 
 .speed__input::-webkit-slider-runnable-track {
-  height: 15px;
+  height: 100%;
   background: var(--main);
   border-radius: 16px;
 }
-
 .speed__input::-moz-range-track {
-  height: 15px;
+  height: 100%;
   background: var(--main);
   border-radius: 16px;
 }
-
 .speed__input::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none; 
-  height: 15px;
-  width: 15px;
+  height: 20px;
+  width: 20px;
   background-color: var(--txt-main);
   border-radius: 50%;
+  box-sizing: border-box;
+  border: 4px solid #5BC3EB;
   box-shadow: -407px 0 0 400px #5BC3EB;
 }
-
 .speed__input::-moz-range-thumb {
-  height: 15px;
-  width: 15px;
+  -webkit-appearance: none;
+  appearance: none; 
+  height: 20px;
+  width: 20px;
   background-color: var(--txt-main);
   border-radius: 50%;
-  border: 1px solid #5BC3EB;
+  box-sizing: border-box;
+  border: 4px solid #5BC3EB;
   box-shadow: -407px 0 0 400px #5BC3EB;
 }
 
@@ -272,7 +264,6 @@
   grid-area: view;
   width: 100%;
   max-width: 480px;
-  /* max-width: 100vw; */
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -296,16 +287,6 @@
   min-height: 300px;
   height: 100%;
   display: block;
-  /* animation: Spin 9s ease infinite; */
-
-}
-.view::before {
-  /* -webkit-animation: AnimationName 5s ease infinite;
-  @-webkit-keyframes AnimationName {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-  } */
 }
 .view__canvas--grid {
   position: relative;
@@ -360,25 +341,6 @@
   z-index: -1;
 }
 
-.gradient .Header {
-  background-color: #5BC3EB;
-  border-bottom-left-radius: 18px;
-  border-bottom-right-radius: 18px;
-}
-.gradient .Header::after {
-  content: none;
-}
-.gradient .Header .logo {
-  color: var(--main);
-  -webkit-text-fill-color: var(--main);
-}
-.gradient .Header .nav-link {
-  color: var(--main);
-  font-weight: 600;
-}
-.gradient .Header .button-icon {
-  color: var(--main);
-}
 .setup .types,
 .setup .angle,
 .setup .edit,
@@ -387,7 +349,7 @@
 .setup .speed {
   padding: 20px;
   border: none;
-  background-color: #1A1C23;
+  background-color: #1E2029;
   border-radius: 14px;
 }
 
@@ -422,7 +384,7 @@
   margin: 10px;
 }
 .css ::-webkit-scrollbar-thumb {
-  border-color: #1A1C23;
+  border-color: #1E2029;
 }
 
 @media (min-width: 820px) {
@@ -434,10 +396,6 @@
   .gradient .generator {
     width: 80%;
     height: 500px;
-    /* grid-template-columns: auto 1fr;
-    grid-template-rows: 1fr;
-    grid-template-areas:
-    "setup view"; */
     flex-direction: row;
   }
   .setup {
@@ -527,38 +485,4 @@
   0% { transform: rotate(0deg) }
   50% { transform: rotate(180deg) }
   100% { transform: rotate(360deg) }
-}
-
-
-.my-object {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, #743cc2 0%, #4464aa 33%, #dbd635 57%, #aa2277 82%);
-  background: -o-radial-gradient(circle, #743cc2 0%, #4464aa 33%, #dbd635 57%, #aa2277 82%);
-  background: -ms-radial-gradient(circle, #743cc2 0%, #4464aa 33%, #dbd635 57%, #aa2277 82%);
-  background: -moz-radial-gradient(circle, #743cc2 0%, #4464aa 33%, #dbd635 57%, #aa2277 82%);
-  background-size: 800% 800%;
-  
-  animation: horizontal 8s ease infinite;
-}
-
-@keyframes horizontal {
-  0% { background-position: 0% 50% }
-  50% { background-position: 100% 50% }
-  100% { background-position: 0% 50% }
-}
-@-o-keyframes horizontal {
-  0% { background-position: 0% 50% }
-  50% { background-position: 100% 50% }
-  100% { background-position: 0% 50% }
-}
-@-moz-keyframes horizontal {
-  0% { background-position: 0% 50% }
-  50% { background-position: 100% 50% }
-  100% { background-position: 0% 50% }
-}
-@-webkit-keyframes horizontal {
-  0% { background-position: 0% 50% }
-  50% { background-position: 100% 50% }
-  100% { background-position: 0% 50% }
 }

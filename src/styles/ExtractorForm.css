@@ -14,6 +14,14 @@
   font-weight: 300;
   letter-spacing: 0.9px;
 }
+.Extractor-Form .text-input__label {
+  font-weight: 500;
+}
+.Extractor-Form .primary-button {
+  width: 90px;
+  height: 30px;
+  border-radius: 10px;
+}
 .Extractor-Form__error-message {
   font-size: 14px;
   color: #C1292E;
@@ -23,18 +31,15 @@
   height: 200px;
   border-radius: 8px;
   padding: 20px;
-  border: 2px dashed var(--txt-main);
+  border: 2px dashed var(--txt-inactive);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--txt-main);
+  color: var(--txt-inactive);
 }
 .image-input--dragging-over {
-  border: 2px dashed var(--main);
-  background:
-    linear-gradient(var(--main) 0 0) padding-box,
-    var(--gradient-secondary) border-box; 
-  opacity: 0.7;
+  border-color: #5BC3EB;
+  color: #5BC3EB;
 }
 .image-input__placeholder {
   display: flex;

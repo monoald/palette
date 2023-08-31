@@ -94,7 +94,7 @@ export const ColorPicker = ({ id, color, updateColor, handleClosePicker }: Color
             className='close-button'
             onClick={handleClosePicker}
           >
-            <span className='close-button__icon icon-x txt-hover-primary'/>
+            <span className='close-button__icon icon-x'/>
           </button>
         </div>
 

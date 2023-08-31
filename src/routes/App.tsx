@@ -15,7 +15,6 @@ import { authApiSlice } from '../features/auth/authApiSlice'
 import RequireAuth from '../features/auth/RequireAuth'
 
 import { UserRoutes } from './UserRoutes'
-import { Test } from '../pages/Test'
 
 store.dispatch(authApiSlice.endpoints.getSaved.initiate())
 

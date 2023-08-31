@@ -1,12 +1,14 @@
 import React, { useRef } from 'react'
 import { useForm } from '../hooks/useForm'
-import { PrimaryButton } from './buttons/PrimaryButton'
-import '../styles/Form.css'
+
 import { User } from '../features/auth/authSlice'
+
+import '../styles/Form.css'
 
 interface SignFormProps {
   fields: Field[]
   submitEvent: (data: Partial<User>) => void
+  submitText: string
 }
 
 export interface Field {
@@ -16,7 +18,7 @@ export interface Field {
   required: boolean
 }
 
-export const Form = ({ fields, submitEvent }: SignFormProps) => {
+export const Form = ({ fields, submitEvent, submitText }: SignFormProps) => {
   const formRef = useRef<HTMLFormElement>(null)
   const { handleValidator, handleSubmit, errorMessage } = useForm()
 
@@ -26,7 +28,7 @@ export const Form = ({ fields, submitEvent }: SignFormProps) => {
 
       { fields.map(field => (
         <div className='Form__item' key={field.name}>
-          <label className='Form__label' htmlFor='email'>
+          <label className='Form__label' htmlFor={field.name}>
             {field.name}
           </label>
 
@@ -44,7 +46,7 @@ export const Form = ({ fields, submitEvent }: SignFormProps) => {
         <p className='error__message'>{errorMessage}</p>
       </div>
 
-      <PrimaryButton type='submit' content='Sign Up' />
+      <input className='primary-button' type='submit' value={submitText} />
     </form>
   )
 }

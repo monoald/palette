@@ -4,37 +4,20 @@
   right: 0%;
   min-width: 120px;
   margin-top: 6px;
-  background: transparent;
+  background: #1E2029;
+  border-radius: 14px;
   font-size: 1.4rem;
   letter-spacing: 0.3px;
   list-style: none;
-  z-index: 1;
-}
-.user-select::before {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 96%;
-  height: 96%;
-  display: flex;
-  align-self: center;
-  background: var(--gradient-primary);
-  z-index: -1;
-  opacity: 0.7;
-  filter: blur(6px);
-}
-.user-select__mask {
-  border-radius: 8px;
-  background-color: var(--main);
+  box-shadow: 2px 2px 18px rgba(0,0,0,0.8);
   overflow: hidden;
+  z-index: 1;
 }
 .user-select__option {
   width: 100%;
   padding: 10px 20px;
 }
 .user-select__option:hover {
+  background: #5BC3EB;
   color: var(--main);
-  -webkit-text-fill-color: var(--main);
-  background: var(--gradient-primary);
 }

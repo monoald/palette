@@ -11,34 +11,32 @@ const HeaderUserSelect = () => {
 
   return (
     <ul className='user-select'>
-      <div className='user-select__mask'>
-        <li>
-          <button
-            className='user-select__option txt-primary'
-            onClick={() => navigation('/user/')}
-          >
-            My Palettes
-          </button>
-        </li>
+      <li>
+        <button
+          className='user-select__option'
+          onClick={() => navigation('/user/')}
+        >
+          My Palettes
+        </button>
+      </li>
 
-        <li>
-          <button
-            className='user-select__option txt-primary'
-            onClick={() => navigation('/user/colors')}
-          >
-            My Colors
-          </button>
-        </li>
+      <li>
+        <button
+          className='user-select__option'
+          onClick={() => navigation('/user/colors')}
+        >
+          My Colors
+        </button>
+      </li>
 
-        <li>
-          <button
-            className='user-select__option txt-primary'
-            onClick={() => dispatch(signOut())}
-          >
-            Sign Out
-          </button>
-        </li>
-      </div>
+      <li>
+        <button
+          className='user-select__option'
+          onClick={() => dispatch(signOut())}
+        >
+          Sign Out
+        </button>
+      </li>
     </ul>
   )
 }

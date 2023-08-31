@@ -52,7 +52,6 @@ export const SignIn = () => {
 
     const key = e.data.length === 20 ? e.data : null
 
-    console.log(e);
     if (key) {
       const user = await smSignIn(key).unwrap()
 
@@ -108,41 +107,42 @@ export const SignIn = () => {
       }
 
       <div className='main'>
-        <Form fields={fields} submitEvent={submit} />
+        <Form fields={fields} submitEvent={submit} submitText='Sign In' />
 
-        <div className='Sign__footer'>
-          <div className='Sign__options'>
-            <h2 className='Sign__subtitle'>
-              <span>Or Continue with</span>
-            </h2>
 
-            <div className='sign-options-container'>
-              <button
-                className='google-sign border-hover-primary'
-                onClick={handleGoogleSignIn}
-              >
-                <span className='google-icon sm-icon' />
-              </button>
+      </div>
 
-              <button
-                className='facebook-sign border-hover-primary'
-                onClick={handleFacebookSignIn}
-              >
-                <span className='facebook-icon sm-icon' />
-              </button>
+      <div className='Sign__footer'>
+        <p>Don't have an account? <Link to='/signup'>Sign up</Link></p>
 
-              <button
-                className='github-sign border-hover-primary'
-                onClick={handleGithubSignIn}
-              >
-                <span className='github-icon sm-icon' />
-              </button>
-            </div>
+        <div className='Sign__options'>
+          <h2 className='Sign__subtitle'>
+            <span>Or Continue with</span>
+          </h2>
+
+          <div className='sign-options-container'>
+            <button
+              className='google-sign'
+              onClick={handleGoogleSignIn}
+            >
+              <span className='google-icon sm-icon' />
+            </button>
+
+            <button
+              className='facebook-sign'
+              onClick={handleFacebookSignIn}
+            >
+              <span className='facebook-icon sm-icon' />
+            </button>
+
+            <button
+              className='github-sign'
+              onClick={handleGithubSignIn}
+            >
+              <span className='github-icon sm-icon' />
+            </button>
           </div>
-
-          <p>Don't have an account? <Link to='/signup'>Sign up</Link></p>
         </div>
-
       </div>
     </SignLayer>
   )

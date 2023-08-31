@@ -133,7 +133,7 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
   return (
     <>
       { extractedColors.length === 0 &&
-        <p className='loading txt-primary'
+        <p className='loading'
         >LOADING...</p>
       }
       <div className='Image-Canvas'
@@ -141,28 +141,6 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
           display: extractedColors.length === 0 ? 'none' : 'flex'
         }}
       >
-        <div className='extracted-colors'>
-          { extractedColors.length !== 0 &&
-            extractedColors.map(color => (
-              <button
-                className='extracted-colors__color'
-                key={color}
-                style={{
-                  background: color
-                }}
-              >
-                <p
-                  className='extracted-colors__name'
-                  style={{
-                    color: getMainContrastColor(color)
-                  }}
-                >
-                  {color}
-                </p>
-              </button>
-            ))
-          }
-        </div>
 
         <div
           className='canvas'
@@ -190,42 +168,55 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
           }
         </div>
 
+        <div className='extracted-colors'>
+          { extractedColors.length !== 0 &&
+            extractedColors.map(color => (
+              <button
+                className='extracted-colors__color'
+                key={color}
+                style={{
+                  background: color
+                }}
+              >
+                <p
+                  className='extracted-colors__name'
+                  style={{
+                    color: getMainContrastColor(color)
+                  }}
+                >
+                  {color}
+                </p>
+              </button>
+            ))
+          }
+        </div>
+
         <div className='config'>
           <button
             className={`
               config__button
-              ${pickerActive ? 'border-primary' : ''}
+              ${pickerActive ? 'config__button--active' : ''}
             `}
             onClick={() => setPickerActive(!pickerActive)}
           >
-            <div className={`
-              config__button-content
-              txt-hover-primary
-              ${pickerActive ? 'txt-primary' : ''}
-            `}>
-              <span className='icon icon-eye-dropper' />
-              <p>Color Picker</p>
-            </div>
+            <span className='icon icon-eye-dropper' />
+            <p>Add Color</p>
           </button>
 
           <button
             className='config__button'
             onClick={handleAddColorsToPalette}
           >
-            <div className='config__button-content txt-hover-primary'>
-              <span className='icon icon-plus' />
-              <p>Add to palette</p>
-            </div>
+            <span className='icon icon-palette' />
+            <p>Add Palette</p>
           </button>
 
           <button
             className='config__button'
             onClick={handleQuantitySubmit}
           >
-            <div className='config__button-content txt-hover-primary'>
-              <span className='icon icon-palette' />
-              <p>Extract</p>
-            </div>
+            <span className='icon icon-spin' />
+            <p>Extract</p>
           </button>
 
           <form className='extractor-input' onSubmit={handleQuantitySubmit}>

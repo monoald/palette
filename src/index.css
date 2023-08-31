@@ -9,13 +9,11 @@ html {
   font-family: 'Noto Sans', sans-serif;
 }
 body {
-  /* min-width: 100vw; */
   min-height: 100vh;
   background-color: var(--main);
   overflow-x: hidden;
 }
 #root {
-  /* min-width: 100vw; */
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -83,27 +81,27 @@ button {
 button:disabled {
   cursor: default;
 }
+
+input[type="text"]:focus, 
+input[type="text"]:hover, 
+input[type="number"]:focus,
+input[type="number"]:hover,
+input[type="email"]:focus,
+input[type="email"]:hover,
+input[type="password"]:focus,
+input[type="password"]:hover {
+  border-color: #5BC3EB;
+}
 input[type="text"],
 input[type="number"],
 input[type="email"],
 input[type="password"] {
-  border: 1px solid var(--txt-inactive);
   background: transparent;
-  border-radius: 6px;
+  border: 1px solid var(--txt-inactive);
+  border-radius: 10px;
   outline: none;
   color: var(--txt-main);
 }
-/* input[type="text"]:focus-visible, 
-input[type="number"]:focus-visible,
-input[type="email"]:focus-visible,
-input[type="password"]:focus-visible {
-  border-color: transparent;
-  border-width: 1px;
-  border-style: solid;
-  background:
-    linear-gradient(var(--main) 0 0) padding-box,
-    var(--gradient-secondary) border-box; 
-} */
 input[type="range"] {
   border: 1px solid var(--main-inactive);
 }
@@ -114,32 +112,32 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
-input[type="text"]:focus, 
-input[type="number"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
-  border-color: #5BC3EB;
-}
+
 
 .txt-primary {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .txt-secondary {
   background: var(--gradient-secondary);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .txt-hover-primary:hover {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .txt-hover-secondary:hover {
   background: var(--gradient-secondary);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .border-primary {
@@ -176,7 +174,7 @@ input[type="password"]:focus {
 }
 
 .logo {
-  color: var(--txt-main);
+  color: #5BC3EB;
   text-decoration: none;
   font-size: 3.4rem;
   font-weight: 700;
@@ -203,6 +201,7 @@ input[type="password"]:focus {
   width: 110px;
   height: 44px;
   padding: 0;
+  border: none;
   border-radius: 14px;
   font-size: 1.3rem;
   font-weight: 500;

@@ -1,0 +1,12 @@
+.gradients-container .item__button::before,
+.user-gradients .item__button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  mask-image: linear-gradient(to bottom, transparent 50%, black);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 30%, black);
+  background: var(--tetst1);
+}

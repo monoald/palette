@@ -2,7 +2,8 @@
   position: absolute;
   top: 100%;
   right: 0%;
-  min-width: 120px;
+  min-width: 140px;
+  width: fit-content;
   margin-top: 6px;
   background: #1E2029;
   border-radius: 14px;

@@ -1,6 +1,7 @@
 import { useAppSelector } from '../app/hooks'
 import { selectUser } from '../features/auth/authSlice'
 import { useSaveColorMutation, useUnsaveColorMutation } from '../features/colors/colorsSlice'
+import { useSaveGradientMutation, useUnsaveGradientMutation } from '../features/gradient/gradientsSlice'
 import { useSavePaletteMutation, useUnsavePaletteMutation } from '../features/palettes/palettesSlice'
 
 export const useSave = (
@@ -12,6 +13,9 @@ export const useSave = (
 
   const [savePalette] = useSavePaletteMutation()
   const [unsavePalette] = useUnsavePaletteMutation()
+
+  const [saveGradient] = useSaveGradientMutation()
+  const [unsaveGradient] = useUnsaveGradientMutation()
 
   const user = useAppSelector(selectUser)
 
@@ -46,6 +50,22 @@ export const useSave = (
         } else {
           savePalette({
             colors: target.dataset.colors,
+            id: target.dataset.id,
+            isNew: options?.new || null
+          }).unwrap()
+        }
+      }
+
+      if (target.classList.contains('gradient-like')) {
+        if (target.dataset.saved === 'true') {
+          await unsaveGradient({
+            name: target.dataset.name,
+            id: target.dataset.id,
+            fromProfile: target.dataset.section === 'user'
+          }).unwrap()
+        } else {
+          saveGradient({
+            name: target.dataset.name,
             id: target.dataset.id,
             isNew: options?.new || null
           }).unwrap()

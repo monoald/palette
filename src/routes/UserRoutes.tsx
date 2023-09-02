@@ -4,6 +4,7 @@ import { UserPalettes } from '../features/auth/UserPalettes'
 import { UserColors } from '../features/auth/UserColors'
 import { resetCollectionModified, selectCollectionModified } from '../features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
+import { UserGradients } from '../features/auth/UserGradients'
 
 
 export const UserRoutes = () => {
@@ -20,6 +21,7 @@ export const UserRoutes = () => {
       <Route path='/' element={<CollectionLayout />}>
         <Route path='/' element={<UserPalettes />} />
         <Route path='/colors' element={<UserColors />} />
+        <Route path='/gradients' element={<UserGradients />} />
       </Route>
     </Routes>
   )

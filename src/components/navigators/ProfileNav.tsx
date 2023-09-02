@@ -18,13 +18,24 @@ export const ProfileNav = () => {
           </li>
 
           <li className='nav__item'>
-          <NavLink
+            <NavLink
               to='/user/colors'
               className={({ isActive }) =>
                 isActive ? 'nav__button nav__button--active' : 'nav__button'
               }
             >
               Colors
+            </NavLink>
+          </li>
+
+          <li className='nav__item'>
+            <NavLink
+              to='/user/gradients'
+              className={({ isActive }) =>
+                isActive ? 'nav__button nav__button--active' : 'nav__button'
+              }
+            >
+              Gradients
             </NavLink>
           </li>
         </ul>

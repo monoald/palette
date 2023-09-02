@@ -1,8 +1,10 @@
 import { apiSlice } from '../../app/api/apiSlice'
 import { idToPalette } from '../../utils/idToPalette'
-import { User, setSavedColors, setSavedPalettes } from './authSlice'
+import { User, setSavedColors, setSavedGradients, setSavedPalettes } from './authSlice'
 import { Color } from '../colors/colorsSlice'
 import { Palette } from '../palettes/palettesSlice'
+import { Gradient } from '../gradient/gradientsSlice'
+import { idToGradient } from '../../utils/idToGradient'
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -48,6 +50,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
             return palette
           })
         }
+
+        if (response.gradients) {
+          response.gradients.map(gradient => {
+            const newGradient = idToGradient(gradient)
+            newGradient.saved = true
+            return newGradient
+          })
+        }
         return response
       },
       onQueryStarted: async (_undefined, { dispatch, queryFulfilled }) => {
@@ -55,6 +65,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
           const { data } = await queryFulfilled
           dispatch(setSavedColors(data.colors as Partial<Color>[]))
           dispatch(setSavedPalettes(data.palettes as Partial<Palette>[]))
+          dispatch(setSavedGradients(data.gradients as Partial<Gradient>[]))
         } catch (err) {
           return
         }

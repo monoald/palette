@@ -6,7 +6,9 @@ const validMutations = [
   'saveColor',
   'unsaveColor',
   'savePalette',
-  'unsavePalette'
+  'unsavePalette',
+  'saveGradient',
+  'unsaveGradient'
 ]
 
 export const middleware: Middleware =

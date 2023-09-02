@@ -14,6 +14,7 @@ import { AngleInput } from '../components/gradient/AngleInput'
 import { CustomRange } from '../components/gradient/CustomRange'
 
 import '../styles/Gradient.css'
+import { makeGradientCalculus } from '../utils/makeGradientCalculus'
 
 
 export interface Color {
@@ -28,16 +29,6 @@ export interface GradientColor {
 interface GradientColors {
   firstRow?: GradientColor[]
   secondRow?: GradientColor[]
-}
-
-
-function makeGradient(container: GradientColor) {
-  let basicGradient = ''
-  container.colors.map((color, index) => {
-    basicGradient += `, ${color.color} ${container.stops[index]}%`
-  })
-
-  return basicGradient
 }
 
 function findIdInColors(id: string, colors: Color[]): number {
@@ -134,11 +125,11 @@ export const Gradient = () => {
     setGradientStyle(prev => {
       const newFirstRowStyle = [...prev.firstRow]
       newFirstRowStyle[0] = newGradient
-      newFirstRowStyle[1] = newFirstRow ? makeGradient(newFirstRow): ''
+      newFirstRowStyle[1] = newFirstRow ? makeGradientCalculus(newFirstRow): ''
 
       const newSecondRowStyle = [...prev.secondRow]
       if (type === 'grid') {
-        newSecondRowStyle[1] = newSecondRow ? makeGradient(newSecondRow): ''
+        newSecondRowStyle[1] = newSecondRow ? makeGradientCalculus(newSecondRow): ''
       }
 
       return {
@@ -161,7 +152,7 @@ export const Gradient = () => {
     if (gradient.firstRow) {
       setGradientStyle(prev => {
         const newGradient = [...prev.firstRow]
-        newGradient[1] = makeGradient(gradient.firstRow as GradientColor)
+        newGradient[1] = makeGradientCalculus(gradient.firstRow as GradientColor)
 
         return {
           ...prev, firstRow: newGradient
@@ -171,7 +162,7 @@ export const Gradient = () => {
       if (gradient.type === 'grid') {
         setGradientStyle(prev => {
           const newGradient = [...prev.secondRow]
-          newGradient[1] = makeGradient(gradient.secondRow as GradientColor)
+          newGradient[1] = makeGradientCalculus(gradient.secondRow as GradientColor)
   
           return {
             ...prev, secondRow: newGradient
@@ -274,14 +265,45 @@ export const Gradient = () => {
 
     setGradient(newDGradient)
 
+    const newAnimationDuration = urlParams.get('ad')
+    const newAnimationTiming = urlParams.get('ati')
+    const newAnimationType = urlParams.get('aty')
+
+    if (newAnimationDuration && newAnimationTiming && newAnimationType) {
+      
+      setGradientStyle(prev => ({
+        ...prev,
+        animationDuration: +newAnimationDuration,
+        animationTiming: newAnimationTiming,
+        animationType: newAnimationType
+      }))
+      setMode('animation')
+    }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const gradientToUrl = ({type, angle, firstRow, secondRow }: GradientType) => {
+  useEffect(() => {
+    if (mode === 'animation') {
+      gradientToUrl(gradient, gradientStyle)
+    } else {
+      gradientToUrl(gradient)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, gradientStyle.animationDuration, gradientStyle.animationTiming, gradientStyle.animationType])
+
+  const gradientToUrl = (
+    {type, angle, firstRow, secondRow }: GradientType,
+    animationStyles?: GradientStyles
+  ) => {
     let newType = ''
     let newAngle = ''
     let newRow1 = 'r1='
     let newRow2 = ''
+
+    let newAnimationDuration = ''
+    let newAnimationTiming = ''
+    let newAnimationType = ''
 
     if (
       (type === 'horizontal' && angle === 90) ||
@@ -311,7 +333,13 @@ export const Gradient = () => {
       newRow2 = newRow2.slice(0, -1)
     }
 
-    const newUrl = '/gradient/' + newType + newAngle + newRow1 + newRow2
+    if (animationStyles) {
+      newAnimationDuration = `&ad=${animationStyles.animationDuration}`
+      newAnimationTiming = `&ati=${animationStyles.animationTiming}`
+      newAnimationType = `&aty=${animationStyles.animationType}`
+    }
+
+    const newUrl = '/gradient/' + newType + newAngle + newRow1 + newRow2 + newAnimationDuration + newAnimationTiming + newAnimationType
 
     window.history.replaceState({}, '', newUrl)
   }
@@ -917,12 +945,11 @@ export const Gradient = () => {
                 ? '155%' : '100%',
                 height: mode === 'animation' && gradientStyle.animationType === 'spin'
                 ? '155%' : '100%',
-                backgroundSize: backgroundSize,
-                'background': gradientStyle.firstRow.length !== 0 ? gradientStyle.firstRow[0] + gradientStyle.firstRow[1] : '',
+                '--d-background': gradientStyle.firstRow.length !== 0 ? gradientStyle.firstRow[0] + gradientStyle.firstRow[1] : '',
                 '--grid-background': gradientStyle.secondRow[0] + gradientStyle.secondRow[1] + ')',
                 animation: animation,
                 '--my-animation': animation,
-                '--my-backsize': backgroundSize
+                '--my-backsize': backgroundSize,
               } as React.CSSProperties}
             ></div>
           </div>

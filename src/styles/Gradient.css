@@ -287,6 +287,8 @@
   min-height: 300px;
   height: 100%;
   display: block;
+  background: var(--d-background);
+  background-size: var(--my-backsize);
 }
 .view__canvas--grid {
   position: relative;

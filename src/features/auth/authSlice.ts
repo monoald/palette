@@ -3,6 +3,9 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
 import { Color } from '../colors/colorsSlice'
 import { Palette } from '../palettes/palettesSlice'
+import { Gradient } from '../gradient/gradientsSlice'
+import { idToGradient } from '../../utils/idToGradient'
+import { gradientToCss } from '../../utils/gradientToCss'
 
 export interface User {
   id: string
@@ -13,6 +16,7 @@ export interface User {
   avatar: string
   colors: Partial<Color>[]
   palettes: Partial<Palette>[]
+  gradients: Partial<Gradient>[]
 }
 
 interface LoginResponse {
@@ -57,6 +61,19 @@ const authSlice = createSlice({
         state.user.palettes = palettes
       }
     },
+    setSavedGradients: (state, action: PayloadAction<Partial<Gradient>[]>) => {
+      const gradients = action.payload
+
+      if (state.user) {
+        const newGradients = gradients.map(gradient => {
+          const newGradient = idToGradient(gradient)
+          newGradient.styles = gradientToCss(newGradient.gradient)
+          newGradient.saved = true
+          return newGradient
+        })
+        state.user.gradients = newGradients
+      }
+    },
     signOut: (state) => {
       state.user = null
       state.token = null
@@ -77,6 +94,7 @@ export const {
   setCredentials,
   setSavedColors,
   setSavedPalettes,
+  setSavedGradients,
   signOut,
   setCollectionModified,
   resetCollectionModified,
@@ -88,4 +106,5 @@ export const selectUser = (state: RootState) => state.auth.user
 export const selectToken = (state: RootState) => state.auth.token
 export const selectSavedColors = (state: RootState) => state.auth.user?.colors
 export const selectSavedPalettes = (state: RootState) => state.auth.user?.palettes
+export const selectSavedGradients = (state: RootState) => state.auth.user?.gradients
 export const selectCollectionModified = (state: RootState) => state.auth.collectionModified

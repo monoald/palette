@@ -270,10 +270,27 @@
   gap: 30px;
   padding-inline: 20px;
 }
+.save-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+.save-container .secondary-button {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  /* width: 130px; */
+  width: fit-content;
+  font-size: 1.4rem;
+}
+.save-container .icon {
+  font-size: 2rem;
+}
 .view {
   position: relative;
   width: 100%;
   max-width: 480px;
+  min-height: 380px;
   display: grid;
   align-items: center;
   justify-items: center;
@@ -308,10 +325,11 @@
 }
 .slider {
   width: 100%;
-  height: fit-content;
+  height: 44px;
   max-width: 940px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 24px;
 }
 .custom-slider {
@@ -412,8 +430,8 @@
     padding: 0px;
   }
   .view {
-    min-height: 400px;
-    height: 80%;
+    min-height: 426px;
+    /* height: 90%; */
   }
   .gradient .css {
     width: 80%;

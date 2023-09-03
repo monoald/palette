@@ -58,6 +58,7 @@ export const useSave = (
 
       if (target.classList.contains('gradient-like')) {
         if (target.dataset.saved === 'true') {
+          if (target.dataset.section === 'user') setTooltipMessage('Press "z" to undo.')
           await unsaveGradient({
             name: target.dataset.name,
             id: target.dataset.id,

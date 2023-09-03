@@ -15,6 +15,10 @@ import { CustomRange } from '../components/gradient/CustomRange'
 
 import '../styles/Gradient.css'
 import { makeGradientCalculus } from '../utils/makeGradientCalculus'
+import { useCheckSavedGradient } from '../hooks/useCheckSavedGradient'
+import { useTooltip } from '../hooks/useTooltip'
+import { useSave } from '../hooks/useSave'
+import Tooltip from '../components/tooltips/Tooltip'
 
 
 export interface Color {
@@ -82,6 +86,10 @@ export const Gradient = () => {
   const [codeTech, setCodeTech] = useState('css')
 
   const { id } = useParams()
+  const [isSaved, savedId] = useCheckSavedGradient(`${id}`)
+
+  const [tooltipMessage, setTooltipMessage] = useTooltip()
+  const likeHandler = useSave(setTooltipMessage, { new: true })
 
   // Update gradient when type changed
   useEffect(() => {
@@ -510,6 +518,24 @@ export const Gradient = () => {
     setGradientStyle(prev => ({ ...prev, animationDuration: +e.target.value }))
   }
 
+  const handleSave = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    likeHandler(e)
+
+    if (mode === 'gradient') {
+      if (isSaved) {
+        setTooltipMessage('Gradient unsaved.')
+      } else {
+        setTooltipMessage('Gradient saved.')
+      }
+    } else if (mode === 'animation') {
+      if (isSaved) {
+        setTooltipMessage('Gradient animation unsaved.')
+      } else {
+        setTooltipMessage('Gradient animation saved.')
+      }
+    }
+  }
+
   const animation = mode === 'animation'
     ? `${gradientStyle.animationType} ${gradientStyle.animationDuration}s ${gradientStyle.animationTiming} infinite`
     : ''
@@ -931,10 +957,32 @@ export const Gradient = () => {
               onClick={() => setMode('animation')}
               className={`primary-button ${mode === 'animation' ? 'primary-button--active' : ''}`}
             >Animation</button>
+
+            <button
+              // onClick={() => setMode('gradient')}
+              onClick={handleSave}
+              className={`
+                secondary-button
+                gradient-like
+                ${ isSaved ? 'secondary-button--active' : ''}
+              `}
+              style={{
+                width: '110px',
+                paddingInline: '20px',
+                height: '100%',
+                fontSize: '1.43rem',
+              }}
+              data-name={id}
+              data-saved={isSaved}
+              data-id={savedId}
+            >
+              { isSaved ? 'Unsave' : 'Save'}
+            </button>
           </div>
         </section>
 
         <section className='gradient__view'>
+
           <div
             className={`view`}
           >
@@ -1044,6 +1092,8 @@ export const Gradient = () => {
           </SyntaxHighlighter>
         }
       </section>
+
+      <Tooltip message={tooltipMessage} />
     </div>
   )
 }

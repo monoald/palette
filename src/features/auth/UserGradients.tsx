@@ -47,9 +47,6 @@ export const UserGradients = () => {
     }
   }, ['KeyZ'])
 
-  console.log(gradients);
-  
-
   const handleSave = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     const target = e.target as HTMLElement
     if (target.classList.contains('gradient-like') && gradients) {

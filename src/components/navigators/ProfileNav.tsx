@@ -38,6 +38,17 @@ export const ProfileNav = () => {
               Gradients
             </NavLink>
           </li>
+
+          <li className='nav__item'>
+            <NavLink
+              to='/user/gradient-animations'
+              className={({ isActive }) =>
+                isActive ? 'nav__button nav__button--active' : 'nav__button'
+              }
+            >
+              Gradient Animations
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </aside>

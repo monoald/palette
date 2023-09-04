@@ -1,3 +1,9 @@
+.user-gradient .item__clr-container {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
 .gradients-container .item__button::before,
 .user-gradients .item__button::before {
   content: "";
@@ -9,4 +15,9 @@
   mask-image: linear-gradient(to bottom, transparent 50%, black);
   -webkit-mask-image: linear-gradient(to bottom, transparent 30%, black);
   background: var(--tetst1);
+}
+
+.user-gradient .item__button {
+  background-size: var(--background-size) !important;
+  background: var(--background);
 }

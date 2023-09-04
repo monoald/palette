@@ -5,21 +5,22 @@ import { SortableContext, rectSortingStrategy, useSortable } from '@dnd-kit/sort
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { vs2015, darcula } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 
+import { useCheckSavedGradient } from '../hooks/useCheckSavedGradient'
+import { useTooltip } from '../hooks/useTooltip'
+import { useSave } from '../hooks/useSave'
+import { useCheckSavedGradientAnimation } from '../hooks/useCheckSavedGradientAnimation'
+
 import { getStops } from '../utils/getStops'
+import { makeGradientCalculus } from '../utils/makeGradientCalculus'
 
 import { Header } from '../components/Header'
 import { ColorPicker, PickerColor } from '../components/picker/ColorPicker'
 import { Select } from '../components/Select'
 import { AngleInput } from '../components/gradient/AngleInput'
 import { CustomRange } from '../components/gradient/CustomRange'
-
-import '../styles/Gradient.css'
-import { makeGradientCalculus } from '../utils/makeGradientCalculus'
-import { useCheckSavedGradient } from '../hooks/useCheckSavedGradient'
-import { useTooltip } from '../hooks/useTooltip'
-import { useSave } from '../hooks/useSave'
 import Tooltip from '../components/tooltips/Tooltip'
 
+import '../styles/Gradient.css'
 
 export interface Color {
   color: string
@@ -84,9 +85,11 @@ export const Gradient = () => {
   const [openPicker, setOpenPicker] = useState<boolean>(false)
   const [mode, setMode] = useState<string>('gradient')
   const [codeTech, setCodeTech] = useState('css')
-
+  
   const { id } = useParams()
-  const [isSaved, savedId] = useCheckSavedGradient(`${id}`)
+  const [name, setName] = useState(id)
+  const [isSavedGradient, savedIdGradient] = useCheckSavedGradient(name as string)
+  const [isSavedGradientAnimation, savedIdGradientAnimation] = useCheckSavedGradientAnimation(name as string)
 
   const [tooltipMessage, setTooltipMessage] = useTooltip()
   const likeHandler = useSave(setTooltipMessage, { new: true })
@@ -349,6 +352,8 @@ export const Gradient = () => {
 
     const newUrl = '/gradient/' + newType + newAngle + newRow1 + newRow2 + newAnimationDuration + newAnimationTiming + newAnimationType
 
+    setName(newType + newAngle + newRow1 + newRow2 + newAnimationDuration + newAnimationTiming + newAnimationType)
+
     window.history.replaceState({}, '', newUrl)
   }
 
@@ -522,13 +527,13 @@ export const Gradient = () => {
     likeHandler(e)
 
     if (mode === 'gradient') {
-      if (isSaved) {
+      if (isSavedGradient) {
         setTooltipMessage('Gradient unsaved.')
       } else {
         setTooltipMessage('Gradient saved.')
       }
     } else if (mode === 'animation') {
-      if (isSaved) {
+      if (isSavedGradientAnimation) {
         setTooltipMessage('Gradient animation unsaved.')
       } else {
         setTooltipMessage('Gradient animation saved.')
@@ -958,26 +963,49 @@ export const Gradient = () => {
               className={`primary-button ${mode === 'animation' ? 'primary-button--active' : ''}`}
             >Animation</button>
 
-            <button
-              // onClick={() => setMode('gradient')}
-              onClick={handleSave}
-              className={`
-                secondary-button
-                gradient-like
-                ${ isSaved ? 'secondary-button--active' : ''}
-              `}
-              style={{
-                width: '110px',
-                paddingInline: '20px',
-                height: '100%',
-                fontSize: '1.43rem',
-              }}
-              data-name={id}
-              data-saved={isSaved}
-              data-id={savedId}
-            >
-              { isSaved ? 'Unsave' : 'Save'}
-            </button>
+            { mode === 'gradient' &&
+              <button
+                onClick={handleSave}
+                className={`
+                  secondary-button
+                  gradient-like
+                  ${ isSavedGradient ? 'secondary-button--active' : ''}
+                `}
+                style={{
+                  width: '110px',
+                  paddingInline: '20px',
+                  height: '100%',
+                  fontSize: '1.43rem',
+                }}
+                data-name={name}
+                data-saved={isSavedGradient}
+                data-id={savedIdGradient}
+              >
+                { isSavedGradient ? 'Unsave' : 'Save'}
+              </button>
+            }
+
+            { mode === 'animation' &&
+              <button
+                onClick={handleSave}
+                className={`
+                  secondary-button
+                  gradient-animation-like
+                  ${ isSavedGradientAnimation ? 'secondary-button--active' : ''}
+                `}
+                style={{
+                  width: '110px',
+                  paddingInline: '20px',
+                  height: '100%',
+                  fontSize: '1.43rem',
+                }}
+                data-name={name}
+                data-saved={isSavedGradientAnimation}
+                data-id={savedIdGradientAnimation}
+              >
+                { isSavedGradientAnimation ? 'Unsave' : 'Save'}
+              </button>
+            }
           </div>
         </section>
 

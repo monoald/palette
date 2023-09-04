@@ -99,9 +99,6 @@ export const ColorBar = ({
     setTooltipMessage('Copied!')
   }
 
-  console.log(color, colors);
-  
-
   return (
     <div
       className='Color-Bar'

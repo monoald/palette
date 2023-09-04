@@ -17,15 +17,16 @@
 .nav {
   width: inherit;
   height: inherit;
-  padding: 40px;
+  padding: 40px 20px;
   list-style: none;
-  text-align: center;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 .nav__button {
-  padding: 10px 20px;
+  padding: 12px 14px;
+  display: block;
+  border-radius: 14px;
   background-color: transparent;
   color: var(--txt-main);
   font-size: 1.6rem;
@@ -35,4 +36,5 @@
 .nav__button--active,
 .nav__button:hover {
   color: #5BC3EB;
+  background: #232633;
 }

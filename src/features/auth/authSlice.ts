@@ -1,11 +1,14 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import { idToGradient } from '../../utils/idToGradient'
+import { gradientToCss } from '../../utils/gradientToCss'
+import { gradientToAnimation } from '../../utils/gradientToAnimation'
+
 import { RootState } from '../../app/store'
 import { Color } from '../colors/colorsSlice'
 import { Palette } from '../palettes/palettesSlice'
 import { Gradient } from '../gradient/gradientsSlice'
-import { idToGradient } from '../../utils/idToGradient'
-import { gradientToCss } from '../../utils/gradientToCss'
+import { AnimationInfo, GradientAnimation } from '../gradientAnimations/gradientAnimationsSlice'
 
 export interface User {
   id: string
@@ -17,6 +20,7 @@ export interface User {
   colors: Partial<Color>[]
   palettes: Partial<Palette>[]
   gradients: Partial<Gradient>[]
+  'gradient-animations': Partial<GradientAnimation>[]
 }
 
 interface LoginResponse {
@@ -74,6 +78,20 @@ const authSlice = createSlice({
         state.user.gradients = newGradients
       }
     },
+    setSavedGradientAnimations: (state, action: PayloadAction<Partial<GradientAnimation>[]>) => {
+      const gradientAnimations = action.payload
+
+      if (state.user) {
+        const newGradientAnimations = gradientAnimations.map(gradient => {
+          const newGradientAnimation = idToGradient(gradient) as GradientAnimation
+          newGradientAnimation.styles = gradientToCss(newGradientAnimation.gradient)
+          newGradientAnimation.animation = gradientToAnimation(newGradientAnimation.gradient.animation as AnimationInfo)
+          newGradientAnimation.saved = true
+          return newGradientAnimation
+        })
+        state.user['gradient-animations'] = newGradientAnimations
+      }
+    },
     signOut: (state) => {
       state.user = null
       state.token = null
@@ -95,6 +113,7 @@ export const {
   setSavedColors,
   setSavedPalettes,
   setSavedGradients,
+  setSavedGradientAnimations,
   signOut,
   setCollectionModified,
   resetCollectionModified,
@@ -107,4 +126,5 @@ export const selectToken = (state: RootState) => state.auth.token
 export const selectSavedColors = (state: RootState) => state.auth.user?.colors
 export const selectSavedPalettes = (state: RootState) => state.auth.user?.palettes
 export const selectSavedGradients = (state: RootState) => state.auth.user?.gradients
+export const selectSavedGradientAnimations = (state: RootState) => state.auth.user?.['gradient-animations']
 export const selectCollectionModified = (state: RootState) => state.auth.collectionModified

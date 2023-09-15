@@ -16,6 +16,7 @@ import RequireAuth from '../features/auth/RequireAuth'
 
 import { UserRoutes } from './UserRoutes'
 import { Gradients } from '../features/gradient/Gradients'
+import { CreateIconsCollection } from '../pages/CreateIconsCollection'
 
 store.dispatch(authApiSlice.endpoints.getSaved.initiate())
 
@@ -45,6 +46,8 @@ export const App = () => {
           <Route path='/gradient/:id' element={<Gradient />} />
 
           <Route path='/loader' element={<Loader />} />
+
+          <Route path='/create-icons-collection' element={<CreateIconsCollection />} />
         </Routes>
       </BrowserRouter>
     </Provider>

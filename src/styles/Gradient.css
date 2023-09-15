@@ -38,7 +38,7 @@
   row-gap: 40px;
   margin: 0 auto;
 }
-.setup {
+.gradient .setup {
   grid-area: setup;
   width: fit-content;
   max-width: 100vw;
@@ -51,7 +51,7 @@
   padding-inline: 20px;
 }
 
-.setup .mode {
+.gradient .setup .mode {
   width: 100%;
   height: fit-content;
   display: flex;
@@ -59,12 +59,12 @@
   gap: 30px;
 }
 
-.setup__head {
+.gradient .setup__head {
   display: flex;
   gap: 30px;
 }
 
-.setup .types {
+.gradient .setup .types {
   width: 190px;
   display: flex;
   flex-wrap: wrap;
@@ -125,7 +125,7 @@
   text-align: center;
 }
 
-.setup .edit {
+.gradient .setup .edit {
   width: 100%;
   height: fit-content;
   display: flex;
@@ -149,7 +149,7 @@
   align-items: center;
 }
 
-.setup .re-order {
+.gradient .setup .re-order {
   width: 100%;
   height: 136px;
   display: flex;
@@ -161,7 +161,7 @@
   border: 1px solid var(--txt-inactive);
   border-radius: 8px
 }
-.setup .row {
+.gradient .setup .row {
   width: auto;
   height: fit-content;
   display: flex;
@@ -361,12 +361,12 @@
   z-index: -1;
 }
 
-.setup .types,
-.setup .angle,
-.setup .edit,
-.setup .re-order,
-.setup .timing,
-.setup .speed {
+.gradient .setup .types,
+.gradient .setup .angle,
+.gradient .setup .edit,
+.gradient .setup .re-order,
+.gradient .setup .timing,
+.gradient .setup .speed {
   padding: 20px;
   border: none;
   background-color: #1E2029;
@@ -418,7 +418,7 @@
     height: 500px;
     flex-direction: row;
   }
-  .setup {
+  .gradient .setup {
     padding: 0px;
   }
   .angle {

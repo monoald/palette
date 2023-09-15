@@ -2,10 +2,11 @@
   --_p-inline: 1.8ch;
   --_p-block: 1.5ch;
   --_triangle-size: 0px;
-  --_shadow-alpha: 30%;
+  --_shadow-alpha: 50%;
 
   opacity: 1;
   position: absolute;
+  display: flex;
   padding: var(--_p-block) var(--_p-inline);
   border-radius: 14px;
   background-color: var(--txt-main);
@@ -76,7 +77,7 @@
 }
 
 #tool-tip:is([tip-position="bottom"], [tip-position="block-end"]) {
-  inset-inline-start: 0%;
+  /* inset-inline-start: 0%; */
   inset-block-start: calc(100% + var(--_p-block) + var(--_triangle-size));
 }
 

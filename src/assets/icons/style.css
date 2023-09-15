@@ -129,3 +129,15 @@
 .icon-spin:before {
   content: "\e922";
 }
+.icon-arrow-up:before {
+  content: "\e923";
+}
+.icon-upload:before {
+  content: "\e924";
+}
+.icon-download:before {
+  content: "\e925";
+}
+.icon-reset:before {
+  content: "\e926";
+}

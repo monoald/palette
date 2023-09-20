@@ -18,10 +18,12 @@
 }
 .Contrast-Calculator .color-button {
   width: 50%;
-  height: 33px;
   border-radius: 0;
   font-size: 1.65rem;
   text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .Contrast-Calculator .color-button--primary {
   border-top-left-radius: 12px;
@@ -36,6 +38,7 @@
   height: 100%;
   background: transparent;
   border: none;
+  padding: 0;
 }
 .secondary-add {
   position: absolute;

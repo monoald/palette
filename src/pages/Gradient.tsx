@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, Over, UniqueIdentifier, closestCorners, useDroppable } from '@dnd-kit/core'
 import { SortableContext, rectSortingStrategy, useSortable } from '@dnd-kit/sortable'
 import SyntaxHighlighter from 'react-syntax-highlighter'
@@ -96,7 +96,6 @@ export const Gradient = () => {
   
   const { id } = useParams()
   const [name, setName] = useState(id)
-  const navigate = useNavigate()
   const [isSavedGradient, savedIdGradient] = useCheckSavedGradient(name as string)
   const [isSavedGradientAnimation, savedIdGradientAnimation] = useCheckSavedGradientAnimation(name as string)
 

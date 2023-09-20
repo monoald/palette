@@ -9,27 +9,27 @@ interface HsbPickerProps {
 }
 
 export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
-  const hsb = color?.formats.hsv as Hsv
-  const hex = colorFormatConverter(hsb, { currentFormat: 'hsv', targetFormat: ['hex']}).hex as string
+  const hsv = color?.formats.hsv as Hsv
+  const hex = colorFormatConverter(hsv, { currentFormat: 'hsv', targetFormat: ['hex']}).hex as string
 
   const saturationBackground: BackgroundColor = {
     start: colorFormatConverter(
-      { h: hsb.h, s: 0, v: hsb.v },
+      { h: hsv.h, s: 0, v: hsv.v },
       { currentFormat: 'hsv', targetFormat: ['hex'] }
     ).hex as string,
     end: colorFormatConverter(
-      { h: hsb.h, s: 100, v: hsb.v },
+      { h: hsv.h, s: 100, v: hsv.v },
       { currentFormat: 'hsv', targetFormat: ['hex'] }
     ).hex as string
   }
 
   const brightnessBackground: BackgroundColor = {
     start: colorFormatConverter(
-      { h: hsb.h, s: hsb.s, v: 0 },
+      { h: hsv.h, s: hsv.s, v: 0 },
       { currentFormat: 'hsv', targetFormat: ['hex'] }
     ).hex as string,
     end: colorFormatConverter(
-      { h: hsb.h, s: hsb.s, v: 100 },
+      { h: hsv.h, s: hsv.s, v: 100 },
       { currentFormat: 'hsv', targetFormat: ['hex'] }
     ).hex as string
   }
@@ -39,9 +39,9 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
       const target = event.target as HTMLInputElement
       const identifier = target.name || target.id
 
-      const hueValue = identifier === 'hue' ? +target.value : hsb.h
-      const saturationValue = identifier === 'saturation' ? +target.value : hsb.s
-      const brightnessValue = identifier === 'brightness' ? +target.value : hsb.v
+      const hueValue = identifier === 'hue' ? +target.value : hsv.h
+      const saturationValue = identifier === 'saturation' ? +target.value : hsv.s
+      const brightnessValue = identifier === 'brightness' ? +target.value : hsv.v
 
       updateColor({ h: hueValue, s: saturationValue, v: brightnessValue }, 'hsv')
     }
@@ -58,7 +58,7 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
             type='number'
             min={0}
             max={100}
-            value={hsb.h}
+            value={hsv.h}
             onChange={handleHsbChange}
           />
         </label>
@@ -71,7 +71,7 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
             type='number'
             min={0}
             max={100}
-            value={hsb.s}
+            value={hsv.s}
             onChange={handleHsbChange}
           />
         </label>
@@ -84,7 +84,7 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
             type='number'
             min={0}
             max={100}
-            value={hsb.v}
+            value={hsv.v}
             onChange={handleHsbChange}
           />
         </label>
@@ -95,7 +95,7 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
           id='hue'
           min={0}
           max={360}
-          value={hsb.h as number}
+          value={hsv.h as number}
           onChange={handleHsbChange}
           isHue
         />
@@ -103,7 +103,7 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
           id='saturation'
           min={0}
           max={100}
-          value={hsb.s}
+          value={hsv.s}
           onChange={handleHsbChange}
           thumbColor={hex}
           backgroundColor={`${saturationBackground.start}, ${saturationBackground.end}`}
@@ -112,7 +112,7 @@ export const HsbPicker = ({ color, updateColor }: HsbPickerProps) => {
           id='brightness'
           min={0}
           max={100}
-          value={hsb.v}
+          value={hsv.v}
           onChange={handleHsbChange}
           thumbColor={hex}
           backgroundColor={`${brightnessBackground.start}, ${brightnessBackground.end}`}

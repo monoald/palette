@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { AnyFormat, BaseColor, ColorFormats, Rgb, colorFormatConverter, rgbToHsv } from 'colors-kit'
+import { AnyFormat, BaseColor, Rgb, colorFormatConverter, rgbToHsv } from 'colors-kit'
 
 import { drawColorCanvas } from '../../utils/drawColorCanvas'
 import { findColorCoordinates } from '../../utils/findColorCoordinates'
@@ -16,18 +16,20 @@ import { XyzPicker } from './pickers/XyzPicker'
 
 import '../../styles/NewPicker.css'
 import '../../styles/Canvas.css'
+import { Formats } from '../../pages/PaletteGenerator'
 
 
 interface ColorPickerProps {
   id: string
   color: string
-  updateColor: (color: PickerColor) => void
+  updateColor: (color: PickerColor, type?: string) => void
   handleClosePicker: () => void
+  type?: string
 }
 
 export interface PickerColor {
   id: string
-  formats: ColorFormats
+  formats: Formats
 }
 
 interface Coordinates {
@@ -46,22 +48,27 @@ const formatSelectData = {
   'XYZ': null,
 }
 
-export const ColorPicker = ({ id, color, updateColor, handleClosePicker }: ColorPickerProps) => {
+export const ColorPicker = ({ id, color, updateColor, handleClosePicker, type }: ColorPickerProps) => {
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null)
   const [pickerFormat, setPickerFormat] = useState('Hexadecimal')
+  const [firstRender, setFirstRender] = useState(true)
   
   const [pickerColor, setPickerColor] = useState<PickerColor>({
     id,
     formats: colorFormatConverter(color, {
       identifyFormat: true,
       allFormats: true,
-    })
+    }) as Formats
   })
 
   const colorCanvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    updateColor(pickerColor)
+    if (firstRender) {
+      setFirstRender(false)
+    } else {
+      updateColor(pickerColor, type)
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pickerColor])
 
@@ -69,7 +76,7 @@ export const ColorPicker = ({ id, color, updateColor, handleClosePicker }: Color
     const formats = colorFormatConverter(color as BaseColor, {
       currentFormat: format,
       allFormats: true,
-    })
+    }) as Formats
 
     setPickerColor({
       id,

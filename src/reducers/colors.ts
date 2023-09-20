@@ -17,7 +17,7 @@ export const colorInitialState: Color = {
   id: 0,
   formats: {
     cmyk: { c: 0, m: 0, y: 0, k: 0 },
-    hsb: { h: 0, s: 0, v: 0 },
+    hsv: { h: 0, s: 0, v: 0 },
     hsl: { h: 0, s: 0, l: 0 },
     lab: { l: 0, a: 0, b: 0 },
     rgb: { r: 0, g: 0, b: 0 },
@@ -67,7 +67,9 @@ export type ColorsTypes =
   'remove-color' | 
   'replace-colors' |
   'back-palette' | 
-  'forward-palette'
+  'forward-palette' |
+  'replace-primary' |
+  'replace-secondary'
 
 export type ColorsAction = { type: ColorsTypes, payload?: ColorsPayload }
 
@@ -135,6 +137,13 @@ export function colorsReducer(state: ColorsReducer, action: ColorsAction) {
     case 'remove-color':
       newColors = removeColor(state.colors, id, history)
       return { ...state, colors: newColors }
+    case 'replace-primary':
+      const index = state.colors.findIndex(clr => clr.id === colorObject.id)
+      newColors = [...state.colors]
+      newColors.splice(index, 1, colorObject)
+      return { ...state, colors: newColors }
+    case 'replace-secondary':
+      return { ...state, secondary: { ...colorObject, id: state.primary.id || colorObject.id } }
     case 'replace-colors':
       const paletteId = paletteToId(colors)
       window.history.replaceState({}, '', `/${paletteId}`)

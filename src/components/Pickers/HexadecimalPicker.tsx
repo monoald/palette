@@ -26,9 +26,9 @@ export const HexadecimalPicker = ({ color, updateColor }: HexadecimalPickerProps
       
       updateColor({
         h: hueValue,
-        s: color?.formats.hsb.s as number,
-        v: color?.formats.hsb.v as number
-      }, 'hsb', false)
+        s: color?.formats.hsv.s as number,
+        v: color?.formats.hsv.v as number
+      }, 'hsv', false)
     }
   }
 
@@ -55,7 +55,7 @@ export const HexadecimalPicker = ({ color, updateColor }: HexadecimalPickerProps
         id='hue'
         min={0}
         max={360}
-        value={color?.formats.hsb.h as number}
+        value={color?.formats.hsv.h as number}
         onChange={handleHueChange}
         isHue
       />

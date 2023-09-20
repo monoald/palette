@@ -9,6 +9,40 @@
   overflow-x: hidden;
   overflow-y: auto;
 }
+.loader-modal {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.loader-modal .loader {
+  width: 300px;
+  height: 300px;
+  display: block;
+  border-radius: 18px;
+  background: #1E2029;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 200px;
+  box-shadow: 2px 2px 15px 6px rgba(8,8,10, 1);
+}
+.loader-modal .loader--icon {
+  background-image: url('../assets/icons/loader.svg');
+}
+.loader-modal .loader--text {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  font-size: 2.4rem;
+}
+.loader-modal .loader--text .icon-rounded-check {
+  color: #5BC3EB;
+}
 .create-icons-collection .main {
   padding-inline: 80px;
   display: flex;
@@ -63,6 +97,9 @@
   border: none;
   overflow-y: visible;
 }
+.create-icons-collection .secondary-button .icon-heart-filled {
+  color: #5BC3EB;
+}
 input[type=file] {
   position: absolute;
   top: 0; bottom: 0;
@@ -91,6 +128,7 @@ input[type=file]::file-selector-button {
 .create-icons-collection .error-message{ 
   color:gold;
   font-size: 1.4rem;
+  text-align: center;
   letter-spacing: 0.3px;
 }
 .selected-icons .color-collection {
@@ -122,12 +160,12 @@ input[type=file]::file-selector-button {
   gap: 40px;
 }
 .create-icons-collection .icon__svg{
-  width: 38px;
-  height: 38px;
-  transform: scale(1.6);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.create-icons-collection .palette-icons .icon__svg {
+  transform: scale(1.6);
 }
 .create-icons-collection .icon {
   position: relative;
@@ -137,7 +175,7 @@ input[type=file]::file-selector-button {
   flex-direction: column;
   align-items: center;
   gap: 18px;
-  padding: 18px;
+  padding: 22px 18px;
   border-radius: 18px;
   background: #1E2029;
   pointer-events: all;

@@ -42,7 +42,7 @@
 .OptionsBar .option--active,
 .OptionsBar .option:hover {
   color: #5BC3EB;
-  background: #232633;
+  background: rgba(255,255,255, 0.1);
 }
 
 .OptionsBar .option .icon {

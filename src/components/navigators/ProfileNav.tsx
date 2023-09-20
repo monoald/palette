@@ -49,6 +49,17 @@ export const ProfileNav = () => {
               Gradient Animations
             </NavLink>
           </li>
+
+          <li className='nav__item'>
+            <NavLink
+              to='/user/icon-fonts'
+              className={({ isActive }) =>
+                isActive ? 'nav__button nav__button--active' : 'nav__button'
+              }
+            >
+              Icon Fonts
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </aside>

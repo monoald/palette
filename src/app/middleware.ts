@@ -10,7 +10,9 @@ const validMutations = [
   'saveGradient',
   'unsaveGradient',
   'saveGradientAnimation',
-  'unsaveGradientAnimation'
+  'unsaveGradientAnimation',
+  'createIcon',
+  'deleteIcon'
 ]
 
 export const middleware: Middleware =

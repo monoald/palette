@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 // import useTheme from '../hooks/useTheme'
 
@@ -12,7 +11,6 @@ import HeaderUserSelect from '../features/auth/HeaderUserSelect'
 import '../styles/Header.css'
 
 export const Header = () => {
-  const [toggleUserOptions, setToggleOptions] = useState(false)
   const user = useAppSelector(selectUser)
   
   const navigate = useNavigate()
@@ -59,28 +57,38 @@ export const Header = () => {
               Palette Generator
             </NavLink>
           </li>
+
+          <li className='header-nav__item'>
+            <NavLink
+              to='/gradients'
+              className={({ isActive }) => 
+                isActive ? 'nav-link--active' : 'nav-link'
+              }
+            >
+              Gradients
+            </NavLink>
+          </li>
+
+          <li className='header-nav__item'>
+            <NavLink
+              to='/create-icons-collection'
+              className={({ isActive }) => 
+                isActive ? 'nav-link--active' : 'nav-link'
+              }
+            >
+              Icon Font
+            </NavLink>
+          </li>
         </ul>
       </nav>
       
       <nav className='user-nav'>
         <ul className='user-nav__list'>
-          {/* <li className='user-nav__item'>
-            <button
-              className='button-icon'
-              onClick={toggleTheme}
-              data-tooltip
-            >
-              <span className={`${theme === 'light' ? 'icon-sunny' : 'icon-moon'}`} />
-              <DescriptionTooltip text='Change theme' tipPosition='bottom' />
-            </button>
-          </li> */}
-
           { user
             ? (
               <li className='user-nav__item'>
                 <button
                   className='user-nav__avatar'
-                  onClick={() => setToggleOptions(!toggleUserOptions)}
                 >
                   <span
                     className={
@@ -96,7 +104,7 @@ export const Header = () => {
                   />
                 </button>
 
-                { toggleUserOptions &&  <HeaderUserSelect />}
+                <HeaderUserSelect />
               </li>
             )
             : (

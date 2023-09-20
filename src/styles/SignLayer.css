@@ -92,7 +92,7 @@
   grid-area: main;
   display: grid;
   align-items: center;
-  background-color: var(--main);
+  background-color: #1E2029;
   z-index: 1;
 }
 .SignLayer .loader {

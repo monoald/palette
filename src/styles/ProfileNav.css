@@ -36,5 +36,5 @@
 .nav__button--active,
 .nav__button:hover {
   color: #5BC3EB;
-  background: #232633;
+  background: rgba(255,255,255, 0.1);
 }

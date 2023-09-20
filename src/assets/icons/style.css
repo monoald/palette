@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'icomoon';
+  font-family: "icomoon";
   src:
     url('icomoon.woff?qcwbmx') format('woff');
   font-weight: normal;
@@ -10,14 +10,11 @@
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
-  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
   line-height: 1;
-
-  /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -69,7 +66,6 @@
 }
 .icon-rounded-check:before {
   content: "\e90c";
-  color: #45cb85;
 }
 .icon-rounded-x:before {
   content: "\e90d";
@@ -140,4 +136,7 @@
 }
 .icon-reset:before {
   content: "\e926";
+}
+.icon-update:before {
+  content: "\e927";
 }

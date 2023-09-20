@@ -41,6 +41,15 @@ const HeaderUserSelect = () => {
       <li>
         <button
           className='user-select__option'
+          onClick={() => navigation('/user/gradients')}
+        >
+          My Icon Fonts
+        </button>
+      </li>
+
+      <li>
+        <button
+          className='user-select__option'
           onClick={() => dispatch(signOut())}
         >
           Sign Out

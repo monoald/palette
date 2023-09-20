@@ -7,7 +7,7 @@
   display: grid;
   align-items: center;
   place-self: center;
-  background-color: var(--main);
+  background-color: #1E2029;
   z-index: 2;
 }
 .loader-page .loader {

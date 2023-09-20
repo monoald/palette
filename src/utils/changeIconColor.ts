@@ -1,15 +1,17 @@
 const parser = new DOMParser()
 
 function setAttributes(paths:  HTMLCollectionOf<SVGPathElement | SVGClipPathElement | SVGSVGElement>, color: string) {
+  const colorSvg = color === '#' ? '#ffffff' : color
+
   for (let i = 0; i < paths.length; i++) {
     const attributes = paths[i].attributes
 
     if (attributes.fill && attributes.fill.value !== 'none') {
-      attributes.fill.value = color
+      attributes.fill.value = colorSvg
     }
 
     if (attributes.stroke && attributes.stroke.value !== 'none') {
-      attributes.stroke.value = color
+      attributes.stroke.value = colorSvg
     }
   }
 }

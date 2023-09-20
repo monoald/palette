@@ -1,0 +1,26 @@
+.user-icons .items__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+}
+.user-icons .item {
+  width: fit-content;
+  padding: 0%;
+  border: 2px solid #1E2029;
+  border-radius: 18px;
+  background: transparent;
+  overflow: hidden;
+}
+.user-icons .item__thumbnail {
+  width: 220px;
+  height: 132px;
+}
+.user-icons .item__footer {
+  padding: 18px;
+  background: #1E2029;
+  color: var(--txt-main);
+  font-size: 1.4rem;
+  text-align: center;
+}

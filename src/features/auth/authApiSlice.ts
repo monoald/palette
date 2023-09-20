@@ -4,11 +4,12 @@ import { gradientToCss } from '../../utils/gradientToCss'
 import { gradientToAnimation } from '../../utils/gradientToAnimation'
 
 import { apiSlice } from '../../app/api/apiSlice'
-import { User, setSavedColors, setSavedGradientAnimations, setSavedGradients, setSavedPalettes } from './authSlice'
+import { User, setSavedColors, setSavedGradientAnimations, setSavedGradients, setSavedIcons, setSavedPalettes } from './authSlice'
 import { Color } from '../colors/colorsSlice'
 import { Palette } from '../palettes/palettesSlice'
 import { Gradient } from '../gradient/gradientsSlice'
 import { AnimationInfo, GradientAnimation } from '../gradientAnimations/gradientAnimationsSlice'
+import { IconCollection } from '../icons/iconsSlice'
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -83,6 +84,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
           dispatch(setSavedPalettes(data.palettes as Partial<Palette>[]))
           dispatch(setSavedGradients(data.gradients as Partial<Gradient>[]))
           dispatch(setSavedGradientAnimations(data['gradient-animations'] as Partial<GradientAnimation>[]))
+          dispatch(setSavedIcons(data.icons as Partial<IconCollection>[]))
         } catch (err) {
           return
         }

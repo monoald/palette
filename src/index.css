@@ -80,6 +80,7 @@ button {
 }
 button:disabled {
   cursor: default;
+  color: var(--txt-inactive)
 }
 
 input[type="text"]:focus, 
@@ -191,8 +192,8 @@ input[type="number"] {
   background: transparent;
   border-radius: 10px;
 }
-.secondary-button--active,
-.secondary-button:hover {
+.secondary-button--active:enabled,
+.secondary-button:hover:enabled {
   color: #5BC3EB;
   border-color: #5BC3EB;
 }

@@ -9,6 +9,7 @@ import { Color } from '../colors/colorsSlice'
 import { Palette } from '../palettes/palettesSlice'
 import { Gradient } from '../gradient/gradientsSlice'
 import { AnimationInfo, GradientAnimation } from '../gradientAnimations/gradientAnimationsSlice'
+import { IconCollection } from '../icons/iconsSlice'
 
 export interface User {
   id: string
@@ -20,6 +21,7 @@ export interface User {
   colors: Partial<Color>[]
   palettes: Partial<Palette>[]
   gradients: Partial<Gradient>[]
+  icons: Partial<IconCollection>[]
   'gradient-animations': Partial<GradientAnimation>[]
 }
 
@@ -92,6 +94,42 @@ const authSlice = createSlice({
         state.user['gradient-animations'] = newGradientAnimations
       }
     },
+    setSavedIcons: (state, action: PayloadAction<Partial<IconCollection>[]>) => {
+      const icons = action.payload
+
+      if(state.user) {
+        state.user.icons = icons
+      }
+    },
+    addSavedIcon: (state, action: PayloadAction<Partial<IconCollection>>) => {
+      const icon = action.payload
+
+      if(state.user) {
+        state.user.icons?.push(icon)
+      }
+    },
+    removeSavedIcon: (state, action: PayloadAction<string>) => {
+      const id = action.payload
+
+      if(state.user) {
+        const index = state.user.icons?.findIndex(icon => icon.id === id) as number
+
+        if (index !== -1) {
+          state.user.icons?.splice(index, 1)
+        }
+      }
+    },
+    updateSavedIcon: (state, action: PayloadAction<{ id: string, newIcon: IconCollection}>) => {
+      const { id, newIcon } = action.payload
+
+      if(state.user) {
+        const index = state.user.icons?.findIndex(icon => icon.id === id) as number
+
+        if (index !== -1) {
+          state.user.icons?.splice(index, 1, newIcon)
+        }
+      }
+    },
     signOut: (state) => {
       state.user = null
       state.token = null
@@ -114,6 +152,10 @@ export const {
   setSavedPalettes,
   setSavedGradients,
   setSavedGradientAnimations,
+  setSavedIcons,
+  addSavedIcon,
+  removeSavedIcon,
+  updateSavedIcon,
   signOut,
   setCollectionModified,
   resetCollectionModified,
@@ -123,8 +165,14 @@ export const authReducer = authSlice.reducer
 
 export const selectUser = (state: RootState) => state.auth.user
 export const selectToken = (state: RootState) => state.auth.token
+export const selectSavedIcons = (state: RootState) => state.auth.user?.icons
 export const selectSavedColors = (state: RootState) => state.auth.user?.colors
 export const selectSavedPalettes = (state: RootState) => state.auth.user?.palettes
 export const selectSavedGradients = (state: RootState) => state.auth.user?.gradients
 export const selectSavedGradientAnimations = (state: RootState) => state.auth.user?.['gradient-animations']
 export const selectCollectionModified = (state: RootState) => state.auth.collectionModified
+
+export const getIconById = (id: string) =>  (state: RootState) => {
+  const ico = state.auth.user?.icons?.find(icon => icon.id === id)
+  return ico
+}

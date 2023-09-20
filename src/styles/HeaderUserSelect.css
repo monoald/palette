@@ -1,8 +1,12 @@
+.user-nav:hover .user-select{
+  display: block;
+}
 .user-select {
+  display: none;
   position: absolute;
-  top: 100%;
+  top: 70%;
   right: 0%;
-  min-width: 140px;
+  min-width: 160px;
   width: fit-content;
   margin-top: 6px;
   background: #1E2029;
@@ -16,7 +20,9 @@
 }
 .user-select__option {
   width: 100%;
-  padding: 10px 20px;
+  padding: 12px 24px;
+  background: #1E2029;
+  text-align: start;
 }
 .user-select__option:hover {
   background: #5BC3EB;

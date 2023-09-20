@@ -139,6 +139,28 @@ export const UserPalettes = () => {
           ))
           }
         </ul>
+
+        { palettes && palettes.length === 0 &&
+          <div className='no-saved-items'>
+            <p>You have no saved palettes!</p>
+
+            <div className='buttons'>
+              <button
+                className='primary-button'
+                onClick={() => navigate('/')}
+              >
+                  Create palette
+              </button>
+
+              <button
+                className='primary-button'
+                onClick={() => navigate('/palettes')}
+              >
+                  Explore palettes
+              </button>
+            </div>
+          </div>
+        }
       </section>
 
       <Tooltip message={tooltipMessage} />

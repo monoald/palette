@@ -41,7 +41,7 @@ const HeaderUserSelect = () => {
       <li>
         <button
           className='user-select__option'
-          onClick={() => navigation('/user/gradients')}
+          onClick={() => navigation('/user/icon-fonts')}
         >
           My Icon Fonts
         </button>

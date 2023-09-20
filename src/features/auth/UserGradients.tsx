@@ -96,6 +96,28 @@ export const UserGradients = () => {
           ))
           }
         </ul>
+
+        { gradients && gradients.length === 0 &&
+          <div className='no-saved-items'>
+            <p>You have no saved gradients!</p>
+
+            <div className='buttons'>
+              <button
+                className='primary-button'
+                onClick={() => navigate('/gradient')}
+              >
+                  Create gradient
+              </button>
+
+              <button
+                className='primary-button'
+                onClick={() => navigate('/gradients')}
+              >
+                  Explore gradients
+              </button>
+            </div>
+          </div>
+        }
       </section>
 
       <Tooltip message={tooltipMessage} />

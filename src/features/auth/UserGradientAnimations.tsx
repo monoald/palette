@@ -60,6 +60,8 @@ export const UserGradientAnimations = () => {
     setAbleKeyUndo(true)
   }
 
+  console.log(gradientAnimations)
+
   return (
     <>
       <CollectionFilter />
@@ -100,6 +102,21 @@ export const UserGradientAnimations = () => {
           ))
           }
         </ul>
+
+        { gradientAnimations && gradientAnimations.length === 0 &&
+          <div className='no-saved-items'>
+            <p>You have no saved gradient animations!</p>
+
+            <div className='buttons'>
+              <button
+                className='primary-button'
+                onClick={() => navigate('/gradient/t=horizontal&r1=00ad96-0_0051ad-50_2300ad-100&ad=5&ati=linear&aty=horizontal')}
+              >
+                  Create gradient animation
+              </button>
+            </div>
+          </div>
+        }
       </section>
 
       <Tooltip message={tooltipMessage} />

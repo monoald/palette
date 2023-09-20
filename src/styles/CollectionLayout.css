@@ -115,3 +115,26 @@
   flex-direction: column;
   border-radius: 50%;
 }
+
+.no-saved-items {
+  width: 600px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 0 auto;
+  border-radius: 18px;
+  background: #1E2029;
+  font-size: 1.8rem;
+  letter-spacing: 0.2px;
+}
+.no-saved-items .buttons {
+  display: flex;
+  gap: 40px;
+}
+.no-saved-items .primary-button {
+  width: fit-content;
+  padding-inline: 18px;
+}

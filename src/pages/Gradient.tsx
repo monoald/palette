@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, Over, UniqueIdentifier, closestCorners, useDroppable } from '@dnd-kit/core'
 import { SortableContext, rectSortingStrategy, useSortable } from '@dnd-kit/sortable'
 import SyntaxHighlighter from 'react-syntax-highlighter'
@@ -72,7 +72,15 @@ const timingSelect = {
 export const Gradient = () => {
   const [gradient, setGradient] = useState<GradientType>({
     type: 'horizontal',
-    angle: 90
+    angle: 90,
+    firstRow: {
+      colors: [
+        { id: 2, color: '#00ad96' },
+        { id: 0, color: '#0051ad' },
+        { id: 1, color: '#2300ad' }
+      ],
+      stops: [0, 50, 100]
+    }
   })
   const [gradientStyle, setGradientStyle] = useState<GradientStyles>({
     firstRow: [],
@@ -88,6 +96,7 @@ export const Gradient = () => {
   
   const { id } = useParams()
   const [name, setName] = useState(id)
+  const navigate = useNavigate()
   const [isSavedGradient, savedIdGradient] = useCheckSavedGradient(name as string)
   const [isSavedGradientAnimation, savedIdGradientAnimation] = useCheckSavedGradientAnimation(name as string)
 
@@ -224,71 +233,81 @@ export const Gradient = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(id)
 
-    const newType = urlParams.get('t')
-    const newAngle = urlParams.get('a')
-    const newFirstRow: GradientColor = {
-      colors: [],
-      stops: []
-    }
-
-    urlParams.get('r1')?.split('_').forEach(color => {
-      const obj = color.split('-')
-
-      newFirstRow.colors.push({
-        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
-        color: `#${obj[0]}`
+    if (!urlParams.get('t') && !urlParams.get('a') && !urlParams.get('r1')) {
+      const url = gradientToUrl({
+        type: gradient.type,
+        angle: gradient.angle,
+        firstRow: gradient.firstRow
       })
-      newFirstRow.stops.push(+obj[1])
-    })
+      // navigate(url)
+    } else {
 
-    const newDGradient: GradientType = {
-      type: gradient.type,
-      angle: gradient.angle
-    }
-
-    newDGradient.firstRow = newFirstRow
-
-    if (newType !== null) {
-      newDGradient.type = newType
-    }
-    if (newAngle !== null) {
-      newDGradient.angle = +newAngle
-    }
-
-    if (urlParams.get('r2') && newType === 'grid') {
-      const newSecondRow: GradientColor = {
+      const newType = urlParams.get('t')
+      const newAngle = urlParams.get('a')
+      const newFirstRow: GradientColor = {
         colors: [],
         stops: []
       }
-  
-      urlParams.get('r2')?.split('_').forEach(color => {
+
+      urlParams.get('r1')?.split('_').forEach(color => {
         const obj = color.split('-')
-  
-        newSecondRow.colors.push({
+
+        newFirstRow.colors.push({
           id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
           color: `#${obj[0]}`
         })
-        newSecondRow.stops.push(+obj[1])
+        newFirstRow.stops.push(+obj[1])
       })
-  
-      newDGradient.secondRow = newSecondRow
-    }
 
-    setGradient(newDGradient)
+      const newDGradient: GradientType = {
+        type: gradient.type,
+        angle: gradient.angle
+      }
 
-    const newAnimationDuration = urlParams.get('ad')
-    const newAnimationTiming = urlParams.get('ati')
-    const newAnimationType = urlParams.get('aty')
+      newDGradient.firstRow = newFirstRow
 
-    if (newAnimationDuration && newAnimationTiming && newAnimationType) {
-      
-      setGradientStyle(prev => ({
-        ...prev,
-        animationDuration: +newAnimationDuration,
-        animationTiming: newAnimationTiming,
-        animationType: newAnimationType
-      }))
-      setMode('animation')
+      if (newType !== null) {
+        newDGradient.type = newType
+      }
+      if (newAngle !== null) {
+        newDGradient.angle = +newAngle
+      }
+
+      if (urlParams.get('r2') && newType === 'grid') {
+        const newSecondRow: GradientColor = {
+          colors: [],
+          stops: []
+        }
+
+        urlParams.get('r2')?.split('_').forEach(color => {
+          const obj = color.split('-')
+
+          newSecondRow.colors.push({
+            id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+            color: `#${obj[0]}`
+          })
+          newSecondRow.stops.push(+obj[1])
+        })
+
+        newDGradient.secondRow = newSecondRow
+      }
+
+      setGradient(newDGradient)
+
+      const newAnimationDuration = urlParams.get('ad')
+      const newAnimationTiming = urlParams.get('ati')
+      const newAnimationType = urlParams.get('aty')
+
+      if (newAnimationDuration && newAnimationTiming && newAnimationType) {
+        
+        setGradientStyle(prev => ({
+          ...prev,
+          animationDuration: +newAnimationDuration,
+          animationTiming: newAnimationTiming,
+          animationType: newAnimationType
+        }))
+        setMode('animation')
+      }
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -355,6 +374,8 @@ export const Gradient = () => {
     setName(newType + newAngle + newRow1 + newRow2 + newAnimationDuration + newAnimationTiming + newAnimationType)
 
     window.history.replaceState({}, '', newUrl)
+
+    return newUrl
   }
 
   const handleDragStart = (e: DragStartEvent) => {

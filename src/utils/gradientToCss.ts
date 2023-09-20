@@ -10,6 +10,7 @@ export const gradientToCss = (gradient: GradientType | GradientInfo): GradientSt
   if (gradient.type) {
     if (gradient.type === 'vertical') newAngle = 180
     if (gradient.type === 'horizontal') newAngle = 90
+    if (gradient.type === 'grid') newAngle = 90
   }
   if (!gradient.type) newAngle = gradient.angle
   const newGradient = gradient.type === 'circle' ? 'radial-gradient(circle' : `linear-gradient(${newAngle}deg`

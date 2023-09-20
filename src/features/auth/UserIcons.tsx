@@ -30,6 +30,21 @@ export const UserIcons = () => {
           ))
           }
         </ul>
+
+        { icons && icons.length === 0 &&
+          <div className='no-saved-items'>
+            <p>You have no saved icon fonts!</p>
+
+            <div className='buttons'>
+              <button
+                className='primary-button'
+                onClick={() => navigate('/create-icons-collection')}
+              >
+                  Create icon font
+              </button>
+            </div>
+          </div>
+        }
       </section>
     </>
   )

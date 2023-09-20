@@ -18,7 +18,6 @@ import { UserRoutes } from './UserRoutes'
 import { Gradients } from '../features/gradient/Gradients'
 import { CreateIconsCollection } from '../pages/CreateIconsCollection'
 import EditIconCollection from '../pages/EditIconCollection'
-import { Test } from '../pages/Test'
 
 store.dispatch(authApiSlice.endpoints.getSaved.initiate())
 
@@ -46,13 +45,12 @@ export const App = () => {
           <Route path='/gradients' element={<Gradients />} />
 
           <Route path='/gradient/:id' element={<Gradient />} />
+          <Route path='/gradient/' element={<Gradient />} />
 
           <Route path='/loader' element={<Loader />} />
 
           <Route path='/create-icons-collection' element={<CreateIconsCollection />} />
           <Route path='/edit-icons-collection/:id' element={<EditIconCollection />} />
-
-          <Route path='test' element={<Test />} />
         </Routes>
       </BrowserRouter>
     </Provider>

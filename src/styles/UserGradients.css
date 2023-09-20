@@ -5,7 +5,8 @@
 }
 
 .gradients-container .item__button::before,
-.user-gradients .item__button::before {
+.user-gradients .item__button::before,
+.user-gradient .item__button::before {
   content: "";
   position: absolute;
   top: 0;

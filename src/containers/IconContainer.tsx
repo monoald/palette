@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
 import { createUUID } from '../utils/createUUID'
 import { changeIconColor } from '../utils/changeIconColor'
+import { checkIconModified } from '../utils/checkIconModified'
 
 import { svgs } from '../data/palette-svgs'
 
-import { Header } from '../components/Header'
 import { DescriptionTooltip } from '../components/tooltips/DescriptionTooltip'
 
 import { Icon, IconCollection } from '../features/icons/iconsSlice'
 
 import '../styles/CreateIconsCollection.css'
-import { checkIconModified } from '../utils/checkIconModified'
 
 interface IconContainerProps {
   isEdit: boolean
@@ -202,20 +202,30 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
     }
   }
 
-  const handleDownload = () => {
+  const handleDownloadFonts = () => {
     if (collection) {
       if (icon) {
         const modified = checkIconModified(icon, collection)
   
         if (modified) saveHandler(collection)
       }
-      window.location.replace(`http://localhost:3000/api/v1/icons/download/${collection.name}`)
+      window.location.replace(`http://localhost:3000/api/v1/icons/download-fonts/${collection.name}`)
+    }
+  }
+
+  const handleDownloadIcons = () => {
+    if (collection) {
+      if (icon) {
+        const modified = checkIconModified(icon, collection)
+  
+        if (modified) saveHandler(collection)
+      }
+      window.location.replace(`http://localhost:3000/api/v1/icons/download-icons/${collection.name}`)
     }
   }
 
   return (
     <div className='create-icons-collection'>
-      <Header />
       { collection &&
         <main className='main'>
           <section className='selected-icons'>
@@ -300,11 +310,22 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
                   className='secondary-button'
                   disabled={isEdit ? false : true}
                   data-tooltip
-                  onClick={handleDownload}
+                  onClick={handleDownloadFonts}
                 >
-                  <span className='icon-download' />
+                  <span className='icon-fonts' />
                   <DescriptionTooltip text={isEdit ? 'Download fonts' : 'Save to download fonts'} tipPosition='bottom' />
                 </button>
+
+                { isEdit &&
+                  <button
+                    className='secondary-button'
+                    data-tooltip
+                    onClick={handleDownloadIcons}
+                  >
+                    <span className='icon-download' />
+                    <DescriptionTooltip text='Download icons' tipPosition='bottom' />
+                  </button>
+                }
               </div>
             </div>
 

@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useReducer, useRef, useState } from 'react'
+import { useEffect, useReducer, useRef, useState } from 'react'
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import { useParams } from 'react-router-dom'
 import { Cmyk, Hsl, Hsv, Lab, Rgb, Xyz, toColorBlind } from 'colors-kit'
 
+import { getMainContrastColor } from '../utils/getMainContrastColor'
+
 import { useKeyDown } from '../hooks/useKeyDown'
 import { useTooltip } from '../hooks/useTooltip'
 import { useSave } from '../hooks/useSave'
 
-import { Header } from '../components/Header'
 import { SideBar } from '../components/SideBar'
 import OptionBarContainer from '../containers/OptionBarContainer'
 import { ColorBar } from '../components/ColorBar'
@@ -24,7 +25,6 @@ import { modalsInitialState, modalsReducer } from '../reducers/modals'
 
 import '../assets/icons/style.css'
 import '../styles/PaletteGenerator.css'
-import { getMainContrastColor } from '../utils/getMainContrastColor'
 
 export interface Color {
   color: string
@@ -121,13 +121,6 @@ export const PaletteGenerator = () => {
     }
   }
 
-  // console.log(colors.primary)
-
-  // function updateColor(type: string, color: AnyFormat, format: string, setMoveThumb: React.Dispatch<React.SetStateAction<boolean>>, moveThumb: boolean) {
-  //   colorsDispatch({ type: type as ColorsTypes, payload: { color, format } })
-  //   setMoveThumb(moveThumb)
-  // }
-
   const updateColor = (color: PickerColor, type?: string) => {
     const colorObject: Color = {
       color: color.formats.hex as string,
@@ -162,8 +155,6 @@ export const PaletteGenerator = () => {
 
   return (
     <div className='palette-layout'>
-      <Header />
-
       <SideBar
         optionsDispatch={optionsDispatch}
         modalsDispatch={modalsDispatch}

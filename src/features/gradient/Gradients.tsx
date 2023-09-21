@@ -27,7 +27,6 @@ export const Gradients = () => {
   const [tooltipMessage, setTooltipMessage] = useTooltip()
   const likeHandler = useSave(setTooltipMessage)
   const navigate = useNavigate()
-  console.log(gradients)
 
   return (
     <CollectionLayout asideNavigation={false}>

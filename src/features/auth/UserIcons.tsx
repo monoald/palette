@@ -9,7 +9,7 @@ export const UserIcons = () => {
   const navigate = useNavigate()
 
   const handleGoToIcon = (id: string) => {
-    navigate(`/edit-icons-collection/${id}`)
+    navigate(`/icons/edit/${id}`)
   }
   return (
     <>

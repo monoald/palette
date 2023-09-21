@@ -18,6 +18,7 @@ function setAttributes(paths:  HTMLCollectionOf<SVGPathElement | SVGClipPathElem
 
 export function changeIconColor(icon: string, color: string): string {
   const svgDoc = parser.parseFromString(icon, 'image/svg+xml')
+  console.log(svgDoc)
 
   const svgs = svgDoc.getElementsByTagName('svg')
   setAttributes(svgs, color)

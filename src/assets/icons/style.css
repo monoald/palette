@@ -140,3 +140,6 @@
 .icon-update:before {
   content: "\e927";
 }
+.icon-font:before {
+  content: "\e928";
+}

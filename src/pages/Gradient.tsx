@@ -13,7 +13,6 @@ import { useCheckSavedGradientAnimation } from '../hooks/useCheckSavedGradientAn
 import { getStops } from '../utils/getStops'
 import { makeGradientCalculus } from '../utils/makeGradientCalculus'
 
-import { Header } from '../components/Header'
 import { ColorPicker, PickerColor } from '../components/picker/ColorPicker'
 import { Select } from '../components/Select'
 import { AngleInput } from '../components/gradient/AngleInput'
@@ -233,12 +232,11 @@ export const Gradient = () => {
     const urlParams = new URLSearchParams(id)
 
     if (!urlParams.get('t') && !urlParams.get('a') && !urlParams.get('r1')) {
-      const url = gradientToUrl({
+      gradientToUrl({
         type: gradient.type,
         angle: gradient.angle,
         firstRow: gradient.firstRow
       })
-      // navigate(url)
     } else {
 
       const newType = urlParams.get('t')
@@ -705,8 +703,6 @@ export const Gradient = () => {
   `
   return (
     <div className='gradient'>
-      <Header />
-
       <div className='generator'>
         { openPicker && gradient.activeId &&
           <ColorPicker

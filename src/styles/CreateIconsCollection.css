@@ -1,10 +1,9 @@
 .create-icons-collection {
-  max-width: 100vw;
-  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 40px;
+  padding-top: 40px;
   padding-bottom: 80px;
   overflow-x: hidden;
   overflow-y: auto;
@@ -286,4 +285,20 @@ input[type=file]::file-selector-button {
   height: 33px;
   border-radius: 10px;
   margin-top: 8px;
+}
+
+.icon-fonts {
+  display: block;
+  width: 25px;
+  height: 25px;
+  background-image: url('../assets/icons/font.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.secondary-button:hover  .icon-fonts {
+  background-image: url('../assets/icons/font-hover.png');
+}
+.secondary-button[disabled] .icon-fonts {
+  background-image: url('../assets/icons/font-inactive.png');
 }

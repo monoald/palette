@@ -37,7 +37,7 @@ export const CreateIconsCollection = () => {
       if (newIcon) {
         dispatch(addSavedIcon(newIcon))
         navigate(
-          `/edit-icons-collection/${newIcon.id}`,
+          `/icons/edit/${newIcon.id}`,
           { 
             state: { isNew: true }
           }

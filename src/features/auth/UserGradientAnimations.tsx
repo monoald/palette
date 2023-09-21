@@ -60,8 +60,6 @@ export const UserGradientAnimations = () => {
     setAbleKeyUndo(true)
   }
 
-  console.log(gradientAnimations)
-
   return (
     <>
       <CollectionFilter />

@@ -13,10 +13,10 @@ body {
   background-color: var(--main);
   overflow-x: hidden;
 }
-#root {
+/* #root {
   min-height: 100vh;
   overflow-x: hidden;
-}
+} */
 
 #light {
   --main: #fafafa;

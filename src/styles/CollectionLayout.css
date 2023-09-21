@@ -1,20 +1,11 @@
-.collection-layout {
-  width: 100vw;
-  height: 100vh;
-  display: grid;
-  grid-template-areas: 
-  "header"
-  "main";
-  grid-template-rows: 64px 1fr;
-  grid-template-columns: 1fr;
-  background-color: var(--main);
-  overflow-x: hidden;
-}
-.collection-layout .Select {
+
+.user-content .Select {
   background: transparent;
 }
-.collection-layout .Select__toggle-button {
+.user-content .Select__toggle-button,
+.collection-content .Select__toggle-button {
   color: var(--txt-main);
+  background-color: var(--main);
 }
 .user-content {
   width: 100%;

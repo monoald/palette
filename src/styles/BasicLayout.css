@@ -1,0 +1,5 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 68px 1fr;
+}

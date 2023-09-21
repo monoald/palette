@@ -1,11 +1,3 @@
-.color {
-  display: grid;
-  grid-template-areas:
-  "header"
-  "main";
-  grid-template-columns: 1fr;
-  grid-template-rows: 68px calc(100vh - 68px);
-}
 .color__main {
   width: 100%;
   max-width: 1640px;

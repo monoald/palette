@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { WCAGRequierements, rateContrast, hexToRgb } from 'colors-kit'
 
 import { ContrastTable } from './ContrastTable'
-import { SecondaryButton } from './buttons/SecondaryButton'
 import { DraggableModal } from '../containers/DraggableModal'
 
 import { ColorsAction, ColorsReducer } from '../reducers/colors'
@@ -112,10 +111,12 @@ export const ContrastCalculator = ({ colors, colorsDispatch, setUpdatedColor, mo
         <ContrastTable contrast={contrast} />
       </div>
 
-      <SecondaryButton
-        event={() => modalsDispatch({ type: 'contrast' })}
-        content='Close'
-      />
+      <button
+        className='secondary-button'
+        onClick={() => modalsDispatch({ type: 'contrast' })}
+      >
+        Close
+      </button>
     </DraggableModal>
   )
 }

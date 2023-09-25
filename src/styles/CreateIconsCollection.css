@@ -55,7 +55,6 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 40px;
 }
 .selected-icons {
   gap: 0px;
@@ -151,6 +150,7 @@ input[type=file]::file-selector-button {
 }
 
 .create-icons-collection .icons-container {
+  position: relative;
   width: 100%;
   max-width: 1192px;
   display: flex;
@@ -158,13 +158,39 @@ input[type=file]::file-selector-button {
   justify-content: center;
   gap: 40px;
 }
+.create-icons-collection .collection-container .icons-container--close {
+  height: 0px;
+  overflow: hidden;
+  padding-bottom: 0px;
+}
+.collection-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.collection-container .icons-container {
+  padding-bottom: 80px;
+}
+.collection-container__subtitle {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 1.8rem;
+}
+.collection-container h3 {
+  font-size: 1.8rem;
+}
+.collection-container .toggle-button {
+  background: transparent;
+}
+.collection-container .toggle-button:hover {
+  color: #5BC3EB;
+}
+
 .create-icons-collection .icon__svg{
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.create-icons-collection .palette-icons .icon__svg {
-  transform: scale(1.6);
 }
 .create-icons-collection .icon {
   position: relative;
@@ -301,4 +327,20 @@ input[type=file]::file-selector-button {
 }
 .secondary-button[disabled] .icon-fonts {
   background-image: url('../assets/icons/font-inactive.png');
+}
+
+.showmore {
+  position: absolute;
+  bottom: 20px;
+  width: 120px;
+  height: auto;
+  background: transparent;
+  padding-block: 10px;
+  border: 1px solid var(--txt-inactive);
+  border-radius: 10px;
+  font-size: 1.3rem;
+}
+.showmore:hover {
+  border-color: #5BC3EB;
+  color: #5BC3EB;
 }

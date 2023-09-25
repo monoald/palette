@@ -7,18 +7,20 @@ import { SignUp } from '../pages/SignUp'
 import { Color } from '../pages/Color'
 import { Gradient } from '../pages/Gradient'
 import Loader from '../pages/Loader'
+import EditIconCollection from '../pages/EditIconCollection'
+import { Home } from '../pages/Home'
+import { CreateIconsCollection } from '../pages/CreateIconsCollection'
 
 import { store } from '../app/store'
 import Palettes from '../features/palettes/Palettes'
 import { Colors } from '../features/colors/Colors'
 import { authApiSlice } from '../features/auth/authApiSlice'
 import RequireAuth from '../features/auth/RequireAuth'
+import { Gradients } from '../features/gradient/Gradients'
 
 import { UserRoutes } from './UserRoutes'
-import { Gradients } from '../features/gradient/Gradients'
-import { CreateIconsCollection } from '../pages/CreateIconsCollection'
-import EditIconCollection from '../pages/EditIconCollection'
 import BasicLayout from '../containers/BasicLayout'
+import { NotFound } from '../pages/404'
 
 store.dispatch(authApiSlice.endpoints.getSaved.initiate())
 
@@ -28,8 +30,10 @@ export const App = () => {
       <BrowserRouter>
         <Routes>
           <Route element={<BasicLayout />}>
-            <Route path='/' element={<PaletteGenerator />} />
-            <Route path='/:palette' element={<PaletteGenerator />} />
+            <Route path='/' element={<Home />} />
+
+            <Route path='/make-palette' element={<PaletteGenerator />} />
+            <Route path='/make-palette/:palette' element={<PaletteGenerator />} />
 
             <Route element={<RequireAuth />}>
               <Route path='/user/*' element={<UserRoutes />} />
@@ -51,11 +55,15 @@ export const App = () => {
               <Route path='/icons/create' element={<CreateIconsCollection />} />
               <Route path='/icons/edit/:id' element={<EditIconCollection />} />
             </Route>
+
+            <Route path='/*' element={<NotFound />} />
+            <Route path='/404' element={<NotFound />} />
           </Route>
 
           <Route path='/signin'  element={<SignIn />} />
           <Route path='/signup'  element={<SignUp />} />
           <Route path='/loader' element={<Loader />} />
+
         </Routes>
       </BrowserRouter>
     </Provider>

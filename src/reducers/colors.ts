@@ -146,7 +146,7 @@ export function colorsReducer(state: ColorsReducer, action: ColorsAction) {
       return { ...state, secondary: { ...colorObject, id: state.primary.id || colorObject.id } }
     case 'replace-colors':
       const paletteId = paletteToId(colors)
-      window.history.replaceState({}, '', `/${paletteId}`)
+      window.history.replaceState({}, '', `/make-palette/${paletteId}`)
       return { ...state, colors: colors }
     case 'back-palette':
       newColors = historyPalette(history, 'back')
@@ -181,7 +181,7 @@ function updateColors(colors: Color[], primary: Color, history: History): Color[
     history.data.push(paletteId)
     history.currentIndex = history.data.length - 1
 
-    window.history.replaceState({}, '', `/${paletteId}`)
+    window.history.replaceState({}, '', `/make-palette/${paletteId}`)
 
     return updatedColors
   }
@@ -215,7 +215,7 @@ function changePalette(paletteType: string, colors: Color[], history: History): 
   history.data.push(paletteId)
   history.currentIndex = history.data.length - 1
 
-  window.history.replaceState({}, '', `/${paletteId}`)
+  window.history.replaceState({}, '', `/make-palette/${paletteId}`)
 
   return newObject
 }
@@ -235,7 +235,7 @@ function reorderColors(event: DragEndEvent, colors: Color[], history: History): 
     history.data.push(paletteId)
     history.currentIndex = history.data.length - 1
 
-    window.history.replaceState({}, '', `/${paletteId}`)
+    window.history.replaceState({}, '', `/make-palette/${paletteId}`)
 
     return newColors
   }
@@ -256,7 +256,7 @@ function addNewColor(colors: Color[], color: string, newColor: string, side: str
   history.data.push(paletteId)
   history.currentIndex = history.data.length - 1
 
-  window.history.replaceState({}, '', `/${paletteId}`)
+  window.history.replaceState({}, '', `/make-palette/${paletteId}`)
 
   return newColors
 }
@@ -289,7 +289,7 @@ function removeColor(colors: Color[], id: number, history: History): Color[] {
   history.data.push(paletteId)
   history.currentIndex = history.data.length - 1
 
-  window.history.replaceState({}, '', `/${paletteId}`)
+  window.history.replaceState({}, '', `/make-palette/${paletteId}`)
 
   return newColors
 }

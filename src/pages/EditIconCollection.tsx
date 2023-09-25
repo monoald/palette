@@ -9,7 +9,7 @@ import Tooltip from '../components/tooltips/Tooltip'
 import { isFetchBaseQueryError } from '../utils/isFetchBaseQueryError'
 import { checkIconModified } from '../utils/checkIconModified'
 import { useTooltip } from '../hooks/useTooltip'
-import { IconNotFound } from '../components/404/IconNotFound'
+import { NotFound } from './404'
 
 const EditIconCollection = () => {
   const [errorMessage, setErrorMessage] = useState('')
@@ -20,6 +20,8 @@ const EditIconCollection = () => {
   const navigate = useNavigate()
 
   const icon = useAppSelector(getIconById(id as string)) as IconCollection
+
+  console.log(icon)
 
   const dispatch = useAppDispatch()
   const [updateIcon, { isLoading: updateLoading }] = useUpdateIconMutation()
@@ -105,7 +107,7 @@ const EditIconCollection = () => {
       }
 
       { !icon &&
-        <IconNotFound />
+        <NotFound />
       }
     </>
     

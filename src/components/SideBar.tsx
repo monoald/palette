@@ -21,7 +21,7 @@ interface HeaderProps {
 
 export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, history, setTooltipMessage }: HeaderProps) => {
   const handleShare = () => {
-    navigator.clipboard.writeText(`https://app-palette.vercel.app/${history.data[history.currentIndex]}`)
+    navigator.clipboard.writeText(window.location.href)
     setTooltipMessage('Url copied!')
   }
   const [isSaved, savedId] = useCheckSavedPalettes(history)

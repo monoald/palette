@@ -4,7 +4,7 @@ import { createUUID } from '../utils/createUUID'
 import { changeIconColor } from '../utils/changeIconColor'
 import { checkIconModified } from '../utils/checkIconModified'
 
-import { svgs } from '../data/palette-svgs'
+import { SvgSet, svgs } from '../data/svgs'
 
 import { DescriptionTooltip } from '../components/tooltips/DescriptionTooltip'
 
@@ -343,25 +343,69 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
 
           <section className='palette-icons'>
             <h2 className='subtitle'>Palette Icons</h2>
-            <div className='icons-container'>
               { svgs.map(svg => (
-                  <div className='icon' key={`palette-${svg.name}`}>
-                    <div
-                      className='icon__svg'
-                      dangerouslySetInnerHTML={{ __html: svg.content }}
-                    />
-                    <button className='icon__button' onClick={() => handleAddIcon(svg)}>
-                      Add
-                      <span className='icon-plus'/>
-                    </button>
-                  </div>
+                <IconSet svg={svg} handleAddIcon={handleAddIcon} key={svg.name}/>
                 ))
               }
-            </div>
           </section>
         </main>
       }
 
+    </div>
+  )
+}
+
+interface IconSetProps {
+  svg: SvgSet
+  handleAddIcon: (svg: Icon) => void
+}
+
+const IconSet = ({ svg, handleAddIcon }: IconSetProps) => {
+  const [toggle, setToggle] = useState(true)
+  const [itemsToShow, setItemsToShow] = useState(12)
+
+  const handleToggle = () => {
+    setToggle(!toggle)
+  }
+
+  const handleShowMoreIcons = () => {
+    setItemsToShow(itemsToShow + 12)
+  }
+
+  return (
+    <div className='collection-container'>
+      <div className='collection-container__subtitle'>
+        <h3>{svg.name}</h3>
+        <button className='toggle-button' onClick={handleToggle}>
+          <span className={!toggle ? 'icon-arrow-up' : 'icon-arrow-down'} />
+        </button>
+      </div>
+      <div className={`icons-container ${!toggle ? 'icons-container--close' : ''}`}>
+        { svg.icons.slice(0,itemsToShow).map(icn => (
+          <div className='icon' key={`palette-${icn.name}`}>
+            <img
+              className='icon__svg'
+              width={40}
+              height={40}
+              src={`data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(icn.content)))}`}
+            />
+
+            <button className='icon__button' onClick={() => handleAddIcon(icn)}>
+              Add
+              <span className='icon-plus'/>
+            </button>
+          </div>
+        ))}
+
+        { itemsToShow < svg.icons.length &&
+          <button
+            className='showmore'
+            onClick={handleShowMoreIcons}
+          >
+            Show more
+          </button>
+        }
+      </div>
     </div>
   )
 }

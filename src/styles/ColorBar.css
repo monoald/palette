@@ -13,7 +13,7 @@
 .Color-Bar .color-button {
   width: fit-content;
   background-color: transparent;
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   border: none;
   display: none;
   align-items: center;
@@ -29,7 +29,7 @@
   position: absolute;
   top: 40px;
   z-index: 1;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.4px;

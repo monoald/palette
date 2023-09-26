@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+
+import { openPopUp } from '../utils/openPopUp'
 
 import { Field, Form } from '../components/Form'
 import { SignLayer } from '../containers/SignLayer'
 
+import { useAppDispatch } from '../app/hooks'
 import { useSignUpMutation, useSmSignInMutation } from '../features/auth/authApiSlice'
+import { User, setCredentials } from '../features/auth/authSlice'
 
 import '../styles/SignIn.css'
-import { User, setCredentials } from '../features/auth/authSlice'
-import { useAppDispatch } from '../app/hooks'
-import { openPopUp } from '../utils/openPopUp'
 
 const fileds: Field[] = [
   {
@@ -43,7 +44,7 @@ export const SignUp = () => {
   const submit = async (data: Partial<User>) => {
     await signUp(data).unwrap()
 
-    navigate('/signin')
+    navigate('/signin', { state: { 'user-created': true } })
   }
 
   const messageListener = async(e: MessageEvent) => {
@@ -105,7 +106,7 @@ export const SignUp = () => {
       }
 
       <div className='main'>
-        <Form fields={fileds} submitEvent={submit} />
+        <Form fields={fileds} submitEvent={submit} submitText='Sign Up' />
 
         <div className='Sign__footer'>
           <div className='Sign__options'>
@@ -115,21 +116,21 @@ export const SignUp = () => {
 
             <div className='sign-options-container'>
               <button
-                className='google-sign border-hover-primary'
+                className='google-sign'
                 onClick={handleGoogleSignIn}
               >
                 <span className='google-icon sm-icon' />
               </button>
 
               <button
-                className='facebook-sign border-hover-primary'
+                className='facebook-sign'
                 onClick={handleFacebookSignIn}
               >
                 <span className='facebook-icon sm-icon' />
               </button>
 
               <button
-                className='github-sign border-hover-primary'
+                className='github-sign'
                 onClick={handleGithubSignIn}
               >
                 <span className='github-icon sm-icon' />

@@ -4,13 +4,14 @@
   display: flex;
   flex-direction: column;
   gap: 22px;
+  margin-top: 10px;
 }
 .extracted-colors {
   width: 100%;
   height: fit-content;
   display: flex;
   border: 1px solid var(--main-inactive);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
 }
 .extracted-colors__color {
@@ -58,9 +59,9 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 18px;
+  padding: 10px 16px;
   border: 1px solid var(--txt-inactive);
-  border-radius: 14px;
+  border-radius: 10px;
   background: transparent;
   color: var(--txt-main);
   font-size: 1.2rem;
@@ -72,7 +73,7 @@
   color: #5BC3EB;
 }
 .Image-Canvas .config__button .icon {
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 .extractor-input {
   position: absolute;
@@ -86,6 +87,7 @@
 .extractor-input #quantity {
   width: 40px;
   text-align: center;
+  border-radius: 6px;
 }
 .extractor-input .quantity-label {
   font-size: 1.4rem;

@@ -33,7 +33,7 @@ const Palettes = () => {
   const navigate = useNavigate()
 
   const editPaletteHandler = (colors: string) => {
-    navigate(`/${colors}`)
+    navigate(`/make-palette/${colors}`)
   }
 
   return (

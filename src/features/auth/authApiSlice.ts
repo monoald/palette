@@ -1,15 +1,17 @@
-import { idToPalette } from '../../utils/idToPalette'
-import { idToGradient } from '../../utils/idToGradient'
-import { gradientToCss } from '../../utils/gradientToCss'
-import { gradientToAnimation } from '../../utils/gradientToAnimation'
+import { normalizeUserData } from '../../utils/normalizeUserData'
 
 import { apiSlice } from '../../app/api/apiSlice'
 import { User, setSavedColors, setSavedGradientAnimations, setSavedGradients, setSavedIcons, setSavedPalettes } from './authSlice'
 import { Color } from '../colors/colorsSlice'
 import { Palette } from '../palettes/palettesSlice'
 import { Gradient } from '../gradient/gradientsSlice'
-import { AnimationInfo, GradientAnimation } from '../gradientAnimations/gradientAnimationsSlice'
+import { GradientAnimation } from '../gradientAnimations/gradientAnimationsSlice'
 import { IconCollection } from '../icons/iconsSlice'
+
+interface SmSignIn {
+  token: string
+  user: Partial<User>
+}
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -18,7 +20,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
         url: 'users/signin',
         method: 'POST',
         body: { ...credentials }
-      })
+      }),
+      transformResponse: (response: SmSignIn) => {
+        response.user = normalizeUserData(response.user)
+
+        return response
+      },
     }),
     signUp: builder.mutation({
       query: (credentials) => ({
@@ -32,7 +39,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
         url: 'auth/signin',
         method: 'POST',
         body: { key: key }
-      })
+      }),
+      transformResponse: (response: SmSignIn) => {
+        response.user = normalizeUserData(response.user)
+
+        return response
+      },
     }),
     getSaved: builder.query<Partial<User>, void>({
       query: () => {
@@ -40,42 +52,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
         return `users/${user.id}`
       },
       transformResponse: (response: Partial<User>) => {
-        if (response.colors) {
-          response.colors.map(color => {
-            color.name = `#${color.name}`
-            color.saved = true
-            return color
-          })
-        }
+        const normalizedData = normalizeUserData(response)
 
-        if (response.palettes) {
-          response.palettes.map(palette => {
-            palette.colorsArr = idToPalette(palette.colors as string)
-            palette.saved = true
-            return palette
-          })
-        }
-
-        if (response.gradients) {
-          response.gradients.map(gradient => {
-            const newGradient = idToGradient(gradient)
-            newGradient.saved = true
-            return newGradient
-          })
-        }
-
-        if (response['gradient-animations']) {
-          response['gradient-animations'].map(gradient => {
-            const newGradientAnimation = idToGradient(gradient) as GradientAnimation
-            newGradientAnimation.styles = gradientToCss(newGradientAnimation.gradient)
-            newGradientAnimation.animation = gradientToAnimation(newGradientAnimation.gradient.animation as AnimationInfo)
-            newGradientAnimation.saved = true
-            
-            return newGradientAnimation
-          })
-        }
-
-        return response
+        return normalizedData
       },
       onQueryStarted: async (_undefined, { dispatch, queryFulfilled }) => {
         try {

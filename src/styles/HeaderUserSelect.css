@@ -6,13 +6,13 @@
   position: absolute;
   top: 70%;
   right: 0%;
-  min-width: 160px;
+  min-width: 144px;
   width: fit-content;
   margin-top: 6px;
   background: #1E2029;
   border-radius: 14px;
-  font-size: 1.4rem;
-  letter-spacing: 0.3px;
+  font-size: 1.26rem;
+  letter-spacing: 0.2px;
   list-style: none;
   box-shadow: 2px 2px 18px rgba(0,0,0,0.8);
   overflow: hidden;
@@ -20,7 +20,7 @@
 }
 .user-select__option {
   width: 100%;
-  padding: 12px 24px;
+  padding: 10px 21px;
   background: #1E2029;
   text-align: start;
 }

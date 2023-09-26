@@ -4,21 +4,23 @@
   background: #1E2029;
   border-bottom-left-radius: 18px;
   border-bottom-right-radius: 18px;
-  z-index: 3;
 }
 .header-content {
   width: 100%;
+  height: 100%;
   display: flex;
   position: relative;
   align-items: center;
-  padding-inline: 20px;
+  padding-inline: 40px;
+  margin: 0 auto;
+  z-index: 3;
 }
 .app-name{ 
   display: flex;
   align-items: baseline;
   gap: 6px;
   color: var(--txt-main);
-  font-size: 1.4rem;
+  font-size: 1.26rem;
   font-weight: 700;
   padding-bottom: 7px;
 }
@@ -28,7 +30,8 @@
   outline: none;
 }
 .Header .logo {
-  font-size: 2rem;
+  font-size: 1.8rem;
+  letter-spacing: 0.5px;
 }
 .header-nav {
   display: none;
@@ -45,8 +48,8 @@
   align-items: center;
 }
 .user-nav__avatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: grid;
   align-content: center;
   justify-content: center;
@@ -83,7 +86,7 @@
 }
 .header-nav__item {
   padding:  12px 18px;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 500;
   cursor: default;
 }
@@ -93,10 +96,10 @@
 
 .header-nav__item .navigation {
   position: absolute;
-  bottom: -114%;
+  bottom: -115%;
   left: 0;
   width: 100%;
-  height: 90px;
+  height: 80px;
   display: none;
   align-items: center;
   justify-content: center;
@@ -198,10 +201,10 @@
 
 @media (min-width: 820px) {
   .Header {
-    height: 68px;
+    height: 61px;
   }
   .Header .logo {
-    font-size: 2.8rem;
+    font-size: 2.43rem;
   }
   .header-nav {
     display: flex;
@@ -211,7 +214,6 @@
     margin-left: auto;
   }
   .user-nav {
-    min-width: 80px;
     height: 80px;
     display: flex;
     justify-content: center;

@@ -50,7 +50,7 @@
 .item .color-button {
   display: flex;
   align-items: center;
-  border-radius: 14px;
+  border-radius: 10px;
   background: #1E2029;
   color: var(--txt-inacive);
 }
@@ -62,7 +62,7 @@
   color: #5BC3EB;
 }
 .item .color-button .icon {
-  font-size: 2.4rem;
+  font-size: 2rem;
 }
 .item__name {
   display: none;

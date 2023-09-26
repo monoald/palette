@@ -13,8 +13,8 @@
   grid-template-rows: 1fr;
   grid-template-areas:
   "sidebar main";
-  gap: 30px;
-  padding: 30px;
+  gap: 27px;
+  padding: 27px;
   text-align: center;
 }
 .palette-layout .user-select::before {

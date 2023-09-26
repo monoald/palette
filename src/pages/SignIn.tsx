@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { openPopUp } from '../utils/openPopUp'
 
 import { SignLayer } from '../containers/SignLayer'
@@ -7,7 +7,12 @@ import { Field, Form } from '../components/Form'
 
 import { useAppDispatch } from '../app/hooks'
 import { useSignInMutation, useSmSignInMutation } from '../features/auth/authApiSlice'
-import { User, setCredentials } from '../features/auth/authSlice'
+import { User, setCredentials, setSavedColors, setSavedGradientAnimations, setSavedGradients, setSavedIcons, setSavedPalettes } from '../features/auth/authSlice'
+import { Color } from '../features/colors/colorsSlice'
+import { Palette } from '../features/palettes/palettesSlice'
+import { Gradient } from '../features/gradient/gradientsSlice'
+import { GradientAnimation } from '../features/gradientAnimations/gradientAnimationsSlice'
+import { IconCollection } from '../features/icons/iconsSlice'
 
 import '../styles/SignIn.css'
 
@@ -27,17 +32,31 @@ const fields: Field[] = [
 ]
 export const SignIn = () => {
   const [loading, setLoading] = useState(false)
+  const [tooltip, setTooltip] = useState(false)
   const navigate = useNavigate()
+  const { state } = useLocation()
 
   const [signIn, { isLoading }] = useSignInMutation()
   const [smSignIn] = useSmSignInMutation()
   const dispatch = useAppDispatch()
 
+  useEffect(() => {
+    if (state) {
+      if (state['user-created'] === true) {
+        setTooltip(true)
+  
+        setTimeout(() => {
+          setTooltip(false)
+        }, 2000);
+      }
+    }
+  }, [])
+
   const submit = async (data: Partial<User>) => {
     const user = await signIn(data).unwrap()
 
     dispatch(setCredentials({
-      user: user,
+      user: user.user,
       token: user.token,
       collectionModified: false
     }))
@@ -60,6 +79,12 @@ export const SignIn = () => {
         token: user.token,
         collectionModified: false
       }))
+
+      dispatch(setSavedColors(user.user.colors as Partial<Color>[]))
+      dispatch(setSavedPalettes(user.user.palettes as Partial<Palette>[]))
+      dispatch(setSavedGradients(user.user.gradients as Partial<Gradient>[]))
+      dispatch(setSavedGradientAnimations(user.user['gradient-animations'] as Partial<GradientAnimation>[]))
+      dispatch(setSavedIcons(user.user.icons as Partial<IconCollection>[]))
 
       navigate('/')
     }
@@ -99,51 +124,61 @@ export const SignIn = () => {
   }
 
   return (
-    <SignLayer>
-      { (isLoading || loading) && 
-        <div className='loader-container'>
-          <span className='loader' />
-        </div>
-      }
-
-      <div className='main'>
-        <Form fields={fields} submitEvent={submit} submitText='Sign In' />
-
-
-      </div>
-
-      <div className='Sign__footer'>
-        <p>Don't have an account? <Link to='/signup'>Sign up</Link></p>
-
-        <div className='Sign__options'>
-          <h2 className='Sign__subtitle'>
-            <span>Or Continue with</span>
-          </h2>
-
-          <div className='sign-options-container'>
-            <button
-              className='google-sign'
-              onClick={handleGoogleSignIn}
-            >
-              <span className='google-icon sm-icon' />
-            </button>
-
-            <button
-              className='facebook-sign'
-              onClick={handleFacebookSignIn}
-            >
-              <span className='facebook-icon sm-icon' />
-            </button>
-
-            <button
-              className='github-sign'
-              onClick={handleGithubSignIn}
-            >
-              <span className='github-icon sm-icon' />
-            </button>
+    <>
+      { tooltip &&
+        <div className='sign-modal'>
+          <div className='sign-modal__container'>
+            <p>User created successfully !</p>
+            <span className='icon-rounded-check'/>
           </div>
         </div>
-      </div>
-    </SignLayer>
+      }
+      <SignLayer>
+        { (isLoading || loading) && 
+          <div className='loader-container'>
+            <span className='loader' />
+          </div>
+        }
+
+        <div className='main'>
+          <Form fields={fields} submitEvent={submit} submitText='Sign In' />
+
+
+        </div>
+
+        <div className='Sign__footer'>
+          <p>Don't have an account? <Link to='/signup'>Sign up</Link></p>
+
+          <div className='Sign__options'>
+            <h2 className='Sign__subtitle'>
+              <span>Or Continue with</span>
+            </h2>
+
+            <div className='sign-options-container'>
+              <button
+                className='google-sign'
+                onClick={handleGoogleSignIn}
+              >
+                <span className='google-icon sm-icon' />
+              </button>
+
+              <button
+                className='facebook-sign'
+                onClick={handleFacebookSignIn}
+              >
+                <span className='facebook-icon sm-icon' />
+              </button>
+
+              <button
+                className='github-sign'
+                onClick={handleGithubSignIn}
+              >
+                <span className='github-icon sm-icon' />
+              </button>
+            </div>
+          </div>
+        </div>
+      </SignLayer>
+    </>
   )
 }

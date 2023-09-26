@@ -13,3 +13,29 @@
   outline: none;
   text-decoration: none;
 }
+.sign-modal {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 0; right: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+.sign-modal__container {
+  width: 320px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: #1E2029;
+  border-radius: 18px;
+  font-size: 1.6rem;
+  box-shadow: 2px 2px 18px 6px rgba(3, 3, 5, 0.8);
+}
+.sign-modal__container .icon-rounded-check {
+  font-size: 2.4rem;
+  color: #5BC3EB;
+}

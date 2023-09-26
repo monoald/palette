@@ -18,17 +18,17 @@
   font-weight: 500;
 }
 .Extractor-Form .primary-button {
-  width: 90px;
-  height: 30px;
-  border-radius: 10px;
+  width: 80px;
+  height: 28px;
+  border-radius: 8px;
 }
 .Extractor-Form__error-message {
   font-size: 14px;
   color: #C1292E;
 }
 .image-input {
-  width: 100%;
-  height: 200px;
+  width: 480px;
+  height: 180px;
   border-radius: 8px;
   padding: 20px;
   border: 2px dashed var(--txt-inactive);

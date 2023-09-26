@@ -987,12 +987,6 @@ export const Gradient = () => {
                   gradient-like
                   ${ isSavedGradient ? 'secondary-button--active' : ''}
                 `}
-                style={{
-                  width: '110px',
-                  paddingInline: '20px',
-                  height: '100%',
-                  fontSize: '1.43rem',
-                }}
                 data-name={name}
                 data-saved={isSavedGradient}
                 data-id={savedIdGradient}
@@ -1009,12 +1003,6 @@ export const Gradient = () => {
                   gradient-animation-like
                   ${ isSavedGradientAnimation ? 'secondary-button--active' : ''}
                 `}
-                style={{
-                  width: '110px',
-                  paddingInline: '20px',
-                  height: '100%',
-                  fontSize: '1.43rem',
-                }}
                 data-name={name}
                 data-saved={isSavedGradientAnimation}
                 data-id={savedIdGradientAnimation}

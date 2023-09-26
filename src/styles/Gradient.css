@@ -359,6 +359,13 @@
   border: 1px solid var(--main-inactive);
   z-index: -1;
 }
+.gradient .primary-button,
+.gradient .secondary-button {
+  width: 100px;
+  height: 33px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+}
 
 .gradient .setup .types,
 .gradient .setup .angle,
@@ -391,10 +398,11 @@
 }
 .gradient .css__code .primary-button {
   height: 110px;
-  width: 44px;
+  width: 33px;
+  border-radius: 10px;
 }
 .gradient .css__code .primary-button span{
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   letter-spacing: 0.8px;
   writing-mode: vertical-lr;
   transform: rotate(180deg);

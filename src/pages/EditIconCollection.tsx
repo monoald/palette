@@ -1,14 +1,17 @@
+import { useEffect, useState } from 'react'
 import { IconCollection, useDeleteIconMutation, useUpdateIconMutation } from '../features/icons/iconsSlice'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+
 import { useAppDispatch, useAppSelector } from '../app/hooks'
-import { getIconById, removeSavedIcon, updateSavedIcon } from '../features/auth/authSlice'
-import { IconContainer } from '../containers/IconContainer'
-import { useEffect, useState } from 'react'
+import { useTooltip } from '../hooks/useTooltip'
 import { normalizeIcon } from '../utils/normalizeIcon'
-import Tooltip from '../components/tooltips/Tooltip'
 import { isFetchBaseQueryError } from '../utils/isFetchBaseQueryError'
 import { checkIconModified } from '../utils/checkIconModified'
-import { useTooltip } from '../hooks/useTooltip'
+
+import { getIconById, removeSavedIcon, updateSavedIcon } from '../features/auth/authSlice'
+
+import { IconContainer } from '../containers/IconContainer'
+import Tooltip from '../components/tooltips/Tooltip'
 import { NotFound } from './404'
 
 const EditIconCollection = () => {
@@ -20,8 +23,6 @@ const EditIconCollection = () => {
   const navigate = useNavigate()
 
   const icon = useAppSelector(getIconById(id as string)) as IconCollection
-
-  console.log(icon)
 
   const dispatch = useAppDispatch()
   const [updateIcon, { isLoading: updateLoading }] = useUpdateIconMutation()

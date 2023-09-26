@@ -21,11 +21,11 @@
   justify-content: center;
 }
 .close-button {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   font-size: 1.8rem;
-  border-radius: 10px;
+  border-radius: 8px;
   background: #5BC3EB;
   color: var(--main);
 }

@@ -4,7 +4,7 @@ function setAttributes(paths:  HTMLCollectionOf<SVGPathElement | SVGClipPathElem
   const colorSvg = color === '#' ? '#ffffff' : color
 
   for (let i = 0; i < paths.length; i++) {
-    const attributes = paths[i].attributes
+    const attributes = paths[i].attributes as NamedNodeMap & { fill: { value: string }, stroke: { value: string } }
 
     if (attributes.fill && attributes.fill.value !== 'none') {
       attributes.fill.value = colorSvg

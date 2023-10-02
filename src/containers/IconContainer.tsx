@@ -144,13 +144,14 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
         if (file.type === 'image/svg+xml') {
           const reader = new FileReader();
 
-          reader.onload = (event: Event & { target: { result: string } }) => {
+          reader.onload = (event: Event) => {
             if (collection) {
-              
+              const target = event.target as EventTarget & { result: string }
               const name = file.name.split('.')[0]
               const color = collection.color as string
+
+              const content = changeIconColor(target.result, color);
   
-              const content = changeIconColor(event.target.result, color);
               let warning = false
   
               let alreadyAdded = -1

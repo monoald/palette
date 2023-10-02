@@ -6,6 +6,7 @@ import { selectUser } from '../features/auth/authSlice'
 import HeaderUserSelect from '../features/auth/HeaderUserSelect'
 
 import '../styles/Header.css'
+import { validateAvatar } from '../utils/validateAvatar'
 
 export const Header = () => {
   const user = useAppSelector(selectUser)
@@ -131,13 +132,13 @@ export const Header = () => {
                   >
                     <span
                       className={
-                        user.avatar?.includes('http')
+                        !validateAvatar(user.avatar as string)
                           ? 'avatar'
                           : `avatar-icon avatar-${user.avatar}`
                       }
                       style={
-                        user.avatar?.includes('http')
-                          ? { backgroundImage: `url(${user.avatar})` }
+                        !validateAvatar(user.avatar as string)
+                          ? { backgroundImage: `url(data:image/png;base64,${user.avatar})` }
                           : {}
                       }
                     />

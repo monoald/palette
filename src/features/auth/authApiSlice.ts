@@ -42,7 +42,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
       transformResponse: (response: SmSignIn) => {
         response.user = normalizeUserData(response.user)
-
+        console.log(response)
+        console.log('hola')
         return response
       },
     }),

@@ -20,12 +20,6 @@ const fileds: Field[] = [
     required: true
   },
   {
-    name: 'username',
-    type: 'text',
-    placeholder: 'MrPalette',
-    required: true
-  },
-  {
     name: 'password',
     type: 'password',
     placeholder: '******',
@@ -71,7 +65,7 @@ export const SignUp = () => {
     setLoading(true)
 
     openPopUp(
-      'https://palette.onrender.com/api/v1/auth/google/callback',
+      'https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/google/callback',
       'signin',
       messageListener
     )
@@ -81,7 +75,7 @@ export const SignUp = () => {
     setLoading(true)
 
     openPopUp(
-      'https://palette.onrender.com/api/v1/auth/facebook/callback',
+      'https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/facebook/callback',
       'signin',
       messageListener
     )
@@ -91,7 +85,7 @@ export const SignUp = () => {
     setLoading(true)
 
     openPopUp(
-      'https://palette.onrender.com/api/v1/auth/github/callback',
+      'https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/github/callback',
       'signin',
       messageListener
     )
@@ -107,8 +101,10 @@ export const SignUp = () => {
 
       <div className='main'>
         <Form fields={fileds} submitEvent={submit} submitText='Sign Up' />
+      </div>
 
         <div className='Sign__footer'>
+          <p>Already on Palette? <Link to='/signin'>Sign in</Link></p>
           <div className='Sign__options'>
             <h2 className='Sign__subtitle'>
               <span>Or Continue with</span>
@@ -137,10 +133,7 @@ export const SignUp = () => {
               </button>
             </div>
           </div>
-
-          <p>Already on Palette? <Link to='/signin'>Sign in</Link></p>
         </div>
-      </div>
     </SignLayer>
   )
 }

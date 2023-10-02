@@ -33,6 +33,7 @@ export const CreateIconsCollection = () => {
     newIcons.thumbnail = await generateThumbnail(newIcons.icons.slice(0,6))
 
     try {
+      console.log(newIcons)
       const newIcon = await createIcon(newIcons).unwrap()
       if (newIcon) {
         dispatch(addSavedIcon(newIcon))

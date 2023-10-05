@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
 
@@ -5,20 +6,23 @@ import { useFilter } from '../../hooks/useFilter'
 import { useSave } from '../../hooks/useSave'
 
 import { CollectionLayout } from '../../containers/CollectionLayout'
-
-import { useAppSelector } from '../../app/hooks'
-import { selectAllColors, useGetColorsQuery } from './colorsSlice'
-import { useTooltip } from '../../hooks/useTooltip'
 import Tooltip from '../../components/tooltips/Tooltip'
 
+import { store } from '../../app/store'
+import { useAppSelector } from '../../app/hooks'
+import { colorApiSlice, selectAllColors } from './colorsSlice'
+import { useTooltip } from '../../hooks/useTooltip'
+
+
+
 export const Colors = () => {
-  const {
-    isLoading,
-    isSuccess,
-    isError,
-    error
-  } = useGetColorsQuery({ page: 1 })
   const colors = useAppSelector(selectAllColors)
+
+  useEffect(() => {
+    if (colors.length === 0) {
+      store.dispatch(colorApiSlice.endpoints.getColors.initiate({ page: 1 }))
+    }
+  }, [colors])
 
   const { shape, CollectionFilter } = useFilter({
     options: {
@@ -36,7 +40,7 @@ export const Colors = () => {
 
       <section className='user-colors' onClick={likeHandler}>
         <ul className={`items__list items__list--${shape}`}>
-          { isSuccess && colors.map(color => (
+          { colors.length !== 0 && colors.map(color => (
             <div className='item' key={color.id}>
               <li
                 className='item__clr-container'

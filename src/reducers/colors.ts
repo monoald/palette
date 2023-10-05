@@ -193,7 +193,8 @@ function changePalette(paletteType: string, colors: Color[], history: History): 
     randomColor: true,
     format: 'hex',
     paletteType: paletteType as Palette,
-    quantity: colors.length || 5
+    quantity: colors.length || 5,
+    variation: Math.floor(Math.random() * (80 - 35 + 1) + 35)
   }) as string[]
 
   const newObject = newColors.map((color): Color => {

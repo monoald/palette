@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
 
@@ -8,19 +9,18 @@ import { useTooltip } from '../../hooks/useTooltip'
 import { CollectionLayout } from '../../containers/CollectionLayout'
 import Tooltip from '../../components/tooltips/Tooltip'
 
+import { store } from '../../app/store'
 import { useAppSelector } from '../../app/hooks'
-import { selectAllPalettes, useGetPalettesQuery } from './palettesSlice'
-
-import '../../styles/Layout-Pal.css'
+import { paletteApiSlice, selectAllPalettes } from './palettesSlice'
 
 const Palettes = () => {
-  const {
-    isLoading,
-    isSuccess,
-    isError,
-    error
-  } = useGetPalettesQuery({ page: 1 })
   const palettes = useAppSelector(selectAllPalettes)
+
+  useEffect(() => {
+    if (palettes.length === 0) {
+      store.dispatch(paletteApiSlice.endpoints.getPalettes.initiate({ page: 1 }))
+    }
+  }, [palettes])
 
   const { shape, CollectionFilter } = useFilter({
     options: {
@@ -42,7 +42,7 @@ const Palettes = () => {
 
       <section className='user-palettes' onClick={likeHandler}>
         <ul className={`items__list items__list--${shape}`}>
-          { isSuccess && palettes.map(palette => (
+          { palettes.length !== 0 && palettes.map(palette => (
               <div className='item' key={palette.id}>
                 <li className='item__clr-container'>
                   { palette.colorsArr.map(color => (

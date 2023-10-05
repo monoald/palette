@@ -1,22 +1,27 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useFilter } from '../../hooks/useFilter'
 import { useSave } from '../../hooks/useSave'
 
 import { CollectionLayout } from '../../containers/CollectionLayout'
-
-import { useAppSelector } from '../../app/hooks'
-import { selectAllGradients, useGetGradientsQuery } from './gradientsSlice'
-import { useTooltip } from '../../hooks/useTooltip'
 import Tooltip from '../../components/tooltips/Tooltip'
+
+import { store } from '../../app/store'
+import { useAppSelector } from '../../app/hooks'
+import { publicGradientApiSlice, selectAllPublicGradients } from '../publicGradients/publicGradientsSlice'
+import { useTooltip } from '../../hooks/useTooltip'
 
 import '../../styles/UserGradients.css'
 
 export const Gradients = () => {
-  const {
-    isSuccess,
-  } = useGetGradientsQuery({ page: 1 })
-  const gradients = useAppSelector(selectAllGradients)
+  const gradients = useAppSelector(selectAllPublicGradients)
+
+  useEffect(() => {
+    if (gradients.length === 0) {
+      store.dispatch(publicGradientApiSlice.endpoints.getPublicGradients.initiate(''))
+    }
+  }, [gradients])
 
   const { shape, CollectionFilter } = useFilter({
     options: {
@@ -34,7 +39,7 @@ export const Gradients = () => {
 
       <section className='gradients-container' onClick={likeHandler}>
         <ul className={`items__list items__list--${shape}`}>
-          { isSuccess && gradients.map(gradient => (
+          { gradients.length !== 0 && gradients.map(gradient => (
             <div className='item' key={gradient.id}>
               <li
                 className='item__clr-container'

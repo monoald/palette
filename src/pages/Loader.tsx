@@ -18,7 +18,7 @@ const Loader = () => {
       window.opener.postMessage('error')
       window.close()
     }
-  })
+  }, [])
 
   return (
     <div className='loader-page'>

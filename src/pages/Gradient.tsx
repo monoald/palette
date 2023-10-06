@@ -541,24 +541,6 @@ export const Gradient = () => {
     setGradientStyle(prev => ({ ...prev, animationDuration: +e.target.value }))
   }
 
-  const handleSave = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    likeHandler(e)
-
-    if (mode === 'gradient') {
-      if (isSavedGradient) {
-        setTooltipMessage('Gradient unsaved.')
-      } else {
-        setTooltipMessage('Gradient saved.')
-      }
-    } else if (mode === 'animation') {
-      if (isSavedGradientAnimation) {
-        setTooltipMessage('Gradient animation unsaved.')
-      } else {
-        setTooltipMessage('Gradient animation saved.')
-      }
-    }
-  }
-
   const animation = mode === 'animation'
     ? `${gradientStyle.animationType} ${gradientStyle.animationDuration}s ${gradientStyle.animationTiming} infinite`
     : ''
@@ -702,431 +684,432 @@ export const Gradient = () => {
   </div>
   `
   return (
-    <div className='gradient'>
-      <div className='generator'>
-        { openPicker && gradient.activeId &&
-          <ColorPicker
-            id={`${gradient.activeId.id}`}
-            color={gradient.activeId.color}
-            updateColor={updateColor}
-            handleClosePicker={handleClosePicker}
-          />
-        }
-        <section className='setup'>
-          { mode === 'gradient' &&
-            <>
-              <div className='setup__head'>
-                <ul className='types'>
-                  <li>
-                    <button
-                      className={`
-                        type
-                        ${gradient.type === 'horizontal'
-                          ? 'type--active'
-                          : ''
-                        }
-                      `}
-                      onClick={() => setGradient(prev => ({ ...prev, type: 'horizontal' }))}
-                    >
-                      <span className='type__icon icon-gradient-horizontal'/>
+    <>
+      <div className='gradient'>
+        <div className='generator'>
+          { openPicker && gradient.activeId &&
+            <ColorPicker
+              id={`${gradient.activeId.id}`}
+              color={gradient.activeId.color}
+              updateColor={updateColor}
+              handleClosePicker={handleClosePicker}
+            />
+          }
+          <section className='setup'>
+            { mode === 'gradient' &&
+              <>
+                <div className='setup__head'>
+                  <ul className='types'>
+                    <li>
+                      <button
+                        className={`
+                          type
+                          ${gradient.type === 'horizontal'
+                            ? 'type--active'
+                            : ''
+                          }
+                        `}
+                        onClick={() => setGradient(prev => ({ ...prev, type: 'horizontal' }))}
+                      >
+                        <span className='type__icon icon-gradient-horizontal'/>
 
-                      <span className='type__name'>
-                        Horizontal
-                      </span>
-                    </button>
-                  </li>
+                        <span className='type__name'>
+                          Horizontal
+                        </span>
+                      </button>
+                    </li>
 
-                  <li>
-                    <button
-                      className={`
-                        type
-                        ${gradient.type === 'vertical'
-                          ? 'type--active'
-                          : ''
-                        }
-                      `}
-                      onClick={() => setGradient(prev => ({ ...prev, type: 'vertical' }))}
-                    >
-                      <span className='type__icon icon-gradient-vertical'/>
+                    <li>
+                      <button
+                        className={`
+                          type
+                          ${gradient.type === 'vertical'
+                            ? 'type--active'
+                            : ''
+                          }
+                        `}
+                        onClick={() => setGradient(prev => ({ ...prev, type: 'vertical' }))}
+                      >
+                        <span className='type__icon icon-gradient-vertical'/>
 
-                      <span className='type__name'>
-                        Vertical
-                      </span>
-                    </button>
-                  </li>
+                        <span className='type__name'>
+                          Vertical
+                        </span>
+                      </button>
+                    </li>
 
-                  <li>
-                    <button
-                      className={`
-                        type
-                        ${gradient.type === 'grid'
-                          ? 'type--active'
-                          : ''
-                        }
-                      `}
-                      onClick={() => setGradient(prev => ({ ...prev, type: 'grid' }))}
-                    >
-                      <span className='type__icon icon-gradient-grid'/>
+                    <li>
+                      <button
+                        className={`
+                          type
+                          ${gradient.type === 'grid'
+                            ? 'type--active'
+                            : ''
+                          }
+                        `}
+                        onClick={() => setGradient(prev => ({ ...prev, type: 'grid' }))}
+                      >
+                        <span className='type__icon icon-gradient-grid'/>
 
-                      <span className='type__name'>
-                        Grid
-                      </span>
-                    </button>
-                  </li>
+                        <span className='type__name'>
+                          Grid
+                        </span>
+                      </button>
+                    </li>
 
-                  <li>
-                    <button
-                      className={`
-                        type
-                        ${gradient.type === 'circle'
-                          ? 'type--active'
-                          : ''
-                        }
-                      `}
-                      onClick={() => setGradient(prev => ({ ...prev, type: 'circle' }))}
-                    >
-                      <span className='type__icon icon-gradient-circle'/>
+                    <li>
+                      <button
+                        className={`
+                          type
+                          ${gradient.type === 'circle'
+                            ? 'type--active'
+                            : ''
+                          }
+                        `}
+                        onClick={() => setGradient(prev => ({ ...prev, type: 'circle' }))}
+                      >
+                        <span className='type__icon icon-gradient-circle'/>
 
-                      <span className='type__name'>
-                        Circle
-                      </span>
-                    </button>
-                  </li>
-                </ul>
+                        <span className='type__name'>
+                          Circle
+                        </span>
+                      </button>
+                    </li>
+                  </ul>
 
-                <AngleInput angle={gradient.angle} setGradient={setGradient} />
-              </div>
+                  <AngleInput angle={gradient.angle} setGradient={setGradient} />
+                </div>
 
-              <div className='edit'>
-                <div
-                  className='row-color edit__current'
-                  style={{
-                    background: gradient.activeId?.color
-                  }}
-                ></div>
+                <div className='edit'>
+                  <div
+                    className='row-color edit__current'
+                    style={{
+                      background: gradient.activeId?.color
+                    }}
+                  ></div>
 
-                <button
-                  className='secondary-button'
-                  onClick={() => setOpenPicker(true)}
-                >Edit</button>
+                  <button
+                    className='secondary-button'
+                    onClick={() => setOpenPicker(true)}
+                  >Edit</button>
 
-                <button
-                  className='secondary-button'
-                  onClick={handleRemoveColor}
-                >Remove</button>
-              </div>
+                  <button
+                    className='secondary-button'
+                    onClick={handleRemoveColor}
+                  >Remove</button>
+                </div>
 
-              <DndContext
-                collisionDetection={closestCorners}
-                onDragEnd={handleDragEnd}
-                onDragStart={handleDragStart}
-              >
-                <div className='re-order'>
-                  { gradient.firstRow &&
-                    <Container
-                      items={gradient.firstRow.colors as Color[]}
-                      id='firstRow'
-                    >
-                      <>
-                        { gradient.firstRow.colors.map(color => (
-                          <>
+                <DndContext
+                  collisionDetection={closestCorners}
+                  onDragEnd={handleDragEnd}
+                  onDragStart={handleDragStart}
+                >
+                  <div className='re-order'>
+                    { gradient.firstRow &&
+                      <Container
+                        items={gradient.firstRow.colors as Color[]}
+                        id='firstRow'
+                      >
+                        <>
+                          { gradient.firstRow.colors.map(color => (
+                            <>
+                              <Color
+                                color={color}
+                              />
+                            </>
+                          ))}
+
+                          { !gradient.secondRow &&
+                            <button
+                              className='row__color row__color--add'
+                              onClick={() => handleAddColor('first')}
+                            >
+                              <span className='icon-plus'/>
+                            </button>
+                          }
+                        </>
+                      </Container>
+                    }
+
+                    { gradient.secondRow &&
+                      <Container
+                        items={gradient.secondRow.colors}
+                        id='secondRow'
+                      >
+                        <>
+                          { gradient.secondRow.colors.map(color => (
                             <Color
                               color={color}
                             />
-                          </>
-                        ))}
+                          ))}
 
-                        { !gradient.secondRow &&
                           <button
                             className='row__color row__color--add'
-                            onClick={() => handleAddColor('first')}
+                            onClick={() => handleAddColor('second')}
                           >
                             <span className='icon-plus'/>
                           </button>
-                        }
-                      </>
-                    </Container>
-                  }
-
-                  { gradient.secondRow &&
-                    <Container
-                      items={gradient.secondRow.colors}
-                      id='secondRow'
-                    >
-                      <>
-                        { gradient.secondRow.colors.map(color => (
-                          <Color
-                            color={color}
-                          />
-                        ))}
-
-                        <button
-                          className='row__color row__color--add'
-                          onClick={() => handleAddColor('second')}
-                        >
-                          <span className='icon-plus'/>
-                        </button>
-                      </>
-                    </Container>
-                  }
-                  <DragOverlay>{gradient.activeId ? <Color color={gradient.activeId} /> : null}</DragOverlay>
-                </div>
-              </DndContext>
-            </>
-          }
-
-          { mode === 'animation' &&
-            <>
-              <div className='setup__head'>
-                <ul className='types'>
-                  <li>
-                    <button
-                      className={`
-                        type
-                        ${gradientStyle.animationType === 'horizontal'
-                          ? 'type--active'
-                          : ''
-                        }
-                      `}
-                      onClick={() => setGradientStyle(prev => ({ ...prev, animationType: 'horizontal' }))}
-                    >
-                      <span className='type__icon icon-move'/>
-
-                      <span className='type__name'>
-                        Horizontal
-                      </span>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      className={`
-                        type
-                        ${gradientStyle.animationType === 'vertical'
-                          ? 'type--active'
-                          : ''
-                        }
-                      `}
-                      onClick={() => setGradientStyle(prev => ({ ...prev, animationType: 'vertical' }))}
-                      disabled={gradient.type === 'grid'}
-                    >
-                      <span className='type__icon icon-vertical'/>
-
-                      <span className='type__name'>
-                        Vertical
-                      </span>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      className={`
-                        type
-                        ${gradientStyle.animationType === 'spin'
-                          ? 'type--active'
-                          : ''
-                        }
-                      `}
-                      onClick={() => setGradientStyle(prev => ({ ...prev, animationType: 'spin' }))}
-                      disabled={gradient.type === 'circle'}
-                    >
-                      <span className='type__icon icon-spin'/>
-
-                      <span className='type__name'>
-                        Spin
-                      </span>
-                    </button>
-                  </li>
-                </ul>
-
-                <div className='timing'>
-                  <p className='timing__label'>Timing Function</p>
-                  <Select
-                    options={timingSelect}
-                    value={gradientStyle.animationTiming}
-                    setValue={setTiming as React.Dispatch<React.SetStateAction<string>>}
-                    configuration={{
-                      showIcon: false,
-                      showCurrentValue: true
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className='speed'>
-                <p className='speed__value'>1s</p>
-                  <input
-                    className='speed__input'
-                    type='range'
-                    min={1}
-                    max={100}
-                    value={gradientStyle.animationDuration}
-                    onChange={handleDurationChange}
-                  />
-                <p className='speed__value'>100s</p>
-              </div>
-            </>
-          }
-
-          <div className='mode'>
-            <button
-              onClick={() => setMode('gradient')}
-              className={`primary-button ${mode === 'gradient' ? 'primary-button--active' : ''}`}
-            >Gradient</button>
-
-            <button
-              onClick={() => setMode('animation')}
-              className={`primary-button ${mode === 'animation' ? 'primary-button--active' : ''}`}
-            >Animation</button>
-
-            { mode === 'gradient' &&
-              <button
-                onClick={handleSave}
-                className={`
-                  secondary-button
-                  gradient-like
-                  ${ isSavedGradient ? 'secondary-button--active' : ''}
-                `}
-                data-name={name}
-                data-saved={isSavedGradient}
-                data-id={savedIdGradient}
-              >
-                { isSavedGradient ? 'Unsave' : 'Save'}
-              </button>
+                        </>
+                      </Container>
+                    }
+                    <DragOverlay>{gradient.activeId ? <Color color={gradient.activeId} /> : null}</DragOverlay>
+                  </div>
+                </DndContext>
+              </>
             }
 
             { mode === 'animation' &&
+              <>
+                <div className='setup__head'>
+                  <ul className='types'>
+                    <li>
+                      <button
+                        className={`
+                          type
+                          ${gradientStyle.animationType === 'horizontal'
+                            ? 'type--active'
+                            : ''
+                          }
+                        `}
+                        onClick={() => setGradientStyle(prev => ({ ...prev, animationType: 'horizontal' }))}
+                      >
+                        <span className='type__icon icon-move'/>
+
+                        <span className='type__name'>
+                          Horizontal
+                        </span>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button
+                        className={`
+                          type
+                          ${gradientStyle.animationType === 'vertical'
+                            ? 'type--active'
+                            : ''
+                          }
+                        `}
+                        onClick={() => setGradientStyle(prev => ({ ...prev, animationType: 'vertical' }))}
+                        disabled={gradient.type === 'grid'}
+                      >
+                        <span className='type__icon icon-vertical'/>
+
+                        <span className='type__name'>
+                          Vertical
+                        </span>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button
+                        className={`
+                          type
+                          ${gradientStyle.animationType === 'spin'
+                            ? 'type--active'
+                            : ''
+                          }
+                        `}
+                        onClick={() => setGradientStyle(prev => ({ ...prev, animationType: 'spin' }))}
+                        disabled={gradient.type === 'circle'}
+                      >
+                        <span className='type__icon icon-spin'/>
+
+                        <span className='type__name'>
+                          Spin
+                        </span>
+                      </button>
+                    </li>
+                  </ul>
+
+                  <div className='timing'>
+                    <p className='timing__label'>Timing Function</p>
+                    <Select
+                      options={timingSelect}
+                      value={gradientStyle.animationTiming}
+                      setValue={setTiming as React.Dispatch<React.SetStateAction<string>>}
+                      configuration={{
+                        showIcon: false,
+                        showCurrentValue: true
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className='speed'>
+                  <p className='speed__value'>1s</p>
+                    <input
+                      className='speed__input'
+                      type='range'
+                      min={1}
+                      max={100}
+                      value={gradientStyle.animationDuration}
+                      onChange={handleDurationChange}
+                    />
+                  <p className='speed__value'>100s</p>
+                </div>
+              </>
+            }
+
+            <div className='mode'>
               <button
-                onClick={handleSave}
-                className={`
-                  secondary-button
-                  gradient-animation-like
-                  ${ isSavedGradientAnimation ? 'secondary-button--active' : ''}
-                `}
-                data-name={name}
-                data-saved={isSavedGradientAnimation}
-                data-id={savedIdGradientAnimation}
-              >
-                { isSavedGradientAnimation ? 'Unsave' : 'Save'}
-              </button>
-            }
-          </div>
-        </section>
+                onClick={() => setMode('gradient')}
+                className={`primary-button ${mode === 'gradient' ? 'primary-button--active' : ''}`}
+              >Gradient</button>
 
-        <section className='gradient__view'>
+              <button
+                onClick={() => setMode('animation')}
+                className={`primary-button ${mode === 'animation' ? 'primary-button--active' : ''}`}
+              >Animation</button>
 
-          <div
-            className={`view`}
-          >
+              { mode === 'gradient' &&
+                <button
+                  onClick={likeHandler}
+                  className={`
+                    secondary-button
+                    gradient-like
+                    ${ isSavedGradient ? 'secondary-button--active' : ''}
+                  `}
+                  data-name={name}
+                  data-saved={isSavedGradient}
+                  data-id={savedIdGradient}
+                >
+                  { isSavedGradient ? 'Unsave' : 'Save'}
+                </button>
+              }
+
+              { mode === 'animation' &&
+                <button
+                  onClick={likeHandler}
+                  className={`
+                    secondary-button
+                    gradient-animation-like
+                    ${ isSavedGradientAnimation ? 'secondary-button--active' : ''}
+                  `}
+                  data-name={name}
+                  data-saved={isSavedGradientAnimation}
+                  data-id={savedIdGradientAnimation}
+                >
+                  { isSavedGradientAnimation ? 'Unsave' : 'Save'}
+                </button>
+              }
+            </div>
+          </section>
+
+          <section className='gradient__view'>
+
             <div
-              className={`view__canvas ${gradient.type === 'grid' ? 'view__canvas--grid' : ''}`}
-              style={{
-                width: mode === 'animation' && gradientStyle.animationType === 'spin'
-                ? '155%' : '100%',
-                height: mode === 'animation' && gradientStyle.animationType === 'spin'
-                ? '155%' : '100%',
-                '--d-background': gradientStyle.firstRow.length !== 0 ? gradientStyle.firstRow[0] + gradientStyle.firstRow[1] : '',
-                '--grid-background': gradientStyle.secondRow[0] + gradientStyle.secondRow[1] + ')',
-                animation: animation,
-                '--my-animation': animation,
-                '--my-backsize': backgroundSize,
-              } as React.CSSProperties}
-            ></div>
-          </div>
+              className={`view`}
+            >
+              <div
+                className={`view__canvas ${gradient.type === 'grid' ? 'view__canvas--grid' : ''}`}
+                style={{
+                  width: mode === 'animation' && gradientStyle.animationType === 'spin'
+                  ? '155%' : '100%',
+                  height: mode === 'animation' && gradientStyle.animationType === 'spin'
+                  ? '155%' : '100%',
+                  '--d-background': gradientStyle.firstRow.length !== 0 ? gradientStyle.firstRow[0] + gradientStyle.firstRow[1] : '',
+                  '--grid-background': gradientStyle.secondRow[0] + gradientStyle.secondRow[1] + ')',
+                  animation: animation,
+                  '--my-animation': animation,
+                  '--my-backsize': backgroundSize,
+                } as React.CSSProperties}
+              ></div>
+            </div>
 
-          <div className='slider'>
-            { gradient.firstRow &&
-              <CustomRange
-                row={gradient.firstRow}
-                rowName='firstRow'
-                setGradient={setGradient}
-                background={gradientStyle.firstRow}
-              />
-            }
+            <div className='slider'>
+              { gradient.firstRow &&
+                <CustomRange
+                  row={gradient.firstRow}
+                  rowName='firstRow'
+                  setGradient={setGradient}
+                  background={gradientStyle.firstRow}
+                />
+              }
 
-            { gradient.secondRow && 
-              <CustomRange
-                row={gradient.secondRow}
-                rowName='secondRow'
-                setGradient={setGradient}
-                background={gradientStyle.secondRow}
-              />
-            }
-          </div>
-        </section>
-      </div>
-
-      <section className='css'>
-        <div className='css__code'>
-          <button
-            className={`
-              primary-button
-              ${codeTech === 'css' ? 'primary-button--active' : ''}
-            `}
-            onClick={() => setCodeTech('css')}
-          >
-            <span>
-              CSS
-            </span>
-          </button>
-          <button
-            className={`
-              primary-button
-              ${codeTech === 'html' ? 'primary-button--active' : ''}
-            `}
-            onClick={() => setCodeTech('html')}
-          >
-            <span>
-              HTML
-            </span>
-          </button>
+              { gradient.secondRow && 
+                <CustomRange
+                  row={gradient.secondRow}
+                  rowName='secondRow'
+                  setGradient={setGradient}
+                  background={gradientStyle.secondRow}
+                />
+              }
+            </div>
+          </section>
         </div>
 
-        { codeTech === 'css' &&
-          <SyntaxHighlighter
-            language='css'
-            style={vs2015}
-            customStyle={{
-              width: '100%',
-              height: '250px',
-              minHeight: '250px',
-              padding: '10px 14px 0px',
-              borderRadius: '14px',
-              background: '#1E2029',
-              fontSize: '1.4rem',
-              overflowX: 'auto',
-              overflowY: 'auto'
-            }}
-          >
-            {cssCode}
-          </SyntaxHighlighter>
-        }
+        <section className='css'>
+          <div className='css__code'>
+            <button
+              className={`
+                primary-button
+                ${codeTech === 'css' ? 'primary-button--active' : ''}
+              `}
+              onClick={() => setCodeTech('css')}
+            >
+              <span>
+                CSS
+              </span>
+            </button>
+            <button
+              className={`
+                primary-button
+                ${codeTech === 'html' ? 'primary-button--active' : ''}
+              `}
+              onClick={() => setCodeTech('html')}
+            >
+              <span>
+                HTML
+              </span>
+            </button>
+          </div>
 
-        { codeTech === 'html' &&
-          <SyntaxHighlighter
-            language='html'
-            style={darcula}
-            customStyle={{
-              width: '100%',
-              height: '250px',
-              minHeight: '250px',
-              padding: '10px 14px 0px',
-              borderRadius: '14px',
-              display: 'flex',
-              alignItems: 'center',
-              background: '#1E2029',
-              fontSize: '1.4rem',
-              overflowX: 'auto',
-              overflowY: 'auto'
-            }}
-          >
-            {htmlCode}
-          </SyntaxHighlighter>
-        }
-      </section>
+          { codeTech === 'css' &&
+            <SyntaxHighlighter
+              language='css'
+              style={vs2015}
+              customStyle={{
+                width: '100%',
+                height: '250px',
+                minHeight: '250px',
+                padding: '10px 14px 0px',
+                borderRadius: '14px',
+                background: '#1E2029',
+                fontSize: '1.4rem',
+                overflowX: 'auto',
+                overflowY: 'auto'
+              }}
+            >
+              {cssCode}
+            </SyntaxHighlighter>
+          }
 
+          { codeTech === 'html' &&
+            <SyntaxHighlighter
+              language='html'
+              style={darcula}
+              customStyle={{
+                width: '100%',
+                height: '250px',
+                minHeight: '250px',
+                padding: '10px 14px 0px',
+                borderRadius: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                background: '#1E2029',
+                fontSize: '1.4rem',
+                overflowX: 'auto',
+                overflowY: 'auto'
+              }}
+            >
+              {htmlCode}
+            </SyntaxHighlighter>
+          }
+        </section>
+      </div>
       <Tooltip message={tooltipMessage} />
-    </div>
+    </>
   )
 }
 

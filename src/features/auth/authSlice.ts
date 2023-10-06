@@ -28,17 +28,15 @@ export interface User {
 interface LoginResponse {
   user: Partial<User> | null
   token: string | null
-  collectionModified: boolean
 }
 
 const user = JSON.parse(localStorage.getItem('user') as string) || null
 
 const token = localStorage.getItem('token') || null
 
-const initialState: LoginResponse = {
+export const initialState: LoginResponse = {
   user: user,
-  token: token,
-  collectionModified: false
+  token: token
 }
 
 const authSlice = createSlice({
@@ -135,14 +133,7 @@ const authSlice = createSlice({
       state.token = null
       localStorage.removeItem('user')
       localStorage.removeItem('token')
-    },
-    setCollectionModified: (state) => {
-      state.collectionModified = true
-      
-    },
-    resetCollectionModified: (state) => {
-      state.collectionModified = false
-    },
+    }
   }
 })
 
@@ -156,9 +147,7 @@ export const {
   addSavedIcon,
   removeSavedIcon,
   updateSavedIcon,
-  signOut,
-  setCollectionModified,
-  resetCollectionModified,
+  signOut
 } = authSlice.actions
 
 export const authReducer = authSlice.reducer
@@ -170,7 +159,6 @@ export const selectSavedColors = (state: RootState) => state.auth.user?.colors
 export const selectSavedPalettes = (state: RootState) => state.auth.user?.palettes
 export const selectSavedGradients = (state: RootState) => state.auth.user?.gradients
 export const selectSavedGradientAnimations = (state: RootState) => state.auth.user?.['gradient-animations']
-export const selectCollectionModified = (state: RootState) => state.auth.collectionModified
 
 export const getIconById = (id: string) =>  (state: RootState) => {
   const ico = state.auth.user?.icons?.find(icon => icon.id === id)

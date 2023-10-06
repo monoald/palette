@@ -109,7 +109,7 @@ export const UserColors = () => {
             <div className='buttons'>
               <button
                 className='primary-button'
-                onClick={() => navigate('/gradient/t=horizontal&r1=00ad96-0_0051ad-50_2300ad-100&ad=5&ati=linear&aty=horizontal')}
+                onClick={() => navigate('/colors')}
               >
                   Explore colors
               </button>

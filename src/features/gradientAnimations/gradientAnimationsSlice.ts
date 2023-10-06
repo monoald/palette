@@ -1,4 +1,4 @@
-import { EntityState, createEntityAdapter, createSelector } from '@reduxjs/toolkit'
+import { createEntityAdapter, createSelector } from '@reduxjs/toolkit'
 
 import { idToGradient } from '../../utils/idToGradient'
 import { gradientToCss } from '../../utils/gradientToCss'
@@ -56,8 +56,8 @@ const initialState = gradientAnimationAdapter.getInitialState()
 
 export const gradientAnimationApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getGradientAnimations: builder.query<EntityState<GradientAnimation>, { page: number }>({
-      query: ({ page }) => `/gradient-animations?page=${page}`,
+    getGradientAnimations: builder.query({
+      query: () => '/gradient-animations',
       transformResponse: (response: GradientAnimation[]) => {
         const user = JSON.parse(localStorage.getItem('user') as string)
 
@@ -163,7 +163,7 @@ export const {
   useUnsaveGradientAnimationMutation
 } = gradientAnimationApiSlice
 
-export const selectGradientAnimationsResult = gradientAnimationApiSlice.endpoints.getGradientAnimations.select({ page: 1 })
+export const selectGradientAnimationsResult = gradientAnimationApiSlice.endpoints.getGradientAnimations.select(undefined)
 
 const selectGradientAnimationsData = createSelector(
   selectGradientAnimationsResult,

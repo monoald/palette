@@ -20,7 +20,7 @@ export const Colors = () => {
 
   useEffect(() => {
     if (colors.length === 0) {
-      store.dispatch(colorApiSlice.endpoints.getColors.initiate({ page: 1 }))
+      store.dispatch(colorApiSlice.endpoints.getColors.initiate(undefined))
     }
   }, [colors])
 

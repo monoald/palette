@@ -154,80 +154,82 @@ export const PaletteGenerator = () => {
   const saveHandler = useSave(setTooltipMessage, { new: true })
 
   return (
-    <div className='palette-layout'>
-      <SideBar
-        optionsDispatch={optionsDispatch}
-        modalsDispatch={modalsDispatch}
-        colorsDispatch={colorsDispatch}
-        history={colors.history}
-        setTooltipMessage={setTooltipMessage}
-      />
+    <>
+      <div className='palette-layout'>
+        <SideBar
+          optionsDispatch={optionsDispatch}
+          modalsDispatch={modalsDispatch}
+          colorsDispatch={colorsDispatch}
+          history={colors.history}
+          setTooltipMessage={setTooltipMessage}
+        />
 
-      <OptionBarContainer
-        options={options}
-        optionsDispatch={optionsDispatch}
-      />
+        <OptionBarContainer
+          options={options}
+          optionsDispatch={optionsDispatch}
+        />
 
-      <DndContext
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <main
-          className='Palette-Generator'
-          ref={mainRef}
-          onMouseMove={handleResize}
-          onMouseUp={handleEndResize}
-          onClick={saveHandler}
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
         >
-          <SortableContext
-            items={colors.colors}
-            strategy={horizontalListSortingStrategy}
+          <main
+            className='Palette-Generator'
+            ref={mainRef}
+            onMouseMove={handleResize}
+            onMouseUp={handleEndResize}
+            onClick={saveHandler}
           >
-            { colors.colors.map((color: Color, index: number) => (
-              <ColorBar
-                color={color}
-                colors={colors.colors}
-                modalsDispatch={modalsDispatch}
-                currentColorBlind={options.colorBlind}
-                heightColorBlind={heightColorBlind}
-                handleStartResize={handleStartResize}
-                resizeColorBlind={resizeColorBlind}
-                colorsDispatch={colorsDispatch}
-                setUpdatedColor={setUpdatedColor}
-                setTooltipMessage={setTooltipMessage}
-                index={index}
-              />
-            ))} 
+            <SortableContext
+              items={colors.colors}
+              strategy={horizontalListSortingStrategy}
+            >
+              { colors.colors.map((color: Color, index: number) => (
+                <ColorBar
+                  color={color}
+                  colors={colors.colors}
+                  modalsDispatch={modalsDispatch}
+                  currentColorBlind={options.colorBlind}
+                  heightColorBlind={heightColorBlind}
+                  handleStartResize={handleStartResize}
+                  resizeColorBlind={resizeColorBlind}
+                  colorsDispatch={colorsDispatch}
+                  setUpdatedColor={setUpdatedColor}
+                  setTooltipMessage={setTooltipMessage}
+                  index={index}
+                />
+              ))} 
 
-          </SortableContext>
+            </SortableContext>
 
-          { modals.contrast &&
-              <ContrastCalculator
-                colors={colors}
-                colorsDispatch={colorsDispatch}
-                setUpdatedColor={setUpdatedColor}
-                modalsDispatch={modalsDispatch}
-              />
-          }
-          { modals.picker && 
-              <ColorPicker
-                handleClosePicker={() => modalsDispatch({ type: 'picker' })}
-                color={updatedColor === 'primary' ? colors.primary.color : colors.secondary.color}
-                updateColor={updateColor}
-                id={updatedColor === 'primary' ? `${colors.primary.id}` : `${colors.secondary.id}`}
-                type={updatedColor === 'primary' ? 'primary' : 'secondary'}
-              />
-          }
-          { modals['img-extractor'] &&
-              <ImageColorExtractor
-                modalsDispatch={modalsDispatch}
-                colorsDispatch={colorsDispatch}
-              />
-          }
+            { modals.contrast &&
+                <ContrastCalculator
+                  colors={colors}
+                  colorsDispatch={colorsDispatch}
+                  setUpdatedColor={setUpdatedColor}
+                  modalsDispatch={modalsDispatch}
+                />
+            }
+            { modals.picker && 
+                <ColorPicker
+                  handleClosePicker={() => modalsDispatch({ type: 'picker' })}
+                  color={updatedColor === 'primary' ? colors.primary.color : colors.secondary.color}
+                  updateColor={updateColor}
+                  id={updatedColor === 'primary' ? `${colors.primary.id}` : `${colors.secondary.id}`}
+                  type={updatedColor === 'primary' ? 'primary' : 'secondary'}
+                />
+            }
+            { modals['img-extractor'] &&
+                <ImageColorExtractor
+                  modalsDispatch={modalsDispatch}
+                  colorsDispatch={colorsDispatch}
+                />
+            }
 
-          <Tooltip message={tooltipMessage}/>
-        </main>
-      </DndContext>
-    </div>
+          </main>
+        </DndContext>
+      </div>
+      <Tooltip message={tooltipMessage}/>
+    </>
   )
 }

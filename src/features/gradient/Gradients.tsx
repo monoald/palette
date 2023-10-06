@@ -19,7 +19,7 @@ export const Gradients = () => {
 
   useEffect(() => {
     if (gradients.length === 0) {
-      store.dispatch(publicGradientApiSlice.endpoints.getPublicGradients.initiate(''))
+      store.dispatch(publicGradientApiSlice.endpoints.getPublicGradients.initiate(undefined))
     }
   }, [gradients])
 

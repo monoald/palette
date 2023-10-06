@@ -24,8 +24,8 @@ export const useSave = (
   const user = useAppSelector(selectUser)
 
   const likeHandler = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    const target = e.target as HTMLElement
     if (user) {
-      const target = e.target as HTMLElement
       if (target.classList.contains('color-like')) {
         if (target.dataset.saved === 'true') {
           if (target.dataset.section === 'user') setTooltipMessage('Press "z" to undo.')
@@ -38,7 +38,6 @@ export const useSave = (
           saveColor({
             name: target.dataset.name,
             id: target.dataset.id,
-            isNew: options?.new || null
           }).unwrap()
         }
       }
@@ -71,7 +70,6 @@ export const useSave = (
           saveGradient({
             name: target.dataset.name,
             id: target.dataset.id,
-            isNew: options?.new || null
           }).unwrap()
         }
       }
@@ -96,7 +94,21 @@ export const useSave = (
       return
     }
 
-    setTooltipMessage('Sign in to save your favorite palettes')
+    if (target.classList.contains('palette-like') ||
+      target.classList.contains('color-like') ||
+      target.classList.contains('gradient-like') ||
+      target.classList.contains('gradient-animation-like')
+    ) {
+      let type = 'palettes'
+  
+      if (target.classList.contains('color-like')) type = 'colors'
+      if (
+        target.classList.contains('gradient-like') ||
+        target.classList.contains('gradient-animation-like')
+      ) type = 'gradients'
+  
+      setTooltipMessage(`Sign in to save your favorite ${type}`)
+    }
   }
   return likeHandler
 }

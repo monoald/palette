@@ -18,7 +18,7 @@ const Palettes = () => {
 
   useEffect(() => {
     if (palettes.length === 0) {
-      store.dispatch(publicPaletteApiSlice.endpoints.getPublicPalettes.initiate({ page: 1 }))
+      store.dispatch(publicPaletteApiSlice.endpoints.getPublicPalettes.initiate(undefined))
     }
   }, [palettes])
 

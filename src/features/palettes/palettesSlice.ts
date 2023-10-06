@@ -26,7 +26,7 @@ export const paletteApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted({ id, unsavedPalette, undoAction, colors }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          publicPaletteApiSlice.util.updateQueryData('getPublicPalettes', { page : 1 }, draft => {
+          publicPaletteApiSlice.util.updateQueryData('getPublicPalettes', undefined, draft => {
             const palette = draft.entities[id]
             if (palette) palette.saved = true
           })
@@ -75,7 +75,7 @@ export const paletteApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted({ colors, id }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          publicPaletteApiSlice.util.updateQueryData('getPublicPalettes', { page : 1 }, draft => {
+          publicPaletteApiSlice.util.updateQueryData('getPublicPalettes', undefined, draft => {
             const palette = draft.entities[id]
             if (palette) palette.saved = false
           })

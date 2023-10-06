@@ -17,14 +17,21 @@ import { Colors } from '../features/colors/Colors'
 import { authApiSlice } from '../features/auth/authApiSlice'
 import RequireAuth from '../features/auth/RequireAuth'
 import { Gradients } from '../features/gradient/Gradients'
+import { initialState as auth } from '../features/auth/authSlice'
 
 import { UserRoutes } from './UserRoutes'
 import BasicLayout from '../containers/BasicLayout'
 import { NotFound } from '../pages/404'
+import { useEffect } from 'react'
 
-store.dispatch(authApiSlice.endpoints.getSaved.initiate())
 
 export const App = () => {
+  useEffect(() => {
+    if (auth.user && auth.token) {
+      store.dispatch(authApiSlice.endpoints.getSaved.initiate())
+    }
+  }, [])
+  
   return (
     <Provider store={store}>
       <BrowserRouter>

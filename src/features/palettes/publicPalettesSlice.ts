@@ -49,7 +49,7 @@ export const {
   useGetPublicPalettesQuery
 } = publicPaletteApiSlice
 
-export const selectPalettesResult = publicPaletteApiSlice.endpoints.getPublicPalettes.select({ page: 1 })
+export const selectPalettesResult = publicPaletteApiSlice.endpoints.getPublicPalettes.select(undefined)
 
 const selectPaletteData = createSelector(
   selectPalettesResult,

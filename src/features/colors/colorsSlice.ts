@@ -1,4 +1,4 @@
-import { EntityState, createEntityAdapter, createSelector } from '@reduxjs/toolkit'
+import { createEntityAdapter, createSelector } from '@reduxjs/toolkit'
 
 import { apiSlice } from '../../app/api/apiSlice'
 import { RootState } from '../../app/store'
@@ -19,8 +19,8 @@ const initialState = colorAdapter.getInitialState()
 
 export const colorApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getColors: builder.query<EntityState<Color>, { page: number }>({
-      query: ({ page }) => `/colors?page=${page}`,
+    getColors: builder.query({
+      query: () => '/colors',
       transformResponse: (response: Color[]) => {
         const user = JSON.parse(localStorage.getItem('user') as string)
 
@@ -46,9 +46,9 @@ export const colorApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: { name }
       }),
-      async onQueryStarted({ id, unsavedColor, isNew, name }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, unsavedColor, name }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          colorApiSlice.util.updateQueryData('getColors', { page : 1 }, draft => {
+          colorApiSlice.util.updateQueryData('getColors', undefined, draft => {
             const color = draft.entities[id]
             if (color) color.saved = true
           })
@@ -64,9 +64,7 @@ export const colorApiSlice = apiSlice.injectEndpoints({
               dispatch(setSavedColors(newColors))
             })
           )
-        }
-
-        if (isNew) {
+        } else {
           patchUserResult = dispatch(
             authApiSlice.util.updateQueryData('getSaved', undefined, draft => {
               const newColors = [...draft.colors as Partial<Color>[]]
@@ -93,7 +91,7 @@ export const colorApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          colorApiSlice.util.updateQueryData('getColors', { page : 1 }, draft => {
+          colorApiSlice.util.updateQueryData('getColors', undefined, draft => {
             const color = draft.entities[id]
             if (color) color.saved = false
           })
@@ -124,7 +122,7 @@ export const {
   useUnsaveColorMutation
 } = colorApiSlice
 
-export const selectColorsResult = colorApiSlice.endpoints.getColors.select({ page: 1 })
+export const selectColorsResult = colorApiSlice.endpoints.getColors.select(undefined)
 
 const selectColorsData = createSelector(
   selectColorsResult,

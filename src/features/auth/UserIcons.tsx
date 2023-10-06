@@ -38,7 +38,7 @@ export const UserIcons = () => {
             <div className='buttons'>
               <button
                 className='primary-button'
-                onClick={() => navigate('/create-icons-collection')}
+                onClick={() => navigate('/icons/create')}
               >
                   Create icon font
               </button>

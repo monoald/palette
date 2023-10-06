@@ -1,5 +1,13 @@
-.Tooltip {
+.tooltip-container {
   position: sticky;
+  top: 0; bottom: 0;
+  left: 0; right: 0;
+  background: transparent;
+  pointer-events: none;
+  z-index: 3;
+}
+.Tooltip {
+  position: absolute;
   bottom: 40px;
   left: -450px;
   display: none;
@@ -9,18 +17,17 @@
   padding: 16px 28px;
   border-radius: 14px;
   background-color: var(--txt-main);
-  margin-left: 20px;
+  margin-left: 30px;
   color: var(--main);
   font-size: 14px;
   text-align: center;
   font-weight: 600;
   box-shadow: 2px 2px 14px rgba(0,0,0,0.8);
-  z-index: 3;
 }
 
 .Tooltip--active {
   display: block;
-  animation: tooltip-animation 6s;
+  animation: tooltip-animation 5s;
 }
 
 @keyframes tooltip-animation {

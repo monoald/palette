@@ -1,11 +1,10 @@
 import { createEntityAdapter, createSelector } from '@reduxjs/toolkit'
 
 import { apiSlice } from '../../app/api/apiSlice'
-import { RootState, store } from '../../app/store'
+import { RootState } from '../../app/store'
 import { idToGradient } from '../../utils/idToGradient'
 import { gradientToCss } from '../../utils/gradientToCss'
 import { getStops } from '../../utils/getStops'
-import { Gradient } from './gradientsSlice'
 
 interface GradientStyles {
   base: string
@@ -15,6 +14,7 @@ interface GradientStyles {
 interface PublicGradient {
   id: string
   name: string
+  users: string[]
   styles: GradientStyles
   saved?: boolean
   upId?: string
@@ -44,14 +44,9 @@ export const publicGradientApiSlice = apiSlice.injectEndpoints({
           newName = `t=horizontal&r1=${newName}`
           const normalizedGradient = { ...gradient, name: newName}
           const newGradient = idToGradient(normalizedGradient)
-          if (user) {
-            let isSaved = false
-            const savedGradients = store.getState().auth.user?.gradients as Gradient[]
-            savedGradients.forEach(grad => {
-              if (grad.upId === gradient.upId)  isSaved = true
-            })
-            newGradient.saved = isSaved
-          }
+
+          if (user && gradient.users.includes(user.id)) newGradient.saved = true
+
           newGradient.styles = gradientToCss(newGradient.gradient)
           return newGradient
         })
@@ -61,10 +56,10 @@ export const publicGradientApiSlice = apiSlice.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              { type: 'Gradient', id: 'LIST' },
-              ...result.ids.map(id => ({ type: 'Gradient' as const, id }))
+              { type: 'PublicGradient', id: 'LIST' },
+              ...result.ids.map(id => ({ type: 'PublicGradient' as const, id }))
             ]
-          : [{ type: 'Gradient', id: 'LIST' }]
+          : [{ type: 'PublicGradient', id: 'LIST' }]
     }),
   })
 })
@@ -73,7 +68,7 @@ export const {
   useGetPublicGradientsQuery
 } = publicGradientApiSlice
 
-export const selectPublicGradientsResult = publicGradientApiSlice.endpoints.getPublicGradients.select('')
+export const selectPublicGradientsResult = publicGradientApiSlice.endpoints.getPublicGradients.select(undefined)
 
 const selectPublicGradientsData = createSelector(
   selectPublicGradientsResult,

@@ -267,6 +267,7 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
                   className='secondary-button'
                   data-tooltip
                   onClick={() => isEdit && unsaveHandler ? unsaveHandler() : saveHandler(collection)}
+                  disabled={collection.icons.length === 0}
                 >
                   { isEdit 
                     ?

@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useTooltip } from '../hooks/useTooltip'
 
-import { IconCollection, useCreateIconMutation } from '../features/icons/iconsSlice'
+import { isFetchBaseQueryError } from '../utils/isFetchBaseQueryError'
+import { generateThumbnail } from '../utils/generateThumbnail'
+import { normalizeIcon } from '../utils/normalizeIcon'
 
 import { IconContainer } from '../containers/IconContainer'
-import { isFetchBaseQueryError } from '../utils/isFetchBaseQueryError'
-import { normalizeIcon } from '../utils/normalizeIcon'
-import { useAppDispatch } from '../app/hooks'
-import { addSavedIcon } from '../features/auth/authSlice'
-import { generateThumbnail } from '../utils/generateThumbnail'
+import Tooltip from '../components/tooltips/Tooltip'
+
+import { useAppDispatch, useAppSelector } from '../app/hooks'
+import { IconCollection, useCreateIconMutation } from '../features/icons/iconsSlice'
+import { addSavedIcon, selectUser } from '../features/auth/authSlice'
 
 export const CreateIconsCollection = () => {
   const [errorMessage, setErrorMessage] = useState('')
@@ -19,6 +22,8 @@ export const CreateIconsCollection = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { state } = useLocation()
+  const [tooltipMessage, setTooltipMessage] = useTooltip()
+  const user = useAppSelector(selectUser)
 
   useEffect(() => {
     if (state && state.icon) {
@@ -32,22 +37,27 @@ export const CreateIconsCollection = () => {
     const newIcons = normalizeIcon(icon)
     newIcons.thumbnail = await generateThumbnail(newIcons.icons.slice(0,6))
 
-    try {
-      const newIcon = await createIcon(newIcons).unwrap()
-      if (newIcon) {
-        dispatch(addSavedIcon(newIcon))
-        navigate(
-          `/icons/edit/${newIcon.id}`,
-          { 
-            state: { isNew: true }
-          }
-        )
+    if (user) {
+      try {
+        const newIcon = await createIcon(newIcons).unwrap()
+        if (newIcon) {
+          dispatch(addSavedIcon(newIcon))
+          navigate(
+            `/icons/edit/${newIcon.id}`,
+            { 
+              state: { isNew: true }
+            }
+          )
+        }
+      } catch (error) {
+        if (isFetchBaseQueryError(error)) {
+          setErrorMessage((error.data as { message: string })?.message)
+        }
       }
-    } catch (error) {
-      if (isFetchBaseQueryError(error)) {
-        setErrorMessage((error.data as { message: string })?.message)
-      }
+    } else {
+      setTooltipMessage('Sign in to save your favorite icons')
     }
+
   }
   return (
     <>
@@ -67,6 +77,8 @@ export const CreateIconsCollection = () => {
           />
         </>
       }
+
+      <Tooltip message={tooltipMessage} />
     </>
   )
 }

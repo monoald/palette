@@ -54,7 +54,7 @@ export const ContrastCalculator = ({ colors, colorsDispatch, setUpdatedColor, mo
   }
 
   return (
-    <DraggableModal nameClass="Contrast-Calculator">
+    <DraggableModal nameClass='Contrast-Calculator'>
       <div className='buttons-container'>
         <button
           className='color-button color-button--primary'

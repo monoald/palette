@@ -5,7 +5,7 @@ import { RootState, store } from '../../app/store'
 import { idToGradient } from '../../utils/idToGradient'
 import { gradientToCss } from '../../utils/gradientToCss'
 import { getStops } from '../../utils/getStops'
-import { Gradient } from '../gradient/gradientsSlice'
+import { Gradient } from './gradientsSlice'
 
 interface GradientStyles {
   base: string

@@ -1,6 +1,6 @@
 .Tooltip {
-  position: absolute;
-  bottom: 20px;
+  position: sticky;
+  bottom: 40px;
   left: -450px;
   display: none;
   width: fit-content;
@@ -8,9 +8,8 @@
   height: fit-content;
   padding: 16px 28px;
   border-radius: 14px;
-  margin-bottom: 40px;
-  margin-left: 40px;
   background-color: var(--txt-main);
+  margin-left: 20px;
   color: var(--main);
   font-size: 14px;
   text-align: center;
@@ -21,7 +20,7 @@
 
 .Tooltip--active {
   display: block;
-  animation: tooltip-animation 7s;
+  animation: tooltip-animation 6s;
 }
 
 @keyframes tooltip-animation {

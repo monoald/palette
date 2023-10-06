@@ -1,4 +1,4 @@
-import { Icon } from "../features/icons/iconsSlice";
+import { Icon } from '../features/icons/iconsSlice'
 
 
 export const svgs: Icon[] = [

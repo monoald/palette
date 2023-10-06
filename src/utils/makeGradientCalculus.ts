@@ -1,4 +1,4 @@
-import { GradientColor } from "../pages/Gradient"
+import { GradientColor } from '../pages/Gradient'
 
 export const makeGradientCalculus = (container: GradientColor): string => {
   let basicGradient = ''

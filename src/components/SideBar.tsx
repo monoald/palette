@@ -36,7 +36,7 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
             onClick={() => optionsDispatch({ type: 'option', payload: 'colorBlind'})}
             data-tooltip
           >
-            <DescriptionTooltip text="Color blind simulator" tipPosition="right"/>
+            <DescriptionTooltip text='Color blind simulator' tipPosition='right'/>
             <span className='option__icon icon-eye'/>
           </button>
         </li>
@@ -47,7 +47,7 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
             onClick={() => optionsDispatch({ type: 'option', payload: 'paletteType'})}
             data-tooltip
           >
-            <DescriptionTooltip text="Palete type" tipPosition="right"/>
+            <DescriptionTooltip text='Palete type' tipPosition='right'/>
             <span className='option__icon icon-palette'/>
           </button>
         </li>
@@ -58,7 +58,7 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
             onClick={() => modalsDispatch({ type: 'img-extractor' })}
             data-tooltip
           >
-            <DescriptionTooltip text="Extract palette from image" tipPosition="right"/>
+            <DescriptionTooltip text='Extract palette from image' tipPosition='right'/>
             <span className='option__icon icon-image'/>
           </button>
         </li>
@@ -69,7 +69,7 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
             onClick={() => colorsDispatch({ type: 'back-palette' })} disabled={history.currentIndex === 0}
             data-tooltip
           >
-            <DescriptionTooltip text="Undo" tipPosition="right"/>
+            <DescriptionTooltip text='Undo' tipPosition='right'/>
             <span className='option__icon icon-undo'/>
           </button>
         </li>
@@ -81,7 +81,7 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
             disabled={history.currentIndex === history.data.length - 1}
             data-tooltip
           >
-            <DescriptionTooltip text="Redo" tipPosition="right"/>
+            <DescriptionTooltip text='Redo' tipPosition='right'/>
             <span className='option__icon icon-redo'/>
           </button>
         </li>
@@ -95,7 +95,7 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
             data-saved={isSaved}
             data-id={savedId}
           >
-            <DescriptionTooltip text="Save palette" tipPosition="right"/>
+            <DescriptionTooltip text='Save palette' tipPosition='right'/>
             <span
               className={`
                 option__icon icon
@@ -111,7 +111,7 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
             onClick={handleShare}
             data-tooltip
           >
-            <DescriptionTooltip text="Share palette" tipPosition="right"/>
+            <DescriptionTooltip text='Share palette' tipPosition='right'/>
             <span className='option__icon icon-share'/>
           </button>
         </li>

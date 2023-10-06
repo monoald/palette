@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react"
-import { useAppSelector } from "../app/hooks"
-import { selectSavedPalettes } from "../features/auth/authSlice"
+import { useEffect, useState } from 'react'
+import { useAppSelector } from '../app/hooks'
+import { selectSavedPalettes } from '../features/auth/authSlice'
 import { History } from '../reducers/colors'
 
 

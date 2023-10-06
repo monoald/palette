@@ -21,7 +21,7 @@ export const UserIcons = () => {
               key={icon.name}
               onClick={() => handleGoToIcon(icon.id as string)}
             >
-              <img className='item__thumbnail' src={icon.thumbnail} alt="" />
+              <img className='item__thumbnail' src={icon.thumbnail} alt='' />
 
               <div className='item__footer'>
                 <p>{icon.name}</p>

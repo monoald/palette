@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react"
-import { Color, GradientColor, GradientType } from "../../pages/Gradient"
-import { isArrayAscending } from "../../utils/isArrayAscending"
+import { useEffect, useRef, useState } from 'react'
+import { Color, GradientColor, GradientType } from '../../pages/Gradient'
+import { isArrayAscending } from '../../utils/isArrayAscending'
 
 interface CustomSliderProps {
   row: GradientColor

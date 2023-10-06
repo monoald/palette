@@ -54,8 +54,7 @@ export const useSave = (
         } else {
           savePalette({
             colors: target.dataset.colors,
-            id: target.dataset.id,
-            isNew: options?.new || null
+            id: target.dataset.id
           }).unwrap()
         }
       }

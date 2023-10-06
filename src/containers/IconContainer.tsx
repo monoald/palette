@@ -30,7 +30,7 @@ interface IconProps {
 export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorMessage, setErrorMessage }: IconContainerProps) => {
   const [collection, setCollection] = useState<IconCollection | undefined>(undefined)
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (icon) {
@@ -136,13 +136,13 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = e.target.files;
+    const selectedFiles = e.target.files
 
     if (selectedFiles && selectedFiles.length > 0) {
       for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
+        const file = selectedFiles[i]
         if (file.type === 'image/svg+xml') {
-          const reader = new FileReader();
+          const reader = new FileReader()
 
           reader.onload = (event: Event) => {
             if (collection) {
@@ -150,7 +150,7 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
               const name = file.name.split('.')[0]
               const color = collection.color as string
 
-              const content = changeIconColor(target.result, color);
+              const content = changeIconColor(target.result, color)
   
               let warning = false
   
@@ -196,7 +196,7 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
             }
           }
 
-          reader.readAsText(file);
+          reader.readAsText(file)
         }
       }
       if (inputRef.current) inputRef.current.value = ''
@@ -241,9 +241,9 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
 
             <div className='setup'>
               <div className='color-collection'>
-                <label htmlFor="color-collection">Add color:</label>
+                <label htmlFor='color-collection'>Add color:</label>
                 <input
-                  type="text"
+                  type='text'
                   name='color-collection'
                   id='color-collection'
                   value={collection.color}
@@ -298,8 +298,8 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
                   <span className='icon-upload' />
                   <DescriptionTooltip text='Import icons' tipPosition='bottom' />
                   <input
-                    type="file"
-                    accept=".svg"
+                    type='file'
+                    accept='.svg'
                     ref={inputRef}
                     multiple
                     onChange={handleFileChange}
@@ -518,7 +518,7 @@ const IconCard = ({ svg, setCollection, setErrorMessage }: IconProps) => {
       <div className='input-mask'>
         <input
           className='icon__input'
-          type="text"
+          type='text'
           value={svg.name}
           onChange={handleNameChanged}
         />
@@ -539,7 +539,7 @@ const IconCard = ({ svg, setCollection, setErrorMessage }: IconProps) => {
               className='icon__input'
               name={`unicode-${svg.name}`}
               id={`unicode-${svg.name}`}
-              type="text"
+              type='text'
               value={svg.unicode}
               onChange={handleUnicodeChanged}
             />
@@ -551,7 +551,7 @@ const IconCard = ({ svg, setCollection, setErrorMessage }: IconProps) => {
               className='icon__input color-input'
               name={`color-${svg.name}`}
               id={`color-${svg.name}`}
-              type="text"
+              type='text'
               value={svg.color}
               onChange={handleColorChanged}
             />

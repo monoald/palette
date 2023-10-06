@@ -1,5 +1,5 @@
-import { ColorFormats, WCAGRequierements, colorFormatConverter, hexToRgb, makeAnalogousPalette, makeComplementaryPalette, makeMonochromaticPalette, makeSplitComplementaryPalette, makeSquarePalette, makeTetradicPalette, makeTriadicPalette, rateContrast, toAchromatomaly, toAchromatopsia, toDeuteranomaly, toDeuteranopia, toProtanomaly, toProtanopia, toTritanomaly, toTritanopia } from "colors-kit"
-import { getMainContrastColor } from "./getMainContrastColor"
+import { ColorFormats, WCAGRequierements, colorFormatConverter, hexToRgb, makeAnalogousPalette, makeComplementaryPalette, makeMonochromaticPalette, makeSplitComplementaryPalette, makeSquarePalette, makeTetradicPalette, makeTriadicPalette, rateContrast, toAchromatomaly, toAchromatopsia, toDeuteranomaly, toDeuteranopia, toProtanomaly, toProtanopia, toTritanomaly, toTritanopia } from 'colors-kit'
+import { getMainContrastColor } from './getMainContrastColor'
 
 export interface Palettes {
   [key: string]: string[]

@@ -24,7 +24,7 @@ export const Header = () => {
           </a>
           by
           <a
-            href="https://github.com/monoald"
+            href='https://github.com/monoald'
             target='_blank'
             className='profile'
           >

@@ -1,10 +1,10 @@
-import { gradientToAnimation } from "./gradientToAnimation";
-import { gradientToCss } from "./gradientToCss";
-import { idToGradient } from "./idToGradient";
-import { idToPalette } from "./idToPalette";
+import { gradientToAnimation } from './gradientToAnimation'
+import { gradientToCss } from './gradientToCss'
+import { idToGradient } from './idToGradient'
+import { idToPalette } from './idToPalette'
 
-import { User } from "../features/auth/authSlice";
-import { AnimationInfo, GradientAnimation } from "../features/gradientAnimations/gradientAnimationsSlice";
+import { User } from '../features/auth/authSlice'
+import { AnimationInfo, GradientAnimation } from '../features/gradientAnimations/gradientAnimationsSlice'
 
 export function normalizeUserData(user: Partial<User>) {
   const newUserData = { ...user }

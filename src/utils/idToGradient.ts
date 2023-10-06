@@ -1,5 +1,5 @@
-import { Gradient, GradientColor, GradientInfo } from "../features/gradient/gradientsSlice"
-import { AnimationInfo, GradientAnimation } from "../features/gradientAnimations/gradientAnimationsSlice"
+import { Gradient, GradientColor, GradientInfo } from '../features/gradient/gradientsSlice'
+import { AnimationInfo, GradientAnimation } from '../features/gradientAnimations/gradientAnimationsSlice'
 
 export const idToGradient = (gradient: Partial<Gradient> | Partial<GradientAnimation>): Gradient => {
   const newGradient = { ...gradient } as Gradient

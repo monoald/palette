@@ -1,6 +1,6 @@
-import { GradientInfo, GradientStyles } from "../features/gradient/gradientsSlice"
-import { GradientType } from "../pages/Gradient"
-import { makeGradientCalculus } from "./makeGradientCalculus"
+import { GradientInfo, GradientStyles } from '../features/gradient/gradientsSlice'
+import { GradientType } from '../pages/Gradient'
+import { makeGradientCalculus } from './makeGradientCalculus'
 
 export const gradientToCss = (gradient: GradientType | GradientInfo): GradientStyles => {
   const css = []

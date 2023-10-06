@@ -9,7 +9,7 @@ import Tooltip from '../../components/tooltips/Tooltip'
 
 import { store } from '../../app/store'
 import { useAppSelector } from '../../app/hooks'
-import { publicGradientApiSlice, selectAllPublicGradients } from '../publicGradients/publicGradientsSlice'
+import { publicGradientApiSlice, selectAllPublicGradients } from './publicGradientsSlice'
 import { useTooltip } from '../../hooks/useTooltip'
 
 import '../../styles/UserGradients.css'

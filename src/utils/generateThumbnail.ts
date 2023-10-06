@@ -8,8 +8,8 @@ export function generateThumbnail (icons: Icon[]): Promise<string> {
     canvas.height = 132
 
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-    ctx.fillStyle = "#111217";
-    ctx.fillRect(0, 0, 220, 132);
+    ctx.fillStyle = '#111217'
+    ctx.fillRect(0, 0, 220, 132)
   
     icons.forEach((svgIcon, index) => {
       const i = index > 2 ? index - 3 : index

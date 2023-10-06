@@ -11,14 +11,14 @@ import Tooltip from '../../components/tooltips/Tooltip'
 
 import { store } from '../../app/store'
 import { useAppSelector } from '../../app/hooks'
-import { paletteApiSlice, selectAllPalettes } from './palettesSlice'
+import { publicPaletteApiSlice, selectAllPalettes } from './publicPalettesSlice'
 
 const Palettes = () => {
   const palettes = useAppSelector(selectAllPalettes)
 
   useEffect(() => {
     if (palettes.length === 0) {
-      store.dispatch(paletteApiSlice.endpoints.getPalettes.initiate({ page: 1 }))
+      store.dispatch(publicPaletteApiSlice.endpoints.getPublicPalettes.initiate({ page: 1 }))
     }
   }, [palettes])
 

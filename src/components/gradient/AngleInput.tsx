@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { GradientType } from "../../pages/Gradient"
+import { useState } from 'react'
+import { GradientType } from '../../pages/Gradient'
 
 import '../../styles/AngleInput.css'
 

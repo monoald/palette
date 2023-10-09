@@ -53,7 +53,7 @@
   display: grid;
   align-content: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 10px;
   overflow: hidden;
   padding: 0;
 }
@@ -64,6 +64,9 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+[class^="avatar-"], [class*=" avatar-"] {
+  background-size: 150%;
 }
 .button-icon {
   background: transparent;

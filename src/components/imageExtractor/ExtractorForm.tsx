@@ -42,6 +42,27 @@ export const ExtractorForm = ({ setUrl, errorMessage }: ExtractorFormProps) => {
     target.classList.remove('image-input--dragging-over')
   }
 
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files as FileList
+    const file = files[0];
+
+    if (file) {
+      // Check if the selected file has an allowed file type
+      const allowedTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/webp', 'image/bmp'];
+      if (allowedTypes.includes(file.type)) {
+        const reader = new FileReader()
+        // console.log(file)
+        reader.onload = (event: Event) => {
+          const target = event.target as EventTarget & { result: string }
+          setUrl(target.result)
+        }
+
+        reader.readAsDataURL(file)
+      }
+    }
+  };
+
   return (
     <div className='Extractor-Form'>
       <form
@@ -73,9 +94,15 @@ export const ExtractorForm = ({ setUrl, errorMessage }: ExtractorFormProps) => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragEnd}
       >
+        <input
+          className='file-input'
+          type="file"
+          accept=".svg, .png, .jpeg, .jpg, .webp, .bmp"
+          onChange={handleFileChange}
+        />
         <p className='image-input__placeholder'>
           <span className='image-input__icon icon-image' />
-          Drop an image
+          Drop or Browse image
         </p>
       </div>
     </div>

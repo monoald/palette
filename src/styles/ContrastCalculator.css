@@ -1,12 +1,9 @@
 .Contrast-Calculator {
-  display: grid;
-  grid-template-areas: 
-  "buttons"
-  "wcag-info"
-  "close-button";
-  grid-template-rows: 33px 1fr auto;
-  width: 600px;
   max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  gap: 0;
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none;
@@ -26,10 +23,10 @@
   align-items: center;
 }
 .Contrast-Calculator .color-button--primary {
-  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
 }
 .Contrast-Calculator .color-button--secondary {
-  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
   padding: 0;
 }
 .secondary-color {
@@ -77,4 +74,8 @@
 .wcag-info__container #tool-tip::after {
   left: 25px;
   border-color: transparent transparent var(--txt-main) transparent;
+}
+
+.close-button {
+  margin-left: auto;
 }

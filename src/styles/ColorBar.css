@@ -36,12 +36,16 @@
 }
 .color-blind-container {
   position: absolute;
+  top: 0;
+  max-height: 80%;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
 }
 .color-blind-container::before {
   position: absolute;
   content: '';
   width: 100%;
-  height: 20px;
+  height: 30px;
   background-color: transparent;
   bottom: -10px;
   left: 0;

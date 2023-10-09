@@ -3,11 +3,12 @@ import { WCAGRequierements, rateContrast, hexToRgb } from 'colors-kit'
 
 import { ContrastTable } from './ContrastTable'
 import { DraggableModal } from '../containers/DraggableModal'
+import { DescriptionTooltip } from './tooltips/DescriptionTooltip'
 
 import { ColorsAction, ColorsReducer } from '../reducers/colors'
 import { ModalsAction } from '../reducers/modals'
+
 import '../styles/ContrastCalculator.css'
-import { DescriptionTooltip } from './tooltips/DescriptionTooltip'
 
 interface ContrastCalculatorProps {
   colors: ColorsReducer
@@ -55,6 +56,26 @@ export const ContrastCalculator = ({ colors, colorsDispatch, setUpdatedColor, mo
 
   return (
     <DraggableModal nameClass='Contrast-Calculator'>
+      <button
+        className='close-button'
+        onClick={() => modalsDispatch({ type: 'contrast' })}
+      >
+        <span className='close-button__icon icon-x'/>
+      </button>
+
+      <div className='wcag-info'>
+        <div className='wcag-info__container txt-hover-primary' data-tooltip>
+          <p>
+            {contrast.contrastValue}:1
+          </p>
+          <span className='wcag-info__icon icon-info' />
+          <DescriptionTooltip
+            text='Web Content Accessibility Guidelines contrast rate'
+            tipPosition='bottom'
+          />
+        </div>
+        <ContrastTable contrast={contrast} />
+      </div>
       <div className='buttons-container'>
         <button
           className='color-button color-button--primary'
@@ -96,27 +117,6 @@ export const ContrastCalculator = ({ colors, colorsDispatch, setUpdatedColor, mo
           </button>
         </div>
       </div>
-
-      <div className='wcag-info'>
-        <div className='wcag-info__container txt-hover-primary' data-tooltip>
-          <p>
-            {contrast.contrastValue}:1
-          </p>
-          <span className='wcag-info__icon icon-info' />
-          <DescriptionTooltip
-            text='Web Content Accessibility Guidelines contrast rate'
-            tipPosition='bottom'
-          />
-        </div>
-        <ContrastTable contrast={contrast} />
-      </div>
-
-      <button
-        className='secondary-button'
-        onClick={() => modalsDispatch({ type: 'contrast' })}
-      >
-        Close
-      </button>
     </DraggableModal>
   )
 }

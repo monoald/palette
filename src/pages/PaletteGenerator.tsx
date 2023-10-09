@@ -94,7 +94,7 @@ export const PaletteGenerator = () => {
 
   useEffect(() => {
     if (firstRender === false) {
-      colorsDispatch({ type: 'set-colors', payload: { paletteType: options.paletteType}})
+      colorsDispatch({ type: 'set-colors', payload: { paletteType: options.paletteType }})
     }
   }, [options.paletteType])
 
@@ -162,6 +162,7 @@ export const PaletteGenerator = () => {
           colorsDispatch={colorsDispatch}
           history={colors.history}
           setTooltipMessage={setTooltipMessage}
+          paletteType={options.paletteType}
         />
 
         <OptionBarContainer

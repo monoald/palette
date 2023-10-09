@@ -27,6 +27,7 @@
   color: #C1292E;
 }
 .image-input {
+  position: relative;
   width: 480px;
   height: 180px;
   border-radius: 8px;
@@ -48,4 +49,8 @@
 }
 .image-input__icon {
   font-size: 3.4rem;
+}
+
+.file-input {
+  cursor: pointer;
 }

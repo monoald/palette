@@ -16,10 +16,11 @@ interface HeaderProps {
   modalsDispatch: React.Dispatch<ModalsAction>
   colorsDispatch: React.Dispatch<ColorsAction>
   history: History
-  setTooltipMessage: React.Dispatch<React.SetStateAction<string>>
+  setTooltipMessage: React.Dispatch<React.SetStateAction<string>>,
+  paletteType: string
 }
 
-export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, history, setTooltipMessage }: HeaderProps) => {
+export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, history, setTooltipMessage, paletteType }: HeaderProps) => {
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href)
     setTooltipMessage('Url copied!')
@@ -30,6 +31,17 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
   return (
     <aside className='SideBar'>
       <ul className='SideBar__nav'>
+      <li>
+          <button
+            className='option'
+            onClick={() => optionsDispatch({ type: 'option', payload: 'paletteType'})}
+            data-tooltip
+          >
+            <DescriptionTooltip text='Palete type' tipPosition='right'/>
+            <span className='option__icon icon-palette'/>
+          </button>
+        </li>
+
         <li>
           <button
             className='option'
@@ -38,17 +50,6 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
           >
             <DescriptionTooltip text='Color blind simulator' tipPosition='right'/>
             <span className='option__icon icon-eye'/>
-          </button>
-        </li>
-
-        <li>
-          <button
-            className='option'
-            onClick={() => optionsDispatch({ type: 'option', payload: 'paletteType'})}
-            data-tooltip
-          >
-            <DescriptionTooltip text='Palete type' tipPosition='right'/>
-            <span className='option__icon icon-palette'/>
           </button>
         </li>
 
@@ -66,7 +67,19 @@ export const SideBar = ({ optionsDispatch, modalsDispatch, colorsDispatch, histo
         <li>
           <button
             className='option'
-            onClick={() => colorsDispatch({ type: 'back-palette' })} disabled={history.currentIndex === 0}
+            onClick={() => colorsDispatch({ type: 'set-colors', payload: { paletteType } })}
+            data-tooltip
+          >
+            <DescriptionTooltip text='Change palette (Spacebar)' tipPosition='right'/>
+            <span className='option__icon icon-plus'/>
+          </button>
+        </li>
+
+        <li>
+          <button
+            className='option'
+            onClick={() => colorsDispatch({ type: 'back-palette' })}
+            disabled={history.currentIndex === 0}
             data-tooltip
           >
             <DescriptionTooltip text='Undo' tipPosition='right'/>

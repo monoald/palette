@@ -18,6 +18,7 @@ import { ContrastCalculator } from '../components/ContrastCalculator'
 import { ColorPicker, PickerColor } from '../components/picker/ColorPicker'
 import { ImageColorExtractor } from '../components/imageExtractor/ImageColorExtractor'
 import Tooltip from '../components/tooltips/Tooltip'
+import { Hint } from '../components/Hint'
 
 import { optionsInitialState, optionsReducer } from '../reducers/options'
 import { colorsInitialState, colorsReducer } from '../reducers/colors'
@@ -55,6 +56,16 @@ export interface Formats {
   xyz: Xyz
   hex?: string
 }
+
+const hints = [
+  'Press the <strong>spacebar</strong> to discover a new palette!',
+  'You can <strong>drag</strong> and <strong>drop</strong> all the pop up elements!',
+  'When simulating <strong>color blindness</strong>, try to resize the simulation by <strong>dragging the bottom edge</strong>!',
+  '<strong>Re-order</strong> your palette dragging the <strong><span class="icon-move" style="font-size: 2rem;"></span></strong> icon.',
+  '<strong>Extract</strong> amazing palettes from <strong>images</strong>, click <strong><span class="icon-image" style="font-size: 2rem;"></span></strong> to start!',
+  'Simulate different <strong>color blindness</strong> types, click <strong><span class="icon-eye" style="font-size: 2rem;"></span></strong> to start!',
+  'Did you <strong>skip</strong> an amazing palette? Don`t worry just click <strong><span class="icon-undo" style="font-size: 2rem;"></span></strong> to go back!',
+]
 
 export const PaletteGenerator = () => {
   const [colors, colorsDispatch] = useReducer(colorsReducer, colorsInitialState)
@@ -156,6 +167,8 @@ export const PaletteGenerator = () => {
   return (
     <>
       <div className='palette-layout'>
+        <Hint hints={hints} />
+
         <SideBar
           optionsDispatch={optionsDispatch}
           modalsDispatch={modalsDispatch}

@@ -21,6 +21,7 @@ import Tooltip from '../components/tooltips/Tooltip'
 
 import '../styles/Gradient.css'
 import { createUUID } from '../utils/createUUID'
+import { Hint } from '../components/Hint'
 
 export interface Color {
   color: string
@@ -68,6 +69,11 @@ const timingSelect = {
   'ease-out': null,
   'ease-in-out': null
 }
+
+const hints = [
+  '<strong>Drag</strong> a color square to <strong>re-order</strong> the gradient',
+  '<strong>Click</strong> a color square to select for its edition or deletion',
+]
 
 export const Gradient = () => {
   const [gradient, setGradient] = useState<GradientType>({
@@ -688,6 +694,7 @@ export const Gradient = () => {
     <>
       <div className='gradient'>
         <div className='generator'>
+          <Hint hints={hints} />
           { openPicker && gradient.activeId &&
             <ColorPicker
               id={`${gradient.activeId.id}`}

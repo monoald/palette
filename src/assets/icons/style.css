@@ -146,3 +146,6 @@
 .icon-dots:before {
   content: "\e929";
 }
+.icon-hint:before {
+  content: "\e92a";
+}

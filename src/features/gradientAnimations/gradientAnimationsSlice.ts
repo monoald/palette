@@ -11,7 +11,7 @@ import { authApiSlice } from '../auth/authApiSlice'
 
 interface Color {
   color: string
-  id: number
+  id: string
 }
 
 export interface GradientColor {

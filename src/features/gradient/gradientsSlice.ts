@@ -5,7 +5,7 @@ import { publicGradientApiSlice } from './publicGradientsSlice'
 
 interface Color {
   color: string
-  id: number
+  id: string
 }
 
 export interface AnimationInfo {

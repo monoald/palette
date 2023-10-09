@@ -1,5 +1,6 @@
 import { Gradient, GradientColor, GradientInfo } from '../features/gradient/gradientsSlice'
 import { AnimationInfo, GradientAnimation } from '../features/gradientAnimations/gradientAnimationsSlice'
+import { createUUID } from './createUUID'
 
 export const idToGradient = (gradient: Partial<Gradient> | Partial<GradientAnimation>): Gradient => {
   const newGradient = { ...gradient } as Gradient
@@ -16,7 +17,7 @@ export const idToGradient = (gradient: Partial<Gradient> | Partial<GradientAnima
     const obj = color.split('-')
 
     firstRow.colors.push({
-      id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+      id: createUUID(),
       color: `#${obj[0]}`
     })
     firstRow.stops.push(+obj[1])
@@ -43,7 +44,7 @@ export const idToGradient = (gradient: Partial<Gradient> | Partial<GradientAnima
       const obj = color.split('-')
 
       newSecondRow.colors.push({
-        id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+        id: createUUID(),
         color: `#${obj[0]}`
       })
       newSecondRow.stops.push(+obj[1])

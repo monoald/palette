@@ -58,8 +58,7 @@ export const SignIn = () => {
 
     dispatch(setCredentials({
       user: user.user,
-      token: user.token,
-      collectionModified: false
+      token: user.token
     }))
 
     navigate('/')
@@ -77,8 +76,7 @@ export const SignIn = () => {
 
       dispatch(setCredentials({
         user: user.user,
-        token: user.token,
-        collectionModified: false
+        token: user.token
       }))
 
       dispatch(setSavedColors(user.user.colors as Partial<Color>[]))

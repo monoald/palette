@@ -20,10 +20,11 @@ import { CustomRange } from '../components/gradient/CustomRange'
 import Tooltip from '../components/tooltips/Tooltip'
 
 import '../styles/Gradient.css'
+import { createUUID } from '../utils/createUUID'
 
 export interface Color {
   color: string
-  id: number
+  id: string
 }
 export interface GradientColor {
   colors: Color[]
@@ -38,7 +39,7 @@ interface GradientColors {
 function findIdInColors(id: string, colors: Color[]): number {
   let colorIndex = -1
   colors.forEach((color, index) => {
-    if (color.id === +id) colorIndex = index
+    if (color.id === id) colorIndex = index
   })
 
   return colorIndex
@@ -74,9 +75,9 @@ export const Gradient = () => {
     angle: 90,
     firstRow: {
       colors: [
-        { id: 2, color: '#00ad96' },
-        { id: 0, color: '#0051ad' },
-        { id: 1, color: '#2300ad' }
+        { id: '2', color: '#00ad96' },
+        { id: '0', color: '#0051ad' },
+        { id: '1', color: '#2300ad' }
       ],
       stops: [0, 50, 100]
     }
@@ -198,7 +199,7 @@ export const Gradient = () => {
           setGradient(prev => ({
             ...prev,
             activeId: {
-              id: gradient.activeId?.id as number,
+              id: gradient.activeId?.id as string,
               color: activeColor.color
             }
           }))
@@ -250,7 +251,7 @@ export const Gradient = () => {
         const obj = color.split('-')
 
         newFirstRow.colors.push({
-          id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+          id: createUUID(),
           color: `#${obj[0]}`
         })
         newFirstRow.stops.push(+obj[1])
@@ -280,7 +281,7 @@ export const Gradient = () => {
           const obj = color.split('-')
 
           newSecondRow.colors.push({
-            id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+            id: createUUID(),
             color: `#${obj[0]}`
           })
           newSecondRow.stops.push(+obj[1])
@@ -440,7 +441,7 @@ export const Gradient = () => {
         setGradient(prev => {
           const newColors = [...prev.firstRow?.colors as Color[]]
           newColors[isOnFirstRow] = {
-            id: +color.id,
+            id: color.id,
             color: color.formats.hex as string
           }
           return {
@@ -455,7 +456,7 @@ export const Gradient = () => {
         setGradient(prev => {
           const newColors = [...prev.secondRow?.colors as Color[]]
           newColors[isOnSecondRow] = {
-            id: +color.id,
+            id: color.id,
             color: color.formats.hex as string
           }
           return {
@@ -505,7 +506,7 @@ export const Gradient = () => {
           colors: [
             ...prev.firstRow?.colors as Color[],
             {
-              id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+              id: createUUID(),
               color: '#ffffff'
             }
           ],
@@ -519,7 +520,7 @@ export const Gradient = () => {
           colors: [
             ...prev.secondRow?.colors as Color[],
             {
-              id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+              id: createUUID(),
               color: '#ffffff'
             }
           ],

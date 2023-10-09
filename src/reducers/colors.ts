@@ -14,7 +14,7 @@ export const colorInitialState: Color = {
   color: '',
   isLocked: false,
   contrastColor: '',
-  id: 0,
+  id: '',
   formats: {
     cmyk: { c: 0, m: 0, y: 0, k: 0 },
     hsv: { h: 0, s: 0, v: 0 },
@@ -48,7 +48,7 @@ export interface ColorsPayload {
   event?: DragEndEvent
   addedColor?: string
   side?: string
-  id?: number
+  id?: string
   colors?: Color[]
   url?: string
   history?: string[]
@@ -99,7 +99,7 @@ export function colorsReducer(state: ColorsReducer, action: ColorsAction) {
   const colors = action.payload?.colors as Color[]
   const event = action.payload?.event as DragEndEvent
   const format = action.payload?.format as string
-  const id = action.payload?.id as number
+  const id = action.payload?.id as string
   let newColor: Color = colorInitialState
   const paletteType = action.payload?.paletteType as string
   const side = action.payload?.side as string
@@ -227,8 +227,8 @@ function reorderColors(event: DragEndEvent, colors: Color[], history: History): 
   const target = over?.id as string
 
   if(dragged !== target) {
-    const activeIndex = colors.findIndex(color  => color.id === +dragged)
-    const overIndex = colors.findIndex(color  => color.id === +target)
+    const activeIndex = colors.findIndex(color  => color.id === dragged)
+    const overIndex = colors.findIndex(color  => color.id === target)
 
     const newColors = arrayMove(colors, activeIndex, overIndex)
 
@@ -280,7 +280,7 @@ function lockColor(color: string, colors: Color[]): Color[] {
   return newColors
 }
 
-function removeColor(colors: Color[], id: number, history: History): Color[] {
+function removeColor(colors: Color[], id: string, history: History): Color[] {
   const newColors = Array.from(colors)
 
   const colorIndex = newColors.findIndex(color => color.id === id)

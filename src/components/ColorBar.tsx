@@ -84,7 +84,7 @@ export const ColorBar = ({
     colorsDispatch({ type: 'add-color', payload: { color, addedColor: newColor, side: 'right' } })
   }
 
-  function handleRemoveColor(id: number) {
+  function handleRemoveColor(id: string) {
     colorsDispatch({ type: 'remove-color', payload: { id } })
   }
 

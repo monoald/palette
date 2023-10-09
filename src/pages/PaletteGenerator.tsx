@@ -30,7 +30,7 @@ export interface Color {
   color: string
   isLocked: boolean
   contrastColor: string
-  id: number
+  id: string
   formats: Formats
   colorBlind: ColorBlindSimulator
 }
@@ -197,6 +197,7 @@ export const PaletteGenerator = () => {
                   setUpdatedColor={setUpdatedColor}
                   setTooltipMessage={setTooltipMessage}
                   index={index}
+                  key={color.id}
                 />
               ))} 
 

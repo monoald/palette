@@ -1,6 +1,7 @@
 import { AnyFormat, BaseColor, Cmyk, Hsl, Hsv, Lab, Rgb, Xyz, colorFormatConverter, toColorBlind } from 'colors-kit'
 import { Color } from '../pages/PaletteGenerator'
 import { getMainContrastColor } from './getMainContrastColor'
+import { createUUID } from './createUUID'
 
 export function createNewColor(color: AnyFormat, format: string): Color {
   const hex = format === 'hex' ? color as string : colorFormatConverter(color as BaseColor, { identifyFormat: true, targetFormat: ['hex'] }).hex as string
@@ -15,7 +16,7 @@ export function createNewColor(color: AnyFormat, format: string): Color {
     color: hex,
     isLocked: false,
     contrastColor: getMainContrastColor(hex),
-    id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+    id: createUUID(),
     formats: {
       cmyk,
       hsv,

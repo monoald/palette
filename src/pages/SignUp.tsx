@@ -53,8 +53,7 @@ export const SignUp = () => {
 
       dispatch(setCredentials({
         user: user.user,
-        token: user.token,
-        collectionModified: false
+        token: user.token
       }))
 
       navigate('/')

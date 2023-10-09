@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSelector } from '@reduxjs/toolkit'
+import { EntityState, createEntityAdapter, createSelector } from '@reduxjs/toolkit'
 import { idToPalette } from '../../utils/idToPalette'
 
 import { apiSlice } from '../../app/api/apiSlice'
@@ -21,8 +21,8 @@ const initialState = publicPaletteAdapter.getInitialState()
 
 export const publicPaletteApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getPublicPalettes: builder.query({
-      query: () => `/public-palettes`,
+    getPublicPalettes: builder.query<EntityState<Palette>, number>({
+      query: (page) => `/public-palettes?page=${page}`,
       transformResponse: (response: Palette[]) => {
         const user = JSON.parse(localStorage.getItem('user') as string)
 
@@ -33,6 +33,35 @@ export const publicPaletteApiSlice = apiSlice.injectEndpoints({
         })
 
         return publicPaletteAdapter.setAll(initialState, loadedPalettes)
+      },
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge: (currentCache, newItems) => {
+        if (newItems.ids.length !== 0) {
+          currentCache.ids.push(...newItems.ids)
+          currentCache.entities = { ...currentCache.entities, ...newItems.entities }
+        } else {
+          currentCache.ids.push('no-more-items')
+          currentCache.entities = {
+            ...currentCache.entities,
+            'no-more-items': {
+              colors: '',
+              colorsArr: [''],
+              users: [''],
+              id: '',
+              savedCount: 0,
+              upId: '',
+              length: 0,
+              saved: false
+            }
+          }
+        }
+
+        return currentCache
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
       },
       providesTags: (result) =>
         result
@@ -49,7 +78,7 @@ export const {
   useGetPublicPalettesQuery
 } = publicPaletteApiSlice
 
-export const selectPalettesResult = publicPaletteApiSlice.endpoints.getPublicPalettes.select(undefined)
+export const selectPalettesResult = publicPaletteApiSlice.endpoints.getPublicPalettes.select(1)
 
 const selectPaletteData = createSelector(
   selectPalettesResult,

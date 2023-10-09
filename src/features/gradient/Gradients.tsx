@@ -1,27 +1,32 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useFilter } from '../../hooks/useFilter'
 import { useSave } from '../../hooks/useSave'
+import { useTooltip } from '../../hooks/useTooltip'
+import { useIntersect } from '../../hooks/useIntersect'
 
 import { CollectionLayout } from '../../containers/CollectionLayout'
 import Tooltip from '../../components/tooltips/Tooltip'
 
-import { store } from '../../app/store'
-import { useAppSelector } from '../../app/hooks'
-import { publicGradientApiSlice, selectAllPublicGradients } from './publicGradientsSlice'
-import { useTooltip } from '../../hooks/useTooltip'
+import { useGetPublicGradientsQuery } from './publicGradientsSlice'
 
 import '../../styles/UserGradients.css'
 
-export const Gradients = () => {
-  const gradients = useAppSelector(selectAllPublicGradients)
+// eslint-disable-next-line prefer-const
+let storedPage = 1
 
-  useEffect(() => {
-    if (gradients.length === 0) {
-      store.dispatch(publicGradientApiSlice.endpoints.getPublicGradients.initiate(undefined))
+export const Gradients = () => {
+  const [page, setPage] = useState(storedPage)
+  const { data: gradients } = useGetPublicGradientsQuery(page)
+  
+  const callback = () => {
+    if (!gradients?.entities['no-more-items']) {
+      setPage(page + 1)
+      storedPage = page + 1
     }
-  }, [gradients])
+  }
+  const [ref] = useIntersect(callback)
 
   const { shape, CollectionFilter } = useFilter({
     options: {
@@ -39,41 +44,44 @@ export const Gradients = () => {
 
       <section className='gradients-container' onClick={likeHandler}>
         <ul className={`items__list items__list--${shape}`}>
-          { gradients.length !== 0 && gradients.map(gradient => (
-            <div className='item' key={gradient.id}>
-              <li
-                className='item__clr-container'
-              >
-                <button
-                  className='item__button'
-                  onClick={() => navigate(`/gradient/${gradient.name}`)}
-                  style={{
-                    position: 'relative',
-                    background: gradient.styles.base,
-                    '--tetst1': gradient.styles.grid
-                  } as React.CSSProperties}
+          { gradients && gradients.ids.map(id => {
+            if (id !== 'no-more-items') return (
+              <div className='item' key={gradients.entities[id]?.id}>
+                <li
+                  className='item__clr-container'
                 >
-                </button>
-              </li>
+                  <button
+                    className='item__button'
+                    onClick={() => navigate(`/gradient/${gradients.entities[id]?.name}`)}
+                    style={{
+                      position: 'relative',
+                      background: gradients.entities[id]?.styles.base,
+                      '--tetst1': gradients.entities[id]?.styles.grid
+                    } as React.CSSProperties}
+                  >
+                  </button>
+                </li>
 
-              <div className='button-container'>
-                <button
-                  className='color-button gradient-like'
-                  data-name={gradient.name}
-                  data-saved={gradient.saved}
-                  data-id={gradient.id}
-                >
-                  <span
-                    className={`
-                      icon
-                      icon-heart${gradient.saved ? '-filled' : ''}
-                    `}
-                  />
-                </button>
+                <div className='button-container'>
+                  <button
+                    className='color-button gradient-like'
+                    data-name={gradients.entities[id]?.name}
+                    data-saved={gradients.entities[id]?.saved}
+                    data-id={gradients.entities[id]?.id}
+                  >
+                    <span
+                      className={`
+                        icon
+                        icon-heart${gradients.entities[id]?.saved ? '-filled' : ''}
+                      `}
+                    />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))
-          }
+            )
+          })}
+
+          <span ref={ref} className='pagination-trigger'/>
         </ul>
       </section>
 

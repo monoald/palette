@@ -52,7 +52,7 @@ export const gradientApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted({ id, unsavedGradient, name }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          publicGradientApiSlice.util.updateQueryData('getPublicGradients', undefined, draft => {
+          publicGradientApiSlice.util.updateQueryData('getPublicGradients', 1, draft => {
             const gradient = draft.entities[id]
             if (gradient) gradient.saved = true
           })
@@ -95,7 +95,7 @@ export const gradientApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted({ id, name }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          publicGradientApiSlice.util.updateQueryData('getPublicGradients', undefined, draft => {
+          publicGradientApiSlice.util.updateQueryData('getPublicGradients', 1, draft => {
             const gradient = draft.entities[id]
             if (gradient) gradient.saved = false
           })

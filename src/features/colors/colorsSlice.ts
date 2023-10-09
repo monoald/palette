@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSelector } from '@reduxjs/toolkit'
+import { EntityState, createEntityAdapter, createSelector } from '@reduxjs/toolkit'
 
 import { apiSlice } from '../../app/api/apiSlice'
 import { RootState } from '../../app/store'
@@ -19,8 +19,8 @@ const initialState = colorAdapter.getInitialState()
 
 export const colorApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getColors: builder.query({
-      query: () => '/colors',
+    getColors: builder.query<EntityState<Color>, number>({
+      query: (page) => `/colors?page=${page}`,
       transformResponse: (response: Color[]) => {
         const user = JSON.parse(localStorage.getItem('user') as string)
 
@@ -31,6 +31,31 @@ export const colorApiSlice = apiSlice.injectEndpoints({
         })
 
         return colorAdapter.setAll(initialState, loadedColors)
+      },
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge: (currentCache, newItems) => {
+        if (newItems.ids.length !== 0) {
+          currentCache.ids.push(...newItems.ids)
+          currentCache.entities = { ...currentCache.entities, ...newItems.entities }
+        } else {
+          currentCache.ids.push('no-more-items')
+          currentCache.entities = {
+            ...currentCache.entities,
+            'no-more-items': {
+              users: [''],
+              name: '',
+              id: '',
+              savedCount: 0
+            }
+          }
+        }
+
+        return currentCache
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
       },
       providesTags: (result) =>
         result
@@ -48,7 +73,7 @@ export const colorApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted({ id, unsavedColor, name }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          colorApiSlice.util.updateQueryData('getColors', undefined, draft => {
+          colorApiSlice.util.updateQueryData('getColors', 1, draft => {
             const color = draft.entities[id]
             if (color) color.saved = true
           })
@@ -91,7 +116,7 @@ export const colorApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          colorApiSlice.util.updateQueryData('getColors', undefined, draft => {
+          colorApiSlice.util.updateQueryData('getColors', 1, draft => {
             const color = draft.entities[id]
             if (color) color.saved = false
           })
@@ -122,7 +147,7 @@ export const {
   useUnsaveColorMutation
 } = colorApiSlice
 
-export const selectColorsResult = colorApiSlice.endpoints.getColors.select(undefined)
+export const selectColorsResult = colorApiSlice.endpoints.getColors.select(1)
 
 const selectColorsData = createSelector(
   selectColorsResult,

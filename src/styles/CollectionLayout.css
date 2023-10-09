@@ -30,10 +30,12 @@
   z-index: 0;
 }
 .items__list {
+  position: relative;
+  min-height: 140vh;
   padding-block: 40px;
-  list-style: none;
-  display: grid;
   gap: 80px;
+  display: grid;
+  list-style: none;
 }
 .item__clr-container {
   display: flex;
@@ -140,4 +142,13 @@
 .no-saved-items .primary-button {
   width: fit-content;
   padding-inline: 18px;
+}
+
+.pagination-trigger {
+  position: absolute;
+  bottom: 200px;
+  width: 100%;
+  height: 80px;
+  display: block;
+  background: transparent;
 }

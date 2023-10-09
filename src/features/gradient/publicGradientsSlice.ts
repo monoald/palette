@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSelector } from '@reduxjs/toolkit'
+import { EntityState, createEntityAdapter, createSelector } from '@reduxjs/toolkit'
 
 import { apiSlice } from '../../app/api/apiSlice'
 import { RootState } from '../../app/store'
@@ -26,8 +26,8 @@ const initialState = publicGradientAdapter.getInitialState()
 
 export const publicGradientApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getPublicGradients: builder.query({
-      query: () => '/public-gradients',
+    getPublicGradients: builder.query<EntityState<PublicGradient>, number>({
+      query: (page) => `/public-gradients?page=${page}`,
       transformResponse: (response: PublicGradient[]) => {
         const user = JSON.parse(localStorage.getItem('user') as string)
 
@@ -53,6 +53,35 @@ export const publicGradientApiSlice = apiSlice.injectEndpoints({
 
         return publicGradientAdapter.setAll(initialState, loadedGradients)
       },
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge: (currentCache, newItems) => {
+        if (newItems.ids.length !== 0) {
+          currentCache.ids.push(...newItems.ids)
+          currentCache.entities = { ...currentCache.entities, ...newItems.entities }
+        } else {
+          currentCache.ids.push('no-more-items')
+          currentCache.entities = {
+            ...currentCache.entities,
+            'no-more-items': {
+              name: '',
+              users: [''],
+              id: '',
+              upId: '',
+              saved: false,
+              styles: {
+                base: ''
+              }
+            }
+          }
+        }
+
+        return currentCache
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
       providesTags: (result) =>
         result
           ? [
@@ -68,7 +97,7 @@ export const {
   useGetPublicGradientsQuery
 } = publicGradientApiSlice
 
-export const selectPublicGradientsResult = publicGradientApiSlice.endpoints.getPublicGradients.select(undefined)
+export const selectPublicGradientsResult = publicGradientApiSlice.endpoints.getPublicGradients.select(1)
 
 const selectPublicGradientsData = createSelector(
   selectPublicGradientsResult,

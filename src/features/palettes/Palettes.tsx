@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
 
@@ -8,19 +7,24 @@ import { useTooltip } from '../../hooks/useTooltip'
 
 import { CollectionLayout } from '../../containers/CollectionLayout'
 import Tooltip from '../../components/tooltips/Tooltip'
+import { useIntersect } from '../../hooks/useIntersect'
+import { useGetPublicPalettesQuery } from './publicPalettesSlice'
+import { useState } from 'react'
 
-import { store } from '../../app/store'
-import { useAppSelector } from '../../app/hooks'
-import { publicPaletteApiSlice, selectAllPalettes } from './publicPalettesSlice'
+// eslint-disable-next-line prefer-const
+let storedPage = 1
 
 const Palettes = () => {
-  const palettes = useAppSelector(selectAllPalettes)
+  const [page, setPage] = useState(storedPage)
+  const { data: palettes } = useGetPublicPalettesQuery(page)
 
-  useEffect(() => {
-    if (palettes.length === 0) {
-      store.dispatch(publicPaletteApiSlice.endpoints.getPublicPalettes.initiate(undefined))
+  const callback = () => {
+    if (!palettes?.entities['no-more-items']) {
+      setPage(page + 1)
+      storedPage = page + 1
     }
-  }, [palettes])
+  }
+  const [ref] = useIntersect(callback)
 
   const { shape, CollectionFilter } = useFilter({
     options: {
@@ -42,10 +46,11 @@ const Palettes = () => {
 
       <section className='user-palettes' onClick={likeHandler}>
         <ul className={`items__list items__list--${shape}`}>
-          { palettes.length !== 0 && palettes.map(palette => (
-              <div className='item' key={palette.id}>
+          { palettes && palettes.ids.map(id => {
+            if (id !== 'no-more-items') return (
+              <div className='item' key={palettes.entities[id]?.id}>
                 <li className='item__clr-container'>
-                  { palette.colorsArr.map(color => (
+                  { palettes.entities[id]?.colorsArr.map(color => (
                       <button key={color}
                         className='item__color'
                         onClick={() => navigate(`/color/${color.substring(1)}`)}
@@ -67,27 +72,30 @@ const Palettes = () => {
                 <div className='button-container'>
                   <button
                     className='color-button palette-like'
-                    data-colors={palette.colors}
-                    data-saved={palette.saved}
-                    data-id={palette.id}
+                    data-colors={palettes.entities[id]?.colors}
+                    data-saved={palettes.entities[id]?.saved}
+                    data-id={palettes.entities[id]?.id}
                   >
                     <span
                       className={`
                         icon
-                        icon-heart${palette.saved ? '-filled' : ''}
+                        icon-heart${palettes.entities[id]?.saved ? '-filled' : ''}
                       `}
                     />
                   </button>
 
                   <button
                   className='color-button'
-                  onClick={() => editPaletteHandler(palette.colors as string)}
+                  onClick={() => editPaletteHandler(palettes.entities[id]?.colors as string)}
                 >
                   Edit
                 </button>
                 </div>
               </div>
-          ))}
+            )
+          })}
+
+          <span ref={ref} className='pagination-trigger'/>
         </ul>
       </section>
       <Tooltip message={tooltipMessage} />

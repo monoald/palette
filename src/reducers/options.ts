@@ -9,7 +9,7 @@ export interface OptionsReducer {
 export const optionsInitialState: OptionsReducer = {
   option: 'none',
   colorBlind: 'none',
-  paletteType: 'analogous'
+  paletteType: 'random'
 }
 
 export function optionsReducer(state: OptionsReducer, action: OptionsAction) {

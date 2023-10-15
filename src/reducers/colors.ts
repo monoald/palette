@@ -141,6 +141,11 @@ export function colorsReducer(state: ColorsReducer, action: ColorsAction) {
       const index = state.colors.findIndex(clr => clr.id === colorObject.id)
       newColors = [...state.colors]
       newColors.splice(index, 1, colorObject)
+      const newId = paletteToId(newColors)
+      history.data.push(newId)
+      history.currentIndex = history.data.length - 1
+
+      window.history.replaceState({}, '', `/make-palette/${newId}`)
       return { ...state, colors: newColors }
     case 'replace-secondary':
       return { ...state, secondary: { ...colorObject, id: state.primary.id || colorObject.id } }
@@ -190,11 +195,9 @@ function updateColors(colors: Color[], primary: Color, history: History): Color[
 
 function changePalette(paletteType: string, colors: Color[], history: History): Color[] {
   const newColors = makeColorPalette({
-    randomColor: true,
     format: 'hex',
     paletteType: paletteType as Palette,
     quantity: colors.length || 5,
-    variation: Math.floor(Math.random() * (80 - 35 + 1) + 35)
   }) as string[]
 
   const newObject = newColors.map((color): Color => {
@@ -297,7 +300,7 @@ function removeColor(colors: Color[], id: string, history: History): Color[] {
 
 function initPalette(url: string | undefined, history: History) {
   if (url === undefined) {
-    const colors = changePalette('analogous', [], history)
+    const colors = changePalette('random', [], history)
 
     return colors
   } else {

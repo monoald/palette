@@ -14,9 +14,11 @@ export const paletteOptions: string[] = [
   'analogous',
   'complementary',
   'monochromatic',
+  'mixed',
+  'shades',
   'split-complementary',
   'square',
   'tetradic',
   'triadic',
-  'random'
+  'random',
 ]

@@ -50,7 +50,7 @@ const formatSelectData = {
 
 export const ColorPicker = ({ id, color, updateColor, handleClosePicker, type }: ColorPickerProps) => {
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null)
-  const [pickerFormat, setPickerFormat] = useState('Hexadecimal')
+  const [pickerFormat, setPickerFormat] = useState(localStorage.getItem('color-picker-format') || 'Hexadecimal')
   const [firstRender, setFirstRender] = useState(true)
   
   const [pickerColor, setPickerColor] = useState<PickerColor>({
@@ -71,6 +71,13 @@ export const ColorPicker = ({ id, color, updateColor, handleClosePicker, type }:
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pickerColor])
+
+  useEffect(() => {
+    if (!firstRender) {
+      localStorage.setItem('color-picker-format', pickerFormat)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pickerFormat])
 
   const updateWorkingColor = (color: AnyFormat, format: string) => {
     const formats = colorFormatConverter(color as BaseColor, {

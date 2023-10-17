@@ -7,6 +7,8 @@ import { ColorsAction } from '../../reducers/colors'
 import { createNewColor } from '../../utils/createNewColor'
 import { getMainContrastColor } from '../../utils/getMainContrastColor'
 
+import { DescriptionTooltip } from '../tooltips/DescriptionTooltip'
+
 import '../../styles/ImageCanvas.css'
 
 interface ImageCanvasProps {
@@ -41,12 +43,16 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
 
     if (imageRef.current !== null) {
       const canvas = imageRef.current as HTMLCanvasElement
-      const context = canvas.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D
+      const context = canvas.getContext('2d') as CanvasRenderingContext2D
 
       const img = new Image()
       img.src = url
-      img.crossOrigin = 'anonymous'
       img.onload = () => {
+        const ratio = 380 / img.height
+        const newWidth = img.width * ratio
+
+        canvas.width = newWidth
+        canvas.height = 380
         context?.drawImage(img, 0, 0, canvas.width, canvas.height)
       }
       extractColors()
@@ -150,8 +156,6 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
         >
           <canvas
             className='canvas__image'
-            width={560}
-            height={400}
             ref={imageRef}
             onDragStart={(event) => {event.preventDefault()}}
           />
@@ -198,25 +202,28 @@ export const ImageCanvas = ({ url, setUrl, setErrorMessage, colorsDispatch }: Im
               ${pickerActive ? 'config__button--active' : ''}
             `}
             onClick={() => setPickerActive(!pickerActive)}
+            data-tooltip
           >
             <span className='icon icon-eye-dropper' />
-            <p>Add Color</p>
+            <DescriptionTooltip text='Add Color' tipPosition='bottom'/>
           </button>
 
           <button
             className='config__button'
             onClick={handleAddColorsToPalette}
+            data-tooltip
           >
             <span className='icon icon-palette' />
-            <p>Add Palette</p>
+            <DescriptionTooltip text='Add Palette' tipPosition='bottom'/>
           </button>
 
           <button
             className='config__button'
             onClick={handleQuantitySubmit}
+            data-tooltip
           >
             <span className='icon icon-spin' />
-            <p>Extract</p>
+            <DescriptionTooltip text='Extract again' tipPosition='bottom'/>
           </button>
 
           <form className='extractor-input' onSubmit={handleQuantitySubmit}>

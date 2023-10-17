@@ -22,7 +22,8 @@
 
 .SideBar .option {
   padding: 0;
-  padding: 12px 10px;
+  padding: 12px 12px;
+  border-radius: 10px;
   background-color: transparent;
   border: none;
   color: var(--txt-main);
@@ -32,6 +33,7 @@
 }
 .SideBar .option:hover {
   color: #5BC3EB;
+  background: rgba(205,205,205,0.1);
 }
 .SideBar .option__icon {
   font-size: 2.2rem;

@@ -1,5 +1,6 @@
 .Image-Canvas {
   width: 100%;
+  min-width: 400px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -31,8 +32,6 @@
 }
 .canvas {
   position: relative;
-  width: 100%;
-  height: 400px;
   user-select: none;
 }
 .canvas__image {
@@ -60,7 +59,6 @@
   justify-content: center;
   gap: 8px;
   padding: 10px 16px;
-  border: 1px solid var(--txt-inactive);
   border-radius: 10px;
   background: transparent;
   color: var(--txt-main);
@@ -69,11 +67,11 @@
 }
 .Image-Canvas .config__button:hover,
 .Image-Canvas .config__button--active {
-  border-color: #5BC3EB;
   color: #5BC3EB;
+  background: rgba(205, 205, 205, 0.1);
 }
 .Image-Canvas .config__button .icon {
-  font-size: 1.8rem;
+  font-size: 2.2rem;
 }
 .extractor-input {
   position: absolute;
@@ -98,6 +96,7 @@
   margin: 0;
 }
 .loading {
+  min-width: 400px;
   font-size: 3.4rem;
   letter-spacing: 5px;
   margin: 100px auto;

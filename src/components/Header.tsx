@@ -1,14 +1,16 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 // import useTheme from '../hooks/useTheme'
+import { validateAvatar } from '../utils/validateAvatar'
 
 import { useAppSelector } from '../app/hooks'
 import { selectUser } from '../features/auth/authSlice'
 import HeaderUserSelect from '../features/auth/HeaderUserSelect'
 
 import '../styles/Header.css'
-import { validateAvatar } from '../utils/validateAvatar'
+import { useState } from 'react'
 
 export const Header = () => {
+  const [toggleNav, setToggleNav] = useState(false)
   const user = useAppSelector(selectUser)
   
   const navigate = useNavigate()
@@ -32,10 +34,15 @@ export const Header = () => {
           </a>
         </p>
 
-        <nav className='header-nav'>
+        <nav
+          className={`
+            header-nav
+            ${toggleNav ? 'menu-fade-in' : 'menu-fade-out'}
+          `}
+        >
           <ul className='header-nav__list'>
             <li className='header-nav__item item-palettes'>
-              Palettes
+              <p>Palettes</p>
               <ul className='navigation'>
                 <li>
                   <NavLink
@@ -62,7 +69,7 @@ export const Header = () => {
             </li>
 
             <li className='header-nav__item item-colors'>
-              Colors
+              <p>Colors</p>
               <ul className='navigation'>
                 <li>
                   <NavLink
@@ -78,7 +85,7 @@ export const Header = () => {
             </li>
 
             <li className='header-nav__item item-gradients'>
-              Gradients
+              <p>Gradients</p>
               <ul className='navigation'>
                 <li>
                   <NavLink
@@ -105,7 +112,7 @@ export const Header = () => {
             </li>
 
             <li className='header-nav__item item-icons'>
-              Icon Fonts
+              <p>Icon Fonts</p>
               <ul className='navigation'>
                 <li>
                   <NavLink
@@ -120,56 +127,61 @@ export const Header = () => {
               </ul>
             </li>
           </ul>
-        </nav>
-        
-        <nav className='user-nav'>
-          <ul className='user-nav__list'>
-            { user
-              ? (
-                <li className='user-nav__item'>
-                  <button
-                    className='user-nav__avatar'
-                  >
-                    <span
-                      className={
-                        !validateAvatar(user.avatar as string)
-                          ? 'avatar'
-                          : `avatar-icon avatar-${user.avatar}`
-                      }
-                      style={
-                        !validateAvatar(user.avatar as string)
-                          ? { backgroundImage: `url(data:image/png;base64,${user.avatar})` }
-                          : {}
-                      }
-                    />
-                  </button>
 
-                  <HeaderUserSelect />
-                </li>
-              )
-              : (
-                  <>
-                    <li className='user-nav__item'>
-                      <button
-                        className='secondary-button'
-                        onClick={() => navigate('/signup')}
-                      >
-                        Sign Up
-                      </button>
-                    </li>
-                    <li className='user-nav__item'>
-                      <button
-                        className='primary-button'
-                        onClick={() => navigate('/signin')}
-                      >
-                        Sign In
-                      </button>
-                    </li>
-                  </>
-              )
-            }
-          </ul>
+          { !user &&
+            <div className='menu-buttons-sign'>
+              <button
+                className='secondary-button'
+                onClick={() => navigate('/signup')}
+              >
+                Sign Up
+              </button>
+              <button
+                className='primary-button'
+                onClick={() => navigate('/signin')}
+              >
+                Sign In
+              </button>
+            </div>
+          }
         </nav>
+
+        <div className='menu-container'>
+          <nav className='user-nav'>
+            <ul className='user-nav__list'>
+              { user &&
+                  <li className='user-nav__item'>
+                    <button
+                      className='user-nav__avatar'
+                    >
+                      <span
+                        className={
+                          !validateAvatar(user.avatar as string)
+                            ? 'avatar'
+                            : `avatar-icon avatar-${user.avatar}`
+                        }
+                        style={
+                          !validateAvatar(user.avatar as string)
+                            ? { backgroundImage: `url(data:image/png;base64,${user.avatar})` }
+                            : {}
+                        }
+                      />
+                    </button>
+
+                    <HeaderUserSelect />
+                  </li>
+              }
+            </ul>
+          </nav>
+
+          <button
+            className='menu-button'
+            onClick={() => setToggleNav(!toggleNav)}
+          >
+            <span className='icon-menu' />
+          </button>
+        </div>
+
       </div>
     </header>
   )

@@ -149,3 +149,6 @@
 .icon-hint:before {
   content: "\e92a";
 }
+.icon-menu:before {
+  content: "\e92b";
+}

@@ -43,13 +43,13 @@
   padding: 0;
   position: absolute;
 }
-#tool-tip::after {
+/* #tool-tip::after {
   content: "";
   position:absolute;
   top: 50%;
   transform: translateY(-50%);
   border: 8px solid transparent;
-}
+} */
 #tool-tip:is(
   [tip-position="top"],
   [tip-position="block-start"],

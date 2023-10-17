@@ -216,33 +216,31 @@ export const PaletteGenerator = () => {
               ))} 
 
             </SortableContext>
-
-            { modals.contrast &&
-                <ContrastCalculator
-                  colors={colors}
-                  colorsDispatch={colorsDispatch}
-                  setUpdatedColor={setUpdatedColor}
-                  modalsDispatch={modalsDispatch}
-                />
-            }
-            { modals.picker && 
-                <ColorPicker
-                  handleClosePicker={() => modalsDispatch({ type: 'picker' })}
-                  color={updatedColor === 'primary' ? colors.primary.color : colors.secondary.color}
-                  updateColor={updateColor}
-                  id={updatedColor === 'primary' ? `${colors.primary.id}` : `${colors.secondary.id}`}
-                  type={updatedColor === 'primary' ? 'primary' : 'secondary'}
-                />
-            }
-            { modals['img-extractor'] &&
-                <ImageColorExtractor
-                  modalsDispatch={modalsDispatch}
-                  colorsDispatch={colorsDispatch}
-                />
-            }
-
           </main>
         </DndContext>
+        { modals.contrast &&
+            <ContrastCalculator
+              colors={colors}
+              colorsDispatch={colorsDispatch}
+              setUpdatedColor={setUpdatedColor}
+              modalsDispatch={modalsDispatch}
+            />
+        }
+        { modals.picker && 
+            <ColorPicker
+              handleClosePicker={() => modalsDispatch({ type: 'picker' })}
+              color={updatedColor === 'primary' ? colors.primary.color : colors.secondary.color}
+              updateColor={updateColor}
+              id={updatedColor === 'primary' ? `${colors.primary.id}` : `${colors.secondary.id}`}
+              type={updatedColor === 'primary' ? 'primary' : 'secondary'}
+            />
+        }
+        { modals['img-extractor'] &&
+            <ImageColorExtractor
+              modalsDispatch={modalsDispatch}
+              colorsDispatch={colorsDispatch}
+            />
+        }
       </div>
       <Tooltip message={tooltipMessage}/>
     </>

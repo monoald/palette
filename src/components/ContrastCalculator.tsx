@@ -64,7 +64,7 @@ export const ContrastCalculator = ({ colors, colorsDispatch, setUpdatedColor, mo
       </button>
 
       <div className='wcag-info'>
-        <div className='wcag-info__container txt-hover-primary' data-tooltip>
+        <div className='wcag-info__container' data-tooltip>
           <p>
             {contrast.contrastValue}:1
           </p>

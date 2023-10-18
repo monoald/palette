@@ -27,7 +27,7 @@
 }
 .config__item {
   width: auto;
-  z-index: 0;
+  z-index: 2;
 }
 .items__list {
   position: relative;
@@ -151,4 +151,24 @@
   height: 80px;
   display: block;
   background: transparent;
+  pointer-events: none;
+}
+@media (max-width: 556px) {
+  .items__list {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  .items__list--horizontal .item__clr-container {
+    height: 160px;
+  }
+  .user-content {
+    grid-template-areas: 
+    "nav"
+    "main";
+    grid-template-columns: 1fr;
+    grid-template-rows: 140px 1fr;
+    align-items: center;
+  }
+  .user-content .collection-layout__main {
+    padding-top: 0;
+  }
 }

@@ -344,3 +344,19 @@ input[type=file]::file-selector-button {
   border-color: #5BC3EB;
   color: #5BC3EB;
 }
+
+@media (max-width: 500px) {
+  .create-icons-collection .main {
+    padding-inline: 20px;
+  }
+  .create-icons-collection .setup {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .create-icons-collection .icons-container {
+    gap: 18px;
+  }
+  .create-icons-collection .icon {
+    gap: 12px;
+  }
+}

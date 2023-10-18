@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 // import useTheme from '../hooks/useTheme'
 import { validateAvatar } from '../utils/validateAvatar'
@@ -7,15 +8,29 @@ import { selectUser } from '../features/auth/authSlice'
 import HeaderUserSelect from '../features/auth/HeaderUserSelect'
 
 import '../styles/Header.css'
-import { useState } from 'react'
 
 export const Header = () => {
   const [toggleNav, setToggleNav] = useState(false)
+  const [firstRender, setFirstRender] = useState(true)
   const user = useAppSelector(selectUser)
   
   const navigate = useNavigate()
 
   // const { theme, toggleTheme } = useTheme()
+
+  useEffect(() => {
+    if (!firstRender) {
+      const menu = document.getElementById('menu')
+      if (toggleNav) {
+        menu?.classList.add('menu-fade-in')
+        menu?.classList.remove('menu-fade-out')
+      } else {
+        menu?.classList.add('menu-fade-out')
+        menu?.classList.remove('menu-fade-in')
+      }
+    } else setFirstRender(false)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toggleNav])
 
   return (
     <header className='Header'>
@@ -35,10 +50,8 @@ export const Header = () => {
         </p>
 
         <nav
-          className={`
-            header-nav
-            ${toggleNav ? 'menu-fade-in' : 'menu-fade-out'}
-          `}
+          id='menu'
+          className='header-nav'
         >
           <ul className='header-nav__list'>
             <li className='header-nav__item item-palettes'>
@@ -146,7 +159,12 @@ export const Header = () => {
           }
         </nav>
 
-        <div className='menu-container'>
+        <div
+          className={`
+            menu-container
+            ${ !user ? 'hidden-menu' : '' }
+          `}
+        >
           <nav className='user-nav'>
             <ul className='user-nav__list'>
               { user &&

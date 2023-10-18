@@ -14,7 +14,7 @@
   background: #1E2029;
   border-radius: 14px;
 }
-.nav {
+.Profile-Nav .nav {
   width: inherit;
   height: inherit;
   padding: 40px 20px;
@@ -37,4 +37,27 @@
 .nav__button:hover {
   color: #5BC3EB;
   background: rgba(255,255,255, 0.1);
+}
+@media (max-width: 556px) {
+  .Profile-Nav {
+    max-width: 90%;
+    height: fit-content;
+    padding: 0;
+    margin: 0 auto;
+    border-radius: 14px;
+    background: #1E2029;
+    overflow-x: scroll;
+  }
+  .Profile-Nav .nav {
+    height: fit-content;
+    padding: 8px 20px;
+    flex-direction: row;
+  }
+  .Profile-Nav .nav-container { 
+    background: transparent;
+    border-radius: 0;
+  }
+  .Profile-Nav .nav__button {
+    text-wrap: nowrap;
+  }
 }

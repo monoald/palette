@@ -37,6 +37,7 @@
 .header-nav {
   position: absolute;
   top: 88px;
+  right: -290px;
   width: 260px;
   height: calc(100vh - 122px);
   border-radius: 18px;
@@ -247,7 +248,7 @@
     border-radius: 0;
     padding: 0;
     margin-left: auto;
-    display: flex;
+    display: flex !important;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
@@ -260,6 +261,10 @@
   .header-nav__item p {
     padding-left: 0;
     color: var(--txt-main);
+  }
+  .header-nav__item .nav-link:hover,
+  .header-nav__item .nav-link--active {
+    background: transparent;
   }
   .header-nav__item .navigation {
     position: absolute;
@@ -300,11 +305,26 @@
     align-items: center;
     font-size: 1.4rem;
   }
+  .menu-container {
+    margin-left: 0;
+  }
   .menu-button {
     display: none;
   }
   .nav-link {
     font-weight: 600;
+  }
+  .menu-fade-out {
+    display: flex;
+    animation: none;
+  }
+}
+@media (max-width: 500px) {
+  .header-content {
+    padding-inline: 20px;
+  }
+  .menu-container {
+    gap: 10px;
   }
 }
 
@@ -320,17 +340,21 @@
 @keyframes menuFadeInFromLeft {
   from {
     right: -290px;
+    display: none;
   }
   to {
     right: 30px;
+    display: flex;
   }
 }
 
 @keyframes menuFadeOutToLeft {
   from {
     right: 30px;
+    display: flex;
   }
   to {
     right: -290px;
+    display: none;
   }
 }

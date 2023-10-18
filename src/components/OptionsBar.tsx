@@ -12,8 +12,7 @@ interface OptionsBarProps {
 
 export const OptionsBar = ({ objectOptions, type, options, optionsDispatch }: OptionsBarProps) => {
   const [fade, setFade] = useState(true)
-  
-  
+
   function handleClick(option: string) {
     optionsDispatch({ type: type, payload: option})
   }

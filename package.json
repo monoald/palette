@@ -1,7 +1,7 @@
 {
   "name": "palette",
   "private": true,
-  "version": "1.0.2",
+  "version": "3.5.2",
   "type": "module",
   "scripts": {
     "dev": "vite",

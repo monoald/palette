@@ -93,8 +93,7 @@ export const SignIn = () => {
     setLoading(true)
 
     openPopUp(
-      // 'https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/google/callback',
-      'http://localhost:3000/api/v1/auth/google/callback',
+      'https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/google/callback',
       'signin',
       messageListener
     )
@@ -104,8 +103,7 @@ export const SignIn = () => {
     setLoading(true)
 
     openPopUp(
-      // 'https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/facebook/callback',
-      'http://localhost:3000/api/v1/auth/facebook/callback',
+      'https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/facebook/callback',
       'signin',
       messageListener
     )
@@ -115,8 +113,7 @@ export const SignIn = () => {
     setLoading(true)
 
     openPopUp(
-      // 'https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/github/callback',
-      'http://localhost:3000/api/v1/auth/github/callback',
+      'https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/github/callback',
       'signin',
       messageListener
     )

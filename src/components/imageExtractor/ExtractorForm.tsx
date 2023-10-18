@@ -18,7 +18,7 @@ export const ExtractorForm = ({ setUrl, errorMessage }: ExtractorFormProps) => {
   const handleUrlSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const url = await axios({
-      url: 'http://localhost:3000/api/v1/images/base64',
+      url: 'https://extinct-houndstooth-fly.cyclic.cloud/api/v1/images/base64',
       method: 'POST',
       data: { url: urlInput }
     })

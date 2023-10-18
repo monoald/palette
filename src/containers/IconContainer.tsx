@@ -210,7 +210,7 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
   
         if (modified) saveHandler(collection)
       }
-      window.location.replace(`http://localhost:3000/api/v1/icons/download-fonts/${collection.name}`)
+      window.location.replace(`https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/download-fonts/${collection.name}`)
     }
   }
 
@@ -221,7 +221,7 @@ export const IconContainer = ({ isEdit, icon, saveHandler, unsaveHandler, errorM
   
         if (modified) saveHandler(collection)
       }
-      window.location.replace(`http://localhost:3000/api/v1/icons/download-icons/${collection.name}`)
+      window.location.replace(`https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/download-icons/${collection.name}`)
     }
   }
 

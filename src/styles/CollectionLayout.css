@@ -31,7 +31,6 @@
 }
 .items__list {
   position: relative;
-  min-height: 140vh;
   padding-block: 40px;
   gap: 80px;
   display: grid;

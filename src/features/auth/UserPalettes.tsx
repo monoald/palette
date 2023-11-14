@@ -81,7 +81,7 @@ export const UserPalettes = () => {
   }
 
   const editPaletteHandler = (colors: string) => {
-    navigate(`/${colors}`)
+    navigate(`/make-palette/${colors}`)
   }
 
   return (

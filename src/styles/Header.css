@@ -1,10 +1,11 @@
 .Header {
-  width: 100%;
+  align-self: flex-end;
+  width: calc(100% - 54px);
   max-width: 100vw;
   height: 61px;
+  margin-inline: 27px;
+  border-radius: 18px;
   background: #1E2029;
-  border-bottom-left-radius: 18px;
-  border-bottom-right-radius: 18px;
 }
 .header-content {
   width: 100%;

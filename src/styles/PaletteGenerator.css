@@ -8,7 +8,7 @@
 }
 .palette-layout {
   position: relative;
-  height: calc(100vh - 68px);
+  height: calc(100vh - 90px);
   display: grid;
   grid-template-columns: 60px 1fr;
   grid-template-rows: 1fr;

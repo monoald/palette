@@ -18,13 +18,9 @@
   z-index: 3;
 }
 .app-name{ 
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
   color: var(--txt-main);
   font-size: 1.26rem;
   font-weight: 700;
-  padding-bottom: 7px;
 }
 .app-name .profile {
   color: var(--txt-main);
@@ -32,8 +28,21 @@
   outline: none;
 }
 .Header .logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
   font-size: 1.8rem;
   letter-spacing: 0.5px;
+}
+.icon-logo {
+  width: 45px;
+  height: 45px;
+  display: block;
+  background-image: url('../assets/icons/palette-logo.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .header-nav {
   position: absolute;

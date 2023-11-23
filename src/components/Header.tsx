@@ -37,15 +37,8 @@ export const Header = () => {
       <div className='header-content'>
         <p className='app-name'>
           <a href='/' className='logo'>
+            <span className='icon-logo'/>
             Palette
-          </a>
-          by
-          <a
-            href='https://github.com/monoald'
-            target='_blank'
-            className='profile'
-          >
-            monoald
           </a>
         </p>
 

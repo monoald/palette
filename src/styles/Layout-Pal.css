@@ -1,8 +1,0 @@
-.layout-pal {
-  display: grid;
-  grid-template-areas: 
-  "header"
-  "main";
-  grid-template-columns: 1fr;
-  grid-template-rows: 54px calc(100vh - 54px);
-}

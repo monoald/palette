@@ -18,5 +18,5 @@ type Color = {
 };
 
 type Palette = {
-  colors: Color[];
+  colors: Array<Color | null>;
 };

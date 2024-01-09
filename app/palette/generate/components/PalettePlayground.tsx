@@ -1,12 +1,19 @@
 "use client";
 
-import React, { PointerEvent, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  PointerEvent,
+  SetStateAction,
+  useRef,
+  useState,
+} from "react";
 
 type Props = {
   palette: Palette;
+  setPalette: Dispatch<SetStateAction<Palette | undefined>>;
 };
 
-export default function PalettePlayground({ palette }: Props) {
+export default function PalettePlayground({ palette, setPalette }: Props) {
   const placeholderRef = useRef<HTMLDivElement>(null);
   const [currentElement, setCurrentElement] = useState<null | HTMLElement>();
   const [offset, setOffset] = useState(0);
@@ -19,9 +26,18 @@ export default function PalettePlayground({ palette }: Props) {
     const width = bar.getBoundingClientRect().width;
     const left = bar.getBoundingClientRect().x;
 
-    const placeholder = placeholderRef.current as HTMLElement;
-    placeholder.classList.toggle("hidden");
-    bar.parentElement?.insertBefore(placeholder, bar);
+    const index = palette.colors.findIndex(
+      (color) => color?.id === bar.id
+    ) as number;
+
+    setPalette((prev) => {
+      if (!prev) return prev;
+
+      const newColors = [...prev.colors];
+      newColors.splice(index, 0, null);
+
+      return { colors: newColors };
+    });
 
     bar.style.left = `${left}px`;
     bar.style.position = "absolute";
@@ -33,59 +49,81 @@ export default function PalettePlayground({ palette }: Props) {
 
   const handlePointerUp = () => {
     if (currentElement) {
-      const placeholder = placeholderRef.current as HTMLElement;
-
       currentElement.style.pointerEvents = "all";
       currentElement.style.position = "initial";
       currentElement.style.width = "100%";
-      placeholder.classList.toggle("hidden");
-      currentElement.parentElement?.insertBefore(currentElement, placeholder);
       setCurrentElement(null);
+
+      let clrIndex = -1;
+      let placeholderIndex = -1;
+
+      palette.colors.forEach((color, index) => {
+        if (color === null) placeholderIndex = index;
+
+        if (color?.id === currentElement.id) clrIndex = index;
+      });
+
+      setPalette((prev) => {
+        if (!prev) return prev;
+
+        const newColors = [...prev.colors];
+        newColors.splice(placeholderIndex, 1, prev.colors[clrIndex]);
+        newColors.splice(clrIndex, 1);
+
+        return { colors: newColors };
+      });
     }
   };
 
   const handlePointerMove = (e: PointerEvent<HTMLButtonElement>) => {
     if (currentElement) {
       currentElement.style.left = `${e.clientX - offset}px`;
-
       let target = e.target as HTMLElement;
-      if (target.id !== "placeholder") {
-        if (target.tagName !== "ARTICLE")
-          target = (target.closest("article") as HTMLElement) || target;
 
-        if (target.tagName === "ARTICLE") {
-          const currentX = e.clientX;
-          const rect = target.getBoundingClientRect();
-          const middle = (rect.right - rect.left) / 2 + rect.left;
-          const container = target.parentElement as HTMLElement;
-          if (currentX < middle) {
-            container.insertBefore(
-              placeholderRef.current as HTMLElement,
-              target
-            );
-          } else {
-            container.insertBefore(
-              placeholderRef.current as HTMLElement,
-              target.nextSibling
-            );
-          }
+      if (target.tagName !== "ARTICLE")
+        target = (target.closest("article") as HTMLElement) || target;
+
+      if (target.id !== "placeholder" && target.tagName === "ARTICLE") {
+        const currentX = e.clientX - offset;
+        const rect = target.getBoundingClientRect();
+        const middle = (rect.right - rect.left) / 2 + rect.left;
+
+        let clrIndex = -1;
+        let placeholderIndex = -1;
+
+        palette.colors.forEach((color, index) => {
+          if (color === null) placeholderIndex = index;
+
+          if (color?.id === target.id) clrIndex = index;
+        });
+
+        if (currentX < middle) {
+          setPalette((prev) => {
+            if (!prev) return prev;
+
+            const newColors = [...prev.colors];
+            newColors.splice(placeholderIndex, 1);
+            newColors.splice(clrIndex, 0, null);
+            return { colors: newColors };
+          });
+        } else {
+          setPalette((prev) => {
+            if (!prev) return prev;
+            const newColors = [...prev.colors];
+            newColors.splice(placeholderIndex, 1);
+            newColors.splice(clrIndex + 1, 0, null);
+            return {
+              colors: newColors,
+            };
+          });
         }
       }
     }
   };
 
-  return (
-    <section
-      className="relative w-full h-full flex gap-3"
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-    >
-      <div
-        id="placeholder"
-        className="w-full hidden"
-        ref={placeholderRef}
-      ></div>
-      {palette.colors.map((color) => (
+  const content = palette?.colors.map((color) => {
+    if (color) {
+      return (
         <article
           key={color.id}
           id={color.id}
@@ -100,7 +138,26 @@ export default function PalettePlayground({ palette }: Props) {
             DRAG
           </button>
         </article>
-      ))}
+      );
+    }
+
+    return (
+      <div
+        key="null"
+        id="placeholder"
+        className="w-full"
+        ref={placeholderRef}
+      ></div>
+    );
+  });
+
+  return (
+    <section
+      className="relative w-full h-full flex gap-3"
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+    >
+      {content}
     </section>
   );
 }

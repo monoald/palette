@@ -25,3 +25,10 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+/* * {
+  transition: 0.3s;
+} */
+div {
+  transition: 1s;
+}

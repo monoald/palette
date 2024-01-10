@@ -32,3 +32,34 @@ body {
 /* div {
   transition: 1s;
 } */
+
+@keyframes shrink {
+  0% {
+    width: 40px;
+  }
+
+  99% {
+    /* display: flex; */
+  }
+  100% {
+    width: 0px;
+    display: none;
+  }
+}
+
+@keyframes grow {
+  0% {
+    width: 0px;
+    /* display: block; */
+  }
+
+  99% {
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+#test {
+  background-image: attr(data-img);
+}

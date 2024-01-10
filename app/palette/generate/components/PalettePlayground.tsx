@@ -49,20 +49,6 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
 
   const handlePointerUp = () => {
     if (currentElement) {
-      currentElement.style.pointerEvents = "all";
-      currentElement.style.position = "initial";
-      currentElement.style.width = "100%";
-      setCurrentElement(null);
-
-      let clrIndex = -1;
-      let placeholderIndex = -1;
-
-      palette.colors.forEach((color, index) => {
-        if (color === null) placeholderIndex = index;
-
-        if (color?.id === currentElement.id) clrIndex = index;
-      });
-
       setPalette((prev) => {
         if (!prev) return prev;
 
@@ -72,6 +58,27 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
 
         return { colors: newColors };
       });
+
+      currentElement.style.left = "0px";
+      currentElement.style.position = "initial";
+      currentElement.style.transition = "left 0.1s";
+      currentElement.style.width = "100%";
+
+      let clrIndex = -1;
+      let placeholderIndex = -1;
+
+      palette.colors.forEach((color, index) => {
+        if (color === null) placeholderIndex = index;
+        if (color?.id === currentElement.id) clrIndex = index;
+      });
+
+      setCurrentElement(null);
+
+      setTimeout(() => {
+        currentElement.style.position = "relative";
+        currentElement.style.transition = "none";
+        currentElement.style.pointerEvents = "all";
+      }, 100);
     }
   };
 
@@ -97,26 +104,50 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
           if (color?.id === target.id) clrIndex = index;
         });
 
-        if (currentX < middle) {
-          setPalette((prev) => {
-            if (!prev) return prev;
+        const targetRect = target.getBoundingClientRect();
+        const placeholderRect =
+          placeholderRef.current?.getBoundingClientRect() as DOMRect;
 
-            const newColors = [...prev.colors];
-            newColors.splice(placeholderIndex, 1);
-            newColors.splice(clrIndex, 0, null);
-            return { colors: newColors };
-          });
+        target.style.transition = "left 0.1s";
+
+        if (currentX < middle) {
+          const diff = placeholderRect.x - targetRect.x;
+          target.style.left = `${diff}px`;
+
+          setTimeout(() => {
+            target.style.transition = "none";
+            target.style.left = "0px";
+            setPalette((prev) => {
+              if (!prev) return prev;
+
+              const newColors = [...prev.colors];
+              newColors.splice(placeholderIndex, 1);
+              newColors.splice(clrIndex, 0, null);
+              return { colors: newColors };
+            });
+          }, 100);
         } else {
-          setPalette((prev) => {
-            if (!prev) return prev;
-            const newColors = [...prev.colors];
-            newColors.splice(placeholderIndex, 1);
-            newColors.splice(clrIndex + 1, 0, null);
-            return {
-              colors: newColors,
-            };
-          });
+          target.style.left = `0px`;
+
+          setTimeout(() => {
+            target.style.transition = "none";
+            setPalette((prev) => {
+              if (!prev) return prev;
+              const newColors = [...prev.colors];
+              newColors.splice(placeholderIndex, 1);
+              newColors.splice(clrIndex + 1, 0, null);
+              return {
+                colors: newColors,
+              };
+            });
+          }, 100);
         }
+
+        target.style.pointerEvents = "none";
+
+        setTimeout(() => {
+          target.style.pointerEvents = "all";
+        }, 100);
       }
     }
   };
@@ -127,7 +158,7 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
         <article
           key={color.id}
           id={color.id}
-          className="w-full h-full rounded-xl flex flex-col justify-center items-center gap-10"
+          className="relative left-0 w-full h-full rounded-xl flex flex-col justify-center items-center gap-10"
           style={{ background: color.hex }}
         >
           <p>{color.hex}</p>

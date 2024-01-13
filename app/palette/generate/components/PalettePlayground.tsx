@@ -53,7 +53,7 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
   //     element.style.removeProperty("transform");
   //     element.style.removeProperty("transition");
   //     element.style.removeProperty("pointer-events");
-  //     element.removeAttribute("data-swap");
+  //     element.removeAttribute("swap");
   //     element = element.nextSibling as HTMLElement;
   //   }
   // };
@@ -121,7 +121,7 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
   //       if (
   //         children[i].id === currentElement.id ||
   //         children[i].id === "placeholder" ||
-  //         children[i].getAttribute("data-swap") === "true"
+  //         children[i].getAttribute("swap") === "true"
   //       )
   //         continue;
 
@@ -133,9 +133,9 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
   //       // Left collision
   //       if (currentRect.x > childRect.x && currentRect.x < childMiddle) {
   //         children[i].style.transform = "translate(100%, 0px)";
-  //         children[i].setAttribute("data-swap", "true");
+  //         children[i].setAttribute("swap", "true");
   //         setTimeout(() => {
-  //           children[i].setAttribute("data-swap", "false");
+  //           children[i].setAttribute("swap", "false");
   //         }, 200);
 
   //         setLastSwap(i);
@@ -146,9 +146,9 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
   //         currentRect.right < childRect.right
   //       ) {
   //         children[i].style.removeProperty("transform");
-  //         children[i].setAttribute("data-swap", "true");
+  //         children[i].setAttribute("swap", "true");
   //         setTimeout(() => {
-  //           children[i].setAttribute("data-swap", "false");
+  //           children[i].setAttribute("swap", "false");
   //         }, 200);
 
   //         setLastSwap(i + 1);
@@ -202,20 +202,21 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
     const draggable = target.closest("*[data-draggable]") as HTMLElement;
     const index = list.findIndex((element) => element.id === draggable.id);
 
-    const first = draggable.parentElement?.firstChild as HTMLElement;
+    const first = (containerRef.current as HTMLElement)
+      .firstChild as HTMLElement;
     setDistance(
       (first.nextSibling as HTMLElement).offsetLeft - first.offsetLeft
     );
 
     setCurrentElement(draggable);
     setOffset(e.clientX - draggable.offsetLeft);
-    setList((prev) => {
-      const newList = [...prev];
-      newList.splice(index, 0, null);
-      const current = newList.splice(index + 1, 1);
-      newList.splice(newList.length, 0, current[0]);
-      return newList;
-    });
+    // setList((prev) => {
+    //   const newList = [...prev];
+    //   newList.splice(index, 0, null);
+    //   const current = newList.splice(index + 1, 1);
+    //   newList.splice(newList.length, 0, current[0]);
+    //   return newList;
+    // });
 
     draggable.style.left = `${
       e.clientX - (e.clientX - draggable.offsetLeft)
@@ -224,23 +225,29 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
     draggable.style.position = "absolute";
     draggable.style.pointerEvents = "none";
     draggable.style.zIndex = "100000";
+
+    const placeholder = placeholderRef.current as HTMLElement;
+    draggable.before(placeholder);
+    placeholder.style.display = "block";
   };
 
   const handlePointerMove = (e: PointerEvent<HTMLElement>) => {
     if (currentElement) {
       const currentRect = currentElement.getBoundingClientRect();
       const container = containerRef.current as HTMLElement;
-      const children = container.childNodes as NodeListOf<HTMLElement>;
+      const draggable = container.querySelectorAll(
+        "[data-draggable]"
+      ) as NodeListOf<HTMLElement>;
 
-      for (let i = 0; i < children.length; i++) {
+      for (let i = 0; i < draggable.length; i++) {
         if (
-          children[i].id === currentElement.id ||
-          children[i].id === "placeholder" ||
-          children[i].getAttribute("data-swap") === "true"
+          draggable[i].id === currentElement.id ||
+          draggable[i].id === "placeholder" ||
+          draggable[i].getAttribute("swap") === "true"
         )
           continue;
 
-        const childRect = children[i].getBoundingClientRect();
+        const childRect = draggable[i].getBoundingClientRect();
         const childMiddle = childRect.width / 2 + childRect.left;
 
         // Left collision
@@ -248,34 +255,40 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
           currentRect.left > childRect.left &&
           currentRect.left < childMiddle
         ) {
-          if (children[i].style.transform) {
-            children[i].style.transform = "translate(0px, 0px)";
-          } else {
-            children[i].style.transition = "transform 0.2s";
-            children[i].style.transform = `translate(${distance}px, 0px)`;
-          }
-          children[i].setAttribute("data-swap", "true");
+          // if (draggable[i].style.transform) {
+          //   draggable[i].style.transform = "translate(0px, 0px)";
+          // } else {
+          //   draggable[i].style.transition = "transform 0.2s";
+          //   draggable[i].style.transform = `translate(${distance}px, 0px)`;
+          // }
 
-          // console.log(children[i].style.transform);
+          draggable[i].style.transition = "transform 0.2s";
+          draggable[i].style.transform = `translate(${distance}px, 0px)`;
+
+          // Remove prev last swapped
+          const lastSwaped = container.querySelectorAll("[last-swaped]");
+          if (lastSwaped) {
+            for (let i = 0; i < lastSwaped.length; i++) {
+              lastSwaped[i].removeAttribute("last-swaped");
+            }
+          }
+
+          // Set Attributes
+          draggable[i].setAttribute("swap", "true");
+          // draggable[i].setAttribute("last-swaped", "left");
+          draggable[i].setAttribute("swaped", "true");
 
           setTimeout(() => {
-            if (children[i].style.transform === "translate(0px, 0px)") {
-              children[i].style.removeProperty("transform");
-            }
-            //   children[i].style.removeProperty("transition");
-            //   children[i].style.removeProperty("transform");
-            children[i].removeAttribute("data-swap");
-            //   setList((prev) => {
-            //     const newList = [...prev];
-            //     const nullIndex = newList.findIndex(
-            //       (element) => element === null
-            //     );
+            draggable[i].style.removeProperty("transition");
+            draggable[i].style.removeProperty("transform");
 
-            //     newList.splice(nullIndex, 1, list[i]);
-            //     newList.splice(i, 1, null);
-
-            //     return newList;
-            //   });
+            // Move placeholder
+            const placeholder = placeholderRef.current as HTMLElement;
+            draggable[i].before(placeholder);
+            // if (draggable[i].style.transform === "translate(0px, 0px)") {
+            //   draggable[i].style.removeProperty("transform");
+            // }
+            draggable[i].removeAttribute("swap");
           }, 200);
         }
         // Right collision
@@ -283,33 +296,36 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
           currentRect.right > childMiddle &&
           currentRect.right < childRect.right
         ) {
-          if (children[i].style.transform) {
-            // children[i].style.removeProperty("transition");
-            children[i].style.transform = "translate(0px, 0px)";
-          } else {
-            children[i].style.transition = "transform 0.2s";
-            children[i].style.transform = `translate(${-distance}px, 0px)`;
+          // if (draggable[i].style.transform) {
+          //   draggable[i].style.transform = "translate(0px, 0px)";
+          // } else {
+          draggable[i].style.transition = "transform 0.2s";
+          draggable[i].style.transform = `translate(${-distance}px, 0px)`;
+          // }
+          // Remove prev last swapped
+          const lastSwaped = container.querySelectorAll("[last-swaped]");
+          if (lastSwaped) {
+            for (let i = 0; i < lastSwaped.length; i++) {
+              lastSwaped[i].removeAttribute("last-swaped");
+            }
           }
-          children[i].setAttribute("data-swap", "true");
+
+          // Set Attributes
+          draggable[i].setAttribute("swap", "true");
+          // draggable[i].setAttribute("last-swaped", "right");
+          draggable[i].setAttribute("swaped", "true");
 
           setTimeout(() => {
-            if (children[i].style.transform === "translate(0px, 0px)") {
-              children[i].style.removeProperty("transform");
-            }
-            //   children[i].style.removeProperty("transition");
-            //   children[i].style.removeProperty("transform");
-            children[i].removeAttribute("data-swap");
-            //   setList((prev) => {
-            //     const newList = [...prev];
-            //     const nullIndex = newList.findIndex(
-            //       (element) => element === null
-            //     );
+            // if (draggable[i].style.transform === "translate(0px, 0px)") {
+            draggable[i].style.removeProperty("transition");
+            draggable[i].style.removeProperty("transform");
+            // }
 
-            //     newList.splice(nullIndex, 1, list[i]);
-            //     newList.splice(i, 1, null);
+            // Move placeholder
+            const placeholder = placeholderRef.current as HTMLElement;
+            draggable[i].after(placeholder);
 
-            //     return newList;
-            //   });
+            draggable[i].removeAttribute("swap");
           }, 200);
         }
       }
@@ -318,36 +334,22 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
     }
   };
 
+  // console.log(list);
+
   const handlePointerUp = (e: PointerEvent<HTMLElement>) => {
     if (currentElement) {
-      const parent = currentElement?.parentElement as HTMLElement;
-      const children = parent.childNodes as NodeListOf<HTMLElement>;
+      const placeholder = placeholderRef.current as HTMLElement;
+      currentElement.style.transition = "left 0.2s";
+      currentElement.style.left = `${placeholder.offsetLeft}px`;
 
-      for (let i = 0; i < children.length; i++) {
-        if (children[i].id === "placeholder") {
-          currentElement.style.transition = "left 0.2s";
-          currentElement.style.left = `${children[i].offsetLeft}px`;
-
-          setTimeout(() => {
-            currentElement.style.removeProperty("transition");
-            currentElement.style.removeProperty("left");
-            currentElement.style.removeProperty("position");
-            currentElement.style.removeProperty("pointer-events");
-            currentElement.style.removeProperty("width");
-
-            setList((prev) => {
-              const newList = [...prev];
-              const current = newList.splice(newList.length - 1, 1);
-              newList.splice(i, 1, current[0]);
-              // newList.splice(i, 1, null);
-              console.log(newList);
-
-              return newList;
-            });
-          }, 200);
-          break;
-        }
-      }
+      setTimeout(() => {
+        currentElement.style.removeProperty("transition");
+        currentElement.style.removeProperty("position");
+        currentElement.style.removeProperty("width");
+        placeholder.before(currentElement);
+        placeholder.style.removeProperty("display");
+        setCurrentElement(null);
+      }, 200);
     }
   };
 
@@ -373,12 +375,16 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
     }
 
     return (
-      <div
-        key="null"
-        id="placeholder"
-        className="w-full"
-        ref={placeholderRef}
-      ></div>
+      <>
+        {/* {currentElement && ( */}
+        <div
+          key="null"
+          id="placeholder"
+          className="w-full"
+          ref={placeholderRef}
+        ></div>
+        {/* )} */}
+      </>
     );
   });
 
@@ -391,13 +397,13 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
     >
       {content}
       {/* {currentElement && (
-        <div
-          key="null"
-          id="placeholder"
-          className="w-full"
-          ref={placeholderRef}
-        ></div>
       )} */}
+      <div
+        key="null"
+        id="placeholder"
+        className="w-full hidden"
+        ref={placeholderRef}
+      ></div>
     </section>
   );
 }

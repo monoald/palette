@@ -11,14 +11,15 @@ export default function page() {
     // target.style.animation = "1s ease shrink";
     // target.style.animationFillMode = "forwards";
     // (target.nextSibling as HTMLElement).style.display = "block";
-    target.style.position = "absolute";
-    target.style.left = "100px";
-    target.style.transition = "0.5s";
-    setTimeout(() => {
-      target.style.position = "relative";
-      target.style.left = "0px";
-    }, 1000);
+    // target.style.position = "absolute";
+    // target.style.left = "100px";
+    // target.style.transition = "0.5s";
+    // setTimeout(() => {
+    //   target.style.position = "relative";
+    //   target.style.left = "0px";
+    // }, 1000);
     console.log(target.nextSibling);
+    target.style.removeProperty("position");
   };
   return (
     <div
@@ -48,8 +49,9 @@ export default function page() {
         onClick={handleClick}
       ></div>
       <div
-        className="relative w-10 h-10 bg-slate-600 left-0"
+        className=" left-52 w-10 h-10 bg-slate-600"
         // style={{ transition: "1s" }}
+        style={{ transition: "1s", position: "absolute" }}
         onClick={handleClick}
       ></div>
     </div>

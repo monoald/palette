@@ -29,19 +29,19 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
   const containerRef = useRef<HTMLElement>(null);
 
   const handlePointerDown = (e: PointerEvent<HTMLButtonElement>) => {
+    const container = containerRef.current as HTMLElement;
+    const first = container.firstChild as HTMLElement;
     const target = e.target as HTMLElement;
     const draggable = target.closest("*[data-draggable]") as HTMLElement;
     const index = list.findIndex((element) => element.id === draggable.id);
 
-    const first = (containerRef.current as HTMLElement)
-      .firstChild as HTMLElement;
     setDistance(
       (first.nextSibling as HTMLElement).offsetLeft - first.offsetLeft
     );
-
     setCurrentElement(draggable);
     setOffset(e.clientX - draggable.offsetLeft);
 
+    // Attributes for draggin
     draggable.style.left = `${
       e.clientX - (e.clientX - draggable.offsetLeft)
     }px`;
@@ -50,6 +50,7 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
     draggable.style.pointerEvents = "none";
     draggable.style.zIndex = "100000";
 
+    // Move placeholder to current element position
     const placeholder = placeholderRef.current as HTMLElement;
     draggable.before(placeholder);
     placeholder.style.display = "block";
@@ -63,9 +64,44 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
     });
   };
 
+  const animateSwap = (
+    element: HTMLElement,
+    container: HTMLElement,
+    side: string
+  ) => {
+    const gap = side === "left" ? -distance : distance;
+    // Remove prev last swapped
+    const lastSwaped = container.querySelectorAll("[last-swaped]");
+    if (lastSwaped) {
+      for (let i = 0; i < lastSwaped.length; i++) {
+        lastSwaped[i].removeAttribute("last-swaped");
+      }
+    }
+
+    const placeholder = placeholderRef.current as HTMLElement;
+
+    side === "left" ? element.before(placeholder) : element.after(placeholder);
+
+    element.style.transform = `translate(${gap}px, 0px)`;
+
+    setTimeout(() => {
+      element.style.transition = "transform 0.2s";
+      element.style.transform = "translate(0px, 0px)";
+    }, 10);
+
+    // Set Attributes
+    element.setAttribute("swap", "true");
+    element.setAttribute("last-swaped", side);
+
+    setTimeout(() => {
+      element.style.removeProperty("transition");
+      element.style.removeProperty("transform");
+      element.removeAttribute("swap");
+    }, 200);
+  };
+
   const handlePointerMove = (e: PointerEvent<HTMLElement>) => {
     if (currentElement) {
-      const currentRect = currentElement.getBoundingClientRect();
       const container = containerRef.current as HTMLElement;
       const draggable = container.querySelectorAll(
         "[data-draggable]"
@@ -79,74 +115,24 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
         )
           continue;
 
-        const childRect = draggable[i].getBoundingClientRect();
-        const childMiddle = childRect.width / 2 + childRect.left;
+        const childMiddle =
+          draggable[i].clientWidth / 2 + draggable[i].offsetLeft;
 
         // Left collision
         if (
-          currentRect.left > childRect.left &&
-          currentRect.left < childMiddle
+          currentElement.offsetLeft > draggable[i].offsetLeft &&
+          currentElement.offsetLeft < childMiddle
         ) {
-          // Remove prev last swapped
-          const lastSwaped = container.querySelectorAll("[last-swaped]");
-          if (lastSwaped) {
-            for (let i = 0; i < lastSwaped.length; i++) {
-              lastSwaped[i].removeAttribute("last-swaped");
-            }
-          }
-
-          const placeholder = placeholderRef.current as HTMLElement;
-          draggable[i].before(placeholder);
-
-          draggable[i].style.transform = `translate(${-distance}px, 0px)`;
-
-          setTimeout(() => {
-            draggable[i].style.transition = "transform 0.2s";
-            draggable[i].style.transform = "translate(0px, 0px)";
-          }, 10);
-
-          // Set Attributes
-          draggable[i].setAttribute("swap", "true");
-          draggable[i].setAttribute("last-swaped", "left");
-
-          setTimeout(() => {
-            draggable[i].style.removeProperty("transition");
-            draggable[i].style.removeProperty("transform");
-            draggable[i].removeAttribute("swap");
-          }, 200);
+          animateSwap(draggable[i], container, "left");
         }
         // Right collision
         else if (
-          currentRect.right > childMiddle &&
-          currentRect.right < childRect.right
+          currentElement.offsetLeft + currentElement.clientWidth >
+            childMiddle &&
+          currentElement.offsetLeft + currentElement.clientWidth <
+            draggable[i].offsetLeft + draggable[i].clientWidth
         ) {
-          // Remove prev last swapped
-          const lastSwaped = container.querySelectorAll("[last-swaped]");
-          if (lastSwaped) {
-            for (let i = 0; i < lastSwaped.length; i++) {
-              lastSwaped[i].removeAttribute("last-swaped");
-            }
-          }
-
-          const placeholder = placeholderRef.current as HTMLElement;
-          draggable[i].after(placeholder);
-
-          draggable[i].style.transform = `translate(${distance}px, 0px)`;
-
-          setTimeout(() => {
-            draggable[i].style.transition = "transform 0.2s";
-            draggable[i].style.transform = "translate(0px, 0px)";
-          }, 10);
-
-          // Set Attributes
-          draggable[i].setAttribute("swap", "true");
-          draggable[i].setAttribute("last-swaped", "right");
-
-          setTimeout(() => {
-            draggable[i].style.removeProperty("transition");
-            draggable[i].style.removeProperty("transform");
-            draggable[i].removeAttribute("swap");
-          }, 200);
+          animateSwap(draggable[i], container, "right");
         }
       }
 

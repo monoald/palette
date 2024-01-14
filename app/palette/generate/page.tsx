@@ -89,10 +89,34 @@ export default function Home() {
     });
   }, []);
 
+  const onUpdate = (updatedArr: any[]) => {
+    setPalette((prev) => {
+      return {
+        ...prev,
+        colors: updatedArr,
+      };
+    });
+  };
+
   return (
     <main className="w-full h-screen">
       {palette && (
-        <PalettePlayground palette={palette} setPalette={setPalette} />
+        <PalettePlayground arr={palette.colors} onUpdate={onUpdate}>
+          {palette.colors.map((element) => (
+            <article
+              key={element.id}
+              id={element.id}
+              className="w-full h-full rounded-xl flex flex-col justify-center items-center gap-10"
+              style={{ background: element.hex }}
+              data-draggable
+            >
+              <p>{element.hex}</p>
+              <button className="bg-slate-900 py-2 px-4" data-drag-trigger>
+                DRAG
+              </button>
+            </article>
+          ))}
+        </PalettePlayground>
       )}
     </main>
   );

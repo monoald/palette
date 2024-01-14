@@ -10,15 +10,16 @@ import React, {
 } from "react";
 
 type Props = {
-  palette: Palette;
-  setPalette: Dispatch<SetStateAction<Palette | undefined>>;
+  arr: any[];
+  onUpdate: (updatedArr: any[]) => void;
+  children: React.ReactNode;
 };
 
-export default function PalettePlayground({ palette, setPalette }: Props) {
+export default function PalettePlayground({ arr, onUpdate, children }: Props) {
   const [list, setList] = useState<Array<any>>([]);
 
   useEffect(() => {
-    setList([...palette.colors]);
+    setList([...arr]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -29,39 +30,42 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
   const containerRef = useRef<HTMLElement>(null);
 
   const handlePointerDown = (e: PointerEvent<HTMLButtonElement>) => {
-    const container = containerRef.current as HTMLElement;
-    const first = container.firstChild as HTMLElement;
     const target = e.target as HTMLElement;
-    const draggable = target.closest("*[data-draggable]") as HTMLElement;
-    const index = list.findIndex((element) => element.id === draggable.id);
 
-    setDistance(
-      (first.nextSibling as HTMLElement).offsetLeft - first.offsetLeft
-    );
-    setCurrentElement(draggable);
-    setOffset(e.clientX - draggable.offsetLeft);
+    if (target.getAttribute("data-drag-trigger")) {
+      const container = containerRef.current as HTMLElement;
+      const first = container.firstChild as HTMLElement;
+      const draggable = target.closest("*[data-draggable]") as HTMLElement;
+      const index = list.findIndex((element) => element.id === draggable.id);
 
-    // Attributes for draggin
-    draggable.style.left = `${
-      e.clientX - (e.clientX - draggable.offsetLeft)
-    }px`;
-    draggable.style.width = `${draggable.clientWidth}px`;
-    draggable.style.position = "absolute";
-    draggable.style.pointerEvents = "none";
-    draggable.style.zIndex = "100000";
+      setDistance(
+        (first.nextSibling as HTMLElement).offsetLeft - first.offsetLeft
+      );
+      setCurrentElement(draggable);
+      setOffset(e.clientX - draggable.offsetLeft);
 
-    // Move placeholder to current element position
-    const placeholder = placeholderRef.current as HTMLElement;
-    draggable.before(placeholder);
-    placeholder.style.display = "block";
+      // Attributes for draggin
+      draggable.style.left = `${
+        e.clientX - (e.clientX - draggable.offsetLeft)
+      }px`;
+      draggable.style.width = `${draggable.clientWidth}px`;
+      draggable.style.position = "absolute";
+      draggable.style.pointerEvents = "none";
+      draggable.style.zIndex = "100000";
 
-    setList((prev) => {
-      const newList = [...prev];
-      const current = newList.splice(index, 1)[0];
-      newList.push(current);
+      // Move placeholder to current element position
+      const placeholder = placeholderRef.current as HTMLElement;
+      draggable.before(placeholder);
+      placeholder.style.display = "block";
 
-      return newList;
-    });
+      setList((prev) => {
+        const newList = [...prev];
+        const current = newList.splice(index, 1)[0];
+        newList.push(current);
+
+        return newList;
+      });
+    }
   };
 
   const animateSwap = (
@@ -175,6 +179,8 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
             newList.splice(lastSwapedIndex + 1, 0, element);
           }
 
+          onUpdate(newList);
+
           return newList;
         });
       }, 200);
@@ -195,32 +201,15 @@ export default function PalettePlayground({ palette, setPalette }: Props) {
     }
   };
 
-  const content = list.map((element) => (
-    <article
-      key={element.id}
-      id={element.id}
-      className="w-full h-full rounded-xl flex flex-col justify-center items-center gap-10"
-      style={{ background: element.hex }}
-      data-draggable
-    >
-      <p>{element.hex}</p>
-      <button
-        className="bg-slate-900 py-2 px-4"
-        onPointerDown={handlePointerDown}
-      >
-        DRAG
-      </button>
-    </article>
-  ));
-
   return (
     <section
       className="relative w-full h-full flex gap-3"
+      onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       ref={containerRef}
     >
-      {content}
+      {children}
       <div
         key="null"
         id="placeholder"

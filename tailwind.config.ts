@@ -9,11 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        main: "#030308",
+        main: "#040409",
         primary: "#111428",
-        secondary: "#EEEEEE",
-        tertiary: "#5BC3EB",
-        "hover-secondary": "#CDCDCD30",
+        secondary: "#CDCDCD",
+        tertiary: "#735ceb",
+        "primary-border": "#E6E7F440",
+        "secondary-border": "#E6E7F41A",
       },
     },
   },

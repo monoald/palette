@@ -3,7 +3,7 @@ import React from "react";
 export default function SideBar() {
   return (
     <aside className="select-none">
-      <ul className="relative w-14 h-full flex flex-col justify-center items-center gap-3 rounded-xl bg-[#1E2029] list-none">
+      <ul className="relative w-14 h-full flex flex-col justify-center items-center gap-3 rounded-xl bg-primary list-none border border-[#CDCDCD1A]">
         <li>
           <button
             className="p-3 rounded-xl bg-transparent border-none text-[#fefefe] hover:text-[#5BC3EB] hover:bg-[#CDCDCD1A] transition"

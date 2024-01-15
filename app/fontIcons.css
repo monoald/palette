@@ -1,0 +1,104 @@
+@font-face {
+  font-family: "icomoon";
+  src: url("/fonts/icons.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "icomoon" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-chevron-down:before {
+  content: "\e900";
+}
+.icon-chevron-left:before {
+  content: "\e901";
+}
+.icon-circle:before {
+  content: "\e902";
+}
+.icon-clipboard:before {
+  content: "\e903";
+}
+.icon-contrast:before {
+  content: "\e904";
+}
+.icon-eye:before {
+  content: "\e905";
+}
+.icon-eye-dropper:before {
+  content: "\e906";
+}
+.icon-hash:before {
+  content: "\e907";
+}
+.icon-heart:before {
+  content: "\e908";
+}
+.icon-heart-filled:before {
+  content: "\e909";
+}
+.icon-image:before {
+  content: "\e90a";
+}
+.icon-info:before {
+  content: "\e90b";
+}
+.icon-locked:before {
+  content: "\e90c";
+}
+.icon-move:before {
+  content: "\e90d";
+}
+.icon-palette:before {
+  content: "\e90e";
+}
+.icon-plus:before {
+  content: "\e90f";
+}
+.icon-rectangle-h:before {
+  content: "\e910";
+}
+.icon-rectangle-v:before {
+  content: "\e911";
+}
+.icon-redo:before {
+  content: "\e912";
+}
+.icon-rounded-check:before {
+  content: "\e913";
+  color: #45cb85;
+}
+.icon-rounded-x:before {
+  content: "\e914";
+  color: #c1292e;
+}
+.icon-share:before {
+  content: "\e915";
+}
+.icon-undo:before {
+  content: "\e916";
+}
+.icon-unlocked:before {
+  content: "\e917";
+}
+.icon-warning:before {
+  content: "\e918";
+}
+.icon-x:before {
+  content: "\e919";
+}

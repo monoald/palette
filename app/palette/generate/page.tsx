@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import PalettePlayground from "./components/PalettePlayground";
 import { makeRandomID } from "@/app/utils/makeRandomID";
+import SideBar from "./components/SideBar";
 
 export default function Home() {
   const [palette, setPalette] = useState<Palette>();
@@ -99,25 +100,28 @@ export default function Home() {
   };
 
   return (
-    <main className="w-full h-screen">
-      {palette && (
-        <PalettePlayground arr={palette.colors} onUpdate={onUpdate}>
-          {palette.colors.map((element) => (
-            <article
-              key={element.id}
-              id={element.id}
-              className="w-full h-full rounded-xl flex flex-col justify-center items-center gap-10"
-              style={{ background: element.hex }}
-              data-draggable
-            >
-              <p>{element.hex}</p>
-              <button className="bg-slate-900 py-2 px-4" data-drag-trigger>
-                DRAG
-              </button>
-            </article>
-          ))}
-        </PalettePlayground>
-      )}
-    </main>
+    <div className="grid grid-rows-[auto_1fr] grid-cols-[54px_1fr] gap-7 p-7 bg-main">
+      <SideBar />
+      <main className="w-full h-full">
+        {palette && (
+          <PalettePlayground arr={palette.colors} onUpdate={onUpdate}>
+            {palette.colors.map((element) => (
+              <article
+                key={element.id}
+                id={element.id}
+                className="w-full h-full rounded-xl flex flex-col justify-center items-center gap-10"
+                style={{ background: element.hex }}
+                data-draggable
+              >
+                <p>{element.hex}</p>
+                <button className="bg-slate-900 py-2 px-4" data-drag-trigger>
+                  DRAG
+                </button>
+              </article>
+            ))}
+          </PalettePlayground>
+        )}
+      </main>
+    </div>
   );
 }

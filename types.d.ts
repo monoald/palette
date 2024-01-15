@@ -20,3 +20,18 @@ type Color = {
 type Palette = {
   colors: Array<Color>;
 };
+
+export as namespace JSX;
+export interface IntrinsicElements {
+  button: ExtendedButton;
+}
+
+interface ExtendedButton
+  extends React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes,
+    HTMLButtonElement
+  > {
+  tooltip?: string;
+  "tooltip-content"?: string;
+  "tooltip-position"?: "left" | "right" | "top" | "bottom";
+}

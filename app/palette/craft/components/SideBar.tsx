@@ -10,9 +10,10 @@ export default function SideBar() {
             // onClick={() =>
             //   optionsDispatch({ type: "option", payload: "paletteType" })
             // }
-            // data-tooltip
+            tooltip="true"
+            tooltip-content="Palette type"
+            tooltip-position="left"
           >
-            {/* <DescriptionTooltip text="Palete type" tipPosition="right" /> */}
             <span className="icon-palette text-2xl" />
           </button>
         </li>
@@ -23,12 +24,10 @@ export default function SideBar() {
             // onClick={() =>
             //   optionsDispatch({ type: "option", payload: "colorBlind" })
             // }
-            // data-tooltip
+            tooltip="true"
+            tooltip-content="Color blind simulator"
+            tooltip-position="left"
           >
-            {/* <DescriptionTooltip
-              text="Color blind simulator"
-              tipPosition="right"
-            /> */}
             <span className="icon-eye text-2xl" />
           </button>
         </li>
@@ -37,12 +36,10 @@ export default function SideBar() {
           <button
             className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() => modalsDispatch({ type: "img-extractor" })}
-            // data-tooltip
+            tooltip="true"
+            tooltip-content="Extract palette from image"
+            tooltip-position="left"
           >
-            {/* <DescriptionTooltip
-              text="Extract palette from image"
-              tipPosition="right"
-            /> */}
             <span className="icon-image text-2xl" />
           </button>
         </li>
@@ -53,12 +50,10 @@ export default function SideBar() {
             // onClick={() =>
             //   colorsDispatch({ type: "set-colors", payload: { paletteType } })
             // }
-            // data-tooltip
+            tooltip="true"
+            tooltip-content="Palette type"
+            tooltip-position="left"
           >
-            {/* <DescriptionTooltip
-              text="Change palette (Spacebar)"
-              tipPosition="right"
-            /> */}
             <span className="icon-plus text-2xl" />
           </button>
         </li>
@@ -68,9 +63,10 @@ export default function SideBar() {
             className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() => colorsDispatch({ type: "back-palette" })}
             // disabled={history.currentIndex === 0}
-            // data-tooltip
+            tooltip="true"
+            tooltip-content="Undo"
+            tooltip-position="left"
           >
-            {/* <DescriptionTooltip text="Undo" tipPosition="right" /> */}
             <span className="icon-undo text-2xl" />
           </button>
         </li>
@@ -80,9 +76,10 @@ export default function SideBar() {
             className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() => colorsDispatch({ type: "forward-palette" })}
             // disabled={history.currentIndex === history.data.length - 1}
-            // data-tooltip
+            tooltip="true"
+            tooltip-content="Redo"
+            tooltip-position="left"
           >
-            {/* <DescriptionTooltip text="Redo" tipPosition="right" /> */}
             <span className="icon-redo text-2xl" />
           </button>
         </li>
@@ -95,8 +92,10 @@ export default function SideBar() {
             // data-colors={history.data[history.currentIndex]}
             // data-saved={isSaved}
             // data-id={savedId}
+            tooltip="true"
+            tooltip-content="Save"
+            tooltip-position="left"
           >
-            {/* <DescriptionTooltip text="Save palette" tipPosition="right" /> */}
             <span
             // className={`
             //   option__icon icon
@@ -110,9 +109,10 @@ export default function SideBar() {
           <button
             className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // </li>onClick={handleShare}
-            // data-tooltip
+            tooltip="true"
+            tooltip-content="Share palette"
+            tooltip-position="left"
           >
-            {/* <DescriptionTooltip text="Share palette" tipPosition="right" /> */}
             <span className="icon-share text-2xl" />
           </button>
         </li>

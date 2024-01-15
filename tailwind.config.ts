@@ -16,6 +16,9 @@ const config: Config = {
         "primary-border": "#E6E7F440",
         "secondary-border": "#E6E7F41A",
       },
+      boxShadow: {
+        "3xl": "0px 0px 15px rgb(0, 0, 0)",
+      },
     },
   },
   plugins: [],

@@ -44,40 +44,26 @@ body {
     rgb(var(--background-start-rgb));
 }
 
-/* * {
-  transition: 0.3s;
-} */
-/* div {
-  transition: 1s;
-} */
-
-@keyframes shrink {
-  0% {
-    width: 40px;
-  }
-
-  99% {
-    /* display: flex; */
-  }
-  100% {
-    width: 0px;
-    display: none;
-  }
+*[tooltip="true"] {
+  @apply relative;
 }
-
-@keyframes grow {
-  0% {
-    width: 0px;
-    /* display: block; */
-  }
-
-  99% {
-  }
-  100% {
-    width: 100%;
-  }
+*[tooltip="true"]::after {
+  content: attr(tooltip-content);
+  inline-size: max-content;
+  @apply absolute top-1/2 left-[calc(100%+15px)] opacity-0 h-fit px-3 py-2 rounded-lg bg-secondary text-main text-sm -translate-y-1/2 z-[100000] shadow-3xl transition-opacity delay-0 duration-300 pointer-events-none select-none;
 }
-
-#test {
-  background-image: attr(data-img);
+*[tooltip="true"]:hover::after {
+  @apply opacity-100 delay-500;
+}
+*[tooltip="true"]::before {
+  content: "";
+  @apply absolute opacity-0 top-1/2 left-[calc(100%+9px)] w-0 h-0 transition-opacity delay-0 duration-300 pointer-events-none select-none -translate-y-1/2 z-[100001];
+}
+*[tooltip="true"]:hover::before {
+  @apply opacity-100 delay-500;
+}
+*[tooltip="true"]:is([tooltip-position="left"])::before {
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-right: 6px solid #cdcdcd;
 }

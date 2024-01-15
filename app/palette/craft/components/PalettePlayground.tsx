@@ -1,13 +1,6 @@
 "use client";
 
-import React, {
-  Dispatch,
-  PointerEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { PointerEvent, useEffect, useRef, useState } from "react";
 
 type Props = {
   arr: any[];
@@ -203,7 +196,7 @@ export default function PalettePlayground({ arr, onUpdate, children }: Props) {
 
   return (
     <section
-      className="relative w-full h-full flex gap-3"
+      className="relative w-full h-full flex justify-center items-center gap-3"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}

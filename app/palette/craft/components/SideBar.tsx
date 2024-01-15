@@ -2,11 +2,11 @@ import React from "react";
 
 export default function SideBar() {
   return (
-    <aside className="select-none">
-      <ul className="relative w-14 h-full flex flex-col justify-center items-center gap-3 rounded-xl bg-primary list-none border border-[#CDCDCD1A]">
+    <aside className="select-none flex items-center">
+      <ul className="relative w-14 h-fit py-4 flex flex-col justify-center items-center gap-3 rounded-full border border-primary-border list-none">
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-[#fefefe] hover:text-[#5BC3EB] hover:bg-[#CDCDCD1A] transition"
+            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() =>
             //   optionsDispatch({ type: "option", payload: "paletteType" })
             // }
@@ -19,7 +19,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-[#fefefe] hover:text-[#5BC3EB] hover:bg-[#CDCDCD1A] transition"
+            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() =>
             //   optionsDispatch({ type: "option", payload: "colorBlind" })
             // }
@@ -35,7 +35,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-[#fefefe] hover:text-[#5BC3EB] hover:bg-[#CDCDCD1A] transition"
+            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() => modalsDispatch({ type: "img-extractor" })}
             // data-tooltip
           >
@@ -49,7 +49,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-[#fefefe] hover:text-[#5BC3EB] hover:bg-[#CDCDCD1A] transition"
+            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() =>
             //   colorsDispatch({ type: "set-colors", payload: { paletteType } })
             // }
@@ -65,7 +65,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-[#fefefe] hover:text-[#5BC3EB] hover:bg-[#CDCDCD1A] transition"
+            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() => colorsDispatch({ type: "back-palette" })}
             // disabled={history.currentIndex === 0}
             // data-tooltip
@@ -77,7 +77,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-[#fefefe] hover:text-[#5BC3EB] hover:bg-[#CDCDCD1A] transition"
+            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() => colorsDispatch({ type: "forward-palette" })}
             // disabled={history.currentIndex === history.data.length - 1}
             // data-tooltip
@@ -108,7 +108,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-[#fefefe] hover:text-[#5BC3EB] hover:bg-[#CDCDCD1A] transition"
+            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // </li>onClick={handleShare}
             // data-tooltip
           >

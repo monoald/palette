@@ -100,7 +100,7 @@ export default function Home() {
   };
 
   return (
-    <div className="grid grid-rows-[auto_1fr] grid-cols-[54px_1fr] gap-7 p-7 bg-main">
+    <div className="grid grid-cols-[auto_1fr] h-[calc(100vh-74px)] gap-8 px-8 py-8 bg-main">
       <SideBar />
       <main className="w-full h-full">
         {palette && (
@@ -109,7 +109,7 @@ export default function Home() {
               <article
                 key={element.id}
                 id={element.id}
-                className="w-full h-full rounded-xl flex flex-col justify-center items-center gap-10"
+                className="w-full h-full rounded-3xl flex flex-col justify-center items-center gap-10"
                 style={{ background: element.hex }}
                 data-draggable
               >

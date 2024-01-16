@@ -142,6 +142,7 @@ export default function PalettePlayground({ arr, onUpdate, children }: Props) {
     const lastSwaped = container.querySelector("[last-swaped]") as HTMLElement;
 
     if (currentElement && lastSwaped) {
+      const side = lastSwaped.getAttribute("last-swaped");
       const placeholder = placeholderRef.current as HTMLElement;
       currentElement.style.transition = "left 0.2s";
       currentElement.style.left = `${placeholder.offsetLeft}px`;
@@ -158,22 +159,19 @@ export default function PalettePlayground({ arr, onUpdate, children }: Props) {
         setCurrentElement(null);
         setList((prev) => {
           const newList = [...prev];
-          let currentIndex = 0;
-          let lastSwapedIndex = 0;
-
-          for (const i in newList) {
-            if (newList[i].id === currentElement.id) currentIndex = +i;
-            if (newList[i].id === lastSwaped.id) lastSwapedIndex = +i;
-          }
+          let lastSwapedIndex = newList.findIndex(
+            (element) => element.id === lastSwaped.id
+          );
 
           const element = newList.splice(newList.length - 1, 1)[0];
-          if (lastSwaped.getAttribute("last-swaped") === "left") {
+          if (side === "left") {
             newList.splice(lastSwapedIndex, 0, element);
           } else {
             newList.splice(lastSwapedIndex + 1, 0, element);
           }
 
           onUpdate(newList);
+          lastSwaped.removeAttribute("last-swaped");
 
           return newList;
         });
@@ -184,6 +182,7 @@ export default function PalettePlayground({ arr, onUpdate, children }: Props) {
       currentElement.style.left = `${placeholder.offsetLeft}px`;
 
       setTimeout(() => {
+        setCurrentElement(null);
         currentElement.style.removeProperty("transition");
         currentElement.style.removeProperty("position");
         currentElement.style.removeProperty("left");

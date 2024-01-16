@@ -100,7 +100,7 @@ export default function Home() {
   };
 
   return (
-    <div className="grid grid-cols-[auto_1fr] h-[calc(100vh-74px)] gap-8 px-8 py-8 bg-main">
+    <div className="flex flex-col-reverse h-[calc(100vh-74px)] gap-8 px-8 py-8 bg-main md:flex-row">
       <SideBar />
       <main className="w-full h-full">
         {palette && (
@@ -109,120 +109,118 @@ export default function Home() {
               <article
                 key={element.id}
                 id={element.id}
-                className="group w-full h-full rounded-3xl flex flex-col justify-center items-center gap-12"
+                className="relative group w-full h-full rounded-3xl flex flex-row justify-end pr-5 items-center gap-3 md:flex-col md:justify-center md:pr-0"
                 style={{ background: element.hex }}
                 data-draggable
               >
-                <p className="absolute top-10 text-xl font-[500] tracking-wider uppercase">
+                <p className="absolute top-auto left-10 text-md font-[500] tracking-wider uppercase md:left-auto md:top-10 lg:text-xl">
                   {element.hex}
                 </p>
 
-                <div className="flex flex-col gap-3">
-                  <button
-                    className="text-2xl hidden p-3 group-hover:flex"
-                    // style={{
-                    //   'color': color.contrastColor
-                    // }}
-                    // onMouseDown={() => handleRemoveColor(color.id)}
-                    tooltip="true"
-                    tooltip-content="Remove"
-                    tooltip-position="bottom"
-                  >
-                    <span className="icon-x" />
-                  </button>
+                <button
+                  className="text-2xl hidden p-3 group-hover:flex"
+                  // style={{
+                  //   'color': color.contrastColor
+                  // }}
+                  // onMouseDown={() => handleRemoveColor(color.id)}
+                  tooltip="true"
+                  tooltip-content="Remove"
+                  tooltip-position="bottom"
+                >
+                  <span className="icon-x" />
+                </button>
 
-                  <button
-                    className="text-2xl hidden p-3 group-hover:flex color-like"
-                    // style={{
-                    //   'color': color.contrastColor
-                    // }}
-                    data-tooltip
-                    // data-name={color.color.substring(1)}
-                    // data-saved={isSaved}
-                    // data-id={savedId}
-                    tooltip="true"
-                    tooltip-content="Save"
-                    tooltip-position="bottom"
-                  >
-                    <span
-                      // className={`
-                      //   icon
-                      //   icon-heart${isSaved ? '-filled' : ''}
-                      // `}
-                      className="icon-heart"
-                    />
-                  </button>
+                <button
+                  className="text-2xl hidden p-3 group-hover:flex color-like"
+                  // style={{
+                  //   'color': color.contrastColor
+                  // }}
+                  data-tooltip
+                  // data-name={color.color.substring(1)}
+                  // data-saved={isSaved}
+                  // data-id={savedId}
+                  tooltip="true"
+                  tooltip-content="Save"
+                  tooltip-position="bottom"
+                >
+                  <span
+                    // className={`
+                    //   icon
+                    //   icon-heart${isSaved ? '-filled' : ''}
+                    // `}
+                    className="icon-heart"
+                  />
+                </button>
 
-                  <button
-                    className="text-2xl hidden p-3 group-hover:flex"
-                    // style={{
-                    //   'color': color.contrastColor
-                    // }}
-                    // onMouseDown={handleCopyToClipboard}
-                    tooltip="true"
-                    tooltip-content="Add to clipboard"
-                    tooltip-position="bottom"
-                  >
-                    <span className="icon-clipboard" />
-                  </button>
+                <button
+                  className="text-2xl hidden p-3 group-hover:flex"
+                  // style={{
+                  //   'color': color.contrastColor
+                  // }}
+                  // onMouseDown={handleCopyToClipboard}
+                  tooltip="true"
+                  tooltip-content="Add to clipboard"
+                  tooltip-position="bottom"
+                >
+                  <span className="icon-clipboard" />
+                </button>
 
-                  <button
-                    className="text-2xl hidden p-3 group-hover:flex"
-                    // style={{
-                    //   'color': color.contrastColor
-                    // }}
-                    // onMouseDown={handleLockColor}
-                    tooltip="true"
-                    tooltip-content="Lock"
-                    tooltip-position="bottom"
-                  >
-                    {/* {color.isLocked */}
-                    {/* ? */}
-                    <span className="icon-unlocked" />
-                    {/* : <span className='icon-lock-open' /> */}
-                    {/* } */}
-                  </button>
+                <button
+                  className="text-2xl hidden p-3 group-hover:flex"
+                  // style={{
+                  //   'color': color.contrastColor
+                  // }}
+                  // onMouseDown={handleLockColor}
+                  tooltip="true"
+                  tooltip-content="Lock"
+                  tooltip-position="bottom"
+                >
+                  {/* {color.isLocked */}
+                  {/* ? */}
+                  <span className="icon-unlocked" />
+                  {/* : <span className='icon-lock-open' /> */}
+                  {/* } */}
+                </button>
 
-                  <button
-                    className="text-2xl hidden p-3 group-hover:flex cursor-grab"
-                    // style={{
-                    // 'color': color.contrastColor
-                    // }}
-                    // {...listeners}
-                    tooltip="true"
-                    tooltip-content="Move"
-                    tooltip-position="bottom"
-                    data-drag-trigger
-                  >
-                    <span className="icon-move" />
-                  </button>
+                <button
+                  className="text-2xl hidden p-3 group-hover:flex cursor-grab"
+                  // style={{
+                  // 'color': color.contrastColor
+                  // }}
+                  // {...listeners}
+                  tooltip="true"
+                  tooltip-content="Move"
+                  tooltip-position="bottom"
+                  data-drag-trigger
+                >
+                  <span className="icon-move" />
+                </button>
 
-                  <button
-                    className="text-2xl hidden p-3 group-hover:flex"
-                    // style={{
-                    // 'color': color.contrastColor
-                    // }}
-                    // onMouseDown={handleContrast}
-                    tooltip="true"
-                    tooltip-content="Contrast calculator"
-                    tooltip-position="bottom"
-                  >
-                    <span className="icon-contrast" />
-                  </button>
+                <button
+                  className="text-2xl hidden p-3 group-hover:flex"
+                  // style={{
+                  // 'color': color.contrastColor
+                  // }}
+                  // onMouseDown={handleContrast}
+                  tooltip="true"
+                  tooltip-content="Contrast calculator"
+                  tooltip-position="bottom"
+                >
+                  <span className="icon-contrast" />
+                </button>
 
-                  <button
-                    className="text-2xl hidden p-3 group-hover:flex"
-                    // style={{
-                    //   'color': color.contrastColor
-                    // }}
-                    // onMouseDown={handleOpenPicker}
-                    tooltip="true"
-                    tooltip-content="Color picker"
-                    tooltip-position="bottom"
-                  >
-                    <span className="icon-eye-dropper" />
-                  </button>
-                </div>
+                <button
+                  className="text-2xl hidden p-3 group-hover:flex"
+                  // style={{
+                  //   'color': color.contrastColor
+                  // }}
+                  // onMouseDown={handleOpenPicker}
+                  tooltip="true"
+                  tooltip-content="Color picker"
+                  tooltip-position="bottom"
+                >
+                  <span className="icon-eye-dropper" />
+                </button>
               </article>
             ))}
           </PalettePlayground>

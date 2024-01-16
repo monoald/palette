@@ -148,6 +148,7 @@ export default function PalettePlayground({ arr, onUpdate, children }: Props) {
       setTimeout(() => {
         currentElement.style.removeProperty("transition");
         currentElement.style.removeProperty("position");
+        currentElement.style.removeProperty("left");
         currentElement.style.removeProperty("width");
         currentElement.style.removeProperty("pointer-events");
         currentElement.style.removeProperty("z-index");
@@ -185,6 +186,7 @@ export default function PalettePlayground({ arr, onUpdate, children }: Props) {
       setTimeout(() => {
         currentElement.style.removeProperty("transition");
         currentElement.style.removeProperty("position");
+        currentElement.style.removeProperty("left");
         currentElement.style.removeProperty("width");
         currentElement.style.removeProperty("pointer-events");
         currentElement.style.removeProperty("z-index");
@@ -196,7 +198,7 @@ export default function PalettePlayground({ arr, onUpdate, children }: Props) {
 
   return (
     <section
-      className="relative w-full h-full flex justify-center items-center gap-3"
+      className="relative w-full h-full flex flex-col justify-center items-center gap-3 md:flex-row"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}

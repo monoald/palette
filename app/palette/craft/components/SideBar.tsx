@@ -2,11 +2,11 @@ import React from "react";
 
 export default function SideBar() {
   return (
-    <aside className="select-none flex items-center">
-      <ul className="relative w-14 h-fit py-4 flex flex-col justify-center items-center gap-3 rounded-full border border-primary-border list-none">
+    <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">
+      <ul className="relative w-fit h-11 px-4 flex flex-row justify-center items-center gap-3 rounded-full border border-primary-border list-none md:flex-col md:w-11 md:h-fit md:px-0 md:py-4">
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() =>
             //   optionsDispatch({ type: "option", payload: "paletteType" })
             // }
@@ -20,7 +20,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() =>
             //   optionsDispatch({ type: "option", payload: "colorBlind" })
             // }
@@ -34,7 +34,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() => modalsDispatch({ type: "img-extractor" })}
             tooltip="true"
             tooltip-content="Extract palette from image"
@@ -46,7 +46,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() =>
             //   colorsDispatch({ type: "set-colors", payload: { paletteType } })
             // }
@@ -60,7 +60,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() => colorsDispatch({ type: "back-palette" })}
             // disabled={history.currentIndex === 0}
             tooltip="true"
@@ -73,7 +73,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() => colorsDispatch({ type: "forward-palette" })}
             // disabled={history.currentIndex === history.data.length - 1}
             tooltip="true"
@@ -107,7 +107,7 @@ export default function SideBar() {
 
         <li>
           <button
-            className="p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // </li>onClick={handleShare}
             tooltip="true"
             tooltip-content="Share palette"

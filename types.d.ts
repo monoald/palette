@@ -21,9 +21,10 @@ type Palette = {
   colors: Array<Color>;
 };
 
-export as namespace JSX;
-export interface IntrinsicElements {
-  button: ExtendedButton;
+declare namespace JSX {
+  interface IntrinsicElements {
+    button: ExtendedButton;
+  }
 }
 
 interface ExtendedButton

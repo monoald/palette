@@ -50,20 +50,34 @@ body {
 *[tooltip="true"]::after {
   content: attr(tooltip-content);
   inline-size: max-content;
-  @apply absolute top-1/2 left-[calc(100%+15px)] opacity-0 h-fit px-3 py-2 rounded-lg bg-secondary text-main text-sm -translate-y-1/2 z-[100000] shadow-3xl transition-opacity delay-0 duration-300 pointer-events-none select-none;
+  @apply absolute opacity-0 h-fit px-3 py-2 rounded-lg bg-secondary text-main text-sm z-[100000] shadow-3xl transition-opacity delay-0 duration-300 pointer-events-none select-none;
+}
+*[tooltip="true"]:is([tooltip-position="left"])::after {
+  @apply top-1/2 left-[calc(100%+15px)] -translate-y-1/2;
+}
+*[tooltip="true"]:is([tooltip-position="bottom"])::after {
+  @apply left-1/2 top-[calc(100%+15px)] -translate-x-1/2;
 }
 *[tooltip="true"]:hover::after {
   @apply opacity-100 delay-500;
 }
 *[tooltip="true"]::before {
   content: "";
-  @apply absolute opacity-0 top-1/2 left-[calc(100%+9px)] w-0 h-0 transition-opacity delay-0 duration-300 pointer-events-none select-none -translate-y-1/2 z-[100001];
-}
-*[tooltip="true"]:hover::before {
-  @apply opacity-100 delay-500;
+  @apply absolute opacity-0  w-0 h-0 transition-opacity delay-0 duration-300 pointer-events-none select-none z-[100001];
 }
 *[tooltip="true"]:is([tooltip-position="left"])::before {
+  @apply top-1/2 left-[calc(100%+9px)] -translate-y-1/2;
   border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
   border-right: 6px solid #cdcdcd;
+}
+
+*[tooltip="true"]:is([tooltip-position="bottom"])::before {
+  @apply left-1/2 top-[calc(100%+9px)] -translate-x-1/2;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 6px solid #cdcdcd;
+}
+*[tooltip="true"]:hover::before {
+  @apply opacity-100 delay-500;
 }

@@ -37,16 +37,27 @@ export default function Home() {
       quantity: 5,
     }) as string[];
 
-    const newUrl = newPalette.reduce((a, b) => a + "-" + b).replaceAll("#", "");
-
-    const newColors = newPalette.map((clr) => {
+    const colors = newPalette.map((clr) => {
       return createColorObject(clr, "hex");
     });
 
-    history.replaceState({}, "", `${newUrl}`);
-
     setPalette((prev) => {
-      if (prev)
+      if (prev) {
+        const newColors = [];
+
+        for (const clrindex in prev.colors) {
+          if (prev.colors[clrindex].isLocked) {
+            newColors.push(prev.colors[clrindex]);
+          } else {
+            newColors.push(colors[clrindex]);
+          }
+        }
+
+        const newUrl = newColors
+          .map((clr) => clr.hex.replace("#", ""))
+          .join("-");
+        history.replaceState({}, "", newUrl);
+
         return {
           ...prev,
           colors: newColors,
@@ -55,6 +66,7 @@ export default function Home() {
             current: prev.history.current++,
           },
         };
+      }
     });
   }, ["Space"]);
 
@@ -92,22 +104,44 @@ export default function Home() {
     });
   };
 
+  const handleLockColor = (id: string) => {
+    const clrIndex = palette?.colors.findIndex(
+      (clr) => clr.id === id
+    ) as number;
+
+    setPalette((prev) => {
+      if (prev) {
+        const newColors = [...prev.colors];
+        newColors[clrIndex] = {
+          ...newColors[clrIndex],
+          isLocked: !newColors[clrIndex].isLocked,
+        };
+        return {
+          ...prev,
+          colors: newColors,
+        };
+      }
+    });
+  };
+
+  console.log(palette);
+
   return (
     <div className="flex flex-col-reverse h-[calc(100vh-74px)] gap-8 px-8 py-8 bg-main md:flex-row">
       <SideBar />
       <main className="w-full h-full">
         {palette && (
           <PalettePlayground onUpdate={onUpdate}>
-            {palette.colors.map((element) => (
+            {palette.colors.map((clr) => (
               <article
-                key={element.id}
-                id={element.id}
+                key={clr.id}
+                id={clr.id}
                 className="relative group w-full h-full rounded-3xl flex flex-row justify-end pr-5 items-center gap-3 md:flex-col md:justify-center md:pr-0"
-                style={{ background: element.hex }}
+                style={{ background: clr.hex }}
                 data-draggable
               >
                 <p className="absolute top-auto left-10 text-md font-[500] tracking-wider uppercase md:left-auto md:top-10 lg:text-xl">
-                  {element.hex}
+                  {clr.hex}
                 </p>
 
                 <button
@@ -163,16 +197,16 @@ export default function Home() {
                   // style={{
                   //   'color': color.contrastColor
                   // }}
-                  // onMouseDown={handleLockColor}
+                  onClick={() => handleLockColor(clr.id)}
                   tooltip="true"
                   tooltip-content="Lock"
                   tooltip-position="bottom"
                 >
-                  {/* {color.isLocked */}
-                  {/* ? */}
-                  <span className="icon-unlocked" />
-                  {/* : <span className='icon-lock-open' /> */}
-                  {/* } */}
+                  {clr.isLocked ? (
+                    <span className="icon-locked" />
+                  ) : (
+                    <span className="icon-unlocked" />
+                  )}
                 </button>
 
                 <button

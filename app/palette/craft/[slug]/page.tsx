@@ -1,19 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { makeColorPalette } from "colors-kit";
+
+import { createColorObject } from "@/app/utils/createColorObject";
+import { useKeyDown } from "@/app/hooks/useKeyDown";
+
 import PalettePlayground from "./components/PalettePlayground";
 import SideBar from "./components/SideBar";
-import { makeColorPalette } from "colors-kit";
-import { createColorObject } from "@/app/utils/createColorObject";
 
 export default function Home() {
   const [palette, setPalette] = useState<Palette>();
-
-  // useEffect(() => {
-  //   window.addEventListener("custom:paletteChange", (e) => {
-  //     console.log(``)
-  //   })
-  // }, []);
 
   useEffect(() => {
     const url = window.location.href.split("/");
@@ -32,6 +29,34 @@ export default function Home() {
       colors: newColors,
     });
   }, []);
+
+  useKeyDown(() => {
+    const newPalette = makeColorPalette({
+      format: "hex",
+      paletteType: "random",
+      quantity: 5,
+    }) as string[];
+
+    const newUrl = newPalette.reduce((a, b) => a + "-" + b).replaceAll("#", "");
+
+    const newColors = newPalette.map((clr) => {
+      return createColorObject(clr, "hex");
+    });
+
+    history.replaceState({}, "", `${newUrl}`);
+
+    setPalette((prev) => {
+      if (prev)
+        return {
+          ...prev,
+          colors: newColors,
+          history: {
+            data: [...prev.history.data, newUrl],
+            current: prev.history.current++,
+          },
+        };
+    });
+  }, ["Space"]);
 
   const onUpdate = (currentId: string, lastSwapedId: string, side: string) => {
     setPalette((prev) => {
@@ -52,6 +77,8 @@ export default function Home() {
         const newUrl = newList.map((clr) => clr.hex.replace("#", "")).join("-");
         const newHistoryData = [...prev.history.data];
         newHistoryData.push(newUrl);
+
+        history.replaceState({}, "", `${newUrl}`);
 
         return {
           ...prev,

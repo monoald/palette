@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 export default function page() {
   const newPalette = makeColorPalette({
     format: "hex",
-    paletteType: "analogous",
+    paletteType: "random",
     quantity: 5,
   }) as string[];
 

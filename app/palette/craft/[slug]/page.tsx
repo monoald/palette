@@ -8,6 +8,11 @@ import { useKeyDown } from "@/app/hooks/useKeyDown";
 
 import PalettePlayground from "./components/PalettePlayground";
 import SideBar from "./components/SideBar";
+import {
+  handleCreateNewPalette,
+  handleLockColor,
+  handleRemoveColor,
+} from "@/app/utils/paletteHandlers";
 
 export default function Home() {
   const [palette, setPalette] = useState<Palette>();
@@ -31,27 +36,9 @@ export default function Home() {
   }, []);
 
   useKeyDown(() => {
-    const newPalette = makeColorPalette({
-      format: "hex",
-      paletteType: "random",
-      quantity: 5,
-    }) as string[];
-
-    const colors = newPalette.map((clr) => {
-      return createColorObject(clr, "hex");
-    });
-
     setPalette((prev) => {
       if (prev) {
-        const newColors = [];
-
-        for (const clrindex in prev.colors) {
-          if (prev.colors[clrindex].isLocked) {
-            newColors.push(prev.colors[clrindex]);
-          } else {
-            newColors.push(colors[clrindex]);
-          }
-        }
+        const newColors = handleCreateNewPalette(prev.colors);
 
         const newUrl = newColors
           .map((clr) => clr.hex.replace("#", ""))
@@ -104,18 +91,10 @@ export default function Home() {
     });
   };
 
-  const handleLockColor = (id: string) => {
-    const clrIndex = palette?.colors.findIndex(
-      (clr) => clr.id === id
-    ) as number;
-
+  const lockColor = (id: string) => {
     setPalette((prev) => {
       if (prev) {
-        const newColors = [...prev.colors];
-        newColors[clrIndex] = {
-          ...newColors[clrIndex],
-          isLocked: !newColors[clrIndex].isLocked,
-        };
+        const newColors = handleLockColor(prev.colors, id);
         return {
           ...prev,
           colors: newColors,
@@ -124,7 +103,28 @@ export default function Home() {
     });
   };
 
-  console.log(palette);
+  const removeColor = (id: string) => {
+    if ((palette?.colors.length as number) <= 2) return;
+    setPalette((prev) => {
+      if (prev) {
+        const newColors = handleRemoveColor(prev.colors, id);
+
+        const newUrl = newColors
+          .map((clr) => clr.hex.replace("#", ""))
+          .join("-");
+        history.replaceState({}, "", newUrl);
+
+        return {
+          ...prev,
+          colors: newColors,
+          history: {
+            data: [...prev.history.data, newUrl],
+            current: prev.history.current++,
+          },
+        };
+      }
+    });
+  };
 
   return (
     <div className="flex flex-col-reverse h-[calc(100vh-74px)] gap-8 px-8 py-8 bg-main md:flex-row">
@@ -149,7 +149,7 @@ export default function Home() {
                   // style={{
                   //   'color': color.contrastColor
                   // }}
-                  // onMouseDown={() => handleRemoveColor(color.id)}
+                  onClick={() => removeColor(clr.id)}
                   tooltip="true"
                   tooltip-content="Remove"
                   tooltip-position="bottom"
@@ -197,7 +197,7 @@ export default function Home() {
                   // style={{
                   //   'color': color.contrastColor
                   // }}
-                  onClick={() => handleLockColor(clr.id)}
+                  onClick={() => lockColor(clr.id)}
                   tooltip="true"
                   tooltip-content="Lock"
                   tooltip-position="bottom"

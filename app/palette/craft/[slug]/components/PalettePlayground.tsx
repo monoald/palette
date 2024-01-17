@@ -139,10 +139,10 @@ export default function PalettePlayground({ onUpdate, children }: Props) {
         placeholder.before(currentElement);
         placeholder.style.removeProperty("display");
 
-        onUpdate(currentElement.id, lastSwaped.id, side);
         lastSwaped.removeAttribute("last-swaped");
         setCurrentElement(null);
       }, 200);
+      onUpdate(currentElement.id, lastSwaped.id, side);
     } else if (currentElement) {
       const placeholder = placeholderRef.current as HTMLElement;
       currentElement.style.transition = "left 0.2s";

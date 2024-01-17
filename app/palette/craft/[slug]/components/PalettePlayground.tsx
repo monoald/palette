@@ -1,28 +1,13 @@
 "use client";
 
-import { test } from "@/app/utils/locationObserver";
-import React, {
-  Dispatch,
-  PointerEvent,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { PointerEvent, ReactNode, useRef, useState } from "react";
 
 type Props = {
-  arr: any[];
-  onUpdate: (updatedArr: any[]) => void;
-  setPalette: Dispatch<SetStateAction<Palette | undefined>>;
-  children: React.ReactNode;
+  onUpdate: (currentId: string, lastSwapedId: string, side: string) => void;
+  children: ReactNode;
 };
 
-export default function PalettePlayground({
-  arr,
-  setPalette,
-  children,
-}: Props) {
-  const list = [...arr];
+export default function PalettePlayground({ onUpdate, children }: Props) {
   const placeholderRef = useRef<HTMLDivElement>(null);
   const [currentElement, setCurrentElement] = useState<null | HTMLElement>();
   const [offset, setOffset] = useState(0);
@@ -56,14 +41,6 @@ export default function PalettePlayground({
       const placeholder = placeholderRef.current as HTMLElement;
       draggable.before(placeholder);
       placeholder.style.display = "block";
-
-      // setList((prev) => {
-      //   const newList = [...prev];
-      //   const current = newList.splice(index, 1)[0];
-      //   newList.push(current);
-
-      //   return newList;
-      // });
     }
   };
 
@@ -148,7 +125,7 @@ export default function PalettePlayground({
     const lastSwaped = container.querySelector("[last-swaped]") as HTMLElement;
 
     if (currentElement && lastSwaped) {
-      const side = lastSwaped.getAttribute("last-swaped");
+      const side = lastSwaped.getAttribute("last-swaped") as string;
       const placeholder = placeholderRef.current as HTMLElement;
       currentElement.style.transition = "left 0.2s";
       currentElement.style.left = `${placeholder.offsetLeft}px`;
@@ -162,64 +139,10 @@ export default function PalettePlayground({
         placeholder.before(currentElement);
         placeholder.style.removeProperty("display");
 
+        onUpdate(currentElement.id, lastSwaped.id, side);
+        lastSwaped.removeAttribute("last-swaped");
         setCurrentElement(null);
       }, 200);
-      // setList((prev) => {
-      //   const newList = [...prev];
-      //   const currentIndex = newList.findIndex(
-      //     (clr) => clr.id === currentElement.id
-      //   );
-      //   const element = newList.splice(currentIndex, 1)[0];
-
-      //   let lastSwapedIndex = newList.findIndex(
-      //     (element) => element.id === lastSwaped.id
-      //   );
-
-      //   if (side === "left") {
-      //     newList.splice(lastSwapedIndex, 0, element);
-      //   } else {
-      //     newList.splice(lastSwapedIndex + 1, 0, element);
-      //   }
-
-      // onUpdate(newList);
-      // setPalette((prev) => {
-      //   if (prev) {
-      //     const newList = [...prev.colors];
-      //     const currentIndex = newList.findIndex(
-      //       (clr) => clr.id === currentElement.id
-      //     );
-      //     const element = newList.splice(currentIndex, 1)[0];
-
-      //     let lastSwapedIndex = newList.findIndex(
-      //       (element) => element.id === lastSwaped.id
-      //     );
-
-      //     if (side === "left") {
-      //       newList.splice(lastSwapedIndex, 0, element);
-      //     } else {
-      //       newList.splice(lastSwapedIndex + 1, 0, element);
-      //     }
-      //     const newUrl = newList
-      //       .map((clr) => clr.hex.replace("#", ""))
-      //       .join("-");
-      //     const newHistoryData = [...prev.history.data];
-      //     newHistoryData.push(newUrl);
-
-      //     return {
-      //       ...prev,
-      //       colors: newList,
-      //       history: {
-      //         data: newHistoryData,
-      //         current: newHistoryData.length - 1,
-      //       },
-      //     };
-      //   }
-      // });
-      //   lastSwaped.removeAttribute("last-swaped");
-
-      //   return newList;
-      // });
-      console.log("blabla");
     } else if (currentElement) {
       const placeholder = placeholderRef.current as HTMLElement;
       currentElement.style.transition = "left 0.2s";

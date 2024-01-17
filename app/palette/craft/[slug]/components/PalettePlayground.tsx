@@ -1,21 +1,28 @@
 "use client";
 
-import React, { PointerEvent, useEffect, useRef, useState } from "react";
+import { test } from "@/app/utils/locationObserver";
+import React, {
+  Dispatch,
+  PointerEvent,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 type Props = {
   arr: any[];
   onUpdate: (updatedArr: any[]) => void;
+  setPalette: Dispatch<SetStateAction<Palette | undefined>>;
   children: React.ReactNode;
 };
 
-export default function PalettePlayground({ arr, onUpdate, children }: Props) {
-  const [list, setList] = useState<Array<any>>([]);
-
-  useEffect(() => {
-    setList([...arr]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+export default function PalettePlayground({
+  arr,
+  setPalette,
+  children,
+}: Props) {
+  const list = [...arr];
   const placeholderRef = useRef<HTMLDivElement>(null);
   const [currentElement, setCurrentElement] = useState<null | HTMLElement>();
   const [offset, setOffset] = useState(0);
@@ -29,7 +36,6 @@ export default function PalettePlayground({ arr, onUpdate, children }: Props) {
       const container = containerRef.current as HTMLElement;
       const first = container.firstChild as HTMLElement;
       const draggable = target.closest("*[data-draggable]") as HTMLElement;
-      const index = list.findIndex((element) => element.id === draggable.id);
 
       setDistance(
         (first.nextSibling as HTMLElement).offsetLeft - first.offsetLeft
@@ -51,13 +57,13 @@ export default function PalettePlayground({ arr, onUpdate, children }: Props) {
       draggable.before(placeholder);
       placeholder.style.display = "block";
 
-      setList((prev) => {
-        const newList = [...prev];
-        const current = newList.splice(index, 1)[0];
-        newList.push(current);
+      // setList((prev) => {
+      //   const newList = [...prev];
+      //   const current = newList.splice(index, 1)[0];
+      //   newList.push(current);
 
-        return newList;
-      });
+      //   return newList;
+      // });
     }
   };
 
@@ -157,25 +163,63 @@ export default function PalettePlayground({ arr, onUpdate, children }: Props) {
         placeholder.style.removeProperty("display");
 
         setCurrentElement(null);
-        setList((prev) => {
-          const newList = [...prev];
-          let lastSwapedIndex = newList.findIndex(
-            (element) => element.id === lastSwaped.id
-          );
-
-          const element = newList.splice(newList.length - 1, 1)[0];
-          if (side === "left") {
-            newList.splice(lastSwapedIndex, 0, element);
-          } else {
-            newList.splice(lastSwapedIndex + 1, 0, element);
-          }
-
-          onUpdate(newList);
-          lastSwaped.removeAttribute("last-swaped");
-
-          return newList;
-        });
       }, 200);
+      // setList((prev) => {
+      //   const newList = [...prev];
+      //   const currentIndex = newList.findIndex(
+      //     (clr) => clr.id === currentElement.id
+      //   );
+      //   const element = newList.splice(currentIndex, 1)[0];
+
+      //   let lastSwapedIndex = newList.findIndex(
+      //     (element) => element.id === lastSwaped.id
+      //   );
+
+      //   if (side === "left") {
+      //     newList.splice(lastSwapedIndex, 0, element);
+      //   } else {
+      //     newList.splice(lastSwapedIndex + 1, 0, element);
+      //   }
+
+      // onUpdate(newList);
+      // setPalette((prev) => {
+      //   if (prev) {
+      //     const newList = [...prev.colors];
+      //     const currentIndex = newList.findIndex(
+      //       (clr) => clr.id === currentElement.id
+      //     );
+      //     const element = newList.splice(currentIndex, 1)[0];
+
+      //     let lastSwapedIndex = newList.findIndex(
+      //       (element) => element.id === lastSwaped.id
+      //     );
+
+      //     if (side === "left") {
+      //       newList.splice(lastSwapedIndex, 0, element);
+      //     } else {
+      //       newList.splice(lastSwapedIndex + 1, 0, element);
+      //     }
+      //     const newUrl = newList
+      //       .map((clr) => clr.hex.replace("#", ""))
+      //       .join("-");
+      //     const newHistoryData = [...prev.history.data];
+      //     newHistoryData.push(newUrl);
+
+      //     return {
+      //       ...prev,
+      //       colors: newList,
+      //       history: {
+      //         data: newHistoryData,
+      //         current: newHistoryData.length - 1,
+      //       },
+      //     };
+      //   }
+      // });
+      //   lastSwaped.removeAttribute("last-swaped");
+
+      //   return newList;
+      // });
+      console.log("blabla");
     } else if (currentElement) {
       const placeholder = placeholderRef.current as HTMLElement;
       currentElement.style.transition = "left 0.2s";

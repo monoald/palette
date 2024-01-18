@@ -1,5 +1,6 @@
 import { makeColorPalette } from "colors-kit";
 import { createColorObject } from "./createColorObject";
+import { Palette as PaletteType } from "colors-kit";
 
 export function handleCreateNewPalette(prevColors: Color[]) {
   const newPalette = makeColorPalette({
@@ -12,7 +13,9 @@ export function handleCreateNewPalette(prevColors: Color[]) {
 
   for (const clrindex in prevColors) {
     if (prevColors[clrindex].isLocked) {
-      newColors.push(prevColors[clrindex]);
+      const newColor = createColorObject(prevColors[clrindex].hex, "hex");
+      newColor.isLocked = true;
+      newColors.push(newColor);
     } else {
       newColors.push(createColorObject(newPalette[clrindex], "hex"));
     }

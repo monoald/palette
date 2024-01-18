@@ -65,7 +65,7 @@ export default function PalettePlayground({ onUpdate, children }: Props) {
     element.style.transform = `translate(${gap}px, 0px)`;
 
     setTimeout(() => {
-      element.style.transition = "transform 0.2s";
+      element.style.transition = "transform 0.1s";
       element.style.transform = "translate(0px, 0px)";
     }, 10);
 
@@ -77,7 +77,7 @@ export default function PalettePlayground({ onUpdate, children }: Props) {
       element.style.removeProperty("transition");
       element.style.removeProperty("transform");
       element.removeAttribute("swap");
-    }, 200);
+    }, 100);
   };
 
   const handlePointerMove = (e: PointerEvent<HTMLElement>) => {
@@ -130,6 +130,7 @@ export default function PalettePlayground({ onUpdate, children }: Props) {
       currentElement.style.transition = "left 0.2s";
       currentElement.style.left = `${placeholder.offsetLeft}px`;
       setTimeout(() => {
+        onUpdate(currentElement.id, lastSwaped.id, side);
         currentElement.style.removeProperty("transition");
         currentElement.style.removeProperty("position");
         currentElement.style.removeProperty("left");
@@ -142,7 +143,6 @@ export default function PalettePlayground({ onUpdate, children }: Props) {
         lastSwaped.removeAttribute("last-swaped");
         setCurrentElement(null);
       }, 200);
-      onUpdate(currentElement.id, lastSwaped.id, side);
     } else if (currentElement) {
       const placeholder = placeholderRef.current as HTMLElement;
       currentElement.style.transition = "left 0.2s";

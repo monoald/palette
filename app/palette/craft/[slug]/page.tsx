@@ -181,7 +181,11 @@ export default function Home({ params }: { params: { slug: string } }) {
   return (
     <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
       <SideBar setOption={setOption} />
-      <OptionBar options={options[option as string]} setOption={setOption} />
+      <OptionBar
+        options={options[option as string]}
+        setOption={setOption}
+        current={option === "palette-type" ? paletteType : colorBlind}
+      />
       <main className="w-full h-full">
         {palette && (
           <PalettePlayground onUpdate={onUpdate}>

@@ -1,14 +1,13 @@
 import { Dispatch, SetStateAction } from "react";
-
-import { getParam, setParam } from "@/app/utils/urlState";
 import { Options } from "../data/options";
 
 type Props = {
   options: Options;
   setOption: Dispatch<SetStateAction<string | undefined>>;
+  current: string | null;
 };
 
-function OptionBar({ options, setOption }: Props) {
+function OptionBar({ options, setOption, current }: Props) {
   const handleSelectOption = (selected: string) => {
     const paletteChange = new CustomEvent("custom:paletteChange", {
       detail: {
@@ -18,13 +17,9 @@ function OptionBar({ options, setOption }: Props) {
       },
     });
 
-    const opt = selected === "none" ? null : selected;
-
     window.dispatchEvent(paletteChange);
-    setParam(options.name, opt);
   };
 
-  const handleClose = () => {};
   return (
     <div
       className={`absolute ml-8 left-0 top-0 w-64 h-full py-8 z-[1] [animation-fill-mode:forwards] ${
@@ -37,7 +32,7 @@ function OptionBar({ options, setOption }: Props) {
             <li key={option}>
               <button
                 className={`group relative w-full h-full py-2 text-start capitalize primary-hover ${
-                  getParam(options.name) === option ? "primary-active" : ""
+                  current === option ? "primary-active" : ""
                 }`}
                 onClick={() => handleSelectOption(option)}
               >

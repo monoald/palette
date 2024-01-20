@@ -44,15 +44,20 @@ body {
     rgb(var(--background-start-rgb));
 }
 
-.primary-active,
-.secondary-active {
+.primary-active {
+  & > *:first-child {
+    @apply text-tertiary text-shadow-active relative pb-1 after:absolute after:left-0 after:top-[100%] after:w-full after:h-[2px] after:bg-tertiary after:opacity-80 after:transition-all after:shadow-active;
+  }
+}
+.primary-hover,
+.secondary-hover {
   &:hover > *:first-child,
   &:active > *:first-child,
   &:focus-visible > *:first-child {
     @apply text-tertiary text-shadow-active;
   }
 }
-.primary-active {
+.primary-hover {
   & > a {
     @apply relative pb-1 after:absolute after:left-0 after:top-[100%] after:w-0 after:h-[2px] after:bg-tertiary after:opacity-80 after:transition-all after:shadow-active;
   }

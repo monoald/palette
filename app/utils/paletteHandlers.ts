@@ -2,10 +2,10 @@ import { makeColorPalette } from "colors-kit";
 import { createColorObject } from "./createColorObject";
 import { Palette as PaletteType } from "colors-kit";
 
-export function handleCreateNewPalette(prevColors: Color[]) {
+export function handleCreateNewPalette(prevColors: Color[], type: PaletteType) {
   const newPalette = makeColorPalette({
     format: "hex",
-    paletteType: "random",
+    paletteType: type,
     quantity: 5,
   }) as string[];
 

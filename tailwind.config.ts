@@ -44,12 +44,17 @@ const config: Config = {
       },
       keyframes: {
         "slide-left": {
-          "0%": { left: "-320px" },
+          "0%": { left: "-320px", display: "block" },
           "100%": { left: "0px" },
+        },
+        "slide-right": {
+          "0%": { left: "0px" },
+          "100%": { left: "-320px", display: "none" },
         },
       },
       animation: {
-        "slide-left": "slide-left 0.5s ease-in-out",
+        "slide-left": "slide-left 0.3s ease-in-out",
+        "slide-right": "slide-right 0.3s ease-in-out",
       },
     },
   },

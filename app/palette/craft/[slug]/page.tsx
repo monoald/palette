@@ -1,25 +1,39 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { makeColorPalette } from "colors-kit";
+import { Palette as PaletteType } from "colors-kit";
 
 import { createColorObject } from "@/app/utils/createColorObject";
 import { useKeyDown } from "@/app/hooks/useKeyDown";
-
-import PalettePlayground from "./components/PalettePlayground";
-import SideBar from "./components/SideBar";
 import {
   handleCreateNewPalette,
   handleLockColor,
   handleRemoveColor,
 } from "@/app/utils/paletteHandlers";
 
-export default function Home() {
+import PalettePlayground from "./components/PalettePlayground";
+import SideBar from "./components/SideBar";
+import OptionBar from "./components/OptionBar";
+import { replacePath } from "@/app/utils/urlState";
+import { options } from "./data/options";
+
+export default function Home({ params }: { params: { slug: string } }) {
   const [palette, setPalette] = useState<Palette>();
+  const [paletteType, setPaletteType] = useState("random");
+  const [colorBlind, setColorBlind] = useState(null);
+  const [option, setOption] = useState<string>();
 
   useEffect(() => {
-    const url = window.location.href.split("/");
-    const urlPalette = url[url.length - 1];
+    window.addEventListener("custom:paletteChange", (e) => {
+      const event = e as CustomEvent;
+      if (event.detail.event === "palette-type") {
+        setPaletteType(event.detail.paletteType);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    const urlPalette = params.slug;
     const newPalette = urlPalette.split("-").map((clr) => "#" + clr);
 
     const newColors = newPalette.map((clr) => {
@@ -33,18 +47,26 @@ export default function Home() {
       },
       colors: newColors,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useKeyDown(() => {
+    const newColors = handleCreateNewPalette(
+      palette?.colors as Color[],
+      paletteType as PaletteType
+    );
+
+    const newUrl = newColors.map((clr) => clr.hex.replace("#", "")).join("-");
+    replacePath(newUrl);
+
+    const paletteChange = new CustomEvent("custom:paletteChange", {
+      detail: { event: "space" },
+    });
+
+    window.dispatchEvent(paletteChange);
+
     setPalette((prev) => {
-      if (prev) {
-        const newColors = handleCreateNewPalette(prev.colors);
-
-        const newUrl = newColors
-          .map((clr) => clr.hex.replace("#", ""))
-          .join("-");
-        history.replaceState({}, "", newUrl);
-
+      if (prev)
         return {
           ...prev,
           colors: newColors,
@@ -53,7 +75,6 @@ export default function Home() {
             current: prev.history.current++,
           },
         };
-      }
     });
   }, ["Space"]);
 
@@ -73,11 +94,11 @@ export default function Home() {
         } else {
           newList.splice(lastSwapedIndex + 1, 0, element);
         }
+
         const newUrl = newList.map((clr) => clr.hex.replace("#", "")).join("-");
         const newHistoryData = [...prev.history.data];
         newHistoryData.push(newUrl);
-
-        history.replaceState({}, "", `${newUrl}`);
+        replacePath(newUrl);
 
         return {
           ...prev,
@@ -127,8 +148,9 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col-reverse h-[calc(100vh-74px)] gap-8 px-8 py-8 bg-main md:flex-row">
-      <SideBar />
+    <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
+      <SideBar setOption={setOption} />
+      <OptionBar options={options[option as string]} setOption={setOption} />
       <main className="w-full h-full">
         {palette && (
           <PalettePlayground onUpdate={onUpdate}>
@@ -162,7 +184,6 @@ export default function Home() {
                   // style={{
                   //   'color': color.contrastColor
                   // }}
-                  data-tooltip
                   // data-name={color.color.substring(1)}
                   // data-saved={isSaved}
                   // data-id={savedId}

@@ -1,15 +1,20 @@
-import React from "react";
+import { Dispatch, SetStateAction } from "react";
 
-export default function SideBar() {
+type Props = {
+  setOption: Dispatch<SetStateAction<string | undefined>>;
+};
+
+export default function SideBar({ setOption }: Props) {
   return (
     <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">
-      <ul className="relative w-fit h-11 px-4 flex flex-row justify-center items-center gap-3 rounded-full border border-primary-border list-none md:flex-col md:w-11 md:h-fit md:px-0 md:py-4">
+      <ul className="relative w-fit h-10 px-4 flex flex-row justify-center items-center gap-3 rounded-full border border-primary-border list-none md:flex-col md:w-10 md:h-fit md:px-0 md:py-4">
         <li>
           <button
             className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
             // onClick={() =>
             //   optionsDispatch({ type: "option", payload: "paletteType" })
             // }
+            onClick={() => setOption("palette-type")}
             tooltip="true"
             tooltip-content="Palette type"
             tooltip-position="left"
@@ -24,6 +29,7 @@ export default function SideBar() {
             // onClick={() =>
             //   optionsDispatch({ type: "option", payload: "colorBlind" })
             // }
+            onClick={() => setOption("color-blind")}
             tooltip="true"
             tooltip-content="Color blind simulator"
             tooltip-position="left"

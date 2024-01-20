@@ -3,6 +3,7 @@ import {
   Rgb,
   colorFormatConverter,
   rateContrast,
+  toColorBlind,
 } from "colors-kit";
 import { makeRandomID } from "./makeRandomID";
 
@@ -41,15 +42,15 @@ export function createColorObject(color: ColorsType, format: string): Color {
       rgb,
       xyz,
     },
-    // colorBlind: {
-    //   achromatomaly: toColorBlind(hex, "achromatomaly") as string,
-    //   achromatopsia: toColorBlind(hex, "achromatopsia") as string,
-    //   deuteranomaly: toColorBlind(hex, "deuteranomaly") as string,
-    //   deuteranopia: toColorBlind(hex, "deuteranopia") as string,
-    //   protanomaly: toColorBlind(hex, "protanomaly") as string,
-    //   protanopia: toColorBlind(hex, "protanopia") as string,
-    //   tritanomaly: toColorBlind(hex, "tritanomaly") as string,
-    //   tritanopia: toColorBlind(hex, "tritanopia") as string,
-    // },
+    colorBlind: {
+      achromatomaly: toColorBlind(hex as string, "achromatomaly") as string,
+      achromatopsia: toColorBlind(hex as string, "achromatopsia") as string,
+      deuteranomaly: toColorBlind(hex as string, "deuteranomaly") as string,
+      deuteranopia: toColorBlind(hex as string, "deuteranopia") as string,
+      protanomaly: toColorBlind(hex as string, "protanomaly") as string,
+      protanopia: toColorBlind(hex as string, "protanopia") as string,
+      tritanomaly: toColorBlind(hex as string, "tritanomaly") as string,
+      tritanopia: toColorBlind(hex as string, "tritanopia") as string,
+    },
   };
 }

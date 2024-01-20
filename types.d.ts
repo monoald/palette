@@ -30,7 +30,7 @@ type Color = {
   contrastColor: string;
   id: string;
   formats: Formats;
-  colorBlind?: ColorBlindSimulator;
+  colorBlind: ColorBlindSimulator;
 };
 
 type Palette = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { PointerEvent, useEffect, useRef, useState } from "react";
 import { Palette as PaletteType } from "colors-kit";
 
 import { createColorObject } from "@/app/utils/createColorObject";
@@ -18,6 +18,7 @@ import { replacePath } from "@/app/utils/urlState";
 import { options } from "./data/options";
 
 export default function Home({ params }: { params: { slug: string } }) {
+  // PALETTE MANAGEMENT
   const [palette, setPalette] = useState<Palette>();
   const [paletteType, setPaletteType] = useState("random");
   const [colorBlind, setColorBlind] = useState(null);
@@ -28,6 +29,10 @@ export default function Home({ params }: { params: { slug: string } }) {
       const event = e as CustomEvent;
       if (event.detail.event === "palette-type") {
         setPaletteType(event.detail.paletteType);
+      }
+
+      if (event.detail.event === "color-blind") {
+        setColorBlind(event.detail.colorBlind);
       }
     });
   }, []);
@@ -78,6 +83,31 @@ export default function Home({ params }: { params: { slug: string } }) {
     });
   }, ["Space"]);
 
+  // COLOR BLIND RESIZE
+  const [heightColorBlind, setHeightColorBlind] = useState<string | number>(
+    "50%"
+  );
+  const [resizeColorBlind, setResizeColorBlind] = useState(false);
+  const clrBlindRef = useRef<HTMLDivElement>(null);
+
+  function handleStartResize() {
+    setResizeColorBlind(true);
+  }
+
+  function handleResize(event: PointerEvent<HTMLDivElement>) {
+    if (resizeColorBlind) {
+      const target = clrBlindRef.current as HTMLDivElement;
+      const clientTop = target.getBoundingClientRect().top;
+      const mouseY = event.clientY - clientTop;
+      setHeightColorBlind(mouseY);
+    }
+  }
+
+  function handleEndResize() {
+    setResizeColorBlind(false);
+  }
+
+  // SWAP
   const onUpdate = (currentId: string, lastSwapedId: string, side: string) => {
     setPalette((prev) => {
       if (prev) {
@@ -112,6 +142,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     });
   };
 
+  // COLOR MANAGEMENT
   const lockColor = (id: string) => {
     setPalette((prev) => {
       if (prev) {
@@ -158,10 +189,30 @@ export default function Home({ params }: { params: { slug: string } }) {
               <article
                 key={clr.id}
                 id={clr.id}
-                className="relative group w-full h-full rounded-3xl flex flex-row justify-end pr-5 items-center gap-3 md:flex-col md:justify-center md:pr-0"
+                className="relative group w-full h-full rounded-3xl flex flex-row justify-end pr-5 items-center gap-3 overflow-hidden select-none md:flex-col md:justify-center md:pr-0"
                 style={{ background: clr.hex }}
+                onPointerMove={handleResize}
+                onPointerUp={handleEndResize}
                 data-draggable
               >
+                {colorBlind && (
+                  <div
+                    ref={clrBlindRef}
+                    className={`absolute top-0 left-0 w-full h-1/2 ${
+                      clr ? `block` : "hidden"
+                    }`}
+                    style={{
+                      background: clr.colorBlind[colorBlind],
+                      height: heightColorBlind,
+                    }}
+                  >
+                    <div
+                      className="absolute -bottom-3 w-full h-6 cursor-row-resize"
+                      onPointerDown={handleStartResize}
+                    ></div>
+                  </div>
+                )}
+
                 <p className="absolute top-auto left-10 text-md font-[500] tracking-wider uppercase md:left-auto md:top-10 lg:text-xl">
                   {clr.hex}
                 </p>

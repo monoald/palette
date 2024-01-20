@@ -52,26 +52,26 @@ const navContent = [
 export default function Header() {
   const user = true;
   return (
-    <header className="relative px-8 pt-8 w-full h-fit flex items-center justify-center gap-9 bg-main text-secondary">
+    <header className="relative px-8 pt-8 w-full h-fit flex items-center justify-center gap-9 bg-main text-secondary text-sm">
       <div className="">
         <h1 className="text-2xl">
           <Link href="/">Berbon</Link>
         </h1>
       </div>
 
-      <nav className="mx-auto h-11 select-none border border-primary-border rounded-full px-6">
-        <ul className="h-11 flex gap-10">
+      <nav className="mx-auto h-10 select-none border border-primary-border rounded-full px-6">
+        <ul className="h-10 flex items-center gap-10">
           {navContent.map((element) => (
             <li
               key={element.name}
-              className="group relative hover:text-tertiary active:text-tertiary focus-visible:text-tertiary py-2 transition-all duration-300"
+              className="group relative py-2 transition-all duration-300 secondary-active"
             >
               <p>{element.name}</p>
-              <ul className="absolute opacity-0 top-[100%] group-hover:opacity-100 group-active:opacity-100 group-focus-visible:opacity-100 flex flex-col gap-3 p-7 border border-primary-border z-[1] text-secondary rounded-2xl backdrop-blur-md bg-[rgba(10,10,10,0.5)] transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-active:pointer-events-auto group-focus-visible:pointer-events-auto">
+              <ul className="absolute opacity-0 top-full -left-7 w-32 group-hover:opacity-100 group-active:opacity-100 group-focus-visible:opacity-100 flex flex-col gap-5 p-7 border border-secondary-border z-[1] text-secondary rounded-2xl backdrop-blur-sm bg-transparent-main transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-active:pointer-events-auto group-focus-visible:pointer-events-auto">
                 {element.subNav.map((subElement) => (
                   <li
                     key={`${element.name}-${subElement.name}`}
-                    className="hover:text-tertiary active:text-tertiary focus-visible:text-tertiary"
+                    className="primary-active"
                   >
                     <Link href={subElement.route}>{subElement.name}</Link>
                   </li>
@@ -92,7 +92,7 @@ export default function Header() {
           </button>
         </div>
       ) : (
-        <div className="w-fit h-fit group">
+        <div className="group/area w-fit h-fit flex">
           <button className="w-[42px] h-[42px] rounded-full overflow-hidden">
             <img
               className="object-cover"
@@ -100,20 +100,20 @@ export default function Header() {
               alt=""
             />
           </button>
-          <ul className="absolute right-7 w-44 opacity-0  group-hover:opacity-100 group-active:opacity-100 group-focus-visible:opacity-100 flex flex-col gap-3 p-7 border border-primary-border z-[1] text-secondary rounded-2xl backdrop-blur-md bg-[rgba(10,10,10,0.5)] transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-active:pointer-events-auto group-focus-visible:pointer-events-auto">
-            <li className="hover:text-tertiary active:text-tertiary focus-visible:text-tertiary">
+          <ul className="absolute right-7 top-full w-44 opacity-0  group-hover/area:opacity-100 group-active/area:opacity-100 group-focus-visible/area:opacity-100 flex flex-col gap-5 p-7 border border-primary-border z-[1] text-secondary rounded-2xl backdrop-blur-md bg-transparent-main transition-all duration-300 pointer-events-none group-hover/area:pointer-events-auto group-active/area:pointer-events-auto group-focus-visible/area:pointer-events-auto">
+            <li className="primary-active">
               <Link href="/me/palettes">My Palettes</Link>
             </li>
-            <li className="hover:text-tertiary active:text-tertiary focus-visible:text-tertiary">
+            <li className="primary-active">
               <Link href="/me/colors">My Colors</Link>
             </li>
-            <li className="hover:text-tertiary active:text-tertiary focus-visible:text-tertiary">
+            <li className="primary-active">
               <Link href="/me/gradients">My Gradients</Link>
             </li>
-            <li className="hover:text-tertiary active:text-tertiary focus-visible:text-tertiary">
+            <li className="primary-active">
               <Link href="/me/font-icons">My Font Icons</Link>
             </li>
-            <li className="hover:text-tertiary active:text-tertiary focus-visible:text-tertiary">
+            <li className="primary-active">
               <Link href="/login">Sign out</Link>
             </li>
           </ul>

@@ -178,6 +178,10 @@ export default function Home({ params }: { params: { slug: string } }) {
     });
   };
 
+  const copyColor = (clr: string) => {
+    navigator.clipboard.writeText(clr.replace("#", ""));
+  };
+
   return (
     <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
       <SideBar setOption={setOption} />
@@ -260,7 +264,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                   // style={{
                   //   'color': color.contrastColor
                   // }}
-                  // onMouseDown={handleCopyToClipboard}
+                  onClick={() => copyColor(clr.hex)}
                   tooltip="true"
                   tooltip-content="Add to clipboard"
                   tooltip-position="bottom"

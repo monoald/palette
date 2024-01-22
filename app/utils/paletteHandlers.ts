@@ -2,7 +2,7 @@ import { Format, makeColorPalette } from "colors-kit";
 import { createColorObject } from "./createColorObject";
 import { Palette as PaletteType, Color as ColorType } from "colors-kit";
 
-export function handleCreateNewPalette(prevColors: Color[], type: PaletteType) {
+export function handleChangePalette(prevColors: Color[], type: PaletteType) {
   const newPalette = makeColorPalette({
     format: "hex",
     paletteType: type,

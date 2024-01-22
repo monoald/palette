@@ -6,7 +6,7 @@ import { Palette as PaletteType } from "colors-kit";
 import { createColorObject } from "@/app/utils/createColorObject";
 import { useKeyDown } from "@/app/hooks/useKeyDown";
 import {
-  handleCreateNewPalette,
+  handleChangePalette,
   handleLockColor,
   handleRemoveColor,
   handleUpdateColor,
@@ -105,7 +105,7 @@ export default function Home({ params }: { params: { slug: string } }) {
   }, []);
 
   const changePalette = () => {
-    const newColors = handleCreateNewPalette(
+    const newColors = handleChangePalette(
       palette?.colors as Color[],
       paletteType as PaletteType
     );
@@ -126,7 +126,7 @@ export default function Home({ params }: { params: { slug: string } }) {
           colors: newColors,
           history: {
             data: [...prev.history.data, newUrl],
-            current: prev.history.current++,
+            current: prev.history.current + 1,
           },
         };
     });
@@ -264,9 +264,68 @@ export default function Home({ params }: { params: { slug: string } }) {
     setContrast(null);
   };
 
+  // HISTORY MANAGEMENT
+  const historyBack = () => {
+    setPalette((prev) => {
+      if (prev) {
+        const current = prev.history.current - 1;
+        const newUrl = prev.history.data[current];
+        replacePath(newUrl);
+
+        const newPalette = newUrl.split("-").map((clr) => "#" + clr);
+
+        const newColors = newPalette.map((clr) => {
+          return createColorObject(clr, "hex");
+        });
+
+        return {
+          ...prev,
+          colors: newColors,
+          history: {
+            ...prev.history,
+            current,
+          },
+        };
+      }
+    });
+  };
+
+  const historyForward = () => {
+    setPalette((prev) => {
+      if (prev) {
+        const current = prev.history.current + 1;
+        const newUrl = prev.history.data[current];
+        replacePath(newUrl);
+
+        const newPalette = newUrl.split("-").map((clr) => "#" + clr);
+
+        const newColors = newPalette.map((clr) => {
+          return createColorObject(clr, "hex");
+        });
+
+        return {
+          ...prev,
+          colors: newColors,
+          history: {
+            ...prev.history,
+            current,
+          },
+        };
+      }
+    });
+  };
+
   return (
     <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
-      <SideBar setOption={setOption} changePalette={changePalette} />
+      {palette && (
+        <SideBar
+          setOption={setOption}
+          changePalette={changePalette}
+          historyBack={historyBack}
+          historyForward={historyForward}
+          paletteHistory={palette.history}
+        />
+      )}
       <OptionBar
         options={options[option as string]}
         setOption={setOption}

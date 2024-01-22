@@ -3,15 +3,24 @@ import { Dispatch, SetStateAction } from "react";
 type Props = {
   setOption: Dispatch<SetStateAction<string | undefined>>;
   changePalette: () => void;
+  historyBack: () => void;
+  historyForward: () => void;
+  paletteHistory: PaletteHistory;
 };
 
-export default function SideBar({ setOption, changePalette }: Props) {
+export default function SideBar({
+  setOption,
+  changePalette,
+  historyBack,
+  historyForward,
+  paletteHistory,
+}: Props) {
   return (
     <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">
       <ul className="relative w-fit h-10 px-4 flex flex-row justify-center items-center gap-3 rounded-full border border-primary-border list-none md:flex-col md:w-10 md:h-fit md:px-0 md:py-4">
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             tooltip="true"
             tooltip-content="Palette type"
             tooltip-position="left"
@@ -23,7 +32,7 @@ export default function SideBar({ setOption, changePalette }: Props) {
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             tooltip="true"
             tooltip-content="Color blind simulator"
             tooltip-position="left"
@@ -35,7 +44,7 @@ export default function SideBar({ setOption, changePalette }: Props) {
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             // onClick={() => modalsDispatch({ type: "img-extractor" })}
             tooltip="true"
             tooltip-content="Extract palette from image"
@@ -47,7 +56,7 @@ export default function SideBar({ setOption, changePalette }: Props) {
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             tooltip="true"
             tooltip-content="Palette type"
             tooltip-position="left"
@@ -59,12 +68,12 @@ export default function SideBar({ setOption, changePalette }: Props) {
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
-            // onClick={() => colorsDispatch({ type: "back-palette" })}
-            // disabled={history.currentIndex === 0}
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777]"
+            disabled={paletteHistory.current === 0}
             tooltip="true"
             tooltip-content="Undo"
             tooltip-position="left"
+            onClick={historyBack}
           >
             <span className="icon-undo text-2xl" />
           </button>
@@ -72,12 +81,12 @@ export default function SideBar({ setOption, changePalette }: Props) {
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
-            // onClick={() => colorsDispatch({ type: "forward-palette" })}
-            // disabled={history.currentIndex === history.data.length - 1}
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777] disabled:pointer-events-none"
+            disabled={paletteHistory.current >= paletteHistory.data.length - 1}
             tooltip="true"
             tooltip-content="Redo"
             tooltip-position="left"
+            onClick={historyForward}
           >
             <span className="icon-redo text-2xl" />
           </button>
@@ -106,7 +115,7 @@ export default function SideBar({ setOption, changePalette }: Props) {
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
+            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             // </li>onClick={handleShare}
             tooltip="true"
             tooltip-content="Share palette"

@@ -23,7 +23,11 @@ function getMainContrastColor(color: Rgb): string {
   return mainContrastColor;
 }
 
-export function createColorObject(color: ColorsType, format: string): Color {
+export function createColorObject(
+  color: ColorsType,
+  format: string,
+  attrs?: Partial<Color>
+): Color {
   const { cmyk, hex, hsl, hsv, lab, rgb, xyz } = colorFormatConverter(color, {
     allFormats: true,
     currentFormat: format,
@@ -31,9 +35,9 @@ export function createColorObject(color: ColorsType, format: string): Color {
 
   return {
     hex: hex || "",
-    isLocked: false,
+    isLocked: attrs?.isLocked || false,
     contrastColor: getMainContrastColor(rgb),
-    id: makeRandomID(),
+    id: attrs?.id || makeRandomID(),
     formats: {
       cmyk,
       hsv,

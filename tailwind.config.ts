@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 
-const customElements = plugin(function ({ matchUtilities, theme }) {
+const customElements = plugin(function ({ matchUtilities, theme, addVariant }) {
   matchUtilities(
     {
       "text-shadow": (value) => ({

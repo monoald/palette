@@ -36,6 +36,7 @@ type Color = {
 type Palette = {
   history: PaletteHistory;
   colors: Array<Color>;
+  currentColor?: string;
 };
 
 declare namespace JSX {

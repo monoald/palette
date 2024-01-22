@@ -1,6 +1,6 @@
-import { makeColorPalette } from "colors-kit";
+import { Format, makeColorPalette } from "colors-kit";
 import { createColorObject } from "./createColorObject";
-import { Palette as PaletteType } from "colors-kit";
+import { Palette as PaletteType, Color as ColorType } from "colors-kit";
 
 export function handleCreateNewPalette(prevColors: Color[], type: PaletteType) {
   const newPalette = makeColorPalette({
@@ -22,6 +22,22 @@ export function handleCreateNewPalette(prevColors: Color[], type: PaletteType) {
   }
 
   return newColors;
+}
+
+export function handleUpdateColor(
+  id: string,
+  clr: ColorType,
+  format: Format,
+  palette: Color[]
+): Color[] {
+  const newPalette = [...palette];
+  const index = newPalette.findIndex((clr) => clr.id === id);
+  const colorToUpdate = newPalette[index];
+  const newColorObject = createColorObject(clr, format, colorToUpdate);
+
+  newPalette.splice(index, 1, newColorObject);
+
+  return newPalette;
 }
 
 export function handleLockColor(colors: Color[], id: string) {

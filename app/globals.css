@@ -105,20 +105,18 @@ body {
 }
 
 .primary-button {
+  @apply h-10 w-28;
+}
+.primary-button,
+.secondary-button {
   --duration: 7s;
   --easing: linear;
-  --c-color-1: #1aa3ff4d;
-  --c-color-2: #1aff1a4d;
-  --c-color-3: #cf07b180;
-  --c-color-4: #1ae8ff4d;
-  --c-shadow-inset-top: #34dfff4d;
-  --c-shadow-inset-bottom: #d7faff4d;
-  @apply relative w-28 mx-auto border-none rounded-full bg-btn-primary text-[#f4f1f2] text-sm font-medium outline-none shadow-btn-primary cursor-pointer;
+  @apply relative border-none rounded-full bg-btn-primary text-[#f4f1f2] text-sm font-medium outline-none shadow-btn-primary cursor-pointer;
   /* Before element */
   @apply before:absolute before:inset-0 before:rounded-full before:pointer-events-none before:z-[3] before:shadow-[inset_0_3px_12px_#34dfff4d,inset_0_-2px_4px_#d7faff4d];
   > div {
     -webkit-mask-image: -webkit-radial-gradient(white, black);
-    @apply py-3 rounded-full overflow-hidden;
+    @apply h-full rounded-full overflow-hidden flex items-center justify-center;
     span {
       @apply relative inline-block z-[1];
     }
@@ -331,4 +329,58 @@ body {
   66% {
     transform: translate(60px, -32px) translateZ(0);
   }
+}
+/* Scroll Bar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 10px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cdcdcd;
+  border-radius: 10px;
+  border: 3px solid black;
+}
+::-webkit-scrollbar-corner {
+  display: none;
+}
+::-webkit-scrollbar-track {
+  margin: 15px;
+}
+/* Inputs */
+input[type="text"],
+input[type="number"] {
+  @apply h-8 border border-primary-border rounded-lg bg-transparent;
+}
+input[type="number"] {
+  @apply text-sm;
+}
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Range Input */
+input[type="range"] {
+  @apply w-full h-3 border-none rounded-full appearance-none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  @apply relative appearance-none h-6 w-6 rounded-full bg-contain bg-center bg-no-repeat bg-[url('/picker-thumb.svg')];
+  background-color: var(--thumb-bg);
+}
+.hue-input {
+  background: -webkit-linear-gradient(
+    left,
+    hsl(0, 100%, 50%),
+    hsl(60, 100%, 50%),
+    hsl(120, 100%, 50%),
+    hsl(180, 100%, 50%),
+    hsl(240, 100%, 50%),
+    hsl(300, 100%, 50%),
+    hsl(360, 100%, 50%)
+  );
+}
+.color-input {
+  background: var(--bg-color);
 }

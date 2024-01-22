@@ -100,7 +100,7 @@ export default function Header() {
               alt=""
             />
           </button>
-          <ul className="absolute right-7 top-full w-44 opacity-0  group-hover/area:opacity-100 group-active/area:opacity-100 group-focus-visible/area:opacity-100 flex flex-col gap-5 p-7 border border-primary-border z-[1] text-secondary rounded-2xl backdrop-blur-md bg-transparent-main transition-all duration-300 pointer-events-none group-hover/area:pointer-events-auto group-active/area:pointer-events-auto group-focus-visible/area:pointer-events-auto">
+          <ul className="absolute right-7 top-full w-44 opacity-0  group-hover/area:opacity-100 group-active/area:opacity-100 group-focus-visible/area:opacity-100 flex flex-col gap-5 p-7 border border-secondary-border z-[1] text-secondary rounded-2xl backdrop-blur-md bg-transparent-main transition-all duration-300 pointer-events-none group-hover/area:pointer-events-auto group-active/area:pointer-events-auto group-focus-visible/area:pointer-events-auto">
             <li className="primary-hover">
               <Link href="/me/palettes">My Palettes</Link>
             </li>

@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { Options } from "../data/options";
+import { dispatch } from "@/app/hooks/useStateHandler";
 
 type Props = {
   options: Options;
@@ -9,15 +10,11 @@ type Props = {
 
 function OptionBar({ options, setOption, current }: Props) {
   const handleSelectOption = (selected: string) => {
-    const paletteChange = new CustomEvent("custom:paletteChange", {
-      detail: {
-        event: options?.name,
-        paletteType: selected,
-        colorBlind: selected,
-      },
+    dispatch("custom:option", {
+      event: options?.name,
+      paletteType: selected,
+      colorBlind: selected,
     });
-
-    window.dispatchEvent(paletteChange);
   };
 
   return (
@@ -44,7 +41,10 @@ function OptionBar({ options, setOption, current }: Props) {
           ))}
         </ul>
 
-        <button className="primary-button" onClick={() => setOption(undefined)}>
+        <button
+          className="primary-button mx-auto"
+          onClick={() => setOption(undefined)}
+        >
           <div>
             <span>Close</span>
             <div className="circle-12"></div>

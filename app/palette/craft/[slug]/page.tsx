@@ -9,6 +9,7 @@ import {
   handleCreateNewPalette,
   handleLockColor,
   handleRemoveColor,
+  handleUpdateColor,
 } from "@/app/utils/paletteHandlers";
 
 import PalettePlayground from "./components/PalettePlayground";
@@ -16,6 +17,8 @@ import SideBar from "./components/SideBar";
 import OptionBar from "./components/OptionBar";
 import { replacePath } from "@/app/utils/urlState";
 import { options } from "./data/options";
+import { Picker } from "@/app/components/picker/Picker";
+import useStateHandler from "@/app/hooks/useStateHandler";
 
 export default function Home({ params }: { params: { slug: string } }) {
   // PALETTE MANAGEMENT
@@ -24,18 +27,63 @@ export default function Home({ params }: { params: { slug: string } }) {
   const [colorBlind, setColorBlind] = useState(null);
   const [option, setOption] = useState<string>();
 
-  useEffect(() => {
-    window.addEventListener("custom:paletteChange", (e) => {
-      const event = e as CustomEvent;
-      if (event.detail.event === "palette-type") {
-        setPaletteType(event.detail.paletteType);
-      }
-
-      if (event.detail.event === "color-blind") {
-        setColorBlind(event.detail.colorBlind);
+  const updatePaletteFromPickerHandler = (e: Event) => {
+    const event = e as CustomEvent;
+    setPalette((prev) => {
+      if (prev) {
+        const updatedColors = handleUpdateColor(
+          event.detail.id,
+          event.detail.clr,
+          event.detail.format,
+          prev.colors as Color[]
+        );
+        return { ...prev, colors: updatedColors };
       }
     });
-  }, []);
+  };
+
+  const updateHistoryFromPickerHandler = () => {
+    setPalette((prev) => {
+      if (prev) {
+        const newUrl = prev.colors
+          .map((clr) => clr.hex.replace("#", ""))
+          .join("-") as string;
+
+        replacePath(newUrl);
+        return {
+          ...prev,
+          history: {
+            data: [...prev.history.data, newUrl],
+            current: prev.history.current + 1,
+          },
+        };
+      }
+    });
+  };
+
+  const optionHandler = (e: Event) => {
+    const event = e as CustomEvent;
+    if (event.detail.event === "palette-type") {
+      setPaletteType(event.detail.paletteType);
+    }
+
+    if (event.detail.event === "color-blind") {
+      setColorBlind(event.detail.colorBlind);
+    }
+  };
+
+  useStateHandler(
+    [
+      updatePaletteFromPickerHandler,
+      updateHistoryFromPickerHandler,
+      optionHandler,
+    ],
+    [
+      "custom:updatePaletteFromPicker",
+      "custom:updateHistoryFromPicker",
+      "custom:option",
+    ]
+  );
 
   useEffect(() => {
     const urlPalette = params.slug;
@@ -143,6 +191,13 @@ export default function Home({ params }: { params: { slug: string } }) {
   };
 
   // COLOR MANAGEMENT
+
+  const setCurrentColor = (id: string) => {
+    setPalette((prev) => {
+      if (prev) return { ...prev, currentColor: id };
+    });
+  };
+
   const lockColor = (id: string) => {
     setPalette((prev) => {
       if (prev) {
@@ -182,6 +237,16 @@ export default function Home({ params }: { params: { slug: string } }) {
     navigator.clipboard.writeText(clr.replace("#", ""));
   };
 
+  const closePicker = () => {
+    setPalette((prev) => {
+      if (prev)
+        return {
+          ...prev,
+          currentColor: undefined,
+        };
+    });
+  };
+
   return (
     <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
       <SideBar setOption={setOption} />
@@ -189,6 +254,10 @@ export default function Home({ params }: { params: { slug: string } }) {
         options={options[option as string]}
         setOption={setOption}
         current={option === "palette-type" ? paletteType : colorBlind}
+      />
+      <Picker
+        clr={palette?.colors.find((clr) => clr.id === palette.currentColor)}
+        closePicker={closePicker}
       />
       <main className="w-full h-full">
         {palette && (
@@ -322,6 +391,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                   //   'color': color.contrastColor
                   // }}
                   // onMouseDown={handleOpenPicker}
+                  onClick={() => setCurrentColor(clr.id)}
                   tooltip="true"
                   tooltip-content="Color picker"
                   tooltip-position="bottom"

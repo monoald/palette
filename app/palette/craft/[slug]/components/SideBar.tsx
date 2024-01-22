@@ -15,12 +15,16 @@ export default function SideBar({
   historyForward,
   paletteHistory,
 }: Props) {
+  const copyPaletteToClipboard = () => {
+    const url = window.location.href.split("#")[0];
+    navigator.clipboard.writeText(url);
+  };
   return (
     <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">
       <ul className="relative w-fit h-10 px-4 flex flex-row justify-center items-center gap-3 rounded-full border border-primary-border list-none md:flex-col md:w-10 md:h-fit md:px-0 md:py-4">
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             tooltip="true"
             tooltip-content="Palette type"
             tooltip-position="left"
@@ -32,7 +36,7 @@ export default function SideBar({
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             tooltip="true"
             tooltip-content="Color blind simulator"
             tooltip-position="left"
@@ -44,7 +48,7 @@ export default function SideBar({
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             // onClick={() => modalsDispatch({ type: "img-extractor" })}
             tooltip="true"
             tooltip-content="Extract palette from image"
@@ -56,7 +60,7 @@ export default function SideBar({
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             tooltip="true"
             tooltip-content="Palette type"
             tooltip-position="left"
@@ -68,7 +72,7 @@ export default function SideBar({
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777]"
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777]"
             disabled={paletteHistory.current === 0}
             tooltip="true"
             tooltip-content="Undo"
@@ -81,7 +85,7 @@ export default function SideBar({
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777] disabled:pointer-events-none"
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777] disabled:pointer-events-none"
             disabled={paletteHistory.current >= paletteHistory.data.length - 1}
             tooltip="true"
             tooltip-content="Redo"
@@ -115,11 +119,11 @@ export default function SideBar({
 
         <li>
           <button
-            className="flex p-3 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
-            // </li>onClick={handleShare}
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             tooltip="true"
             tooltip-content="Share palette"
             tooltip-position="left"
+            onClick={copyPaletteToClipboard}
           >
             <span className="icon-share text-2xl" />
           </button>

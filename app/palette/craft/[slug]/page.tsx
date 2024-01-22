@@ -19,6 +19,7 @@ import { replacePath } from "@/app/utils/urlState";
 import { options } from "./data/options";
 import { Picker } from "@/app/components/picker/Picker";
 import useStateHandler from "@/app/hooks/useStateHandler";
+import { ContrastCalculator } from "@/app/components/ContrastCalculator";
 
 export default function Home({ params }: { params: { slug: string } }) {
   // PALETTE MANAGEMENT
@@ -247,6 +248,18 @@ export default function Home({ params }: { params: { slug: string } }) {
     });
   };
 
+  // CONTRAST
+  const [contrast, setContrast] = useState<number | null>(null);
+
+  const openContrast = (id: string) => {
+    const index = palette?.colors.findIndex((clr) => clr.id === id) as number;
+    setContrast(index);
+  };
+
+  const closeContrast = () => {
+    setContrast(null);
+  };
+
   return (
     <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
       <SideBar setOption={setOption} />
@@ -255,6 +268,13 @@ export default function Home({ params }: { params: { slug: string } }) {
         setOption={setOption}
         current={option === "palette-type" ? paletteType : colorBlind}
       />
+      {contrast !== null && (
+        <ContrastCalculator
+          currentIndex={contrast as number}
+          colors={palette?.colors as Color[]}
+          close={closeContrast}
+        />
+      )}
       <Picker
         clr={palette?.colors.find((clr) => clr.id === palette.currentColor)}
         closePicker={closePicker}
@@ -290,15 +310,20 @@ export default function Home({ params }: { params: { slug: string } }) {
                   </div>
                 )}
 
-                <p className="absolute top-auto left-10 text-md font-[500] tracking-wider uppercase md:left-auto md:top-10 lg:text-xl">
+                <p
+                  className="absolute top-auto left-10 text-md font-[500] tracking-wider uppercase md:left-auto md:top-10 lg:text-xl"
+                  style={{
+                    color: clr.contrastColor,
+                  }}
+                >
                   {clr.hex}
                 </p>
 
                 <button
                   className="text-2xl hidden p-3 group-hover:flex"
-                  // style={{
-                  //   'color': color.contrastColor
-                  // }}
+                  style={{
+                    color: clr.contrastColor,
+                  }}
                   onClick={() => removeColor(clr.id)}
                   tooltip="true"
                   tooltip-content="Remove"
@@ -309,9 +334,9 @@ export default function Home({ params }: { params: { slug: string } }) {
 
                 <button
                   className="text-2xl hidden p-3 group-hover:flex color-like"
-                  // style={{
-                  //   'color': color.contrastColor
-                  // }}
+                  style={{
+                    color: clr.contrastColor,
+                  }}
                   // data-name={color.color.substring(1)}
                   // data-saved={isSaved}
                   // data-id={savedId}
@@ -330,9 +355,9 @@ export default function Home({ params }: { params: { slug: string } }) {
 
                 <button
                   className="text-2xl hidden p-3 group-hover:flex"
-                  // style={{
-                  //   'color': color.contrastColor
-                  // }}
+                  style={{
+                    color: clr.contrastColor,
+                  }}
                   onClick={() => copyColor(clr.hex)}
                   tooltip="true"
                   tooltip-content="Add to clipboard"
@@ -343,9 +368,9 @@ export default function Home({ params }: { params: { slug: string } }) {
 
                 <button
                   className="text-2xl hidden p-3 group-hover:flex"
-                  // style={{
-                  //   'color': color.contrastColor
-                  // }}
+                  style={{
+                    color: clr.contrastColor,
+                  }}
                   onClick={() => lockColor(clr.id)}
                   tooltip="true"
                   tooltip-content="Lock"
@@ -360,10 +385,9 @@ export default function Home({ params }: { params: { slug: string } }) {
 
                 <button
                   className="text-2xl hidden p-3 group-hover:flex cursor-grab"
-                  // style={{
-                  // 'color': color.contrastColor
-                  // }}
-                  // {...listeners}
+                  style={{
+                    color: clr.contrastColor,
+                  }}
                   tooltip="true"
                   tooltip-content="Move"
                   tooltip-position="bottom"
@@ -374,10 +398,10 @@ export default function Home({ params }: { params: { slug: string } }) {
 
                 <button
                   className="text-2xl hidden p-3 group-hover:flex"
-                  // style={{
-                  // 'color': color.contrastColor
-                  // }}
-                  // onMouseDown={handleContrast}
+                  style={{
+                    color: clr.contrastColor,
+                  }}
+                  onClick={() => openContrast(clr.id)}
                   tooltip="true"
                   tooltip-content="Contrast calculator"
                   tooltip-position="bottom"
@@ -387,10 +411,9 @@ export default function Home({ params }: { params: { slug: string } }) {
 
                 <button
                   className="text-2xl hidden p-3 group-hover:flex"
-                  // style={{
-                  //   'color': color.contrastColor
-                  // }}
-                  // onMouseDown={handleOpenPicker}
+                  style={{
+                    color: clr.contrastColor,
+                  }}
                   onClick={() => setCurrentColor(clr.id)}
                   tooltip="true"
                   tooltip-content="Color picker"

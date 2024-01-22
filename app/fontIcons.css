@@ -83,11 +83,21 @@
 }
 .icon-rounded-check:before {
   content: "\e913";
-  color: #45cb85;
+  @apply w-5 h-5 flex items-center justify-center rounded-full shadow-[inset_0_3px_12px_#33ff8173,inset_0_-2px_4px_#d6ffe673];
+  background-image: radial-gradient(circle, #14ff6e73, #73ffa973 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
 }
 .icon-rounded-x:before {
   content: "\e914";
-  color: #c1292e;
+  @apply w-5 h-5 flex items-center justify-center rounded-full shadow-[inset_0_3px_12px_#ff335c73,inset_0_-2px_4px_#ff618173];
+  background-image: radial-gradient(circle, #ff144373, #ff738f73 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
 }
 .icon-share:before {
   content: "\e915";

@@ -7,7 +7,7 @@ import {
 } from "colors-kit";
 import { makeRandomID } from "./makeRandomID";
 
-function getMainContrastColor(color: Rgb): string {
+export function getMainContrastColor(color: Rgb): string {
   const whiteContrast = rateContrast([
     { r: 255, g: 255, b: 255 },
     color,

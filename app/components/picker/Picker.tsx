@@ -23,10 +23,7 @@ export function Picker({ clr, closePicker }: Props) {
   return (
     <>
       {clr && (
-        <dialog
-          open={Boolean(clr)}
-          className="w-fit h-fit p-7 mt-24 flex flex-col gap-3 border border-secondary-border z-[1] text-secondary rounded-2xl backdrop-blur-md bg-transparent-main transition-all"
-        >
+        <dialog className="w-fit h-fit p-7 mt-24 flex flex-col gap-3 border border-secondary-border z-[1] text-secondary rounded-2xl backdrop-blur-md bg-transparent-main transition-all">
           <div className="grid grid-cols-[1fr_auto] gap-4">
             <Select options={options} setSelect={setPicker} current={picker} />
             <button className="secondary-button w-8 h-8" onClick={closePicker}>

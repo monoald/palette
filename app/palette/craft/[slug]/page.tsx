@@ -104,7 +104,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useKeyDown(() => {
+  const changePalette = () => {
     const newColors = handleCreateNewPalette(
       palette?.colors as Color[],
       paletteType as PaletteType
@@ -130,6 +130,10 @@ export default function Home({ params }: { params: { slug: string } }) {
           },
         };
     });
+  };
+
+  useKeyDown(() => {
+    changePalette();
   }, ["Space"]);
 
   // COLOR BLIND RESIZE
@@ -262,7 +266,7 @@ export default function Home({ params }: { params: { slug: string } }) {
 
   return (
     <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
-      <SideBar setOption={setOption} />
+      <SideBar setOption={setOption} changePalette={changePalette} />
       <OptionBar
         options={options[option as string]}
         setOption={setOption}

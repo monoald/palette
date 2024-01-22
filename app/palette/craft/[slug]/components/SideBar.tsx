@@ -2,22 +2,20 @@ import { Dispatch, SetStateAction } from "react";
 
 type Props = {
   setOption: Dispatch<SetStateAction<string | undefined>>;
+  changePalette: () => void;
 };
 
-export default function SideBar({ setOption }: Props) {
+export default function SideBar({ setOption, changePalette }: Props) {
   return (
     <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">
       <ul className="relative w-fit h-10 px-4 flex flex-row justify-center items-center gap-3 rounded-full border border-primary-border list-none md:flex-col md:w-10 md:h-fit md:px-0 md:py-4">
         <li>
           <button
             className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
-            // onClick={() =>
-            //   optionsDispatch({ type: "option", payload: "paletteType" })
-            // }
-            onClick={() => setOption("palette-type")}
             tooltip="true"
             tooltip-content="Palette type"
             tooltip-position="left"
+            onClick={() => setOption("palette-type")}
           >
             <span className="icon-palette text-2xl" />
           </button>
@@ -26,13 +24,10 @@ export default function SideBar({ setOption }: Props) {
         <li>
           <button
             className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
-            // onClick={() =>
-            //   optionsDispatch({ type: "option", payload: "colorBlind" })
-            // }
-            onClick={() => setOption("color-blind")}
             tooltip="true"
             tooltip-content="Color blind simulator"
             tooltip-position="left"
+            onClick={() => setOption("color-blind")}
           >
             <span className="icon-eye text-2xl" />
           </button>
@@ -53,12 +48,10 @@ export default function SideBar({ setOption }: Props) {
         <li>
           <button
             className="flex p-3 rounded-xl bg-transparent border-none text-secondary hover:text-tertiary transition duration-300"
-            // onClick={() =>
-            //   colorsDispatch({ type: "set-colors", payload: { paletteType } })
-            // }
             tooltip="true"
             tooltip-content="Palette type"
             tooltip-position="left"
+            onClick={changePalette}
           >
             <span className="icon-plus text-2xl" />
           </button>

@@ -7,6 +7,7 @@ import { createColorObject } from "@/app/utils/createColorObject";
 import { useKeyDown } from "@/app/hooks/useKeyDown";
 import {
   handleChangePalette,
+  handleCreatePaletteFromUrl,
   handleLockColor,
   handleRemoveColor,
   handleUpdateColor,
@@ -20,6 +21,7 @@ import { options } from "./data/options";
 import { Picker } from "@/app/components/picker/Picker";
 import useStateHandler from "@/app/hooks/useStateHandler";
 import { ContrastCalculator } from "@/app/components/ContrastCalculator";
+import { ImageColorExtractor } from "@/app/components/imageExtractor/ImageColorExtractor";
 
 export default function Home({ params }: { params: { slug: string } }) {
   // PALETTE MANAGEMENT
@@ -73,26 +75,44 @@ export default function Home({ params }: { params: { slug: string } }) {
     }
   };
 
+  const updatePaletteFromImgHandler = (e: Event) => {
+    const event = e as CustomEvent;
+    const url = event.detail.url;
+    const newColors = handleCreatePaletteFromUrl(url);
+
+    setPalette((prev) => {
+      if (prev)
+        return {
+          ...prev,
+          colors: newColors,
+          history: {
+            data: [...prev.history.data, url],
+            current: prev.history.current + 1,
+          },
+        };
+    });
+    replacePath(url);
+  };
+
   useStateHandler(
     [
       updatePaletteFromPickerHandler,
       updateHistoryFromPickerHandler,
       optionHandler,
+      updatePaletteFromImgHandler,
     ],
     [
       "custom:updatePaletteFromPicker",
       "custom:updateHistoryFromPicker",
       "custom:option",
+      "custom:updatePaletteFromImg",
     ]
   );
 
   useEffect(() => {
     const urlPalette = params.slug;
-    const newPalette = urlPalette.split("-").map((clr) => "#" + clr);
 
-    const newColors = newPalette.map((clr) => {
-      return createColorObject(clr, "hex");
-    });
+    const newColors = handleCreatePaletteFromUrl(urlPalette);
 
     setPalette({
       history: {
@@ -315,6 +335,13 @@ export default function Home({ params }: { params: { slug: string } }) {
     });
   };
 
+  // IMG TO PALETTE
+  const [openImg, setOpenImg] = useState(false);
+
+  const toggleImg = () => {
+    setOpenImg(!openImg);
+  };
+
   return (
     <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
       {palette && (
@@ -324,6 +351,7 @@ export default function Home({ params }: { params: { slug: string } }) {
           historyBack={historyBack}
           historyForward={historyForward}
           paletteHistory={palette.history}
+          toggleImg={toggleImg}
         />
       )}
       <OptionBar
@@ -331,6 +359,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         setOption={setOption}
         current={option === "palette-type" ? paletteType : colorBlind}
       />
+      {openImg && <ImageColorExtractor toggleImg={toggleImg} />}
       {contrast !== null && (
         <ContrastCalculator
           currentIndex={contrast as number}

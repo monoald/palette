@@ -24,6 +24,16 @@ export function handleChangePalette(prevColors: Color[], type: PaletteType) {
   return newColors;
 }
 
+export function handleCreatePaletteFromUrl(url: string) {
+  const newPalette = url.split("-").map((clr) => "#" + clr);
+
+  const newColors = newPalette.map((clr) => {
+    return createColorObject(clr, "hex");
+  });
+
+  return newColors;
+}
+
 export function handleUpdateColor(
   id: string,
   clr: ColorType,

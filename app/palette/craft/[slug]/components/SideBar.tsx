@@ -6,6 +6,7 @@ type Props = {
   historyBack: () => void;
   historyForward: () => void;
   paletteHistory: PaletteHistory;
+  toggleImg: () => void;
 };
 
 export default function SideBar({
@@ -14,6 +15,7 @@ export default function SideBar({
   historyBack,
   historyForward,
   paletteHistory,
+  toggleImg,
 }: Props) {
   const copyPaletteToClipboard = () => {
     const url = window.location.href.split("#")[0];
@@ -49,7 +51,7 @@ export default function SideBar({
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
-            // onClick={() => modalsDispatch({ type: "img-extractor" })}
+            onClick={toggleImg}
             tooltip="true"
             tooltip-content="Extract palette from image"
             tooltip-position="left"

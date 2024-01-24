@@ -67,7 +67,7 @@ export default function Header() {
               className="group relative py-2 transition-all duration-300 secondary-hover"
             >
               <p>{element.name}</p>
-              <ul className="absolute opacity-0 top-full -left-7 w-32 group-hover:opacity-100 group-active:opacity-100 group-focus-visible:opacity-100 flex flex-col gap-5 p-7 border border-secondary-border z-[1] text-secondary rounded-2xl backdrop-blur-sm bg-transparent-main transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-active:pointer-events-auto group-focus-visible:pointer-events-auto">
+              <ul className="absolute opacity-0 top-full -left-7 w-32 group-hover:opacity-100 group-active:opacity-100 group-focus-visible:opacity-100 flex flex-col gap-5 p-7 border border-secondary-border z-50 text-secondary rounded-2xl backdrop-blur-sm bg-transparent-main transition-all duration-300 pointer-events-none group-hover:pointer-events-auto group-active:pointer-events-auto group-focus-visible:pointer-events-auto">
                 {element.subNav.map((subElement) => (
                   <li
                     key={`${element.name}-${subElement.name}`}
@@ -100,7 +100,7 @@ export default function Header() {
               alt=""
             />
           </button>
-          <ul className="absolute right-7 top-full w-44 opacity-0  group-hover/area:opacity-100 group-active/area:opacity-100 group-focus-visible/area:opacity-100 flex flex-col gap-5 p-7 border border-secondary-border z-[1] text-secondary rounded-2xl backdrop-blur-md bg-transparent-main transition-all duration-300 pointer-events-none group-hover/area:pointer-events-auto group-active/area:pointer-events-auto group-focus-visible/area:pointer-events-auto">
+          <ul className="absolute right-7 top-full w-44 opacity-0  group-hover/area:opacity-100 group-active/area:opacity-100 group-focus-visible/area:opacity-100 flex flex-col gap-5 p-7 border border-secondary-border z-50 text-secondary rounded-2xl backdrop-blur-md bg-transparent-main transition-all duration-300 pointer-events-none group-hover/area:pointer-events-auto group-active/area:pointer-events-auto group-focus-visible/area:pointer-events-auto">
             <li className="primary-hover">
               <Link href="/me/palettes">My Palettes</Link>
             </li>

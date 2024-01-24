@@ -37,7 +37,7 @@ export const ContrastCalculator = ({
   };
 
   return (
-    <dialog className="w-fit h-fit p-7 mt-24 flex flex-col gap-8 border border-secondary-border z-[1] text-secondary rounded-2xl backdrop-blur-md bg-transparent-main transition-all">
+    <dialog className="absolute top-1/2 -translate-y-1/2 w-fit h-fit p-7 flex flex-col gap-8 border border-secondary-border z-[1] text-secondary rounded-2xl backdrop-blur-md bg-transparent-main transition-all">
       <button
         className="secondary-button right-7 top-7 w-8 h-8"
         style={{ position: "absolute" }}

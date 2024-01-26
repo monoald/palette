@@ -117,3 +117,6 @@
 .icon-reset:before {
   content: "\e91a";
 }
+.icon-cone:before {
+  content: "\e91b";
+}

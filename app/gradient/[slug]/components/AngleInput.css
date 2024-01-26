@@ -1,0 +1,5 @@
+.angle-active {
+  > div {
+    @apply border-tertiary shadow-active;
+  }
+}

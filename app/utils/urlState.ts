@@ -16,12 +16,12 @@ export function getParam(name: string): string | null {
   return params.get(name);
 }
 
-export function setParam(name: string, value: string | null): void {
+export function setParam(name: string, value: string | number | null): void {
   const search = window.location.search;
   const params = new URLSearchParams(search);
 
   if (value) {
-    params.set(name, value);
+    params.set(name, `${value}`);
   } else {
     params.delete(name);
   }

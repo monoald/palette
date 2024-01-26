@@ -49,8 +49,10 @@ body {
     @apply text-tertiary text-shadow-active relative pb-1 after:absolute after:left-0 after:top-[100%] after:w-full after:h-[2px] after:bg-tertiary after:opacity-80 after:transition-all after:shadow-active;
   }
 }
-.primary-hover,
-.secondary-hover {
+.secondary-active {
+  @apply text-tertiary text-shadow-active;
+}
+.primary-hover {
   &:hover > *:first-child,
   &:active > *:first-child,
   &:focus-visible > *:first-child {
@@ -64,6 +66,9 @@ body {
   &:hover > a {
     @apply after:w-full;
   }
+}
+.secondary-hover {
+  @apply hover:text-tertiary hover:text-shadow-active;
 }
 
 *[tooltip="true"] {

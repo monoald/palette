@@ -27,8 +27,9 @@ export default function Home({ params }: { params: { slug: string } }) {
   // PALETTE MANAGEMENT
   const [palette, setPalette] = useState<Palette>();
   const [paletteType, setPaletteType] = useState("random");
-  const [colorBlind, setColorBlind] = useState(null);
-  const [option, setOption] = useState<string>();
+  const [paletteTypeOpen, setPaletteTypeOpen] = useState(false);
+  const [colorBlind, setColorBlind] = useState("none");
+  const [colorBlindOpen, setColorBlindOpen] = useState(false);
 
   const updatePaletteFromPickerHandler = (e: Event) => {
     const event = e as CustomEvent;
@@ -64,17 +65,6 @@ export default function Home({ params }: { params: { slug: string } }) {
     });
   };
 
-  const optionHandler = (e: Event) => {
-    const event = e as CustomEvent;
-    if (event.detail.event === "palette-type") {
-      setPaletteType(event.detail.paletteType);
-    }
-
-    if (event.detail.event === "color-blind") {
-      setColorBlind(event.detail.colorBlind);
-    }
-  };
-
   const updatePaletteFromImgHandler = (e: Event) => {
     const event = e as CustomEvent;
     const url = event.detail.url;
@@ -98,13 +88,11 @@ export default function Home({ params }: { params: { slug: string } }) {
     [
       updatePaletteFromPickerHandler,
       updateHistoryFromPickerHandler,
-      optionHandler,
       updatePaletteFromImgHandler,
     ],
     [
       "custom:updatePaletteFromPicker",
       "custom:updateHistoryFromPicker",
-      "custom:option",
       "custom:updatePaletteFromImg",
     ]
   );
@@ -155,6 +143,14 @@ export default function Home({ params }: { params: { slug: string } }) {
   useKeyDown(() => {
     changePalette();
   }, ["Space"]);
+
+  const selectPaletteType = (selected: string) => {
+    setPaletteType(selected);
+  };
+
+  const selectColorBlind = (selected: string) => {
+    setColorBlind(selected);
+  };
 
   // COLOR BLIND RESIZE
   const [heightColorBlind, setHeightColorBlind] = useState<string | number>(
@@ -346,7 +342,8 @@ export default function Home({ params }: { params: { slug: string } }) {
     <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
       {palette && (
         <SideBar
-          setOption={setOption}
+          setPaletteTypeOpen={setPaletteTypeOpen}
+          setColorBlindOpen={setColorBlindOpen}
           changePalette={changePalette}
           historyBack={historyBack}
           historyForward={historyForward}
@@ -355,9 +352,18 @@ export default function Home({ params }: { params: { slug: string } }) {
         />
       )}
       <OptionBar
-        options={options[option as string]}
-        setOption={setOption}
-        current={option === "palette-type" ? paletteType : colorBlind}
+        open={paletteTypeOpen}
+        setOpen={setPaletteTypeOpen}
+        options={options["palette-type"].options}
+        current={paletteType}
+        selectOption={selectPaletteType}
+      />
+      <OptionBar
+        open={colorBlindOpen}
+        setOpen={setColorBlindOpen}
+        options={options["color-blind"].options}
+        current={colorBlind}
+        selectOption={selectColorBlind}
       />
       {openImg && <ImageColorExtractor toggleImg={toggleImg} />}
       {contrast !== null && (
@@ -384,14 +390,15 @@ export default function Home({ params }: { params: { slug: string } }) {
                 onPointerUp={handleEndResize}
                 data-draggable
               >
-                {colorBlind && (
+                {colorBlind !== "none" && (
                   <div
                     ref={clrBlindRef}
                     className={`absolute top-0 left-0 w-full h-1/2 ${
                       clr ? `block` : "hidden"
                     }`}
                     style={{
-                      background: clr.colorBlind[colorBlind],
+                      background:
+                        clr.colorBlind[colorBlind as keyof ColorBlindSimulator],
                       height: heightColorBlind,
                     }}
                   >
@@ -429,20 +436,11 @@ export default function Home({ params }: { params: { slug: string } }) {
                   style={{
                     color: clr.contrastColor,
                   }}
-                  // data-name={color.color.substring(1)}
-                  // data-saved={isSaved}
-                  // data-id={savedId}
                   tooltip="true"
                   tooltip-content="Save"
                   tooltip-position="bottom"
                 >
-                  <span
-                    // className={`
-                    //   icon
-                    //   icon-heart${isSaved ? '-filled' : ''}
-                    // `}
-                    className="icon-heart"
-                  />
+                  <span className="icon-heart" />
                 </button>
 
                 <button

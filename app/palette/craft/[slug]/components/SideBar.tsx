@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
 
 type Props = {
-  setOption: Dispatch<SetStateAction<string | undefined>>;
+  setPaletteTypeOpen: Dispatch<SetStateAction<boolean>>;
+  setColorBlindOpen: Dispatch<SetStateAction<boolean>>;
   changePalette: () => void;
   historyBack: () => void;
   historyForward: () => void;
@@ -10,7 +11,8 @@ type Props = {
 };
 
 export default function SideBar({
-  setOption,
+  setPaletteTypeOpen,
+  setColorBlindOpen,
   changePalette,
   historyBack,
   historyForward,
@@ -30,7 +32,7 @@ export default function SideBar({
             tooltip="true"
             tooltip-content="Palette type"
             tooltip-position="left"
-            onClick={() => setOption("palette-type")}
+            onClick={() => setPaletteTypeOpen(true)}
           >
             <span className="icon-palette text-2xl" />
           </button>
@@ -42,7 +44,7 @@ export default function SideBar({
             tooltip="true"
             tooltip-content="Color blind simulator"
             tooltip-position="left"
-            onClick={() => setOption("color-blind")}
+            onClick={() => setColorBlindOpen(true)}
           >
             <span className="icon-eye text-2xl" />
           </button>

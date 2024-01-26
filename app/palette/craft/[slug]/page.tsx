@@ -15,7 +15,7 @@ import {
 
 import PalettePlayground from "./components/PalettePlayground";
 import SideBar from "./components/SideBar";
-import OptionBar from "./components/OptionBar";
+import OptionBar from "../../../components/OptionBar";
 import { replacePath } from "@/app/utils/urlState";
 import { options } from "./data/options";
 import { Picker } from "@/app/components/picker/Picker";

@@ -120,3 +120,18 @@
 .icon-cone:before {
   content: "\e91b";
 }
+.icon-angle:before {
+  content: "\e91c";
+}
+.icon-gradient-conic:before {
+  content: "\e91d";
+}
+.icon-gradient-horizontal:before {
+  content: "\e91e";
+}
+.icon-gradient-vertical:before {
+  content: "\e91f";
+}
+.icon-gradient-circle:before {
+  content: "\e920";
+}

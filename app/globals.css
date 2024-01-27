@@ -110,6 +110,10 @@ body {
   @apply opacity-100 delay-500;
 }
 
+/* BUTTONS */
+button:disabled {
+  @apply pointer-events-none text-[#777777];
+}
 .primary-button {
   @apply h-10 w-28;
 }

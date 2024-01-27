@@ -1,3 +1,4 @@
+import { getParam } from "@/app/utils/urlState";
 import { Dispatch, SetStateAction } from "react";
 
 type Props = {
@@ -39,6 +40,10 @@ export default function SideBar({
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             onClick={() => setAngleOpen(true)}
+            disabled={
+              getParam("type") !== "horizontal" &&
+              getParam("type") !== "vertical"
+            }
             tooltip="true"
             tooltip-content="Angle"
             tooltip-position="left"
@@ -51,6 +56,7 @@ export default function SideBar({
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             onClick={() => setCirclePositionOpen(true)}
+            disabled={getParam("type") !== "circle"}
             tooltip="true"
             tooltip-content="Position circle"
             tooltip-position="left"

@@ -3,9 +3,14 @@ import { Dispatch, SetStateAction } from "react";
 type Props = {
   setGradientTypeOpen: Dispatch<SetStateAction<boolean>>;
   setAngleOpen: Dispatch<SetStateAction<boolean>>;
+  setCirclePositionOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function SideBar({ setGradientTypeOpen, setAngleOpen }: Props) {
+export default function SideBar({
+  setGradientTypeOpen,
+  setAngleOpen,
+  setCirclePositionOpen,
+}: Props) {
   return (
     <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">
       <ul className="relative w-fit h-10 px-4 flex flex-row justify-center items-center gap-3 rounded-full border border-primary-border list-none md:flex-col md:w-10 md:h-fit md:px-0 md:py-4">
@@ -39,6 +44,18 @@ export default function SideBar({ setGradientTypeOpen, setAngleOpen }: Props) {
             tooltip-position="left"
           >
             <span className="icon-angle text-2xl" />
+          </button>
+        </li>
+
+        <li>
+          <button
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
+            onClick={() => setCirclePositionOpen(true)}
+            tooltip="true"
+            tooltip-content="Position circle"
+            tooltip-position="left"
+          >
+            <span className="icon-move-circle text-2xl" />
           </button>
         </li>
       </ul>

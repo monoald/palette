@@ -39,11 +39,16 @@ export function AngleInput({ angle, setGradient, setAngleOpen }: Props) {
     degrees = Math.abs(degrees - 450);
     degrees = degrees > 360 ? Math.abs(degrees - 360) : degrees;
 
-    setGradient((prev) => ({ ...prev, angle: Math.round(degrees) }));
+    setGradient((prev) => ({
+      ...prev,
+      angle: Math.round(degrees),
+    }));
     setParam("angle", Math.floor(degrees));
     if (getParam("type")) {
       setParam("type", null);
     }
+    setParam("circle-x", null);
+    setParam("circle-y", null);
   };
 
   const handleMouseUp = (e: PointerEvent<HTMLDivElement>) => {

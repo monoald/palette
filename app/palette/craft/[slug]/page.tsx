@@ -11,7 +11,7 @@ import {
   handleLockColor,
   handleRemoveColor,
   handleUpdateColor,
-} from "@/app/utils/paletteHandlers";
+} from "./utils/paletteHandlers";
 
 import PalettePlayground from "./components/PalettePlayground";
 import SideBar from "./components/SideBar";

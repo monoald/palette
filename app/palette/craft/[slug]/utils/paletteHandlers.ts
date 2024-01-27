@@ -1,5 +1,5 @@
 import { Format, makeColorPalette } from "colors-kit";
-import { createColorObject } from "./createColorObject";
+import { createColorObject } from "../../../../utils/createColorObject";
 import { Palette as PaletteType, Color as ColorType } from "colors-kit";
 
 export function handleChangePalette(prevColors: Color[], type: PaletteType) {

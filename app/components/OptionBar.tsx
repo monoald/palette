@@ -5,7 +5,6 @@ type Props = {
   setOpen: Dispatch<SetStateAction<boolean>>;
   options: string[];
   current: string;
-
   selectOption: (option: string) => void;
 };
 
@@ -18,7 +17,7 @@ function OptionBar({ open, options, current, selectOption, setOpen }: Props) {
 
     setTimeout(() => {
       setOpen(!open);
-    }, 3000);
+    }, 300);
   };
 
   if (open) {

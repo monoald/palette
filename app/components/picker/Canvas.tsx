@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { dispatch } from "@/app/hooks/useStateHandler";
 
 type Props = {
-  clr: Color;
+  clr: { id: string; hex: string; formats: Formats };
 };
 
 type Coordinates = {

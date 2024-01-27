@@ -4,7 +4,7 @@ import { RangeInput } from "../RangeInput";
 import { dispatch } from "@/app/hooks/useStateHandler";
 
 type Props = {
-  clr: Color;
+  clr: { id: string; hex: string; formats: Formats };
 };
 
 export function HexadecimalPicker({ clr }: Props) {

@@ -1,5 +1,5 @@
 interface Props {
-  clr: Color;
+  clr: { id: string; hex: string; formats: Formats };
 }
 
 export function LabPicker({ clr }: Props) {

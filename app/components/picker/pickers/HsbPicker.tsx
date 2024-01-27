@@ -4,7 +4,7 @@ import { dispatch } from "@/app/hooks/useStateHandler";
 import { keepNumberInRange } from "@/app/utils/keepNumberInRange";
 
 interface Props {
-  clr: Color;
+  clr: { id: string; hex: string; formats: Formats };
 }
 
 export function HsbPicker({ clr }: Props) {

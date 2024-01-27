@@ -11,7 +11,7 @@ import { RgbPicker } from "./pickers/RgbPicker";
 import { XyzPicker } from "./pickers/XyzPicker";
 
 type Props = {
-  clr: Color | undefined;
+  clr: { id: string; hex: string; formats: Formats } | undefined;
   closePicker: () => void;
 };
 

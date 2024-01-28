@@ -7,20 +7,33 @@ export function handleCreateGradientOnFirstRender(
   slug: string,
   searchParams: ReadonlyURLSearchParams
 ): Gradient {
+  const stopsFromParams = searchParams.get("stops");
   const typeFromParams = searchParams.get("type");
   const angleFromParams = searchParams.get("angle");
   const circlePositionXFromParam = searchParams.get("circle-x");
   const circlePositionYFromParam = searchParams.get("circle-y");
 
+  const clrsArr = slug.split("-");
   let type = "horizontal";
   let angle = 90;
   let circlePosition = { x: 50, y: 50 };
 
+  const step = 100 / (clrsArr.length - 1);
+  let stops = clrsArr.map((el, i) => {
+    return i * step;
+  });
+
+  // set Stops
+  if (stopsFromParams) {
+    stops = stopsFromParams.split("-").map((stop) => +stop);
+  }
+
   // set Colors
-  const clrs = slug.split("-").map((clr) => ({
+
+  const clrs = clrsArr.map((clr, i) => ({
     id: makeRandomID(),
     hex: "#" + clr,
-    stop: 0,
+    stop: stops[i],
     formats: colorFormatConverter("#" + clr, {
       allFormats: true,
       currentFormat: "hex",
@@ -69,7 +82,6 @@ export function handleCreateStyles(
   colors: string;
   end: string;
 } {
-  const colors = gradient.clrs.map((clr) => clr.hex).join(", ");
   let typeGradient = `linear-gradient(${gradient.angle}deg, `;
   const type = searchParams.get("type");
 
@@ -79,10 +91,19 @@ export function handleCreateStyles(
     typeGradient = "conic-gradient(";
   }
 
-  return { type: typeGradient, colors: colors, end: ")" };
+  let clrs = "";
+
+  for (const i in gradient.clrs) {
+    clrs += `${gradient.clrs[i].hex} ${gradient.clrs[i].stop}%`;
+    if (+i + 1 !== gradient.clrs.length) {
+      clrs += ", ";
+    }
+  }
+
+  return { type: typeGradient, colors: clrs, end: ")" };
 }
 
-export function handleUpdateGradientType(type: string): string {
+export function handleUpdateType(type: string): string {
   setParams([
     { name: "type", value: type },
     { name: "angle", value: null },
@@ -101,13 +122,42 @@ export function handleUpdateGradientType(type: string): string {
   return "conic-gradient(";
 }
 
-export function handleUpdateGradientAngle(angle: number): string {
+export function handleUpdateAngle(angle: number): string {
   return `linear-gradient(${angle}deg, `;
 }
 
-export function handleUpdateGradientCirclePosition(position: {
+export function handleUpdateCirclePosition(position: {
   x: number;
   y: number;
 }): string {
   return `radial-gradient(circle at ${position.x}% ${position.y}%, `;
+}
+
+export function handleUpdateStop(
+  clrs: GradientColor[],
+  id: string,
+  stop: number
+): GradientColor[] {
+  const newClrs = clrs.map((clr) => {
+    if (clr.id === id) {
+      return { ...clr, stop: stop };
+    } else {
+      return clr;
+    }
+  });
+
+  return newClrs;
+}
+
+export function handleUpdateColorStyle(clrs: GradientColor[]): string {
+  let clrsStyle = "";
+
+  for (const i in clrs) {
+    clrsStyle += `${clrs[i].hex} ${clrs[i].stop}%`;
+    if (+i + 1 !== clrs.length) {
+      clrsStyle += ", ";
+    }
+  }
+
+  return clrsStyle;
 }

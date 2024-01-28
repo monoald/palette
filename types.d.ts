@@ -39,10 +39,17 @@ type Palette = {
   currentColor?: string;
 };
 
+type GradientColor = {
+  id: string;
+  hex: string;
+  stop: number;
+  formats: Formats;
+};
+
 type Gradient = {
   type: string;
   angle: number;
-  clrs: { id: string; hex: string; stop: number; formats: Formats }[];
+  clrs: GradientColor[];
   circlePosition: { x: number; y: number };
   currentColor?: string;
 };

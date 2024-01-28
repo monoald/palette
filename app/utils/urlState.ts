@@ -43,7 +43,5 @@ export function setParams(
     }
   }
 
-  console.log(urlParams);
-
   history.replaceState({}, "", "?" + urlParams.toString());
 }

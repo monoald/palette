@@ -39,7 +39,7 @@ export function AngleInput({ angle, updateAngle, setAngleOpen }: Props) {
     degrees = degrees > 360 ? Math.abs(degrees - 360) : degrees;
 
     updateAngle(Math.round(degrees));
-    setParam("angle", Math.floor(degrees));
+    setParam("angle", Math.round(degrees));
     if (getParam("type")) {
       setParam("type", null);
     }

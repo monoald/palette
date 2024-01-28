@@ -1,16 +1,15 @@
 import { Dispatch, PointerEvent, SetStateAction, useState } from "react";
-import { Gradient } from "../page";
 
 import "./AngleInput.css";
 import { getParam, setParam } from "@/app/utils/urlState";
 
 type Props = {
   angle: number;
-  setGradient: Dispatch<SetStateAction<Gradient>>;
+  updateAngle: (angle: number) => void;
   setAngleOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export function AngleInput({ angle, setGradient, setAngleOpen }: Props) {
+export function AngleInput({ angle, updateAngle, setAngleOpen }: Props) {
   const [isClicked, setIsClicked] = useState(false);
 
   const handleMouseDown = (e: PointerEvent<HTMLDivElement>) => {
@@ -39,10 +38,7 @@ export function AngleInput({ angle, setGradient, setAngleOpen }: Props) {
     degrees = Math.abs(degrees - 450);
     degrees = degrees > 360 ? Math.abs(degrees - 360) : degrees;
 
-    setGradient((prev) => ({
-      ...prev,
-      angle: Math.round(degrees),
-    }));
+    updateAngle(Math.round(degrees));
     setParam("angle", Math.floor(degrees));
     if (getParam("type")) {
       setParam("type", null);
@@ -82,7 +78,7 @@ export function AngleInput({ angle, setGradient, setAngleOpen }: Props) {
       degrees = Math.abs(degrees - 450);
       degrees = degrees > 360 ? Math.abs(degrees - 360) : degrees;
 
-      setGradient((prev) => ({ ...prev, angle: Math.floor(degrees) }));
+      updateAngle(Math.floor(degrees));
     }
   };
 
@@ -90,7 +86,7 @@ export function AngleInput({ angle, setGradient, setAngleOpen }: Props) {
     const target = e.target as HTMLInputElement;
     const newAngle = +target.value;
 
-    setGradient((prev) => ({ ...prev, angle: newAngle }));
+    updateAngle(newAngle);
     setParam("angle", newAngle);
     if (getParam("type")) {
       setParam("type", null);

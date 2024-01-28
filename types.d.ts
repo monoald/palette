@@ -39,6 +39,14 @@ type Palette = {
   currentColor?: string;
 };
 
+type Gradient = {
+  type: string;
+  angle: number;
+  clrs: { id: string; hex: string; stop: number; formats: Formats }[];
+  circlePosition: { x: number; y: number };
+  currentColor?: string;
+};
+
 declare namespace JSX {
   interface IntrinsicElements {
     button: ExtendedButton;

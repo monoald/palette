@@ -5,18 +5,17 @@ import {
   useRef,
   useState,
 } from "react";
-import { Gradient } from "../page";
 import { getParam, setParam } from "@/app/utils/urlState";
 
 type Props = {
   circlePosition: { x: number; y: number };
-  setGradient: Dispatch<SetStateAction<Gradient>>;
+  updateCirclePosition: (position: { x: number; y: number }) => void;
   setCirclePositionOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export function CirclePosition({
   circlePosition,
-  setGradient,
+  updateCirclePosition,
   setCirclePositionOpen,
 }: Props) {
   const [isClicked, setIsClicked] = useState(false);
@@ -39,7 +38,7 @@ export function CirclePosition({
       ((e.clientY - rectangleRect.y) / elementRect.height) * 200
     );
 
-    setGradient((prev) => ({ ...prev, circlePosition: { x, y } }));
+    updateCirclePosition({ x, y });
     setParam("circle-x", x);
     setParam("circle-y", y);
     if (getParam("type")) {
@@ -70,7 +69,7 @@ export function CirclePosition({
         ((e.clientY - rectangleRect.y) / elementRect.height) * 200
       );
 
-      setGradient((prev) => ({ ...prev, circlePosition: { x, y } }));
+      updateCirclePosition({ x, y });
     }
   };
 
@@ -82,16 +81,10 @@ export function CirclePosition({
     const newPosition = +target.value;
 
     if (toUpdate === "x") {
-      setGradient((prev) => ({
-        ...prev,
-        circlePosition: { ...prev.circlePosition, x: newPosition },
-      }));
+      updateCirclePosition({ x: newPosition, y: circlePosition.y });
       setParam("circle-x", newPosition);
     } else {
-      setGradient((prev) => ({
-        ...prev,
-        circlePosition: { ...prev.circlePosition, y: newPosition },
-      }));
+      updateCirclePosition({ x: circlePosition.x, y: newPosition });
       setParam("circle-y", newPosition);
     }
     if (getParam("type")) {

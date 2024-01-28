@@ -28,3 +28,22 @@ export function setParam(name: string, value: string | number | null): void {
 
   history.replaceState({}, "", "?" + params.toString());
 }
+
+export function setParams(
+  params: { name: string; value: string | number | null }[]
+): void {
+  const search = window.location.search;
+  const urlParams = new URLSearchParams(search);
+
+  for (const param of params) {
+    if (param.value) {
+      urlParams.set(param.name, `${param.value}`);
+    } else {
+      urlParams.delete(param.name);
+    }
+  }
+
+  console.log(urlParams);
+
+  history.replaceState({}, "", "?" + urlParams.toString());
+}

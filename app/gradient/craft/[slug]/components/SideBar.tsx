@@ -56,7 +56,12 @@ export default function SideBar({
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             onClick={() => setCirclePositionOpen(true)}
-            disabled={getParam("type") !== "circle"}
+            disabled={
+              !(
+                getParam("type") == "circle" ||
+                (getParam("circle-x") && getParam("circle-y"))
+              )
+            }
             tooltip="true"
             tooltip-content="Position circle"
             tooltip-position="left"

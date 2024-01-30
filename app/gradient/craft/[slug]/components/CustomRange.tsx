@@ -1,5 +1,5 @@
 "use client";
-import { setParam } from "@/app/utils/urlState";
+import { replacePath, setParam } from "@/app/utils/urlState";
 import { PointerEvent, useRef, useState } from "react";
 
 type Props = {
@@ -33,6 +33,11 @@ export function CustomRange({ styleClrs, clrs, updateStop }: Props) {
 
   const handleDragEnd = () => {
     setCurrentClr(undefined);
+
+    const newUrl = clrs
+      .map((clr) => clr.hex.replace("#", ""))
+      .join("-") as string;
+    replacePath(newUrl);
     setParam("stops", clrs.map((clr) => clr.stop).join("-"));
   };
 

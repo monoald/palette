@@ -120,7 +120,6 @@ export default function Page({ params }: { params: { slug: string } }) {
             setAngleOpen={setAngleOpen}
             setCirclePositionOpen={setCirclePositionOpen}
           />
-          {/* <ChangePalette clrs={gradient.clrs} selectCurrentClr={selectCurrentClr} /> */}
           <OptionBar
             open={gradientTypeOpen}
             setOpen={setGradientTypeOpen}
@@ -128,10 +127,6 @@ export default function Page({ params }: { params: { slug: string } }) {
             current={gradient.type as string}
             selectOption={selectGradientType}
           />
-          {/* <Picker
-          clr={gradient.clrs.find((clr) => clr.id === gradient.currentColor)}
-          closePicker={closePicker}
-        /> */}
           {angleOpen && (
             <AngleInput
               angle={gradient.angle}
@@ -147,12 +142,14 @@ export default function Page({ params }: { params: { slug: string } }) {
             />
           )}
           <main className="w-full h-full flex flex-col gap-8 text-sm">
-            <div
-              className="w-full h-full flex border border-primary-border rounded-2xl"
-              style={{
-                background: `${gradientStyle?.type}${gradientStyle?.colors}${gradientStyle?.end}`,
-              }}
-            ></div>
+            <div className="w-full h-full flex border border-primary-border rounded-2xl overflow-hidden">
+              <div
+                className="relative w-full h-full"
+                style={{
+                  background: `${gradientStyle?.type}${gradientStyle?.colors}${gradientStyle?.end}`,
+                }}
+              ></div>
+            </div>
             <CustomRange
               styleClrs={gradientStyle.colors}
               clrs={gradient.clrs}

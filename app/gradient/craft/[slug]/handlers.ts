@@ -1,6 +1,7 @@
+import { getMainContrastColor } from "@/app/utils/createColorObject";
 import { makeRandomID } from "@/app/utils/makeRandomID";
 import { setParams } from "@/app/utils/urlState";
-import { colorFormatConverter } from "colors-kit";
+import { colorFormatConverter, hexToRgb } from "colors-kit";
 import { ReadonlyURLSearchParams } from "next/navigation";
 
 export function handleCreateGradientOnFirstRender(
@@ -38,6 +39,7 @@ export function handleCreateGradientOnFirstRender(
       allFormats: true,
       currentFormat: "hex",
     }) as Formats,
+    contrastColor: getMainContrastColor(hexToRgb("#" + clr)),
   }));
 
   // set Type
@@ -64,6 +66,11 @@ export function handleCreateGradientOnFirstRender(
       x: +circlePositionXFromParam,
       y: +circlePositionYFromParam,
     };
+  }
+
+  // set Stops
+  if (stopsFromParams) {
+    stops = stopsFromParams.split("-").map((stop) => +stop);
   }
 
   return {
@@ -138,13 +145,25 @@ export function handleUpdateStop(
   id: string,
   stop: number
 ): GradientColor[] {
-  const newClrs = clrs.map((clr) => {
-    if (clr.id === id) {
-      return { ...clr, stop: stop };
-    } else {
-      return clr;
-    }
-  });
+  const newClrs = [...clrs];
+
+  const clrIndex = newClrs.findIndex((clr) => clr.id === id);
+
+  newClrs[clrIndex].stop = stop;
+
+  if (newClrs[clrIndex - 1] && stop < newClrs[clrIndex - 1].stop) {
+    [newClrs[clrIndex], newClrs[clrIndex - 1]] = [
+      newClrs[clrIndex - 1],
+      newClrs[clrIndex],
+    ];
+  }
+
+  if (newClrs[clrIndex + 1] && stop > newClrs[clrIndex + 1].stop) {
+    [newClrs[clrIndex], newClrs[clrIndex + 1]] = [
+      newClrs[clrIndex + 1],
+      newClrs[clrIndex],
+    ];
+  }
 
   return newClrs;
 }

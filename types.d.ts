@@ -44,6 +44,7 @@ type GradientColor = {
   hex: string;
   stop: number;
   formats: Formats;
+  contrastColor: string;
 };
 
 type Gradient = {

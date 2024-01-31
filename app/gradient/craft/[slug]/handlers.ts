@@ -1,7 +1,7 @@
 import { getMainContrastColor } from "@/app/utils/createColorObject";
 import { makeRandomID } from "@/app/utils/makeRandomID";
 import { setParams } from "@/app/utils/urlState";
-import { colorFormatConverter, hexToRgb } from "colors-kit";
+import { Color, Format, colorFormatConverter, hexToRgb } from "colors-kit";
 import { ReadonlyURLSearchParams } from "next/navigation";
 
 export function handleCreateGradientOnFirstRender(
@@ -108,6 +108,59 @@ export function handleCreateStyles(
   }
 
   return { type: typeGradient, colors: clrs, end: ")" };
+}
+
+export function handleUpdateColor(
+  id: string,
+  clr: Color,
+  format: Format,
+  clrs: GradientColor[]
+): GradientColor[] {
+  const newClrs = [...clrs];
+  const newClrIndex = newClrs.findIndex((clr) => clr.id === id);
+  const newClr = { ...newClrs[newClrIndex] };
+
+  const { hex, cmyk, hsl, hsv, rgb, lab, xyz } = colorFormatConverter(clr, {
+    allFormats: true,
+    currentFormat: format,
+  }) as Formats;
+
+  newClr.hex = hex as string;
+  newClr.formats = { cmyk, hsl, hsv, rgb, lab, xyz };
+
+  newClrs.splice(newClrIndex, 1, newClr);
+
+  return newClrs;
+}
+
+export function handleRemoveColor(id: string, clrs: GradientColor[]) {
+  const newClrs = [...clrs];
+  const index = newClrs.findIndex((clr) => clr.id === id);
+  newClrs.splice(index, 1);
+
+  return newClrs;
+}
+
+export function handleAddColor(clrs: GradientColor[]): GradientColor[] {
+  const newClrs = clrs.map((clr) => {
+    if (clr.stop >= 10) {
+      clr.stop -= 10;
+    }
+    return clr;
+  });
+
+  newClrs.push({
+    id: makeRandomID(),
+    hex: "#ffffff",
+    stop: 100,
+    formats: colorFormatConverter("#ffffff", {
+      allFormats: true,
+      currentFormat: "hex",
+    }) as Formats,
+    contrastColor: getMainContrastColor(hexToRgb("#ffffff")),
+  });
+
+  return newClrs;
 }
 
 export function handleUpdateType(type: string): string {

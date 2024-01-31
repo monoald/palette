@@ -3,12 +3,14 @@ import { Dispatch, SetStateAction } from "react";
 
 type Props = {
   setGradientTypeOpen: Dispatch<SetStateAction<boolean>>;
+  setColorsOpen: Dispatch<SetStateAction<boolean>>;
   setAngleOpen: Dispatch<SetStateAction<boolean>>;
   setCirclePositionOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function SideBar({
   setGradientTypeOpen,
+  setColorsOpen,
   setAngleOpen,
   setCirclePositionOpen,
 }: Props) {
@@ -29,8 +31,9 @@ export default function SideBar({
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
+            onClick={() => setColorsOpen(true)}
             tooltip="true"
-            tooltip-content="Palette"
+            tooltip-content="Colors"
             tooltip-position="left"
           >
             <span className="icon-palette text-2xl" />

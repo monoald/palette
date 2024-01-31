@@ -1,16 +1,23 @@
 "use client";
 
+import { replacePath, setParam } from "@/app/utils/urlState";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AngleInput } from "./components/AngleInput";
 import SideBar from "./components/SideBar";
 import OptionBar from "@/app/components/OptionBar";
 import { CirclePosition } from "./components/CirclePosition";
+import { ChangePalette } from "./components/ChangePalette";
+import { Picker } from "@/app/components/picker/Picker";
+import useStateHandler from "@/app/hooks/useStateHandler";
 import {
+  handleAddColor,
   handleCreateGradientOnFirstRender,
   handleCreateStyles,
+  handleRemoveColor,
   handleUpdateAngle,
   handleUpdateCirclePosition,
+  handleUpdateColor,
   handleUpdateColorStyle,
   handleUpdateStop,
   handleUpdateType,
@@ -40,6 +47,47 @@ export default function Page({ params }: { params: { slug: string } }) {
       handleCreateStyles(searchParams as ReadonlyURLSearchParams, newGradient)
     );
   }, [params.slug, searchParams]);
+
+  const updatePaletteFromPickerHandler = (e: Event) => {
+    const event = e as CustomEvent;
+    setGradient((prev) => {
+      if (prev) {
+        const newClrs = handleUpdateColor(
+          event.detail.id,
+          event.detail.clr,
+          event.detail.format,
+          prev.clrs
+        );
+
+        // updateStyles
+        const clrsStyle = handleUpdateColorStyle(newClrs as GradientColor[]);
+        setGradientStyle((prev) => {
+          if (prev) return { ...prev, colors: clrsStyle };
+        });
+        return { ...prev, clrs: newClrs };
+      }
+    });
+  };
+
+  const updateHistoryFromPickerHandler = (e: Event) => {
+    const newUrl = gradient?.clrs
+      .map((clr) => clr.hex.replace("#", ""))
+      .join("-") as string;
+
+    replacePath(newUrl);
+  };
+
+  // PALETTE
+  useStateHandler(
+    [
+      updatePaletteFromPickerHandler,
+      // updateHistoryFromPickerHandler
+    ],
+    [
+      "custom:updatePaletteFromPicker",
+      // "custom:updateHistoryFromPicker"
+    ]
+  );
 
   // OPTIONS
   const [gradientTypeOpen, setGradientTypeOpen] = useState(false);
@@ -95,6 +143,19 @@ export default function Page({ params }: { params: { slug: string } }) {
   // MODALS
   const [angleOpen, setAngleOpen] = useState(false);
   const [circlePositionOpen, setCirclePositionOpen] = useState(false);
+  const [colorsOpen, setColorsOpen] = useState(false);
+
+  const closePicker = () => {
+    setGradient((prev) => {
+      if (prev) return { ...prev, currentColor: undefined };
+    });
+  };
+
+  const selectCurrentClr = (id: string | undefined) => {
+    setGradient((prev) => {
+      if (prev) return { ...prev, currentColor: id };
+    });
+  };
 
   // STOPS
   const updateStop = (id: string, stop: number) => {
@@ -111,12 +172,54 @@ export default function Page({ params }: { params: { slug: string } }) {
     });
   };
 
+  // COLOR
+  const removeClr = (id: string) => {
+    setGradient((prev) => {
+      if (prev) {
+        const newClrs = handleRemoveColor(id, prev.clrs);
+        const clrsStyle = handleUpdateColorStyle(newClrs as GradientColor[]);
+        setGradientStyle((prev) => {
+          if (prev) return { ...prev, colors: clrsStyle };
+        });
+
+        const newUrl = newClrs
+          .map((clr) => clr.hex.replace("#", ""))
+          .join("-") as string;
+        replacePath(newUrl);
+        setParam("stops", newClrs.map((clr) => clr.stop).join("-"));
+
+        return { ...prev, clrs: newClrs };
+      }
+    });
+  };
+
+  const addClr = () => {
+    setGradient((prev) => {
+      if (prev) {
+        const newClrs = handleAddColor(prev.clrs);
+        const clrsStyle = handleUpdateColorStyle(newClrs as GradientColor[]);
+        setGradientStyle((prev) => {
+          if (prev) return { ...prev, colors: clrsStyle };
+        });
+
+        const newUrl = newClrs
+          .map((clr) => clr.hex.replace("#", ""))
+          .join("-") as string;
+        replacePath(newUrl);
+        setParam("stops", newClrs.map((clr) => clr.stop).join("-"));
+
+        return { ...prev, clrs: newClrs };
+      }
+    });
+  };
+
   return (
     <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
       {gradient && gradientStyle && (
         <>
           <SideBar
             setGradientTypeOpen={setGradientTypeOpen}
+            setColorsOpen={setColorsOpen}
             setAngleOpen={setAngleOpen}
             setCirclePositionOpen={setCirclePositionOpen}
           />
@@ -127,6 +230,15 @@ export default function Page({ params }: { params: { slug: string } }) {
             current={gradient.type as string}
             selectOption={selectGradientType}
           />
+          {colorsOpen && (
+            <ChangePalette
+              clrs={gradient.clrs}
+              selectCurrentClr={selectCurrentClr}
+              removeClr={removeClr}
+              addClr={addClr}
+              setColorsOpen={setColorsOpen}
+            />
+          )}
           {angleOpen && (
             <AngleInput
               angle={gradient.angle}
@@ -141,6 +253,10 @@ export default function Page({ params }: { params: { slug: string } }) {
               setCirclePositionOpen={setCirclePositionOpen}
             />
           )}
+          <Picker
+            clr={gradient.clrs.find((clr) => clr.id === gradient.currentColor)}
+            closePicker={closePicker}
+          />
           <main className="w-full h-full flex flex-col gap-8 text-sm">
             <div className="w-full h-full flex border border-primary-border rounded-2xl overflow-hidden">
               <div

@@ -94,24 +94,33 @@ export default function Page({ params }: { params: { slug: string } }) {
     });
   };
 
-  const updateHistoryFromPickerHandler = (e: Event) => {
-    const newUrl = gradient?.clrs
-      .map((clr) => clr.hex.replace("#", ""))
-      .join("-") as string;
+  const updateHistoryFromPickerHandler = () => {
+    setGradient((prev) => {
+      if (prev) {
+        const newUrl = prev.clrs
+          .map((clr) => clr.hex.replace("#", ""))
+          .join("-") as string;
 
-    replacePath(newUrl);
+        replacePath(newUrl);
+        return {
+          ...prev,
+          history: {
+            data: [...prev.history.data, newUrl + window.location.search],
+            current: prev.history.current + 1,
+          },
+        };
+      }
+    });
   };
+
+  useEffect(() => {
+    console.log(gradient?.history);
+  }, [gradient?.history]);
 
   // PALETTE
   useStateHandler(
-    [
-      updatePaletteFromPickerHandler,
-      // updateHistoryFromPickerHandler
-    ],
-    [
-      "custom:updatePaletteFromPicker",
-      // "custom:updateHistoryFromPicker"
-    ]
+    [updatePaletteFromPickerHandler, updateHistoryFromPickerHandler],
+    ["custom:updatePaletteFromPicker", "custom:updateHistoryFromPicker"]
   );
 
   // OPTIONS
@@ -128,7 +137,24 @@ export default function Page({ params }: { params: { slug: string } }) {
           angle = 0;
         }
 
-        return { ...prev, type: selected, angle };
+        let newUrl = "";
+        gradient?.clrs.forEach((clr, i) => {
+          if (i !== 0) {
+            newUrl += "-";
+          }
+
+          newUrl += clr.hex.replace("#", "");
+        });
+
+        return {
+          ...prev,
+          type: selected,
+          angle,
+          history: {
+            data: [...prev.history.data, newUrl + `?type=${selected}`],
+            current: prev.history.current + 1,
+          },
+        };
       }
     });
     const newType = handleUpdateType(selected);
@@ -151,6 +177,27 @@ export default function Page({ params }: { params: { slug: string } }) {
     });
   };
 
+  const updateHistoryOnAngleChange = (angle: number) => {
+    setGradient((prev) => {
+      if (prev) {
+        const urlArr =
+          prev.history.data[prev.history.data.length - 1].split("?");
+
+        const param = new URLSearchParams(urlArr[1]);
+        param.set("angle", `${angle}`);
+        param.delete("type");
+
+        return {
+          ...prev,
+          history: {
+            data: [...prev.history.data, urlArr[0] + "?" + param.toString()],
+            current: prev.history.current + 1,
+          },
+        };
+      }
+    });
+  };
+
   // CIRCLE POSITION
   const updateCirclePosition = (position: { x: number; y: number }) => {
     setGradient((prev) => {
@@ -162,6 +209,31 @@ export default function Page({ params }: { params: { slug: string } }) {
           ...prev,
           type: handleUpdateCirclePosition(position),
         };
+    });
+  };
+
+  const updateHistoryOnCirclePositionChange = (position: {
+    x: number;
+    y: number;
+  }) => {
+    setGradient((prev) => {
+      if (prev) {
+        const urlArr =
+          prev.history.data[prev.history.data.length - 1].split("?");
+
+        const param = new URLSearchParams(urlArr[1]);
+        param.set("circle-x", `${position.x}`);
+        param.set("circle-y", `${position.y}`);
+        param.delete("type");
+
+        return {
+          ...prev,
+          history: {
+            data: [...prev.history.data, urlArr[0] + "?" + param.toString()],
+            current: prev.history.current + 1,
+          },
+        };
+      }
     });
   };
 
@@ -194,6 +266,26 @@ export default function Page({ params }: { params: { slug: string } }) {
     });
     setGradientStyle((prev) => {
       if (prev) return { ...prev, colors: handleUpdateColorStyle(newClrs) };
+    });
+  };
+
+  const updateHistoryOnStopsChange = (stops: string) => {
+    setGradient((prev) => {
+      if (prev) {
+        const urlArr =
+          prev.history.data[prev.history.data.length - 1].split("?");
+
+        const param = new URLSearchParams(urlArr[1]);
+        param.set("stops", stops);
+
+        return {
+          ...prev,
+          history: {
+            data: [...prev.history.data, urlArr[0] + "?" + param.toString()],
+            current: prev.history.current + 1,
+          },
+        };
+      }
     });
   };
 
@@ -270,6 +362,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               angle={gradient.angle}
               updateAngle={updateAngle}
               setAngleOpen={setAngleOpen}
+              updateHistoryOnAngleChange={updateHistoryOnAngleChange}
             />
           )}
           {circlePositionOpen && (
@@ -277,6 +370,9 @@ export default function Page({ params }: { params: { slug: string } }) {
               updateCirclePosition={updateCirclePosition}
               circlePosition={gradient.circlePosition}
               setCirclePositionOpen={setCirclePositionOpen}
+              updateHistoryOnCirclePositionChange={
+                updateHistoryOnCirclePositionChange
+              }
             />
           )}
           <Picker
@@ -296,6 +392,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               styleClrs={gradientStyle.colors}
               clrs={gradient.clrs}
               updateStop={updateStop}
+              updateHistoryOnStopsChange={updateHistoryOnStopsChange}
             />
           </main>
         </>

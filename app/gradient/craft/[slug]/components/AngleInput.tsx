@@ -7,9 +7,15 @@ type Props = {
   angle: number;
   updateAngle: (angle: number) => void;
   setAngleOpen: Dispatch<SetStateAction<boolean>>;
+  updateHistoryOnAngleChange: (angle: number) => void;
 };
 
-export function AngleInput({ angle, updateAngle, setAngleOpen }: Props) {
+export function AngleInput({
+  angle,
+  updateAngle,
+  setAngleOpen,
+  updateHistoryOnAngleChange,
+}: Props) {
   const [isClicked, setIsClicked] = useState(false);
 
   const handleMouseDown = (e: PointerEvent<HTMLDivElement>) => {
@@ -52,6 +58,7 @@ export function AngleInput({ angle, updateAngle, setAngleOpen }: Props) {
     circle.classList.remove("angle-active");
     setIsClicked(false);
     setParam("angle", angle);
+    updateHistoryOnAngleChange(angle);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -91,6 +98,7 @@ export function AngleInput({ angle, updateAngle, setAngleOpen }: Props) {
     if (getParam("type")) {
       setParam("type", null);
     }
+    updateHistoryOnAngleChange(newAngle);
   };
 
   return (

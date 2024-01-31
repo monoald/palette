@@ -6,9 +6,15 @@ type Props = {
   styleClrs: string;
   clrs: GradientColor[];
   updateStop: (id: string, stop: number) => void;
+  updateHistoryOnStopsChange: (stops: string) => void;
 };
 
-export function CustomRange({ styleClrs, clrs, updateStop }: Props) {
+export function CustomRange({
+  styleClrs,
+  clrs,
+  updateStop,
+  updateHistoryOnStopsChange,
+}: Props) {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [currentClr, setCurrentClr] = useState<string>();
 
@@ -38,7 +44,9 @@ export function CustomRange({ styleClrs, clrs, updateStop }: Props) {
       .map((clr) => clr.hex.replace("#", ""))
       .join("-") as string;
     replacePath(newUrl);
-    setParam("stops", clrs.map((clr) => clr.stop).join("-"));
+    const stops = clrs.map((clr) => clr.stop).join("-");
+    setParam("stops", stops);
+    updateHistoryOnStopsChange(stops);
   };
 
   return (

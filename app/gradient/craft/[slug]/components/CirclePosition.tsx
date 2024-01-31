@@ -11,12 +11,17 @@ type Props = {
   circlePosition: { x: number; y: number };
   updateCirclePosition: (position: { x: number; y: number }) => void;
   setCirclePositionOpen: Dispatch<SetStateAction<boolean>>;
+  updateHistoryOnCirclePositionChange: (position: {
+    x: number;
+    y: number;
+  }) => void;
 };
 
 export function CirclePosition({
   circlePosition,
   updateCirclePosition,
   setCirclePositionOpen,
+  updateHistoryOnCirclePositionChange,
 }: Props) {
   const [isClicked, setIsClicked] = useState(false);
   const rectangleRef = useRef<HTMLDivElement>(null);
@@ -52,6 +57,7 @@ export function CirclePosition({
     setIsClicked(false);
     setParam("circle-x", circlePosition.x);
     setParam("circle-y", circlePosition.y);
+    updateHistoryOnCirclePositionChange(circlePosition);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -82,9 +88,17 @@ export function CirclePosition({
 
     if (toUpdate === "x") {
       updateCirclePosition({ x: newPosition, y: circlePosition.y });
+      updateHistoryOnCirclePositionChange({
+        x: newPosition,
+        y: circlePosition.y,
+      });
       setParam("circle-x", newPosition);
     } else {
       updateCirclePosition({ x: circlePosition.x, y: newPosition });
+      updateHistoryOnCirclePositionChange({
+        x: newPosition,
+        y: circlePosition.y,
+      });
       setParam("circle-y", newPosition);
     }
     if (getParam("type")) {

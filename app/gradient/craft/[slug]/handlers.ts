@@ -57,10 +57,14 @@ export function handleChangeGradient(history: CustomHistory): Gradient {
 
   const newUrl = newPalette.reduce((a, b) => a + "-" + b).replaceAll("#", "");
   replacePath(newUrl);
-  setParams([
+  const searchParams = setParams([
     {
       name: "type",
-      value: type,
+      value:
+        (angle !== 90 && angle !== 0) ||
+        (type === "circle" && circlePosition.x !== 50)
+          ? null
+          : type,
     },
     {
       name: "stops",
@@ -87,7 +91,7 @@ export function handleChangeGradient(history: CustomHistory): Gradient {
   ]);
 
   const newHistory = {
-    data: [...history.data, newUrl],
+    data: [...history.data, newUrl + searchParams],
     current: history.current + 1,
   };
 
@@ -96,7 +100,7 @@ export function handleChangeGradient(history: CustomHistory): Gradient {
     angle,
     clrs,
     circlePosition,
-    history,
+    history: newHistory,
   };
 }
 
@@ -191,7 +195,7 @@ export function handleCreateGradientFromUrl(
 
   // set History
   const history = {
-    data: [slug],
+    data: [slug + "?" + searchParams.toString()],
     current: 0,
   };
 

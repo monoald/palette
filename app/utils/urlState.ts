@@ -31,7 +31,7 @@ export function setParam(name: string, value: string | number | null): void {
 
 export function setParams(
   params: { name: string; value: string | number | null }[]
-): void {
+): string {
   const search = window.location.search;
   const urlParams = new URLSearchParams(search);
 
@@ -44,4 +44,6 @@ export function setParams(
   }
 
   history.replaceState({}, "", "?" + urlParams.toString());
+
+  return "?" + urlParams.toString();
 }

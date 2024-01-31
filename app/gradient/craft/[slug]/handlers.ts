@@ -1,10 +1,99 @@
 import { getMainContrastColor } from "@/app/utils/createColorObject";
 import { makeRandomID } from "@/app/utils/makeRandomID";
-import { setParams } from "@/app/utils/urlState";
-import { Color, Format, colorFormatConverter, hexToRgb } from "colors-kit";
+import { replacePath, setParams } from "@/app/utils/urlState";
+import {
+  Color,
+  Format,
+  Palette,
+  colorFormatConverter,
+  hexToRgb,
+  makeColorPalette,
+} from "colors-kit";
 import { ReadonlyURLSearchParams } from "next/navigation";
 
-export function handleCreateGradientOnFirstRender(
+export function handleChangeGradient() {
+  const newPalette = makeColorPalette({
+    format: "hex",
+    paletteType: ["analogous", "complementary", "monochromatic", "shades"][
+      Math.floor(Math.random() * (3 - 0 + 1) + 0)
+    ] as Palette,
+    quantity: Math.floor(Math.random() * (3 - 2 + 1) + 2),
+  }) as string[];
+
+  const type = ["horizontal", "vertical", "circle", "conic"][
+    Math.floor(Math.random() * (3 - 0 + 1) + 0)
+  ];
+  let angle = Math.floor(Math.random() * (359 - 0 + 1) + 0);
+
+  if (type === "circle" || type === "conic") {
+    angle = 0;
+  }
+
+  const clrs = newPalette.map((clr, i) => ({
+    id: makeRandomID(),
+    hex: clr,
+    stop: 0,
+    formats: colorFormatConverter(clr, {
+      allFormats: true,
+      currentFormat: "hex",
+    }) as Formats,
+    contrastColor: getMainContrastColor(hexToRgb(clr)),
+  }));
+
+  const step = 100 / (clrs.length - 1);
+  for (const i in clrs) {
+    clrs[i].stop = +i * step;
+  }
+
+  let circlePosition = { x: 50, y: 50 };
+
+  if (type === "circle") {
+    circlePosition = {
+      x: Math.floor(Math.random() * (200 - 0 + 1) + 0) - 50,
+      y: Math.floor(Math.random() * (200 - 0 + 1) + 0) - 50,
+    };
+  }
+
+  const newUrl = newPalette.reduce((a, b) => a + "-" + b).replaceAll("#", "");
+  replacePath(newUrl);
+  setParams([
+    {
+      name: "type",
+      value: type,
+    },
+    {
+      name: "stops",
+      value: null,
+    },
+    {
+      name: "angle",
+      value: angle === 90 || angle === 0 ? null : angle,
+    },
+    {
+      name: "circle-x",
+      value:
+        circlePosition.x === 50 && circlePosition.y === 50
+          ? null
+          : circlePosition.x,
+    },
+    {
+      name: "circle-y",
+      value:
+        circlePosition.x === 50 && circlePosition.y === 50
+          ? null
+          : circlePosition.y,
+    },
+  ]);
+
+  return {
+    type,
+    angle,
+    clrs,
+    circlePosition,
+  };
+}
+
+export function handleCreateGradientFromUrl(
   slug: string,
   searchParams: ReadonlyURLSearchParams
 ): Gradient {
@@ -30,7 +119,6 @@ export function handleCreateGradientOnFirstRender(
   }
 
   // set Colors
-
   const clrs = clrsArr.map((clr, i) => ({
     id: makeRandomID(),
     hex: "#" + clr,

@@ -12,7 +12,8 @@ import { Picker } from "@/app/components/picker/Picker";
 import useStateHandler from "@/app/hooks/useStateHandler";
 import {
   handleAddColor,
-  handleCreateGradientOnFirstRender,
+  handleChangeGradient,
+  handleCreateGradientFromUrl,
   handleCreateStyles,
   handleRemoveColor,
   handleUpdateAngle,
@@ -23,6 +24,7 @@ import {
   handleUpdateType,
 } from "./handlers";
 import { CustomRange } from "./components/CustomRange";
+import { useKeyDown } from "@/app/hooks/useKeyDown";
 
 const gradientTypes = ["horizontal", "vertical", "circle", "conic"];
 
@@ -37,7 +39,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   }>();
 
   useEffect(() => {
-    const newGradient = handleCreateGradientOnFirstRender(
+    const newGradient = handleCreateGradientFromUrl(
       params.slug,
       searchParams as ReadonlyURLSearchParams
     );
@@ -47,6 +49,33 @@ export default function Page({ params }: { params: { slug: string } }) {
       handleCreateStyles(searchParams as ReadonlyURLSearchParams, newGradient)
     );
   }, [params.slug, searchParams]);
+
+  const changeGradient = () => {
+    const newGradient = handleChangeGradient();
+    setGradient(newGradient);
+
+    let typeGradient = `linear-gradient(${newGradient.angle}deg, `;
+
+    if (newGradient.type === "circle" || searchParams.get("circle-x")) {
+      typeGradient = `radial-gradient(circle at ${newGradient.circlePosition.x}% ${newGradient.circlePosition.y}%, `;
+    } else if (newGradient.type === "conic") {
+      typeGradient = "conic-gradient(";
+    }
+
+    let clrs = "";
+
+    for (const i in newGradient.clrs) {
+      clrs += `${newGradient.clrs[i].hex} ${newGradient.clrs[i].stop}%`;
+      if (+i + 1 !== newGradient.clrs.length) {
+        clrs += ", ";
+      }
+    }
+    setGradientStyle({ type: typeGradient, colors: clrs, end: ")" });
+  };
+
+  useKeyDown(() => {
+    changeGradient();
+  }, ["Space"]);
 
   const updatePaletteFromPickerHandler = (e: Event) => {
     const event = e as CustomEvent;
@@ -222,6 +251,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             setColorsOpen={setColorsOpen}
             setAngleOpen={setAngleOpen}
             setCirclePositionOpen={setCirclePositionOpen}
+            changeGradient={changeGradient}
           />
           <OptionBar
             open={gradientTypeOpen}

@@ -6,6 +6,7 @@ type Props = {
   setColorsOpen: Dispatch<SetStateAction<boolean>>;
   setAngleOpen: Dispatch<SetStateAction<boolean>>;
   setCirclePositionOpen: Dispatch<SetStateAction<boolean>>;
+  changeGradient: () => void;
 };
 
 export default function SideBar({
@@ -13,6 +14,7 @@ export default function SideBar({
   setColorsOpen,
   setAngleOpen,
   setCirclePositionOpen,
+  changeGradient,
 }: Props) {
   return (
     <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">
@@ -73,6 +75,18 @@ export default function SideBar({
             tooltip-position="left"
           >
             <span className="icon-move-circle text-2xl" />
+          </button>
+        </li>
+
+        <li>
+          <button
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
+            onClick={changeGradient}
+            tooltip="true"
+            tooltip-content="Craft new palette"
+            tooltip-position="left"
+          >
+            <span className="icon-shuffle text-2xl" />
           </button>
         </li>
       </ul>

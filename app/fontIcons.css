@@ -138,3 +138,6 @@
 .icon-move-circle:before {
   content: "\e921";
 }
+.icon-shuffle:before {
+  content: "\e922";
+}

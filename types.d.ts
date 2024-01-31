@@ -19,7 +19,7 @@ type ColorBlindSimulator = {
   tritanopia: string;
 };
 
-type PaletteHistory = {
+type CustomHistory = {
   data: string[];
   current: number;
 };
@@ -34,7 +34,7 @@ type Color = {
 };
 
 type Palette = {
-  history: PaletteHistory;
+  history: CustomHistory;
   colors: Array<Color>;
   currentColor?: string;
 };

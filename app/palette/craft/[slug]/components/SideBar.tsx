@@ -6,7 +6,7 @@ type Props = {
   changePalette: () => void;
   historyBack: () => void;
   historyForward: () => void;
-  paletteHistory: PaletteHistory;
+  paletteHistory: CustomHistory;
   toggleImg: () => void;
 };
 

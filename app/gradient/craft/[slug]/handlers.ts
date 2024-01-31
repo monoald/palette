@@ -10,8 +10,9 @@ import {
   makeColorPalette,
 } from "colors-kit";
 import { ReadonlyURLSearchParams } from "next/navigation";
+import { GradientStyles } from "./page";
 
-export function handleChangeGradient() {
+export function handleChangeGradient(history: CustomHistory): Gradient {
   const newPalette = makeColorPalette({
     format: "hex",
     paletteType: ["analogous", "complementary", "monochromatic", "shades"][
@@ -85,12 +86,39 @@ export function handleChangeGradient() {
     },
   ]);
 
+  const newHistory = {
+    data: [...history.data, newUrl],
+    current: history.current + 1,
+  };
+
   return {
     type,
     angle,
     clrs,
     circlePosition,
+    history,
   };
+}
+
+export function handleChangeStyles(gradient: Gradient): GradientStyles {
+  let typeGradient = `linear-gradient(${gradient.angle}deg, `;
+
+  if (gradient.type === "circle") {
+    typeGradient = `radial-gradient(circle at ${gradient.circlePosition.x}% ${gradient.circlePosition.y}%, `;
+  } else if (gradient.type === "conic") {
+    typeGradient = "conic-gradient(";
+  }
+
+  let clrs = "";
+
+  for (const i in gradient.clrs) {
+    clrs += `${gradient.clrs[i].hex} ${gradient.clrs[i].stop}%`;
+    if (+i + 1 !== gradient.clrs.length) {
+      clrs += ", ";
+    }
+  }
+
+  return { type: typeGradient, colors: clrs, end: ")" };
 }
 
 export function handleCreateGradientFromUrl(
@@ -161,22 +189,25 @@ export function handleCreateGradientFromUrl(
     stops = stopsFromParams.split("-").map((stop) => +stop);
   }
 
+  // set History
+  const history = {
+    data: [slug],
+    current: 0,
+  };
+
   return {
     type,
     angle,
     clrs,
     circlePosition,
+    history,
   };
 }
 
 export function handleCreateStyles(
   searchParams: ReadonlyURLSearchParams,
   gradient: Gradient
-): {
-  type: string;
-  colors: string;
-  end: string;
-} {
+): GradientStyles {
   let typeGradient = `linear-gradient(${gradient.angle}deg, `;
   const type = searchParams.get("type");
 

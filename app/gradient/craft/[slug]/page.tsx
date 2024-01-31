@@ -13,6 +13,7 @@ import useStateHandler from "@/app/hooks/useStateHandler";
 import {
   handleAddColor,
   handleChangeGradient,
+  handleChangeStyles,
   handleCreateGradientFromUrl,
   handleCreateStyles,
   handleRemoveColor,
@@ -25,6 +26,12 @@ import {
 } from "./handlers";
 import { CustomRange } from "./components/CustomRange";
 import { useKeyDown } from "@/app/hooks/useKeyDown";
+
+export type GradientStyles = {
+  type: string;
+  colors: string;
+  end: string;
+};
 
 const gradientTypes = ["horizontal", "vertical", "circle", "conic"];
 
@@ -51,26 +58,15 @@ export default function Page({ params }: { params: { slug: string } }) {
   }, [params.slug, searchParams]);
 
   const changeGradient = () => {
-    const newGradient = handleChangeGradient();
-    setGradient(newGradient);
+    setGradient((prev) => {
+      if (prev) {
+        const newGradient = handleChangeGradient(prev.history);
 
-    let typeGradient = `linear-gradient(${newGradient.angle}deg, `;
+        setGradientStyle(handleChangeStyles(newGradient));
 
-    if (newGradient.type === "circle" || searchParams.get("circle-x")) {
-      typeGradient = `radial-gradient(circle at ${newGradient.circlePosition.x}% ${newGradient.circlePosition.y}%, `;
-    } else if (newGradient.type === "conic") {
-      typeGradient = "conic-gradient(";
-    }
-
-    let clrs = "";
-
-    for (const i in newGradient.clrs) {
-      clrs += `${newGradient.clrs[i].hex} ${newGradient.clrs[i].stop}%`;
-      if (+i + 1 !== newGradient.clrs.length) {
-        clrs += ", ";
+        return newGradient;
       }
-    }
-    setGradientStyle({ type: typeGradient, colors: clrs, end: ")" });
+    });
   };
 
   useKeyDown(() => {

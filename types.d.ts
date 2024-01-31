@@ -53,6 +53,7 @@ type Gradient = {
   clrs: GradientColor[];
   circlePosition: { x: number; y: number };
   currentColor?: string;
+  history: CustomHistory;
 };
 
 declare namespace JSX {

@@ -7,6 +7,9 @@ type Props = {
   setAngleOpen: Dispatch<SetStateAction<boolean>>;
   setCirclePositionOpen: Dispatch<SetStateAction<boolean>>;
   changeGradient: () => void;
+  gradientHistory: CustomHistory;
+  historyBack: () => void;
+  historyForward: () => void;
 };
 
 export default function SideBar({
@@ -15,6 +18,9 @@ export default function SideBar({
   setAngleOpen,
   setCirclePositionOpen,
   changeGradient,
+  gradientHistory,
+  historyBack,
+  historyForward,
 }: Props) {
   return (
     <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">
@@ -87,6 +93,34 @@ export default function SideBar({
             tooltip-position="left"
           >
             <span className="icon-shuffle text-2xl" />
+          </button>
+        </li>
+
+        <li>
+          <button
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777]"
+            disabled={gradientHistory.current === 0}
+            tooltip="true"
+            tooltip-content="Undo"
+            tooltip-position="left"
+            onClick={historyBack}
+          >
+            <span className="icon-undo text-2xl" />
+          </button>
+        </li>
+
+        <li>
+          <button
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777] disabled:pointer-events-none"
+            disabled={
+              gradientHistory.current >= gradientHistory.data.length - 1
+            }
+            tooltip="true"
+            tooltip-content="Redo"
+            tooltip-position="left"
+            onClick={historyForward}
+          >
+            <span className="icon-redo text-2xl" />
           </button>
         </li>
       </ul>

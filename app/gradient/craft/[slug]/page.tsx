@@ -1,6 +1,6 @@
 "use client";
 
-import { replacePath, setParam } from "@/app/utils/urlState";
+import { replacePath, setParam, setParams } from "@/app/utils/urlState";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AngleInput } from "./components/AngleInput";
@@ -112,10 +112,6 @@ export default function Page({ params }: { params: { slug: string } }) {
       }
     });
   };
-
-  useEffect(() => {
-    console.log(gradient?.history);
-  }, [gradient?.history]);
 
   // PALETTE
   useStateHandler(
@@ -330,6 +326,63 @@ export default function Page({ params }: { params: { slug: string } }) {
     });
   };
 
+  // HISTORY MANAGEMENT
+  const historyBack = () => {
+    setGradient((prev) => {
+      if (prev) {
+        const current = prev.history.current - 1;
+
+        const url = prev.history.data[current].split("?");
+        const newGradient = handleCreateGradientFromUrl(
+          url[0],
+          new URLSearchParams(url[1])
+        );
+
+        replacePath(url[0]);
+        history.replaceState({}, "", "?" + url[1]);
+        setGradientStyle(
+          handleCreateStyles(new URLSearchParams(url[1]), newGradient)
+        );
+
+        return {
+          ...newGradient,
+          history: {
+            ...prev.history,
+            current,
+          },
+        };
+      }
+    });
+  };
+
+  const historyForward = () => {
+    setGradient((prev) => {
+      if (prev) {
+        const current = prev.history.current + 1;
+
+        const url = prev.history.data[current].split("?");
+        const newGradient = handleCreateGradientFromUrl(
+          url[0],
+          new URLSearchParams(url[1])
+        );
+
+        replacePath(url[0]);
+        history.replaceState({}, "", "?" + url[1]);
+        setGradientStyle(
+          handleCreateStyles(new URLSearchParams(url[1]), newGradient)
+        );
+
+        return {
+          ...newGradient,
+          history: {
+            ...prev.history,
+            current,
+          },
+        };
+      }
+    });
+  };
+
   return (
     <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
       {gradient && gradientStyle && (
@@ -340,6 +393,9 @@ export default function Page({ params }: { params: { slug: string } }) {
             setAngleOpen={setAngleOpen}
             setCirclePositionOpen={setCirclePositionOpen}
             changeGradient={changeGradient}
+            gradientHistory={gradient.history}
+            historyBack={historyBack}
+            historyForward={historyForward}
           />
           <OptionBar
             open={gradientTypeOpen}

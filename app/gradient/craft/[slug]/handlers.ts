@@ -127,7 +127,7 @@ export function handleChangeStyles(gradient: Gradient): GradientStyles {
 
 export function handleCreateGradientFromUrl(
   slug: string,
-  searchParams: ReadonlyURLSearchParams
+  searchParams: ReadonlyURLSearchParams | URLSearchParams
 ): Gradient {
   const stopsFromParams = searchParams.get("stops");
   const typeFromParams = searchParams.get("type");
@@ -209,7 +209,7 @@ export function handleCreateGradientFromUrl(
 }
 
 export function handleCreateStyles(
-  searchParams: ReadonlyURLSearchParams,
+  searchParams: ReadonlyURLSearchParams | URLSearchParams,
   gradient: Gradient
 ): GradientStyles {
   let typeGradient = `linear-gradient(${gradient.angle}deg, `;

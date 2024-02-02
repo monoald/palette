@@ -60,6 +60,7 @@ type Gradient = {
   circlePosition: { x: number; y: number };
   currentColor?: string;
   history: CustomHistory;
+  animation: string;
 };
 
 declare namespace JSX {

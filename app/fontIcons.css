@@ -144,3 +144,6 @@
 .icon-code:before {
   content: "\e923";
 }
+.icon-animation:before {
+  content: "\e924";
+}

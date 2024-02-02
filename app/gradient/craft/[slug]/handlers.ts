@@ -20,11 +20,13 @@ export function handleURLToGradient(
   const angleFromParams = searchParams.get("angle");
   const circlePositionXFromParam = searchParams.get("circle-x");
   const circlePositionYFromParam = searchParams.get("circle-y");
+  const animationFromParams = searchParams.get("animation");
 
   const clrsArr = slug.split("-");
   let type = "horizontal";
   let angle = 90;
   let circlePosition = { x: 50, y: 50 };
+  let animation = "none";
 
   const step = 100 / (clrsArr.length - 1);
   let stops = clrsArr.map((el, i) => {
@@ -85,12 +87,18 @@ export function handleURLToGradient(
     current: 0,
   };
 
+  // set Animation
+  if (animationFromParams) {
+    animation = animationFromParams;
+  }
+
   const gradient = {
     type,
     angle,
     clrs,
     circlePosition,
     history,
+    animation,
   };
 
   const style = createStyle(gradient);
@@ -183,6 +191,7 @@ export function handleUpdateHistory(
     gradient.angle,
     gradient.type,
     gradient.circlePosition,
+    gradient.animation,
     evenStops === currentStops ? undefined : currentStops
   );
 
@@ -336,7 +345,7 @@ function randomGradient(history: CustomHistory): Gradient {
 
   const newUrl = newPalette.reduce((a, b) => a + "-" + b).replaceAll("#", "");
   replacePath(newUrl);
-  const searchParams = updateParams(angle, type, circlePosition);
+  const searchParams = updateParams(angle, type, circlePosition, "none");
 
   const newHistory = {
     data: [...history.data, newUrl + searchParams],
@@ -349,6 +358,7 @@ function randomGradient(history: CustomHistory): Gradient {
     clrs,
     circlePosition,
     history: newHistory,
+    animation: "none",
   };
 }
 
@@ -356,6 +366,7 @@ function updateParams(
   angle: number,
   type: string,
   circlePosition: { x: number; y: number },
+  animation: string,
   stops?: string
 ): string {
   const searchParams = setParams([
@@ -391,6 +402,7 @@ function updateParams(
           ? null
           : circlePosition.y,
     },
+    { name: "animation", value: animation === "none" ? null : animation },
   ]);
 
   return searchParams;

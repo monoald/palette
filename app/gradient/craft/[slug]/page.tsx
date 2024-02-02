@@ -24,6 +24,7 @@ import { CustomRange } from "./components/CustomRange";
 import { useKeyDown } from "@/app/hooks/useKeyDown";
 
 const gradientTypes = ["horizontal", "vertical", "circle", "conic"];
+const gradientAnimations = ["horizontal", "vertical", "spin", "none"];
 
 export default function Page({ params }: { params: { slug: string } }) {
   const searchParams = useSearchParams();
@@ -125,6 +126,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   // OPTIONS
   const [gradientTypeOpen, setGradientTypeOpen] = useState(false);
+  const [gradientAnimationOpen, setGradientAnimationOpen] = useState(false);
 
   const selectGradientType = (selected: string) => {
     setGradient((prev) => {
@@ -140,6 +142,14 @@ export default function Page({ params }: { params: { slug: string } }) {
         const history = handleUpdateHistory(newGradient);
 
         return { ...newGradient, history };
+      }
+    });
+  };
+  const selectGradientAnimation = (selected: string) => {
+    setGradient((prev) => {
+      if (prev) {
+        const history = handleUpdateHistory({ ...prev, animation: selected });
+        return { ...prev, animation: selected, history };
       }
     });
   };
@@ -310,6 +320,7 @@ export default function Page({ params }: { params: { slug: string } }) {
           <SideBar
             gradientStyle={gradientStyle}
             setGradientTypeOpen={setGradientTypeOpen}
+            setGradientAnimationOpen={setGradientAnimationOpen}
             setColorsOpen={setColorsOpen}
             setAngleOpen={setAngleOpen}
             setCirclePositionOpen={setCirclePositionOpen}
@@ -317,6 +328,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             gradientHistory={gradient.history}
             historyBack={historyBack}
             historyForward={historyForward}
+            animation={gradient.animation}
           />
           <OptionBar
             open={gradientTypeOpen}
@@ -324,6 +336,13 @@ export default function Page({ params }: { params: { slug: string } }) {
             options={gradientTypes}
             current={gradient.type as string}
             selectOption={selectGradientType}
+          />
+          <OptionBar
+            open={gradientAnimationOpen}
+            setOpen={setGradientAnimationOpen}
+            options={gradientAnimations}
+            current={gradient.animation as string}
+            selectOption={selectGradientAnimation}
           />
           {colorsOpen && (
             <ChangePalette
@@ -353,11 +372,25 @@ export default function Page({ params }: { params: { slug: string } }) {
             closePicker={closePicker}
           />
           <main className="w-full h-full flex flex-col gap-8 text-sm">
-            <div className="w-full h-full flex border border-primary-border rounded-2xl overflow-hidden">
+            <div className="relative w-full h-full flex items-center border border-primary-border rounded-3xl overflow-hidden">
               <div
-                className="relative w-full h-full"
+                className="absolute"
                 style={{
-                  background: `${gradientStyle.type}${gradientStyle.clrs}${gradientStyle.end}`,
+                  inset: gradient.animation === "spin" ? "-90%" : "0%",
+                  backgroundSize:
+                    gradient.animation === "vertical"
+                      ? "100% 150%"
+                      : gradient.animation === "horizontal"
+                      ? "150% 100%"
+                      : gradient.animation === "circle" ||
+                        gradient.animation === "conic"
+                      ? "100%"
+                      : undefined,
+                  backgroundImage: `${gradientStyle.type}${gradientStyle.clrs}${gradientStyle.end}`,
+                  animation:
+                    gradient.animation === "none"
+                      ? undefined
+                      : `${gradient.animation} 5s linear infinite`,
                 }}
               ></div>
             </div>

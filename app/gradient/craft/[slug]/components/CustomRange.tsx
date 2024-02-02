@@ -1,4 +1,5 @@
 "use client";
+import { dispatch } from "@/app/hooks/useStateHandler";
 import { replacePath, setParam } from "@/app/utils/urlState";
 import { PointerEvent, useRef, useState } from "react";
 
@@ -6,15 +7,9 @@ type Props = {
   styleClrs: string;
   clrs: GradientColor[];
   updateStop: (id: string, stop: number) => void;
-  updateHistoryOnStopsChange: (stops: string) => void;
 };
 
-export function CustomRange({
-  styleClrs,
-  clrs,
-  updateStop,
-  updateHistoryOnStopsChange,
-}: Props) {
+export function CustomRange({ styleClrs, clrs, updateStop }: Props) {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [currentClr, setCurrentClr] = useState<string>();
 
@@ -46,7 +41,7 @@ export function CustomRange({
     replacePath(newUrl);
     const stops = clrs.map((clr) => clr.stop).join("-");
     setParam("stops", stops);
-    updateHistoryOnStopsChange(stops);
+    dispatch("custom:updateHistoryFromProperty");
   };
 
   return (

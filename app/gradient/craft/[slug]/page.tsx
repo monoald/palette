@@ -1,6 +1,6 @@
 "use client";
 
-import { replacePath, setParam, setParams } from "@/app/utils/urlState";
+import { replacePath } from "@/app/utils/urlState";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AngleInput } from "./components/AngleInput";
@@ -12,26 +12,16 @@ import { Picker } from "@/app/components/picker/Picker";
 import useStateHandler from "@/app/hooks/useStateHandler";
 import {
   handleAddColor,
-  handleChangeGradient,
-  handleChangeStyles,
-  handleCreateGradientFromUrl,
-  handleCreateStyles,
+  handleURLToGradient,
   handleRemoveColor,
-  handleUpdateAngle,
-  handleUpdateCirclePosition,
   handleUpdateColor,
   handleUpdateColorStyle,
-  handleUpdateStop,
-  handleUpdateType,
+  handleCraftGradient,
+  handleUpdateProperty,
+  handleUpdateHistory,
 } from "./handlers";
 import { CustomRange } from "./components/CustomRange";
 import { useKeyDown } from "@/app/hooks/useKeyDown";
-
-export type GradientStyles = {
-  type: string;
-  colors: string;
-  end: string;
-};
 
 const gradientTypes = ["horizontal", "vertical", "circle", "conic"];
 
@@ -39,31 +29,24 @@ export default function Page({ params }: { params: { slug: string } }) {
   const searchParams = useSearchParams();
 
   const [gradient, setGradient] = useState<Gradient>();
-  const [gradientStyle, setGradientStyle] = useState<{
-    type: string;
-    colors: string;
-    end: string;
-  }>();
+  const [gradientStyle, setGradientStyle] = useState<GradientStyle>();
 
   useEffect(() => {
-    const newGradient = handleCreateGradientFromUrl(
+    const [newGradient, newStyle] = handleURLToGradient(
       params.slug,
       searchParams as ReadonlyURLSearchParams
     );
 
     setGradient(newGradient);
-    setGradientStyle(
-      handleCreateStyles(searchParams as ReadonlyURLSearchParams, newGradient)
-    );
+    setGradientStyle(newStyle);
   }, [params.slug, searchParams]);
 
   const changeGradient = () => {
     setGradient((prev) => {
       if (prev) {
-        const newGradient = handleChangeGradient(prev.history);
+        const [newGradient, newStyle] = handleCraftGradient(prev.history);
 
-        setGradientStyle(handleChangeStyles(newGradient));
-
+        setGradientStyle(newStyle);
         return newGradient;
       }
     });
@@ -113,10 +96,31 @@ export default function Page({ params }: { params: { slug: string } }) {
     });
   };
 
+  const updateHistoryFromPropertyHandler = () => {
+    setGradient((prev) => {
+      if (prev) {
+        const history = handleUpdateHistory(prev);
+
+        return {
+          ...prev,
+          history,
+        };
+      }
+    });
+  };
+
   // PALETTE
   useStateHandler(
-    [updatePaletteFromPickerHandler, updateHistoryFromPickerHandler],
-    ["custom:updatePaletteFromPicker", "custom:updateHistoryFromPicker"]
+    [
+      updatePaletteFromPickerHandler,
+      updateHistoryFromPickerHandler,
+      updateHistoryFromPropertyHandler,
+    ],
+    [
+      "custom:updatePaletteFromPicker",
+      "custom:updateHistoryFromPicker",
+      "custom:updateHistoryFromProperty",
+    ]
   );
 
   // OPTIONS
@@ -125,71 +129,33 @@ export default function Page({ params }: { params: { slug: string } }) {
   const selectGradientType = (selected: string) => {
     setGradient((prev) => {
       if (prev) {
-        let angle = prev.angle;
+        const [newGradient, newStyle] = handleUpdateProperty(
+          "type",
+          selected,
+          prev
+        );
 
-        if (selected === "horizontal") {
-          angle = 90;
-        } else if (selected === "vertical") {
-          angle = 0;
-        }
+        setGradientStyle(newStyle);
 
-        let newUrl = "";
-        gradient?.clrs.forEach((clr, i) => {
-          if (i !== 0) {
-            newUrl += "-";
-          }
+        const history = handleUpdateHistory(newGradient);
 
-          newUrl += clr.hex.replace("#", "");
-        });
-
-        return {
-          ...prev,
-          type: selected,
-          angle,
-          history: {
-            data: [...prev.history.data, newUrl + `?type=${selected}`],
-            current: prev.history.current + 1,
-          },
-        };
+        return { ...newGradient, history };
       }
-    });
-    const newType = handleUpdateType(selected);
-    setGradientStyle((prev) => {
-      if (prev) return { ...prev, type: newType };
     });
   };
 
   // ANGLE
   const updateAngle = (angle: number) => {
     setGradient((prev) => {
-      if (prev) return { ...prev, angle };
-    });
-    setGradientStyle((prev) => {
-      if (prev)
-        return {
-          ...prev,
-          type: handleUpdateAngle(angle),
-        };
-    });
-  };
-
-  const updateHistoryOnAngleChange = (angle: number) => {
-    setGradient((prev) => {
       if (prev) {
-        const urlArr =
-          prev.history.data[prev.history.data.length - 1].split("?");
+        const [newGradient, newStyle] = handleUpdateProperty(
+          "angle",
+          angle,
+          prev
+        );
 
-        const param = new URLSearchParams(urlArr[1]);
-        param.set("angle", `${angle}`);
-        param.delete("type");
-
-        return {
-          ...prev,
-          history: {
-            data: [...prev.history.data, urlArr[0] + "?" + param.toString()],
-            current: prev.history.current + 1,
-          },
-        };
+        setGradientStyle(newStyle);
+        return newGradient;
       }
     });
   };
@@ -197,38 +163,15 @@ export default function Page({ params }: { params: { slug: string } }) {
   // CIRCLE POSITION
   const updateCirclePosition = (position: { x: number; y: number }) => {
     setGradient((prev) => {
-      if (prev) return { ...prev, circlePosition: position };
-    });
-    setGradientStyle((prev) => {
-      if (prev)
-        return {
-          ...prev,
-          type: handleUpdateCirclePosition(position),
-        };
-    });
-  };
-
-  const updateHistoryOnCirclePositionChange = (position: {
-    x: number;
-    y: number;
-  }) => {
-    setGradient((prev) => {
       if (prev) {
-        const urlArr =
-          prev.history.data[prev.history.data.length - 1].split("?");
+        const [newGradient, newStyle] = handleUpdateProperty(
+          "position",
+          position,
+          prev
+        );
 
-        const param = new URLSearchParams(urlArr[1]);
-        param.set("circle-x", `${position.x}`);
-        param.set("circle-y", `${position.y}`);
-        param.delete("type");
-
-        return {
-          ...prev,
-          history: {
-            data: [...prev.history.data, urlArr[0] + "?" + param.toString()],
-            current: prev.history.current + 1,
-          },
-        };
+        setGradientStyle(newStyle);
+        return newGradient;
       }
     });
   };
@@ -252,35 +195,16 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   // STOPS
   const updateStop = (id: string, stop: number) => {
-    const newClrs = handleUpdateStop(
-      gradient?.clrs as GradientColor[],
-      id,
-      stop
-    );
-    setGradient((prev) => {
-      if (prev) return { ...prev, clrs: newClrs };
-    });
-    setGradientStyle((prev) => {
-      if (prev) return { ...prev, colors: handleUpdateColorStyle(newClrs) };
-    });
-  };
-
-  const updateHistoryOnStopsChange = (stops: string) => {
     setGradient((prev) => {
       if (prev) {
-        const urlArr =
-          prev.history.data[prev.history.data.length - 1].split("?");
+        const [newGradient, newStyle] = handleUpdateProperty(
+          "stops",
+          { id, stop },
+          prev
+        );
 
-        const param = new URLSearchParams(urlArr[1]);
-        param.set("stops", stops);
-
-        return {
-          ...prev,
-          history: {
-            data: [...prev.history.data, urlArr[0] + "?" + param.toString()],
-            current: prev.history.current + 1,
-          },
-        };
+        setGradientStyle(newStyle);
+        return newGradient;
       }
     });
   };
@@ -292,16 +216,16 @@ export default function Page({ params }: { params: { slug: string } }) {
         const newClrs = handleRemoveColor(id, prev.clrs);
         const clrsStyle = handleUpdateColorStyle(newClrs as GradientColor[]);
         setGradientStyle((prev) => {
-          if (prev) return { ...prev, colors: clrsStyle };
+          if (prev) return { ...prev, clrs: clrsStyle };
         });
 
         const newUrl = newClrs
           .map((clr) => clr.hex.replace("#", ""))
           .join("-") as string;
         replacePath(newUrl);
-        setParam("stops", newClrs.map((clr) => clr.stop).join("-"));
+        const history = handleUpdateHistory({ ...prev, clrs: newClrs }, true);
 
-        return { ...prev, clrs: newClrs };
+        return { ...prev, clrs: newClrs, history };
       }
     });
   };
@@ -312,16 +236,16 @@ export default function Page({ params }: { params: { slug: string } }) {
         const newClrs = handleAddColor(prev.clrs);
         const clrsStyle = handleUpdateColorStyle(newClrs as GradientColor[]);
         setGradientStyle((prev) => {
-          if (prev) return { ...prev, colors: clrsStyle };
+          if (prev) return { ...prev, clrs: clrsStyle };
         });
 
         const newUrl = newClrs
           .map((clr) => clr.hex.replace("#", ""))
           .join("-") as string;
         replacePath(newUrl);
-        setParam("stops", newClrs.map((clr) => clr.stop).join("-"));
+        const history = handleUpdateHistory({ ...prev, clrs: newClrs }, true);
 
-        return { ...prev, clrs: newClrs };
+        return { ...prev, clrs: newClrs, history };
       }
     });
   };
@@ -333,17 +257,15 @@ export default function Page({ params }: { params: { slug: string } }) {
         const current = prev.history.current - 1;
 
         const url = prev.history.data[current].split("?");
-        const newGradient = handleCreateGradientFromUrl(
+        const [newGradient, newStyle] = handleURLToGradient(
           url[0],
           new URLSearchParams(url[1])
         );
 
         replacePath(url[0]);
         history.replaceState({}, "", "?" + url[1]);
-        setGradientStyle(
-          handleCreateStyles(new URLSearchParams(url[1]), newGradient)
-        );
 
+        setGradientStyle(newStyle);
         return {
           ...newGradient,
           history: {
@@ -361,17 +283,15 @@ export default function Page({ params }: { params: { slug: string } }) {
         const current = prev.history.current + 1;
 
         const url = prev.history.data[current].split("?");
-        const newGradient = handleCreateGradientFromUrl(
+        const [newGradient, newStyle] = handleURLToGradient(
           url[0],
           new URLSearchParams(url[1])
         );
 
         replacePath(url[0]);
         history.replaceState({}, "", "?" + url[1]);
-        setGradientStyle(
-          handleCreateStyles(new URLSearchParams(url[1]), newGradient)
-        );
 
+        setGradientStyle(newStyle);
         return {
           ...newGradient,
           history: {
@@ -418,7 +338,6 @@ export default function Page({ params }: { params: { slug: string } }) {
               angle={gradient.angle}
               updateAngle={updateAngle}
               setAngleOpen={setAngleOpen}
-              updateHistoryOnAngleChange={updateHistoryOnAngleChange}
             />
           )}
           {circlePositionOpen && (
@@ -426,9 +345,6 @@ export default function Page({ params }: { params: { slug: string } }) {
               updateCirclePosition={updateCirclePosition}
               circlePosition={gradient.circlePosition}
               setCirclePositionOpen={setCirclePositionOpen}
-              updateHistoryOnCirclePositionChange={
-                updateHistoryOnCirclePositionChange
-              }
             />
           )}
           <Picker
@@ -440,15 +356,14 @@ export default function Page({ params }: { params: { slug: string } }) {
               <div
                 className="relative w-full h-full"
                 style={{
-                  background: `${gradientStyle?.type}${gradientStyle?.colors}${gradientStyle?.end}`,
+                  background: `${gradientStyle.type}${gradientStyle.clrs}${gradientStyle.end}`,
                 }}
               ></div>
             </div>
             <CustomRange
-              styleClrs={gradientStyle.colors}
+              styleClrs={gradientStyle.clrs}
               clrs={gradient.clrs}
               updateStop={updateStop}
-              updateHistoryOnStopsChange={updateHistoryOnStopsChange}
             />
           </main>
         </>

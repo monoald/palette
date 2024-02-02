@@ -1,21 +1,15 @@
 import { Dispatch, PointerEvent, SetStateAction, useState } from "react";
 
 import "./AngleInput.css";
-import { getParam, setParam } from "@/app/utils/urlState";
+import { dispatch } from "@/app/hooks/useStateHandler";
 
 type Props = {
   angle: number;
   updateAngle: (angle: number) => void;
   setAngleOpen: Dispatch<SetStateAction<boolean>>;
-  updateHistoryOnAngleChange: (angle: number) => void;
 };
 
-export function AngleInput({
-  angle,
-  updateAngle,
-  setAngleOpen,
-  updateHistoryOnAngleChange,
-}: Props) {
+export function AngleInput({ angle, updateAngle, setAngleOpen }: Props) {
   const [isClicked, setIsClicked] = useState(false);
 
   const handleMouseDown = (e: PointerEvent<HTMLDivElement>) => {
@@ -45,20 +39,13 @@ export function AngleInput({
     degrees = degrees > 360 ? Math.abs(degrees - 360) : degrees;
 
     updateAngle(Math.round(degrees));
-    setParam("angle", Math.round(degrees));
-    if (getParam("type")) {
-      setParam("type", null);
-    }
-    setParam("circle-x", null);
-    setParam("circle-y", null);
   };
 
   const handleMouseUp = (e: PointerEvent<HTMLDivElement>) => {
     const circle = e.target as HTMLElement;
     circle.classList.remove("angle-active");
     setIsClicked(false);
-    setParam("angle", angle);
-    updateHistoryOnAngleChange(angle);
+    dispatch("custom:updateHistoryFromProperty");
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -94,11 +81,7 @@ export function AngleInput({
     const newAngle = +target.value;
 
     updateAngle(newAngle);
-    setParam("angle", newAngle);
-    if (getParam("type")) {
-      setParam("type", null);
-    }
-    updateHistoryOnAngleChange(newAngle);
+    dispatch("custom:updateHistoryFromProperty");
   };
 
   return (

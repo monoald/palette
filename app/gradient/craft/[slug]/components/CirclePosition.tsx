@@ -5,23 +5,18 @@ import {
   useRef,
   useState,
 } from "react";
-import { getParam, setParam } from "@/app/utils/urlState";
+import { dispatch } from "@/app/hooks/useStateHandler";
 
 type Props = {
   circlePosition: { x: number; y: number };
   updateCirclePosition: (position: { x: number; y: number }) => void;
   setCirclePositionOpen: Dispatch<SetStateAction<boolean>>;
-  updateHistoryOnCirclePositionChange: (position: {
-    x: number;
-    y: number;
-  }) => void;
 };
 
 export function CirclePosition({
   circlePosition,
   updateCirclePosition,
   setCirclePositionOpen,
-  updateHistoryOnCirclePositionChange,
 }: Props) {
   const [isClicked, setIsClicked] = useState(false);
   const rectangleRef = useRef<HTMLDivElement>(null);
@@ -44,20 +39,14 @@ export function CirclePosition({
     );
 
     updateCirclePosition({ x, y });
-    setParam("circle-x", x);
-    setParam("circle-y", y);
-    if (getParam("type")) {
-      setParam("type", null);
-    }
   };
 
   const handleMouseUp = (e: PointerEvent<HTMLDivElement>) => {
     const circle = e.target as HTMLElement;
     circle.classList.remove("angle-active");
     setIsClicked(false);
-    setParam("circle-x", circlePosition.x);
-    setParam("circle-y", circlePosition.y);
-    updateHistoryOnCirclePositionChange(circlePosition);
+
+    dispatch("custom:updateHistoryFromProperty");
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -88,22 +77,11 @@ export function CirclePosition({
 
     if (toUpdate === "x") {
       updateCirclePosition({ x: newPosition, y: circlePosition.y });
-      updateHistoryOnCirclePositionChange({
-        x: newPosition,
-        y: circlePosition.y,
-      });
-      setParam("circle-x", newPosition);
     } else {
       updateCirclePosition({ x: circlePosition.x, y: newPosition });
-      updateHistoryOnCirclePositionChange({
-        x: newPosition,
-        y: circlePosition.y,
-      });
-      setParam("circle-y", newPosition);
     }
-    if (getParam("type")) {
-      setParam("type", null);
-    }
+
+    dispatch("custom:updateHistoryFromProperty");
   };
 
   return (

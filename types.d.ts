@@ -47,6 +47,12 @@ type GradientColor = {
   contrastColor: string;
 };
 
+type GradientStyle = {
+  type: string;
+  clrs: string;
+  end: string;
+};
+
 type Gradient = {
   type: string;
   angle: number;

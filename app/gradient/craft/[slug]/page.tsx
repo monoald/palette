@@ -308,6 +308,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       {gradient && gradientStyle && (
         <>
           <SideBar
+            gradientStyle={gradientStyle}
             setGradientTypeOpen={setGradientTypeOpen}
             setColorsOpen={setColorsOpen}
             setAngleOpen={setAngleOpen}

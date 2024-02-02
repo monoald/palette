@@ -2,6 +2,7 @@ import { getParam } from "@/app/utils/urlState";
 import { Dispatch, SetStateAction } from "react";
 
 type Props = {
+  gradientStyle: GradientStyle;
   setGradientTypeOpen: Dispatch<SetStateAction<boolean>>;
   setColorsOpen: Dispatch<SetStateAction<boolean>>;
   setAngleOpen: Dispatch<SetStateAction<boolean>>;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export default function SideBar({
+  gradientStyle,
   setGradientTypeOpen,
   setColorsOpen,
   setAngleOpen,
@@ -22,6 +24,20 @@ export default function SideBar({
   historyBack,
   historyForward,
 }: Props) {
+  const copyCodeToClipboard = () => {
+    navigator.clipboard.writeText(`.card{
+      background: ${gradientStyle.type}${gradientStyle.clrs});
+      background: -o-${gradientStyle.type}${gradientStyle.clrs});
+      background: -ms-${gradientStyle.type}${gradientStyle.clrs});
+      background: -moz-${gradientStyle.type}${gradientStyle.clrs});
+      background-size: 100% 100%;
+    }`);
+  };
+
+  const copyUrlToClipboard = () => {
+    const url = window.location.href.split("#")[0];
+    navigator.clipboard.writeText(url);
+  };
   return (
     <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">
       <ul className="relative w-fit h-10 px-4 flex flex-row justify-center items-center gap-3 rounded-full border border-primary-border list-none md:flex-col md:w-10 md:h-fit md:px-0 md:py-4">
@@ -65,7 +81,6 @@ export default function SideBar({
             <span className="icon-angle text-2xl" />
           </button>
         </li>
-
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
@@ -83,7 +98,6 @@ export default function SideBar({
             <span className="icon-move-circle text-2xl" />
           </button>
         </li>
-
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
@@ -95,7 +109,6 @@ export default function SideBar({
             <span className="icon-shuffle text-2xl" />
           </button>
         </li>
-
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777]"
@@ -108,7 +121,6 @@ export default function SideBar({
             <span className="icon-undo text-2xl" />
           </button>
         </li>
-
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777] disabled:pointer-events-none"
@@ -121,6 +133,29 @@ export default function SideBar({
             onClick={historyForward}
           >
             <span className="icon-redo text-2xl" />
+          </button>
+        </li>
+        <li>
+          <button
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777] disabled:pointer-events-none"
+            tooltip="true"
+            tooltip-content="Copy code"
+            tooltip-position="left"
+            onClick={copyCodeToClipboard}
+          >
+            <span className="icon-code text-2xl" />
+          </button>
+        </li>
+
+        <li>
+          <button
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
+            tooltip="true"
+            tooltip-content="Share palette"
+            tooltip-position="left"
+            onClick={copyUrlToClipboard}
+          >
+            <span className="icon-share text-2xl" />
           </button>
         </li>
       </ul>

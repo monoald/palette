@@ -46,7 +46,7 @@ export function CirclePosition({
     circle.classList.remove("angle-active");
     setIsClicked(false);
 
-    dispatch("custom:updateHistoryFromProperty");
+    dispatch("custom:updateHistoryFromPicker", { updatePath: false });
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -81,7 +81,7 @@ export function CirclePosition({
       updateCirclePosition({ x: circlePosition.x, y: newPosition });
     }
 
-    dispatch("custom:updateHistoryFromProperty");
+    dispatch("custom:updateHistoryFromPicker", { updatePath: false });
   };
 
   return (

@@ -41,7 +41,7 @@ export function CustomRange({ styleClrs, clrs, updateStop }: Props) {
     replacePath(newUrl);
     const stops = clrs.map((clr) => clr.stop).join("-");
     setParam("stops", stops);
-    dispatch("custom:updateHistoryFromProperty");
+    dispatch("custom:updateHistoryFromPicker", { updatePath: false });
   };
 
   return (

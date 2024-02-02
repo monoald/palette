@@ -71,36 +71,19 @@ export default function Page({ params }: { params: { slug: string } }) {
         // updateStyles
         const clrsStyle = handleUpdateColorStyle(newClrs as GradientColor[]);
         setGradientStyle((prev) => {
-          if (prev) return { ...prev, colors: clrsStyle };
+          if (prev) return { ...prev, clrs: clrsStyle };
         });
         return { ...prev, clrs: newClrs };
       }
     });
   };
 
-  const updateHistoryFromPickerHandler = () => {
+  const updateHistoryFromPickerHandler = (e: Event) => {
+    const event = e as CustomEvent;
+    const updatePath = event?.detail?.updatePath ?? true;
     setGradient((prev) => {
       if (prev) {
-        const newUrl = prev.clrs
-          .map((clr) => clr.hex.replace("#", ""))
-          .join("-") as string;
-
-        replacePath(newUrl);
-        return {
-          ...prev,
-          history: {
-            data: [...prev.history.data, newUrl + window.location.search],
-            current: prev.history.current + 1,
-          },
-        };
-      }
-    });
-  };
-
-  const updateHistoryFromPropertyHandler = () => {
-    setGradient((prev) => {
-      if (prev) {
-        const history = handleUpdateHistory(prev);
+        const history = handleUpdateHistory(prev, updatePath);
 
         return {
           ...prev,
@@ -112,16 +95,8 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   // PALETTE
   useStateHandler(
-    [
-      updatePaletteFromPickerHandler,
-      updateHistoryFromPickerHandler,
-      updateHistoryFromPropertyHandler,
-    ],
-    [
-      "custom:updatePaletteFromPicker",
-      "custom:updateHistoryFromPicker",
-      "custom:updateHistoryFromProperty",
-    ]
+    [updatePaletteFromPickerHandler, updateHistoryFromPickerHandler],
+    ["custom:updatePaletteFromPicker", "custom:updateHistoryFromPicker"]
   );
 
   // OPTIONS

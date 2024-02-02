@@ -45,7 +45,7 @@ export function AngleInput({ angle, updateAngle, setAngleOpen }: Props) {
     const circle = e.target as HTMLElement;
     circle.classList.remove("angle-active");
     setIsClicked(false);
-    dispatch("custom:updateHistoryFromProperty");
+    dispatch("custom:updateHistoryFromPicker", { updatePath: false });
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -81,7 +81,7 @@ export function AngleInput({ angle, updateAngle, setAngleOpen }: Props) {
     const newAngle = +target.value;
 
     updateAngle(newAngle);
-    dispatch("custom:updateHistoryFromProperty");
+    dispatch("custom:updateHistoryFromPicker", { updatePath: false });
   };
 
   return (

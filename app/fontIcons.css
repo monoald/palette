@@ -147,3 +147,15 @@
 .icon-animation:before {
   content: "\e924";
 }
+.icon-download:before {
+  content: "\e925";
+}
+.icon-font:before {
+  content: "\e926";
+}
+.icon-save:before {
+  content: "\e927";
+}
+.icon-upload:before {
+  content: "\e928";
+}

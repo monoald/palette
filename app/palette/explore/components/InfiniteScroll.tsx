@@ -1,7 +1,8 @@
 "use client";
-import { getPublicPalettes } from "@/lib/getPublicPalettes";
+
 import { useIntersect } from "../../../hooks/useIntersect";
 import { useState } from "react";
+import { getPublicPalettes } from "./getPublicPalettes";
 
 let page = 2;
 

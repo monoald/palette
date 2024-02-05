@@ -1,7 +1,7 @@
-import { PaletteType } from "@/lib/getPublicPalettes";
 import { MotionDiv } from "@/app/components/FramerMotion";
 import { getMainContrastColor } from "@/app/utils/createColorObject";
 import { hexToRgb } from "colors-kit";
+import { PaletteType } from "./getPublicPalettes";
 
 type Props = {
   palette: PaletteType;

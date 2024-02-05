@@ -1,12 +1,11 @@
 "use server";
 
-import Card from "../app/palette/explore/components/Card";
+import Card from "./Card";
 
 export type PaletteType = {
   id: string;
   colors: string;
   colorsArr: string[];
-  users: string[];
   length: number;
   savedCount: number;
   saved: boolean;

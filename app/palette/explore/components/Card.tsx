@@ -20,7 +20,7 @@ export default function Card({ palette, index }: Props) {
       initial="hidden"
       animate="visible"
       transition={{
-        delay: index * 0.15,
+        delay: index * 0.2,
         ease: "easeInOut",
         duration: 0.5,
       }}

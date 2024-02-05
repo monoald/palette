@@ -1,4 +1,4 @@
-import { PaletteType } from "@/app/action";
+import { PaletteType } from "@/lib/getPublicPalettes";
 import { MotionDiv } from "@/app/components/FramerMotion";
 import { getMainContrastColor } from "@/app/utils/createColorObject";
 import { hexToRgb } from "colors-kit";

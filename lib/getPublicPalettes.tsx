@@ -1,6 +1,6 @@
 "use server";
 
-import Card from "./palette/explore/components/Card";
+import Card from "../app/palette/explore/components/Card";
 
 export type PaletteType = {
   id: string;
@@ -13,7 +13,7 @@ export type PaletteType = {
   upId: string;
 };
 
-export const fetchPublicPalettes = async (
+export const getPublicPalettes = async (
   page: number
 ): Promise<JSX.Element[]> => {
   const response: PaletteType[] = await fetch(

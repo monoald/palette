@@ -1,16 +1,15 @@
 "use client";
-import { PaletteType, fetchPublicPalettes } from "@/app/action";
+import { getPublicPalettes } from "@/lib/getPublicPalettes";
 import { useIntersect } from "../../../hooks/useIntersect";
 import { useState } from "react";
-import Card from "./Card";
 
 let page = 2;
 
-export default function PaginationTrigger() {
+export default function InfiniteScroll() {
   const [data, setData] = useState<JSX.Element[]>();
   const [keepLoading, setKeepLoading] = useState(true);
   const [ref] = useIntersect(async () => {
-    const palettes = await fetchPublicPalettes(page);
+    const palettes = await getPublicPalettes(page);
 
     if (palettes.length === 0) setKeepLoading(false);
 

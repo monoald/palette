@@ -1,5 +1,3 @@
-const parser = new DOMParser();
-
 function setAttributes(
   paths: HTMLCollectionOf<SVGPathElement | SVGClipPathElement | SVGSVGElement>,
   color: string
@@ -23,6 +21,7 @@ function setAttributes(
 }
 
 export function changeSvgColor(icon: string, color: string): string {
+  const parser = new DOMParser();
   const svgDoc = parser.parseFromString(icon, "image/svg+xml");
   const svgs = svgDoc.getElementsByTagName("svg");
   setAttributes(svgs, color);

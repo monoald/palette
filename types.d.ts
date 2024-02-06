@@ -66,6 +66,7 @@ type Gradient = {
 declare namespace JSX {
   interface IntrinsicElements {
     button: ExtendedButton;
+    div: ExtendedDiv;
   }
 }
 
@@ -74,6 +75,13 @@ interface ExtendedButton
     React.ButtonHTMLAttributes,
     HTMLButtonElement
   > {
+  tooltip?: string;
+  "tooltip-content"?: string;
+  "tooltip-position"?: "left" | "right" | "top" | "bottom";
+}
+
+interface ExtendedDiv
+  extends React.DetailedHTMLProps<React.DivHTMLAttributes, HTMLDivElement> {
   tooltip?: string;
   "tooltip-content"?: string;
   "tooltip-position"?: "left" | "right" | "top" | "bottom";

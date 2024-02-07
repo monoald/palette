@@ -8,11 +8,11 @@ const navContent = [
     subNav: [
       {
         name: "Explore",
-        route: "/palettes",
+        route: "/palette/explore",
       },
       {
         name: "Craft",
-        route: "/palettes/craft",
+        route: "/palette/craft",
       },
     ],
   },
@@ -21,7 +21,7 @@ const navContent = [
     subNav: [
       {
         name: "Explore",
-        route: "/colors",
+        route: "/colors/explore",
       },
     ],
   },
@@ -30,11 +30,11 @@ const navContent = [
     subNav: [
       {
         name: "Explore",
-        route: "/gradients",
+        route: "/gradient/explore",
       },
       {
         name: "Craft",
-        route: "/gradients/craft",
+        route: "/gradient/craft",
       },
     ],
   },
@@ -43,7 +43,7 @@ const navContent = [
     subNav: [
       {
         name: "Craft",
-        route: "/font-icons/craft",
+        route: "/font-icon/craft",
       },
     ],
   },

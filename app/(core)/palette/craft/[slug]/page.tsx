@@ -4,7 +4,7 @@ import { PointerEvent, useEffect, useRef, useState } from "react";
 import { Palette as PaletteType } from "colors-kit";
 
 import { createColorObject } from "@/app/utils/createColorObject";
-import { useKeyDown } from "@/app/hooks/useKeyDown";
+import { useKeyDown } from "@/app/(core)/hooks/useKeyDown";
 import {
   handleChangePalette,
   handleCreatePaletteFromUrl,
@@ -15,11 +15,11 @@ import {
 
 import PalettePlayground from "./components/PalettePlayground";
 import SideBar from "./components/SideBar";
-import OptionBar from "../../../components/OptionBar";
+import OptionBar from "../../../../components/OptionBar";
 import { replacePath } from "@/app/utils/urlState";
 import { options } from "./data/options";
 import { Picker } from "@/app/components/picker/Picker";
-import useStateHandler from "@/app/hooks/useStateHandler";
+import useStateHandler from "@/app/(core)/hooks/useStateHandler";
 import { ContrastCalculator } from "@/app/components/ContrastCalculator";
 import { ImageColorExtractor } from "@/app/components/imageExtractor/ImageColorExtractor";
 

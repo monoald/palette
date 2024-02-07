@@ -1,6 +1,6 @@
 import { Cmyk, colorFormatConverter } from "colors-kit";
 import { BackgroundColor, RangeInput } from "../RangeInput";
-import { dispatch } from "@/app/hooks/useStateHandler";
+import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import { keepNumberInRange } from "@/app/utils/keepNumberInRange";
 
 type Props = {

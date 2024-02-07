@@ -1,4 +1,4 @@
-import { dispatch } from "@/app/hooks/useStateHandler";
+import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 
 export interface BackgroundColor {
   start: string;

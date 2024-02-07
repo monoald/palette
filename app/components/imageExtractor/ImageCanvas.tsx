@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { extractPalette, hexToRgb, rgbToHex } from "colors-kit";
 import { getMainContrastColor } from "@/app/utils/createColorObject";
 import { keepNumberInRange } from "@/app/utils/keepNumberInRange";
-import { dispatch } from "@/app/hooks/useStateHandler";
+import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 
 type Props = {
   url: string;

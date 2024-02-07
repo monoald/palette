@@ -1,5 +1,5 @@
 "use client";
-import { dispatch } from "@/app/hooks/useStateHandler";
+import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import { replacePath, setParam } from "@/app/utils/urlState";
 import { PointerEvent, useRef, useState } from "react";
 

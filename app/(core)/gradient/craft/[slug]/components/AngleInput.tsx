@@ -1,7 +1,7 @@
 import { Dispatch, PointerEvent, SetStateAction, useState } from "react";
 
 import "./AngleInput.css";
-import { dispatch } from "@/app/hooks/useStateHandler";
+import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 
 type Props = {
   angle: number;

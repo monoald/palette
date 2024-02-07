@@ -9,7 +9,7 @@ import OptionBar from "@/app/components/OptionBar";
 import { CirclePosition } from "./components/CirclePosition";
 import { ChangePalette } from "./components/ChangePalette";
 import { Picker } from "@/app/components/picker/Picker";
-import useStateHandler from "@/app/hooks/useStateHandler";
+import useStateHandler from "@/app/(core)/hooks/useStateHandler";
 import {
   handleAddColor,
   handleURLToGradient,
@@ -21,7 +21,7 @@ import {
   handleUpdateHistory,
 } from "./handlers";
 import { CustomRange } from "./components/CustomRange";
-import { useKeyDown } from "@/app/hooks/useKeyDown";
+import { useKeyDown } from "@/app/(core)/hooks/useKeyDown";
 
 const gradientTypes = ["horizontal", "vertical", "circle", "conic"];
 const gradientAnimations = ["horizontal", "vertical", "spin", "none"];

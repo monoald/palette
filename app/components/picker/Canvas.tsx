@@ -4,7 +4,7 @@ import {
   findColorCoordinates,
 } from "../../utils/pickerHandlers";
 import { useEffect, useRef, useState } from "react";
-import { dispatch } from "@/app/hooks/useStateHandler";
+import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 
 type Props = {
   clr: { id: string; hex: string; formats: Formats };

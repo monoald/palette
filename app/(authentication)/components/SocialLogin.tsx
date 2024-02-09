@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { openPopUp } from "../login/utils/openPopUp";
-import { User, useUserStore } from "@/store";
+import { UserState, useUserStore } from "@/store";
 
 type Props = {
   src: string;
@@ -20,17 +20,20 @@ export default function SocialLogin({ src, url }: Props) {
 
     if (key) {
       const body = JSON.stringify({ key: key });
-      const credentials: { user: User; token: string } | { error: string } =
-        await fetch("http://localhost:3000/api/v1/auth/signin", {
+      const credentials: UserState = await fetch(
+        "http://localhost:3000/api/v1/auth/signin",
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body,
-        }).then((res) => res.json());
+        }
+      ).then((res) => res.json());
 
-      if ("token" in credentials && "user" in credentials) {
-        const { user, token } = credentials;
+      const { user, token } = credentials;
+
+      if (user && token) {
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", JSON.stringify(token));
         updateUser(user, token);

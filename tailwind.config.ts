@@ -101,6 +101,11 @@ const config: Config = {
           "77%": { bottom: "7%", left: "13%", width: "80px", height: "15px" },
           "100%": { bottom: "10%", left: "50%", width: "96px", height: "48px" },
         },
+        "item-loading": {
+          "0%": { opacity: "100%" },
+          "50%": { opacity: "0%" },
+          "100%": { opacity: "100%" },
+        },
       },
       animation: {
         "slide-left": "slide-left 0.3s ease-in-out",
@@ -109,6 +114,7 @@ const config: Config = {
         "back-2": "back-2 20s infinite",
         "back-3": "back-3 20s infinite",
         "back-4": "back-4 20s infinite",
+        "item-loading": "item-loading 3s infinite",
       },
     },
   },

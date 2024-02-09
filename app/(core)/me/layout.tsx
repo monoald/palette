@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useUserStore } from "@/store";
 import MainLoader from "./components/MainLoader";
 import { getUserCollections } from "./action";
+import SecondaryLoader from "./components/SecondaryLoader";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -42,11 +43,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     if (pathname === "/me") {
       return <MainLoader />;
     }
-    return (
-      <div className="w-full h-screen flex items-center justify-center">
-        <span className="mx-auto" id="loader"></span>
-      </div>
-    );
+    return <SecondaryLoader />;
   } else {
     return <>{children}</>;
   }

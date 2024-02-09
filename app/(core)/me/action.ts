@@ -16,10 +16,12 @@ type PaletteCollection = {
   length: number;
 };
 
+type IconsCollection = BasicCollection & { thumbnail: string };
+
 export type Collections = {
   colors: BasicCollection[];
   gradients: GradientCollection[];
-  icons: BasicCollection[] & { thumbnail: string }[];
+  icons: IconsCollection[];
   palettes: PaletteCollection[];
 };
 

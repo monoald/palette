@@ -19,7 +19,7 @@ import OptionBar from "../../../../components/OptionBar";
 import { replacePath } from "@/app/utils/urlState";
 import { options } from "./data/options";
 import { Picker } from "@/app/components/picker/Picker";
-import useStateHandler from "@/app/(core)/hooks/useStateHandler";
+import useStateHandler, { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import { ContrastCalculator } from "@/app/components/ContrastCalculator";
 import { ImageColorExtractor } from "@/app/components/imageExtractor/ImageColorExtractor";
 
@@ -256,6 +256,10 @@ export default function Home({ params }: { params: { slug: string } }) {
 
   const copyColor = (clr: string) => {
     navigator.clipboard.writeText(clr.replace("#", ""));
+    dispatch("custom:updateMessage", {
+      type: "error",
+      message: "Color copied to clipboard",
+    });
   };
 
   const closePicker = () => {

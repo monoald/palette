@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 
 export default function useStateHandler(
@@ -15,7 +14,7 @@ export default function useStateHandler(
         window.removeEventListener(eventNames[index], callbacks[index]);
       }
     };
-  }, []);
+  }, [callbacks, eventNames]);
 }
 
 export function dispatch(name: string, detail?: { [key: string]: any }) {

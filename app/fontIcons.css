@@ -57,7 +57,7 @@
 .icon-image:before {
   content: "\e90a";
 }
-.icon-info:before {
+.icon-info-filled:before {
   content: "\e90b";
 }
 .icon-locked:before {
@@ -81,7 +81,7 @@
 .icon-redo:before {
   content: "\e912";
 }
-.icon-rounded-check:before {
+.icon-check-filled:before {
   content: "\e913";
   @apply w-5 h-5 flex items-center justify-center rounded-full shadow-[inset_0_3px_12px_#33ff8173,inset_0_-2px_4px_#d6ffe673];
   background-image: radial-gradient(circle, #14ff6e73, #73ffa973 80%);
@@ -90,7 +90,7 @@
   -moz-background-clip: text;
   -moz-text-fill-color: transparent;
 }
-.icon-rounded-x:before {
+.icon-x-filled:before {
   content: "\e914";
   @apply w-5 h-5 flex items-center justify-center rounded-full shadow-[inset_0_3px_12px_#ff335c73,inset_0_-2px_4px_#ff618173];
   background-image: radial-gradient(circle, #ff144373, #ff738f73 80%);
@@ -158,4 +158,19 @@
 }
 .icon-upload:before {
   content: "\e928";
+}
+.icon-check-round:before {
+  content: "\e929";
+}
+.icon-danger:before {
+  content: "\e92a";
+}
+.icon-danger-filled:before {
+  content: "\e92b";
+}
+.icon-info:before {
+  content: "\e92c";
+}
+.icon-x-round:before {
+  content: "\e92d";
 }

@@ -72,7 +72,7 @@ export const ContrastCalculator = ({
             Small Text
             <span
               className={`text-2xl ${
-                contrast?.AA.smallText ? "icon-rounded-check" : "icon-rounded-x"
+                contrast?.AA.smallText ? "icon-check-filled" : "icon-x-filled"
               }`}
             />
           </p>
@@ -80,7 +80,7 @@ export const ContrastCalculator = ({
             Large Text
             <span
               className={`text-2xl ${
-                contrast?.AA.largeText ? "icon-rounded-check" : "icon-rounded-x"
+                contrast?.AA.largeText ? "icon-check-filled" : "icon-x-filled"
               }`}
             />
           </p>
@@ -88,9 +88,7 @@ export const ContrastCalculator = ({
             UI Component
             <span
               className={`text-2xl ${
-                contrast?.AA.uiComponent
-                  ? "icon-rounded-check"
-                  : "icon-rounded-x"
+                contrast?.AA.uiComponent ? "icon-check-filled" : "icon-x-filled"
               }`}
             />
           </p>
@@ -101,9 +99,7 @@ export const ContrastCalculator = ({
             Small Text
             <span
               className={`text-2xl ${
-                contrast?.AAA.smallText
-                  ? "icon-rounded-check"
-                  : "icon-rounded-x"
+                contrast?.AAA.smallText ? "icon-check-filled" : "icon-x-filled"
               }`}
             />
           </p>
@@ -111,9 +107,7 @@ export const ContrastCalculator = ({
             Large Text
             <span
               className={`text-2xl ${
-                contrast?.AAA.largeText
-                  ? "icon-rounded-check"
-                  : "icon-rounded-x"
+                contrast?.AAA.largeText ? "icon-check-filled" : "icon-x-filled"
               }`}
             />
           </p>
@@ -122,8 +116,8 @@ export const ContrastCalculator = ({
             <span
               className={`text-2xl ${
                 contrast?.AAA.uiComponent
-                  ? "icon-rounded-check"
-                  : "icon-rounded-x"
+                  ? "icon-check-filled"
+                  : "icon-x-filled"
               }`}
             />
           </p>

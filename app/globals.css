@@ -464,3 +464,44 @@ input[type="range"]::-webkit-slider-thumb {
     opacity: 0;
   }
 }
+/* MESSAGE */
+.info-icon {
+  background-image: radial-gradient(circle, #32d0f8cb, #45d6fac9 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+  text-shadow: 0 0 25px #72faffd0, 0 0 25px #72faff40, 0 0 30px #72faff40,
+    0 0 40px #72faff40, 0 0 60px #15d2ff60, 0 0 30px #72faff80,
+    0 0 98px #15d2ff60;
+}
+.check-round-icon {
+  background-image: radial-gradient(circle, #1cfa2faf, #5dfa8cb6 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+  text-shadow: 0 0 15px #5bf85bd0, 0 0 15px #5bf85b40, 0 0 20px #5bf85b40,
+    0 0 40px #5bf85b40, 0 0 60px #1dff1560, 0 0 20px #72ffad80,
+    0 0 98px #1dff1560;
+}
+.danger-icon {
+  background-image: radial-gradient(circle, #f8e322b6, #edf850b9 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+  text-shadow: 0 0 15px #fdff72d0, 0 0 15px #fdff7240, 0 0 20px #fdff7240,
+    0 0 40px #fdff7240, 0 0 60px #ffe81560, 0 0 20px #e5ff7280,
+    0 0 98px #ffe81560;
+}
+.x-round-icon {
+  background-image: radial-gradient(circle, #fd2b2b9d, #fa4848c2 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+  text-shadow: 0 0 15px #db1717b2, 0 0 15px #db1717b2, 0 0 20px #db1717b2,
+    0 0 40px #db1717b2, 0 0 60px #ff1d1560, 0 0 20px #fc575280,
+    0 0 98px #ff1d1560;
+}

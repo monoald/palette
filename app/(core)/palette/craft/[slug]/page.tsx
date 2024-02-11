@@ -122,13 +122,24 @@ export default function Home({ params }: { params: { slug: string } }) {
 
     const newColors = handleCreatePaletteFromUrl(urlPalette, colors);
 
-    setPalette({
-      history: {
-        data: [urlPalette],
-        current: 0,
-      },
-      colors: newColors,
-      isSaved: isPaletteSaved(palettes, urlPalette),
+    setPalette((prev) => {
+      if (prev) {
+        return {
+          ...prev,
+          isSaved: isPaletteSaved(
+            palettes,
+            prev.history.data[prev.history.current]
+          ),
+        };
+      }
+      return {
+        history: {
+          data: [urlPalette],
+          current: 0,
+        },
+        colors: newColors,
+        isSaved: isPaletteSaved(palettes, urlPalette),
+      };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colors, palettes]);

@@ -36,6 +36,7 @@ export function createColorObject(
   return {
     hex: hex || "",
     isLocked: attrs?.isLocked || false,
+    isSaved: attrs?.isSaved || false,
     contrastColor: getMainContrastColor(rgb),
     id: attrs?.id || makeRandomID(),
     formats: {

@@ -1,6 +1,11 @@
-import { Format, makeColorPalette } from "colors-kit";
-import { createColorObject } from "../../../../../utils/createColorObject";
-import { Palette as PaletteType, Color as ColorType } from "colors-kit";
+import {
+  Format,
+  makeColorPalette,
+  Palette as PaletteType,
+  Color as ColorType,
+} from "colors-kit";
+import { createColorObject } from "../../../../utils/createColorObject";
+import { BasicCollection } from "@/app/(core)/me/action";
 
 export function handleChangePalette(prevColors: Color[], type: PaletteType) {
   const newPalette = makeColorPalette({
@@ -24,11 +29,18 @@ export function handleChangePalette(prevColors: Color[], type: PaletteType) {
   return newColors;
 }
 
-export function handleCreatePaletteFromUrl(url: string) {
+export function handleCreatePaletteFromUrl(
+  url: string,
+  colors: BasicCollection[] | undefined
+) {
   const newPalette = url.split("-").map((clr) => "#" + clr);
 
   const newColors = newPalette.map((clr) => {
-    return createColorObject(clr, "hex");
+    return createColorObject(clr, "hex", {
+      isSaved:
+        colors?.findIndex((color) => color.name === clr.replace("#", "")) !==
+        -1,
+    });
   });
 
   return newColors;

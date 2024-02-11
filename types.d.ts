@@ -27,6 +27,7 @@ type CustomHistory = {
 type Color = {
   hex: string;
   isLocked: boolean;
+  isSaved: boolean;
   contrastColor: string;
   id: string;
   formats: Formats;

@@ -4,24 +4,27 @@ import { PointerEvent, useEffect, useRef, useState } from "react";
 import { Palette as PaletteType } from "colors-kit";
 
 import { createColorObject } from "@/app/utils/createColorObject";
+import { replacePath } from "@/app/utils/urlState";
 import { useKeyDown } from "@/app/(core)/hooks/useKeyDown";
+import useStateHandler, { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import {
   handleChangePalette,
   handleCreatePaletteFromUrl,
   handleLockColor,
   handleRemoveColor,
   handleUpdateColor,
-} from "./utils/paletteHandlers";
+} from "./handlers";
 
+import { useUserStore } from "@/store";
+import { options } from "./data/options";
+
+import { ContrastCalculator } from "@/app/components/ContrastCalculator";
+import { ImageColorExtractor } from "@/app/components/imageExtractor/ImageColorExtractor";
+import { Picker } from "@/app/components/picker/Picker";
 import PalettePlayground from "./components/PalettePlayground";
 import SideBar from "./components/SideBar";
 import OptionBar from "../../../../components/OptionBar";
-import { replacePath } from "@/app/utils/urlState";
-import { options } from "./data/options";
-import { Picker } from "@/app/components/picker/Picker";
-import useStateHandler, { dispatch } from "@/app/(core)/hooks/useStateHandler";
-import { ContrastCalculator } from "@/app/components/ContrastCalculator";
-import { ImageColorExtractor } from "@/app/components/imageExtractor/ImageColorExtractor";
+import { handleSaveColor, handleUnsaveColor } from "@/app/(core)/handlers";
 
 export default function Home({ params }: { params: { slug: string } }) {
   // PALETTE MANAGEMENT
@@ -30,6 +33,10 @@ export default function Home({ params }: { params: { slug: string } }) {
   const [paletteTypeOpen, setPaletteTypeOpen] = useState(false);
   const [colorBlind, setColorBlind] = useState("none");
   const [colorBlindOpen, setColorBlindOpen] = useState(false);
+
+  const token = useUserStore((state) => state.token);
+  const colors = useUserStore((state) => state.collections?.colors);
+  const updateColors = useUserStore((state) => state.updateColors);
 
   const updatePaletteFromPickerHandler = (e: Event) => {
     const event = e as CustomEvent;
@@ -68,7 +75,7 @@ export default function Home({ params }: { params: { slug: string } }) {
   const updatePaletteFromImgHandler = (e: Event) => {
     const event = e as CustomEvent;
     const url = event.detail.url;
-    const newColors = handleCreatePaletteFromUrl(url);
+    const newColors = handleCreatePaletteFromUrl(url, colors);
 
     setPalette((prev) => {
       if (prev)
@@ -100,7 +107,7 @@ export default function Home({ params }: { params: { slug: string } }) {
   useEffect(() => {
     const urlPalette = params.slug;
 
-    const newColors = handleCreatePaletteFromUrl(urlPalette);
+    const newColors = handleCreatePaletteFromUrl(urlPalette, colors);
 
     setPalette({
       history: {
@@ -110,7 +117,7 @@ export default function Home({ params }: { params: { slug: string } }) {
       colors: newColors,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [colors]);
 
   const changePalette = () => {
     const newColors = handleChangePalette(
@@ -260,6 +267,25 @@ export default function Home({ params }: { params: { slug: string } }) {
       type: "error",
       message: "Color copied to clipboard",
     });
+  };
+
+  const saveColor = async (
+    color: { name: string; id: string },
+    saved: boolean
+  ) => {
+    if (!token) {
+      dispatch("custom:updateMessage", {
+        type: "error",
+        message: "You must login to save a color!",
+      });
+      return;
+    }
+
+    if (saved) {
+      await handleUnsaveColor(token, color, updateColors);
+    } else {
+      await handleSaveColor(token, color, updateColors);
+    }
   };
 
   const closePicker = () => {
@@ -440,11 +466,21 @@ export default function Home({ params }: { params: { slug: string } }) {
                   style={{
                     color: clr.contrastColor,
                   }}
+                  onClick={() =>
+                    saveColor(
+                      { name: clr.hex.replace("#", ""), id: clr.id },
+                      clr.isSaved
+                    )
+                  }
                   tooltip="true"
                   tooltip-content="Save"
                   tooltip-position="bottom"
                 >
-                  <span className="icon-heart" />
+                  <span
+                    className={`${
+                      clr.isSaved ? "icon-heart-filled" : "icon-heart"
+                    }`}
+                  />
                 </button>
 
                 <button

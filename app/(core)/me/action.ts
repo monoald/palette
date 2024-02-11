@@ -1,6 +1,6 @@
 import { urlToGradient } from "./utils/urlToGradients";
 
-type BasicCollection = {
+export type BasicCollection = {
   id: string;
   name: string;
 };

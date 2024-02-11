@@ -153,44 +153,64 @@ ${spinAnimation.keyframe}`;
             tooltip-content="Gradient type"
             tooltip-position="left"
           >
-            <span className="icon-gradient-vertical text-2xl" />
+            {(getParam("type") == "horizontal" || getParam("angle")) && (
+              <span className="icon-gradient-horizontal text-2xl" />
+            )}
+            {getParam("type") == "vertical" && (
+              <span className="icon-gradient-vertical text-2xl" />
+            )}
+            {(getParam("type") == "circle" ||
+              (getParam("circle-x") && getParam("circle-y"))) && (
+              <span className="icon-gradient-circle text-2xl" />
+            )}
+            {getParam("type") === "conic" && (
+              <span className="icon-gradient-conic text-2xl" />
+            )}
           </button>
         </li>
-        <li>
-          <button
-            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
-            onClick={() => setAngleOpen(true)}
-            disabled={
-              !(
-                getParam("angle") ||
-                getParam("type") == "horizontal" ||
-                getParam("type") == "vertical"
-              )
-            }
-            tooltip="true"
-            tooltip-content="Angle"
-            tooltip-position="left"
-          >
-            <span className="icon-angle text-2xl" />
-          </button>
-        </li>
-        <li>
-          <button
-            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
-            onClick={() => setCirclePositionOpen(true)}
-            disabled={
-              !(
-                getParam("type") == "circle" ||
-                (getParam("circle-x") && getParam("circle-y"))
-              )
-            }
-            tooltip="true"
-            tooltip-content="Position circle"
-            tooltip-position="left"
-          >
-            <span className="icon-move-circle text-2xl" />
-          </button>
-        </li>
+        {(getParam("angle") ||
+          getParam("type") == "horizontal" ||
+          getParam("type") == "vertical") && (
+          <li>
+            <button
+              className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
+              onClick={() => setAngleOpen(true)}
+              disabled={
+                !(
+                  getParam("angle") ||
+                  getParam("type") == "horizontal" ||
+                  getParam("type") == "vertical"
+                )
+              }
+              tooltip="true"
+              tooltip-content="Angle"
+              tooltip-position="left"
+            >
+              <span className="icon-angle text-2xl" />
+            </button>
+          </li>
+        )}
+
+        {(getParam("type") == "circle" ||
+          (getParam("circle-x") && getParam("circle-y"))) && (
+          <li>
+            <button
+              className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
+              onClick={() => setCirclePositionOpen(true)}
+              disabled={
+                !(
+                  getParam("type") == "circle" ||
+                  (getParam("circle-x") && getParam("circle-y"))
+                )
+              }
+              tooltip="true"
+              tooltip-content="Position circle"
+              tooltip-position="left"
+            >
+              <span className="icon-move-circle text-2xl" />
+            </button>
+          </li>
+        )}
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
@@ -239,6 +259,24 @@ ${spinAnimation.keyframe}`;
             <span className="icon-redo text-2xl" />
           </button>
         </li>
+
+        <li>
+          <button
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777] disabled:pointer-events-none"
+            // onClick={savePalette}
+            tooltip="true"
+            tooltip-content="Save"
+            tooltip-position="left"
+          >
+            <span
+              // className={`${
+              //   isPaletteSaved ? "icon-heart-filled" : "icon-heart"
+              // } text-2xl`}
+              className="icon-heart text-2xl"
+            />
+          </button>
+        </li>
+
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"

@@ -46,3 +46,38 @@ export async function unsaveColor(token: string, color: string) {
     throw new PaletaError(er);
   }
 }
+
+export async function savePalette(token: string, colors: string) {
+  const isSaved = await fetch("http://localhost:3000/api/v1/palettes/save", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `bearer ${token}`,
+    },
+    body: JSON.stringify({ colors }),
+  });
+
+  if (isSaved.status !== 200) {
+    const er: PaletaErrorConstructor = await isSaved.json();
+    throw new PaletaError(er);
+  }
+}
+
+export async function unsavePalette(token: string, colors: string) {
+  const isUnsaved = await fetch(
+    "http://localhost:3000/api/v1/palettes/unsave",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${token}`,
+      },
+      body: JSON.stringify({ colors }),
+    }
+  );
+
+  if (isUnsaved.status !== 200) {
+    const er: PaletaErrorConstructor = await isUnsaved.json();
+    throw new PaletaError(er);
+  }
+}

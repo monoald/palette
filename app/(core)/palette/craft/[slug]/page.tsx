@@ -24,7 +24,14 @@ import { Picker } from "@/app/components/picker/Picker";
 import PalettePlayground from "./components/PalettePlayground";
 import SideBar from "./components/SideBar";
 import OptionBar from "../../../../components/OptionBar";
-import { handleSaveColor, handleUnsaveColor } from "@/app/(core)/handlers";
+import {
+  handleSaveColor,
+  handleSavePalette,
+  handleUnsaveColor,
+  handleUnsavePalette,
+} from "@/app/(core)/handlers";
+import { makeRandomID } from "@/app/utils/makeRandomID";
+import { isPaletteSaved } from "./utils/isPaletteSaved";
 
 export default function Home({ params }: { params: { slug: string } }) {
   // PALETTE MANAGEMENT
@@ -36,7 +43,9 @@ export default function Home({ params }: { params: { slug: string } }) {
 
   const token = useUserStore((state) => state.token);
   const colors = useUserStore((state) => state.collections?.colors);
+  const palettes = useUserStore((state) => state.collections?.palettes);
   const updateColors = useUserStore((state) => state.updateColors);
+  const updatePalettes = useUserStore((state) => state.updatePalettes);
 
   const updatePaletteFromPickerHandler = (e: Event) => {
     const event = e as CustomEvent;
@@ -48,7 +57,11 @@ export default function Home({ params }: { params: { slug: string } }) {
           event.detail.format,
           prev.colors as Color[]
         );
-        return { ...prev, colors: updatedColors };
+        const url = updatedColors
+          .map((clr) => clr.hex.replace("#", ""))
+          .join("-") as string;
+        const isSaved = isPaletteSaved(palettes, url);
+        return { ...prev, colors: updatedColors, isSaved };
       }
     });
   };
@@ -115,9 +128,10 @@ export default function Home({ params }: { params: { slug: string } }) {
         current: 0,
       },
       colors: newColors,
+      isSaved: isPaletteSaved(palettes, urlPalette),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colors]);
+  }, [colors, palettes]);
 
   const changePalette = () => {
     const newColors = handleChangePalette(
@@ -143,6 +157,7 @@ export default function Home({ params }: { params: { slug: string } }) {
             data: [...prev.history.data, newUrl],
             current: prev.history.current + 1,
           },
+          isSaved: isPaletteSaved(palettes, newUrl),
         };
     });
   };
@@ -157,6 +172,46 @@ export default function Home({ params }: { params: { slug: string } }) {
 
   const selectColorBlind = (selected: string) => {
     setColorBlind(selected);
+  };
+
+  const savePalette = async () => {
+    if (!token) {
+      dispatch("custom:updateMessage", {
+        type: "error",
+        message: "You must login to save a palette!",
+      });
+      return;
+    }
+
+    if (palette) {
+      if (palette.isSaved) {
+        await handleUnsavePalette(
+          token,
+          {
+            id: makeRandomID(),
+            colors: palette.history.data[palette.history.current],
+            colorsArr: palette.history.data[palette.history.current]
+              .split("-")
+              .map((clr) => "#" + clr),
+            length: palette?.colors.length,
+          },
+          updatePalettes
+        );
+      } else {
+        await handleSavePalette(
+          token,
+          {
+            id: makeRandomID(),
+            colors: palette.history.data[palette.history.current],
+            colorsArr: palette.history.data[palette.history.current]
+              .split("-")
+              .map((clr) => "#" + clr),
+            length: palette?.colors.length,
+          },
+          updatePalettes
+        );
+      }
+    }
   };
 
   // COLOR BLIND RESIZE
@@ -213,6 +268,7 @@ export default function Home({ params }: { params: { slug: string } }) {
             data: newHistoryData,
             current: newHistoryData.length - 1,
           },
+          isSaved: isPaletteSaved(palettes, newUrl),
         };
       }
     });
@@ -256,6 +312,7 @@ export default function Home({ params }: { params: { slug: string } }) {
             data: [...prev.history.data, newUrl],
             current: prev.history.current++,
           },
+          isSaved: isPaletteSaved(palettes, newUrl),
         };
       }
     });
@@ -331,6 +388,7 @@ export default function Home({ params }: { params: { slug: string } }) {
             ...prev.history,
             current,
           },
+          isSaved: isPaletteSaved(palettes, newUrl),
         };
       }
     });
@@ -356,6 +414,7 @@ export default function Home({ params }: { params: { slug: string } }) {
             ...prev.history,
             current,
           },
+          isSaved: isPaletteSaved(palettes, newUrl),
         };
       }
     });
@@ -379,6 +438,8 @@ export default function Home({ params }: { params: { slug: string } }) {
           historyForward={historyForward}
           paletteHistory={palette.history}
           toggleImg={toggleImg}
+          savePalette={savePalette}
+          isPaletteSaved={palette.isSaved}
         />
       )}
       <OptionBar

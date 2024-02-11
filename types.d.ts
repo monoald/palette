@@ -38,6 +38,7 @@ type Palette = {
   history: CustomHistory;
   colors: Array<Color>;
   currentColor?: string;
+  isSaved: boolean;
 };
 
 type GradientColor = {

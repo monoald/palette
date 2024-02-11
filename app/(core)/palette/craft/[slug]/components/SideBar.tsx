@@ -8,6 +8,8 @@ type Props = {
   historyForward: () => void;
   paletteHistory: CustomHistory;
   toggleImg: () => void;
+  savePalette: () => void;
+  isPaletteSaved: boolean;
 };
 
 export default function SideBar({
@@ -18,6 +20,8 @@ export default function SideBar({
   historyForward,
   paletteHistory,
   toggleImg,
+  savePalette,
+  isPaletteSaved,
 }: Props) {
   const copyPaletteToClipboard = () => {
     const url = window.location.href.split("#")[0];
@@ -102,21 +106,16 @@ export default function SideBar({
 
         <li>
           <button
-            className="option palette-like"
-            // onClick={saveHandler}
-            data-tooltip
-            // data-colors={history.data[history.currentIndex]}
-            // data-saved={isSaved}
-            // data-id={savedId}
+            className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777] disabled:pointer-events-none"
+            onClick={savePalette}
             tooltip="true"
             tooltip-content="Save"
             tooltip-position="left"
           >
             <span
-            // className={`
-            //   option__icon icon
-            //   icon-heart${isSaved ? "-filled" : ""}
-            // `}
+              className={`${
+                isPaletteSaved ? "icon-heart-filled" : "icon-heart"
+              } text-2xl`}
             />
           </button>
         </li>

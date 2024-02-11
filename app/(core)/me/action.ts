@@ -9,8 +9,9 @@ type GradientCollection = BasicCollection & {
   style: string;
 };
 
-type PaletteCollection = {
+export type PaletteCollection = {
   id: string;
+  upId: string;
   colors: string;
   colorsArr: string[];
   length: number;

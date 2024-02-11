@@ -1,5 +1,9 @@
 import { create } from "zustand";
-import { BasicCollection, Collections } from "./app/(core)/me/action";
+import {
+  BasicCollection,
+  Collections,
+  PaletteCollection,
+} from "./app/(core)/me/action";
 
 export type User = {
   avatar: string;
@@ -17,6 +21,10 @@ type Actions = {
   updateUser: (user: User, token: string) => void;
   updateCollections: (collections: Collections) => void;
   updateColors: (type: string, payload: BasicCollection | string) => void;
+  updatePalettes: (
+    type: string,
+    payload: Partial<PaletteCollection> | string
+  ) => void;
 };
 
 function handleUpdateColors(
@@ -54,6 +62,41 @@ function handleUpdateColors(
   return state;
 }
 
+function handleUpdatePalettes(
+  state: UserState & Actions,
+  type: string,
+  payload: any
+): Partial<UserState & Actions> {
+  if (type === "save") {
+    if (state.collections) {
+      return {
+        ...state,
+        collections: {
+          ...state.collections,
+          palettes: [...state.collections.palettes, payload],
+        },
+      };
+    }
+  } else if (type === "unsave") {
+    if (state.collections?.palettes) {
+      const newColors = [...state.collections.palettes];
+      const colorIndex = state.collections.palettes.findIndex(
+        (palette) => palette.colors === payload
+      );
+
+      if (colorIndex !== -1) {
+        newColors?.splice(colorIndex, 1);
+
+        return {
+          ...state,
+          collections: { ...state.collections, palettes: newColors },
+        };
+      }
+    }
+  }
+  return state;
+}
+
 export const useUserStore = create<UserState & Actions>((set) => ({
   user: null,
   token: null,
@@ -62,4 +105,6 @@ export const useUserStore = create<UserState & Actions>((set) => ({
   updateCollections: (collections) => set(() => ({ collections })),
   updateColors: (type, payload) =>
     set((state) => handleUpdateColors(state, type, payload)),
+  updatePalettes: (type, payload) =>
+    set((state) => handleUpdatePalettes(state, type, payload)),
 }));

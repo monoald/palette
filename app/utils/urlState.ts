@@ -32,8 +32,7 @@ export function setParam(name: string, value: string | number | null): void {
 export function setParams(
   params: { name: string; value: string | number | null }[]
 ): string {
-  const search = window.location.search;
-  const urlParams = new URLSearchParams(search);
+  const urlParams = new URLSearchParams();
 
   for (const param of params) {
     if (param.value) {

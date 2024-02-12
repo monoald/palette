@@ -9,7 +9,7 @@ import OptionBar from "@/app/components/OptionBar";
 import { CirclePosition } from "./components/CirclePosition";
 import { ChangePalette } from "./components/ChangePalette";
 import { Picker } from "@/app/components/picker/Picker";
-import useStateHandler from "@/app/(core)/hooks/useStateHandler";
+import useStateHandler, { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import {
   handleAddColor,
   handleURLToGradient,
@@ -22,15 +22,25 @@ import {
 } from "./handlers";
 import { CustomRange } from "./components/CustomRange";
 import { useKeyDown } from "@/app/(core)/hooks/useKeyDown";
+import { useUserStore } from "@/store";
+import { isGradientSaved } from "./utils/isGradientSaved";
+import { makeRandomID } from "@/app/utils/makeRandomID";
+import {
+  handleSaveGradient,
+  handleUnsaveGradient,
+} from "@/app/(core)/handlers";
 
 const gradientTypes = ["horizontal", "vertical", "circle", "conic"];
 const gradientAnimations = ["horizontal", "vertical", "spin", "none"];
 
 export default function Page({ params }: { params: { slug: string } }) {
   const searchParams = useSearchParams();
-
   const [gradient, setGradient] = useState<Gradient>();
   const [gradientStyle, setGradientStyle] = useState<GradientStyle>();
+
+  const gradients = useUserStore((state) => state.collections?.gradients);
+  const token = useUserStore((state) => state.token);
+  const updateGradients = useUserStore((state) => state.updateGradients);
 
   useEffect(() => {
     const [newGradient, newStyle] = handleURLToGradient(
@@ -38,9 +48,23 @@ export default function Page({ params }: { params: { slug: string } }) {
       searchParams as ReadonlyURLSearchParams
     );
 
-    setGradient(newGradient);
-    setGradientStyle(newStyle);
-  }, [params.slug, searchParams]);
+    setGradient((prev) => {
+      if (prev) {
+        return {
+          ...prev,
+          isSaved: isGradientSaved(
+            gradients,
+            prev.history.data[prev.history.current]
+          ),
+        };
+      }
+      setGradientStyle(newStyle);
+      return {
+        ...newGradient,
+        isSaved: isGradientSaved(gradients, params.slug),
+      };
+    });
+  }, [gradients, params.slug, searchParams]);
 
   const changeGradient = () => {
     setGradient((prev) => {
@@ -48,7 +72,13 @@ export default function Page({ params }: { params: { slug: string } }) {
         const [newGradient, newStyle] = handleCraftGradient(prev.history);
 
         setGradientStyle(newStyle);
-        return newGradient;
+        return {
+          ...newGradient,
+          isSaved: isGradientSaved(
+            gradients,
+            newGradient.history.data[newGradient.history.current]
+          ),
+        };
       }
     });
   };
@@ -73,7 +103,10 @@ export default function Page({ params }: { params: { slug: string } }) {
         setGradientStyle((prev) => {
           if (prev) return { ...prev, clrs: clrsStyle };
         });
-        return { ...prev, clrs: newClrs };
+        return {
+          ...prev,
+          clrs: newClrs,
+        };
       }
     });
   };
@@ -88,6 +121,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         return {
           ...prev,
           history,
+          isSaved: isGradientSaved(gradients, history.data[history.current]),
         };
       }
     });
@@ -98,6 +132,40 @@ export default function Page({ params }: { params: { slug: string } }) {
     [updatePaletteFromPickerHandler, updateHistoryFromPickerHandler],
     ["custom:updatePaletteFromPicker", "custom:updateHistoryFromPicker"]
   );
+
+  const saveGradient = async () => {
+    if (!token) {
+      dispatch("custom:updateMessage", {
+        type: "error",
+        message: "You must login to save a gradient!",
+      });
+      return;
+    }
+
+    if (gradient && gradientStyle) {
+      if (gradient.isSaved) {
+        await handleUnsaveGradient(
+          token,
+          {
+            id: makeRandomID(),
+            name: gradient.history.data[gradient.history.current],
+            style: gradientStyle.type + gradientStyle.clrs + gradientStyle.end,
+          },
+          updateGradients
+        );
+      } else {
+        await handleSaveGradient(
+          token,
+          {
+            id: makeRandomID(),
+            name: gradient.history.data[gradient.history.current],
+            style: gradientStyle.type + gradientStyle.clrs + gradientStyle.end,
+          },
+          updateGradients
+        );
+      }
+    }
+  };
 
   // OPTIONS
   const [gradientTypeOpen, setGradientTypeOpen] = useState(false);
@@ -116,7 +184,11 @@ export default function Page({ params }: { params: { slug: string } }) {
 
         const history = handleUpdateHistory(newGradient);
 
-        return { ...newGradient, history };
+        return {
+          ...newGradient,
+          history,
+          isSaved: isGradientSaved(gradients, history.data[history.current]),
+        };
       }
     });
   };
@@ -124,7 +196,12 @@ export default function Page({ params }: { params: { slug: string } }) {
     setGradient((prev) => {
       if (prev) {
         const history = handleUpdateHistory({ ...prev, animation: selected });
-        return { ...prev, animation: selected, history };
+        return {
+          ...prev,
+          animation: selected,
+          history,
+          isSaved: isGradientSaved(gradients, history.data[history.current]),
+        };
       }
     });
   };
@@ -189,7 +266,9 @@ export default function Page({ params }: { params: { slug: string } }) {
         );
 
         setGradientStyle(newStyle);
-        return newGradient;
+        return {
+          ...newGradient,
+        };
       }
     });
   };
@@ -257,6 +336,10 @@ export default function Page({ params }: { params: { slug: string } }) {
             ...prev.history,
             current,
           },
+          isSaved: isGradientSaved(
+            gradients,
+            newGradient.history.data[newGradient.history.current]
+          ),
         };
       }
     });
@@ -283,6 +366,10 @@ export default function Page({ params }: { params: { slug: string } }) {
             ...prev.history,
             current,
           },
+          isSaved: isGradientSaved(
+            gradients,
+            newGradient.history.data[newGradient.history.current]
+          ),
         };
       }
     });
@@ -304,6 +391,8 @@ export default function Page({ params }: { params: { slug: string } }) {
             historyBack={historyBack}
             historyForward={historyForward}
             animation={gradient.animation}
+            saveGradient={saveGradient}
+            isSaved={gradient.isSaved}
           />
           <OptionBar
             open={gradientTypeOpen}

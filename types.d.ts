@@ -63,6 +63,7 @@ type Gradient = {
   currentColor?: string;
   history: CustomHistory;
   animation: string;
+  isSaved: boolean;
 };
 
 declare namespace JSX {

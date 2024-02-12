@@ -13,6 +13,8 @@ type Props = {
   historyBack: () => void;
   historyForward: () => void;
   animation: string;
+  saveGradient: () => void;
+  isSaved: boolean;
 };
 
 const horizontalAnimation = {
@@ -71,6 +73,8 @@ export default function SideBar({
   historyBack,
   historyForward,
   animation,
+  saveGradient,
+  isSaved,
 }: Props) {
   const copyCodeToClipboard = () => {
     let code = "";
@@ -263,16 +267,15 @@ ${spinAnimation.keyframe}`;
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300 disabled:text-[#777777] disabled:pointer-events-none"
-            // onClick={savePalette}
+            onClick={saveGradient}
             tooltip="true"
             tooltip-content="Save"
             tooltip-position="left"
           >
             <span
-              // className={`${
-              //   isPaletteSaved ? "icon-heart-filled" : "icon-heart"
-              // } text-2xl`}
-              className="icon-heart text-2xl"
+              className={`${
+                isSaved ? "icon-heart-filled" : "icon-heart"
+              } text-2xl`}
             />
           </button>
         </li>

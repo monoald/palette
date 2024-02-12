@@ -43,11 +43,13 @@ export default function page() {
 
   if (!(angle === 90 || angle === 0)) {
     paramsObject["angle"] = angle;
+    delete paramsObject["type"];
   }
 
   if (circlePosition.x !== 50 && circlePosition.y !== 50) {
     paramsObject["circle-x"] = circlePosition.x;
     paramsObject["circle-y"] = circlePosition.y;
+    delete paramsObject["type"];
   }
 
   const newParams = new URLSearchParams(paramsObject).toString();

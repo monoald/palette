@@ -2,6 +2,7 @@ import { create } from "zustand";
 import {
   BasicCollection,
   Collections,
+  GradientCollection,
   PaletteCollection,
 } from "./app/(core)/me/action";
 
@@ -24,6 +25,10 @@ type Actions = {
   updatePalettes: (
     type: string,
     payload: Partial<PaletteCollection> | string
+  ) => void;
+  updateGradients: (
+    type: string,
+    payload: Partial<GradientCollection> | string
   ) => void;
 };
 
@@ -79,17 +84,52 @@ function handleUpdatePalettes(
     }
   } else if (type === "unsave") {
     if (state.collections?.palettes) {
-      const newColors = [...state.collections.palettes];
+      const newPalettes = [...state.collections.palettes];
       const colorIndex = state.collections.palettes.findIndex(
         (palette) => palette.colors === payload
       );
 
       if (colorIndex !== -1) {
-        newColors?.splice(colorIndex, 1);
+        newPalettes?.splice(colorIndex, 1);
 
         return {
           ...state,
-          collections: { ...state.collections, palettes: newColors },
+          collections: { ...state.collections, palettes: newPalettes },
+        };
+      }
+    }
+  }
+  return state;
+}
+
+function handleUpdateGradients(
+  state: UserState & Actions,
+  type: string,
+  payload: any
+): Partial<UserState & Actions> {
+  if (type === "save") {
+    if (state.collections) {
+      return {
+        ...state,
+        collections: {
+          ...state.collections,
+          gradients: [...state.collections.gradients, payload],
+        },
+      };
+    }
+  } else if (type === "unsave") {
+    if (state.collections?.gradients) {
+      const newGradients = [...state.collections.gradients];
+      const colorIndex = state.collections.gradients.findIndex(
+        (gradient) => gradient.name === payload
+      );
+
+      if (colorIndex !== -1) {
+        newGradients?.splice(colorIndex, 1);
+
+        return {
+          ...state,
+          collections: { ...state.collections, gradients: newGradients },
         };
       }
     }
@@ -107,4 +147,6 @@ export const useUserStore = create<UserState & Actions>((set) => ({
     set((state) => handleUpdateColors(state, type, payload)),
   updatePalettes: (type, payload) =>
     set((state) => handleUpdatePalettes(state, type, payload)),
+  updateGradients: (type, payload) =>
+    set((state) => handleUpdateGradients(state, type, payload)),
 }));

@@ -81,3 +81,38 @@ export async function unsavePalette(token: string, colors: string) {
     throw new PaletaError(er);
   }
 }
+
+export async function saveGradient(token: string, name: string) {
+  const isSaved = await fetch("http://localhost:3000/api/v1/gradients/save", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `bearer ${token}`,
+    },
+    body: JSON.stringify({ name }),
+  });
+
+  if (isSaved.status !== 200) {
+    const er: PaletaErrorConstructor = await isSaved.json();
+    throw new PaletaError(er);
+  }
+}
+
+export async function unsaveGradient(token: string, name: string) {
+  const isUnsaved = await fetch(
+    "http://localhost:3000/api/v1/gradients/unsave",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${token}`,
+      },
+      body: JSON.stringify({ name }),
+    }
+  );
+
+  if (isUnsaved.status !== 200) {
+    const er: PaletaErrorConstructor = await isUnsaved.json();
+    throw new PaletaError(er);
+  }
+}

@@ -99,6 +99,7 @@ export function handleURLToGradient(
     circlePosition,
     history,
     animation,
+    isSaved: false,
   };
 
   const style = createStyle(gradient);
@@ -359,6 +360,7 @@ function randomGradient(history: CustomHistory): Gradient {
     circlePosition,
     history: newHistory,
     animation: "none",
+    isSaved: false,
   };
 }
 
@@ -379,10 +381,6 @@ function updateParams(
           : type,
     },
     {
-      name: "stops",
-      value: stops ? stops : null,
-    },
-    {
       name: "angle",
       value: angle === 90 || angle === 0 ? null : angle,
     },
@@ -401,6 +399,10 @@ function updateParams(
         type !== "circle"
           ? null
           : circlePosition.y,
+    },
+    {
+      name: "stops",
+      value: stops ? stops : null,
     },
     { name: "animation", value: animation === "none" ? null : animation },
   ]);

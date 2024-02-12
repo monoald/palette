@@ -1,12 +1,17 @@
 import {
   PaletaError,
   saveColor,
+  saveGradient,
   savePalette,
   unsaveColor,
   unsavePalette,
 } from "./actions";
 import { dispatch } from "./hooks/useStateHandler";
-import { BasicCollection, PaletteCollection } from "./me/action";
+import {
+  BasicCollection,
+  GradientCollection,
+  PaletteCollection,
+} from "./me/action";
 
 export async function handleSaveColor(
   token: string,
@@ -155,6 +160,87 @@ export async function handleUnsavePalette(
           },
           callbackCancel: () => {
             updatePalettes("unsave", palette);
+            return true;
+          },
+        });
+      }
+    }
+    return false;
+  }
+}
+
+export async function handleSaveGradient(
+  token: string,
+  gradient: Partial<GradientCollection>,
+  updateGradients: (
+    type: string,
+    payload: Partial<GradientCollection> | string
+  ) => void
+) {
+  try {
+    await saveGradient(token, gradient.name as string);
+
+    dispatch("custom:updateMessage", {
+      type: "success",
+      message: "Gradient saved successfully!",
+    });
+    updateGradients("save", gradient);
+    return true;
+  } catch (error) {
+    if (error instanceof PaletaError) {
+      if (error.statusCode === 409) {
+        dispatch("custom:updateOptionMessage", {
+          message: "Gradient already saved, do you want to unsave it?",
+          callbackContinue: async () => {
+            handleUnsavePalette(token, gradient, updateGradients);
+            return false;
+          },
+          callbackCancel: () => {
+            updateGradients("save", gradient);
+            return true;
+          },
+        });
+      } else {
+        dispatch("custom:updateMessage", {
+          type: "error",
+          message: error.message,
+        });
+      }
+    }
+
+    return false;
+  }
+}
+
+export async function handleUnsaveGradient(
+  token: string,
+  gradient: Partial<GradientCollection>,
+  updateGradients: (
+    type: string,
+    payload: Partial<GradientCollection> | string
+  ) => void
+) {
+  try {
+    await unsavePalette(token, gradient.name as string);
+
+    dispatch("custom:updateMessage", {
+      type: "success",
+      message: "Gradient unsaved successfully!",
+    });
+    updateGradients("unsave", gradient.name as string);
+
+    return true;
+  } catch (error) {
+    if (error instanceof PaletaError) {
+      if (error.statusCode === 409) {
+        dispatch("custom:updateOptionMessage", {
+          message: "Gradient already unsaved, do you want to save it?",
+          callbackContinue: async () => {
+            handleSavePalette(token, gradient, updateGradients);
+            return false;
+          },
+          callbackCancel: () => {
+            updateGradients("unsave", gradient);
             return true;
           },
         });

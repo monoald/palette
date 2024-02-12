@@ -5,7 +5,7 @@ export type BasicCollection = {
   name: string;
 };
 
-type GradientCollection = BasicCollection & {
+export type GradientCollection = BasicCollection & {
   style: string;
 };
 

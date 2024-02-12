@@ -20,7 +20,7 @@ export function urlToGradient(url: string): string {
   let clrs = "";
 
   for (const i in colors) {
-    clrs += "#" + colors[i];
+    clrs += colors[i];
     if (stops) {
       clrs += stops[i] + "%";
     }

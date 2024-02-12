@@ -61,7 +61,7 @@ export default function Page() {
                     className="w-full h-36 flex rounded-3xl overflow-hidden"
                     style={{
                       background:
-                        collections.gradients[collections.gradients.length - 2]
+                        collections.gradients[collections.gradients.length - 1]
                           .style,
                     }}
                   ></div>

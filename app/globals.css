@@ -67,8 +67,11 @@ body {
     @apply after:w-full;
   }
 }
-.secondary-hover {
-  @apply hover:text-tertiary hover:text-shadow-active;
+.secondary-hover:hover {
+  & p:first-child,
+  & spang:first-child {
+    @apply text-tertiary text-shadow-active;
+  }
 }
 
 *[tooltip="true"] {

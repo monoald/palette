@@ -11,7 +11,7 @@ export function urlToGradient(url: string): string {
 
   let typeGradient = `linear-gradient(${angle}deg, `;
 
-  if (type === "circle") {
+  if (type === "circle" || (circlePositionX && circlePositionY)) {
     typeGradient = `radial-gradient(circle at ${circlePositionX}% ${circlePositionY}%, `;
   } else if (type === "conic") {
     typeGradient = "conic-gradient(";
@@ -22,7 +22,7 @@ export function urlToGradient(url: string): string {
   for (const i in colors) {
     clrs += colors[i];
     if (stops) {
-      clrs += stops[i] + "%";
+      clrs += " " + stops[i] + "%";
     }
     if (+i + 1 !== colors.length) {
       clrs += ", ";

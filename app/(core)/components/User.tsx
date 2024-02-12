@@ -6,6 +6,7 @@ import { getUserCollections } from "../me/action";
 
 export default function User({ children }: { children: React.ReactNode }) {
   const [client, setClient] = useState(false);
+  const [fullyLoad, setFullyLoad] = useState(false);
 
   const user = useUserStore((state) => state.user);
   const updateUser = useUserStore((state) => state.updateUser);
@@ -32,14 +33,16 @@ export default function User({ children }: { children: React.ReactNode }) {
         JSON.parse(localStorage.getItem("token") as string)
       );
     }
+
+    setFullyLoad(true);
   }, [client, updateUser]);
 
-  if (!user) {
-    return (
-      <div className="w-full h-[calc(100vh-80px)] flex items-center justify-center">
-        <span className="mx-auto" id="loader"></span>
-      </div>
-    );
+  if (user || fullyLoad) {
+    return <>{children}</>;
   }
-  return <>{children}</>;
+  return (
+    <div className="w-full h-[calc(100vh-80px)] flex items-center justify-center">
+      <span className="mx-auto" id="loader"></span>
+    </div>
+  );
 }

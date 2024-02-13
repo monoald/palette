@@ -1,6 +1,4 @@
-"use server";
-
-import Card from "./Card";
+"use client";
 
 export type ColorType = {
   id: string;
@@ -9,12 +7,13 @@ export type ColorType = {
   saved: boolean;
 };
 
-export const getColors = async (page: number): Promise<JSX.Element[]> => {
+export const getColors = async (
+  page: number,
+  id: string
+): Promise<ColorType[]> => {
   const response: ColorType[] = await fetch(
-    `http://localhost:3000/api/v1/colors?page=${page}&limit=6`
+    `http://localhost:3000/api/v1/colors?page=${page}&limit=6&id=${id}`
   ).then((res) => res.json());
 
-  return response.map((color, index) => (
-    <Card color={color} key={color.id} index={index} />
-  ));
+  return response;
 };

@@ -16,7 +16,9 @@ import {
 export async function handleSaveColor(
   token: string,
   color: BasicCollection,
-  updateColors: (type: string, payload: BasicCollection | string) => void
+  updateColors: (type: string, payload: BasicCollection | string) => void,
+  callbackSave?: () => void,
+  callbackUnsave?: () => void
 ) {
   try {
     await saveColor(token, color.name);
@@ -26,19 +28,23 @@ export async function handleSaveColor(
       message: "Color saved successfully!",
     });
     updateColors("save", color);
-    return true;
+    if (callbackSave) {
+      callbackSave();
+    }
   } catch (error) {
     if (error instanceof PaletaError) {
       if (error.statusCode === 409) {
         dispatch("custom:updateOptionMessage", {
           message: "Color already saved, do you want to unsave it?",
           callbackContinue: async () => {
-            handleUnsaveColor(token, color, updateColors);
+            handleUnsaveColor(token, color, updateColors, callbackUnsave);
             return false;
           },
           callbackCancel: () => {
             updateColors("save", color);
-            return true;
+            if (callbackSave) {
+              callbackSave();
+            }
           },
         });
       } else {
@@ -56,7 +62,9 @@ export async function handleSaveColor(
 export async function handleUnsaveColor(
   token: string,
   color: BasicCollection,
-  updateColors: (type: string, payload: BasicCollection | string) => void
+  updateColors: (type: string, payload: BasicCollection | string) => void,
+  callbackUnsave?: () => void,
+  callbackSave?: () => void
 ) {
   try {
     await unsaveColor(token, color.name);
@@ -67,19 +75,24 @@ export async function handleUnsaveColor(
     });
     updateColors("unsave", color.name);
 
-    return true;
+    if (callbackUnsave) {
+      callbackUnsave();
+    }
   } catch (error) {
     if (error instanceof PaletaError) {
       if (error.statusCode === 409) {
         dispatch("custom:updateOptionMessage", {
           message: "Color already unsaved, do you want to save it?",
           callbackContinue: async () => {
-            handleSaveColor(token, color, updateColors);
+            handleSaveColor(token, color, updateColors, callbackSave);
             return false;
           },
           callbackCancel: () => {
             updateColors("unsave", color);
-            return true;
+
+            if (callbackUnsave) {
+              callbackUnsave();
+            }
           },
         });
       }

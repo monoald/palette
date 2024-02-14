@@ -2,10 +2,13 @@
 
 import Image from "next/image";
 import { svgs } from "../data/svg";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import SideBar from "../components/SideBar";
+import { MutableCard } from "../components/MutableCard";
 import { changeSvgColor } from "../utils/changeIconColor";
-type Icon = {
+import UpdateIconsColor from "../components/UpdateIconsColor";
+import { makeRandomID } from "@/app/utils/makeRandomID";
+export type Icon = {
   id?: string | undefined;
   name: string;
   content: string;
@@ -14,9 +17,9 @@ type Icon = {
   warning?: boolean;
 };
 
-type IconCollection = {
+export type IconCollection = {
   name: string;
-  color: string | undefined;
+  color: string;
   icons: Icon[];
   thumbnail: string;
 };
@@ -72,9 +75,124 @@ export default function Page() {
     setItemsToShow(itemsToShow + 12);
   };
 
+  // Update Icons Color
+  const [iconsColor, setIconsColor] = useState(false);
+
+  const toggleIconsColor = () => {
+    setIconsColor(!iconsColor);
+  };
+
+  const iconsColorChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCollection((prev) => {
+      const newIcons = [...(prev.icons as Icon[])];
+
+      newIcons.forEach((ico, index) => {
+        const content = changeSvgColor(ico.content, e.target.value as string);
+
+        newIcons[index] = {
+          ...ico,
+          content,
+          color: e.target.value,
+        };
+      });
+
+      return {
+        ...prev,
+        color: e.target.value,
+        icons: newIcons,
+      };
+    });
+  };
+
+  // Upload Icons
+  const uploadIcons = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files;
+
+    if (selectedFiles && selectedFiles.length > 0) {
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        if (file.type === "image/svg+xml") {
+          const reader = new FileReader();
+
+          reader.onload = (event: Event) => {
+            if (collection) {
+              const target = event.target as EventTarget & { result: string };
+              const name = file.name.split(".")[0];
+              const color = collection.color as string;
+
+              const content = changeSvgColor(target.result, color);
+
+              let warning = false;
+
+              let alreadyAdded = -1;
+              let nameUsed = -1;
+
+              collection.icons?.forEach((ico, index) => {
+                if (ico.content === content) alreadyAdded = index;
+                if (ico.name === name) nameUsed = index;
+              });
+
+              if (alreadyAdded !== -1) {
+                // setErrorMessage('Icon already added!')
+                return;
+              } else {
+                // setErrorMessage('')
+              }
+
+              if (nameUsed !== -1) {
+                // setErrorMessage('Name already used!')
+                warning = true;
+                collection.icons[nameUsed].warning = true;
+              } else {
+                // setErrorMessage('')
+                collection.icons.forEach((ico) => {
+                  ico.warning = false;
+                });
+              }
+
+              const unicode =
+                collection.icons.length === 0
+                  ? (parseInt("a100", 16) + 1 + i).toString(16)
+                  : (
+                      parseInt(
+                        collection.icons[collection.icons.length - 1]
+                          .unicode as string,
+                        16
+                      ) + i
+                    ).toString(16);
+
+              const newIcon = {
+                name,
+                content,
+                unicode,
+                id: makeRandomID(),
+                color: collection.color,
+                warning,
+              };
+              setCollection((prev) => ({
+                ...prev,
+                icons: [...prev.icons, newIcon],
+              }));
+            }
+          };
+
+          reader.readAsText(file);
+        }
+      }
+      // if (inputRef.current) inputRef.current.value = ''
+    }
+  };
+
   return (
     <div className="min-h-[calc(100vh-80px)] p-8 flex gap-8 bg-main text-secondary text-sm">
-      <SideBar />
+      <SideBar toggleIconsColor={toggleIconsColor} uploadIcons={uploadIcons} />
+      {iconsColor && (
+        <UpdateIconsColor
+          iconsColorChanged={iconsColorChanged}
+          toggleIconsColor={toggleIconsColor}
+          iconsColor={collection.color as string}
+        />
+      )}
       <main className="w-full h-full ml-[72px] flex flex-col gap-12 items-center">
         <section className="w-full h-auto flex flex-col items-center gap-10">
           <input
@@ -157,170 +275,5 @@ export default function Page() {
         </section>
       </main>
     </div>
-  );
-}
-
-type Props = {
-  svg: Icon;
-  setCollection: Dispatch<SetStateAction<IconCollection>>;
-};
-
-function MutableCard({ svg, setCollection }: Props) {
-  const [toggleSetup, setToggleSetup] = useState(false);
-
-  const handleNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const regex = /^[a-zA-Z0-9-_]+$/;
-    let normalizedText = e.target.value.toLowerCase();
-    if (regex.test(normalizedText) || normalizedText === "") {
-      setCollection((prev) => {
-        const newIcons = [...prev.icons];
-        const icon = newIcons.find((ico) => ico.id === svg.id);
-
-        const nameUsed = newIcons.find((ico) => ico.name === e.target.value);
-
-        if (nameUsed !== undefined) {
-          // setErrorMessage('Name already used!')
-          nameUsed.warning = true;
-          if (icon) icon.warning = true;
-        } else {
-          // setErrorMessage('')
-          newIcons.forEach((ico) => {
-            ico.warning = false;
-          });
-        }
-
-        if (icon) {
-          icon.name = e.target.value;
-        }
-
-        return { ...prev, icons: newIcons };
-      });
-    }
-  };
-
-  const handleUnicodeChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCollection((prev) => {
-      const newIcons = [...prev.icons];
-      const icon = newIcons.find((ico) => ico.id === svg.id);
-
-      const unicodeUsed = newIcons.find(
-        (ico) => ico.unicode === e.target.value
-      );
-
-      if (unicodeUsed !== undefined) {
-        // setErrorMessage('Unicode already used!')
-        unicodeUsed.warning = true;
-        if (icon) icon.warning = true;
-      } else {
-        // setErrorMessage('')
-        newIcons.forEach((ico) => {
-          ico.warning = false;
-        });
-      }
-
-      if (icon) {
-        icon.unicode = e.target.value;
-      }
-
-      return { ...prev, icons: newIcons };
-    });
-  };
-
-  const handleColorChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const regex = /^[a-zA-Z0-9#]+$/;
-    let normalizedText = e.target.value.toLowerCase();
-    if (regex.test(normalizedText) || normalizedText === "") {
-      setCollection((prev) => {
-        const newIcons = [...prev.icons];
-        const icon = newIcons.find((ico) => ico.id === svg.id);
-
-        if (icon) {
-          icon.color = e.target.value;
-          const color = e.target.value;
-          icon.content = changeSvgColor(icon.content, color);
-        }
-
-        return { ...prev, icons: newIcons };
-      });
-    }
-  };
-
-  const handleIconRemoved = () => {
-    setCollection((prev) => {
-      const newIcons = [...prev.icons];
-      const iconIndex = newIcons.findIndex((ico) => ico.id === svg.id);
-
-      newIcons.splice(iconIndex, 1);
-
-      return { ...prev, icons: newIcons };
-    });
-  };
-  return (
-    <article className="relative p-5 border border-primary-border rounded-2xl flex flex-col items-center gap-4">
-      <Image
-        className="icon__svg"
-        width={36}
-        height={36}
-        src={`data:image/svg+xml;base64,${btoa(
-          unescape(encodeURIComponent(svg.content))
-        )}`}
-        alt={`icon ${svg.name}`}
-      />
-
-      <div className="relative w-full px-2 border border-primary-border focus-within:border-white rounded-lg overflow-hidden after:absolute after:top-0 after:right-0 after:w-10 after:h-full after:block after:bg-[linear-gradient(90deg,rgba(0,0,0,0),#03050c)] after:pointer-events-none">
-        <input
-          className="w-full whitespace-nowrap overflow-hidden border-none text-center focus-visible:outline-none"
-          type="text"
-          value={svg.name}
-          onChange={handleNameChanged}
-        />
-      </div>
-
-      <button
-        className="w-full h-[34px] py-1 border border-primary-border rounded-full"
-        onClick={handleIconRemoved}
-      >
-        Remove
-      </button>
-
-      <button
-        className="w-full h-4"
-        onClick={() => setToggleSetup(!toggleSetup)}
-      >
-        <span className="icon-chevron-down text-xl" />
-      </button>
-
-      {toggleSetup && (
-        <div className="absolute top-[calc(100%-40px)] -left-[1px] w-[calc(100%+2px)] h-auto p-5 pt-0 flex flex-col gap-4 border border-t-0 border-primary-border rounded-b-2xl transition-all bg-main z-10">
-          <div className="w-full flex flex-col gap-2">
-            <label htmlFor={`unicode-${svg.name}`}>Unicode:</label>
-            <input
-              className="text-center"
-              name={`unicode-${svg.name}`}
-              id={`unicode-${svg.name}`}
-              type="text"
-              value={svg.unicode}
-              onChange={handleUnicodeChanged}
-            />
-          </div>
-
-          <div className="w-full flex flex-col gap-2">
-            <label htmlFor={`color-${svg.name}`}>Color:</label>
-            <input
-              className="text-center"
-              name={`color-${svg.name}`}
-              id={`color-${svg.name}`}
-              type="text"
-              value={svg.color}
-              onChange={handleColorChanged}
-            />
-          </div>
-
-          <button className="h-4" onClick={() => setToggleSetup(!toggleSetup)}>
-            <span className="icon-chevron-down text-xl block rotate-180" />
-          </button>
-        </div>
-      )}
-    </article>
   );
 }

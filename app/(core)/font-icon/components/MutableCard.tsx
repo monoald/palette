@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Icon, IconCollection } from "../craft/page";
 import { Dispatch, SetStateAction, useState } from "react";
 import { changeSvgColor } from "../utils/changeIconColor";
+import { dispatch } from "../../hooks/useStateHandler";
 
 type Props = {
   svg: Icon;
@@ -17,16 +18,23 @@ export function MutableCard({ svg, setCollection }: Props) {
     if (regex.test(normalizedText) || normalizedText === "") {
       setCollection((prev) => {
         const newIcons = [...prev.icons];
-        const icon = newIcons.find((ico) => ico.id === svg.id);
+        const iconIndex = newIcons.findIndex((ico) => ico.id === svg.id);
+        const icon = newIcons[iconIndex];
 
-        const nameUsed = newIcons.find((ico) => ico.name === e.target.value);
+        const iconUsedIndex = newIcons.findIndex((ico) => {
+          if (ico.id !== svg.id) {
+            return ico.name === e.target.value;
+          }
+        });
 
-        if (nameUsed !== undefined) {
-          // setErrorMessage('Name already used!')
-          nameUsed.warning = true;
+        if (iconUsedIndex !== -1) {
+          dispatch("custom:updateMessage", {
+            type: "warning",
+            message: `Name ${e.target.value} already used`,
+          });
+          newIcons[iconUsedIndex].warning = true;
           if (icon) icon.warning = true;
         } else {
-          // setErrorMessage('')
           newIcons.forEach((ico) => {
             ico.warning = false;
           });
@@ -46,16 +54,20 @@ export function MutableCard({ svg, setCollection }: Props) {
       const newIcons = [...prev.icons];
       const icon = newIcons.find((ico) => ico.id === svg.id);
 
-      const unicodeUsed = newIcons.find(
-        (ico) => ico.unicode === e.target.value
-      );
+      const unicodeUsed = newIcons.find((ico) => {
+        if (ico.id !== svg.id) {
+          return ico.unicode === e.target.value;
+        }
+      });
 
       if (unicodeUsed !== undefined) {
-        // setErrorMessage('Unicode already used!')
+        dispatch("custom:updateMessage", {
+          type: "warning",
+          message: `Unicode ${e.target.value} already used`,
+        });
         unicodeUsed.warning = true;
         if (icon) icon.warning = true;
       } else {
-        // setErrorMessage('')
         newIcons.forEach((ico) => {
           ico.warning = false;
         });
@@ -99,7 +111,11 @@ export function MutableCard({ svg, setCollection }: Props) {
     });
   };
   return (
-    <article className="relative p-5 border border-primary-border rounded-2xl flex flex-col items-center gap-4">
+    <article
+      className={`relative p-5 border ${
+        svg.warning ? "border-[#ec9d09]" : "border-primary-border"
+      } rounded-2xl flex flex-col items-center gap-4`}
+    >
       <Image
         className="icon__svg"
         width={36}
@@ -134,7 +150,11 @@ export function MutableCard({ svg, setCollection }: Props) {
       </button>
 
       {toggleSetup && (
-        <div className="absolute top-[calc(100%-40px)] -left-[1px] w-[calc(100%+2px)] h-auto p-5 pt-0 flex flex-col gap-4 border border-t-0 border-primary-border rounded-b-2xl transition-all bg-main z-10">
+        <div
+          className={`absolute top-[calc(100%-40px)] -left-[1px] w-[calc(100%+2px)] h-auto p-5 pt-0 flex flex-col gap-4 border border-t-0 ${
+            svg.warning ? "border-[#ec9d09]" : "border-primary-border"
+          } rounded-b-2xl transition-all bg-main z-10`}
+        >
           <div className="w-full flex flex-col gap-2">
             <label htmlFor={`unicode-${svg.name}`}>Unicode:</label>
             <input

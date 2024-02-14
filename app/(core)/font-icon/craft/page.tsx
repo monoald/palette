@@ -8,6 +8,7 @@ import { MutableCard } from "../components/MutableCard";
 import { changeSvgColor } from "../utils/changeIconColor";
 import UpdateIconsColor from "../components/UpdateIconsColor";
 import { makeRandomID } from "@/app/utils/makeRandomID";
+import { dispatch } from "../../hooks/useStateHandler";
 export type Icon = {
   id?: string | undefined;
   name: string;
@@ -51,10 +52,11 @@ export default function Page() {
       );
 
       if (alreadyAdded !== -1) {
-        // setErrorMessage('Icon already added!')
+        dispatch("custom:updateMessage", {
+          type: "warning",
+          message: "Icon already added",
+        });
         return prev;
-      } else {
-        // setErrorMessage('')
       }
 
       newIcon.unicode =
@@ -63,7 +65,6 @@ export default function Page() {
           : (
               parseInt(newIcons[newIcons.length - 1].unicode as string, 16) + 1
             ).toString(16);
-      // newIcon.id = createUUID()
 
       newIcons.push(newIcon);
 
@@ -115,71 +116,72 @@ export default function Page() {
           const reader = new FileReader();
 
           reader.onload = (event: Event) => {
-            if (collection) {
-              const target = event.target as EventTarget & { result: string };
-              const name = file.name.split(".")[0];
-              const color = collection.color as string;
+            const target = event.target as EventTarget & { result: string };
+            let name = file.name
+              .split(".")[0]
+              .toLowerCase()
+              .replaceAll(" ", "-");
+            const color = collection.color as string;
 
-              const content = changeSvgColor(target.result, color);
+            const content = changeSvgColor(target.result, color);
 
-              let warning = false;
+            let warning = false;
 
-              let alreadyAdded = -1;
-              let nameUsed = -1;
+            let alreadyAdded = -1;
+            let nameUsed = -1;
 
-              collection.icons?.forEach((ico, index) => {
-                if (ico.content === content) alreadyAdded = index;
-                if (ico.name === name) nameUsed = index;
+            collection.icons?.forEach((ico, index) => {
+              if (ico.content === content) alreadyAdded = index;
+              if (ico.name === name) nameUsed = index;
+            });
+
+            if (alreadyAdded !== -1) {
+              dispatch("custom:updateMessage", {
+                type: "warning",
+                message: `Icon ${name} already uploaded`,
               });
-
-              if (alreadyAdded !== -1) {
-                // setErrorMessage('Icon already added!')
-                return;
-              } else {
-                // setErrorMessage('')
-              }
-
-              if (nameUsed !== -1) {
-                // setErrorMessage('Name already used!')
-                warning = true;
-                collection.icons[nameUsed].warning = true;
-              } else {
-                // setErrorMessage('')
-                collection.icons.forEach((ico) => {
-                  ico.warning = false;
-                });
-              }
-
-              const unicode =
-                collection.icons.length === 0
-                  ? (parseInt("a100", 16) + 1 + i).toString(16)
-                  : (
-                      parseInt(
-                        collection.icons[collection.icons.length - 1]
-                          .unicode as string,
-                        16
-                      ) + i
-                    ).toString(16);
-
-              const newIcon = {
-                name,
-                content,
-                unicode,
-                id: makeRandomID(),
-                color: collection.color,
-                warning,
-              };
-              setCollection((prev) => ({
-                ...prev,
-                icons: [...prev.icons, newIcon],
-              }));
+              return;
             }
+
+            if (nameUsed !== -1) {
+              dispatch("custom:updateMessage", {
+                type: "warning",
+                message: `Name ${name} already used`,
+              });
+              warning = true;
+              collection.icons[nameUsed].warning = true;
+            }
+
+            const unicode =
+              collection.icons.length === 0
+                ? (parseInt("a101", 16) + i).toString(16)
+                : (
+                    parseInt(
+                      collection.icons[collection.icons.length - 1]
+                        .unicode as string,
+                      16
+                    ) +
+                    1 +
+                    i
+                  ).toString(16);
+
+            const newIcon = {
+              name,
+              content,
+              unicode,
+              id: makeRandomID(),
+              color: collection.color,
+              warning,
+            };
+            setCollection((prev) => ({
+              ...prev,
+              icons: [...prev.icons, newIcon],
+            }));
           };
 
           reader.readAsText(file);
         }
       }
-      // if (inputRef.current) inputRef.current.value = ''
     }
   };
 
@@ -203,32 +205,6 @@ export default function Page() {
           />
           <div className="w-full h-auto grid grid-cols-[repeat(auto-fill,_minmax(140px,_1fr))] gap-8">
             {collection?.icons.map((svg) => (
-              // <article
-              //   key={svg.id}
-              //   className="p-5 border border-primary-border rounded-2xl flex flex-col items-center gap-4"
-              // >
-              //   <Image
-              //     className="icon__svg"
-              //     width={36}
-              //     height={36}
-              //     src={`data:image/svg+xml;base64,${btoa(
-              //       unescape(encodeURIComponent(svg.content))
-              //     )}`}
-              //     alt={`icon ${svg.name}`}
-              //   />
-
-              //   <div className="relative w-full py-1 px-2 border border-transparent hover:border-primary-border focus-within:border-primary-border rounded-xl overflow-hidden after:absolute after:top-0 after:right-0 after:w-10 after:h-full after:block after:bg-[linear-gradient(90deg,rgba(0,0,0,0),#03050c)] after:pointer-events-none">
-              //     <input
-              //       className="w-full whitespace-nowrap overflow-hidden border-none text-center active:border-none focus-visible:outline-none"
-              //       type="text"
-              //       value={svg.name}
-              //     />
-              //   </div>
-
-              //   <button className="w-full py-1 border border-primary-border rounded-2xl flex items-center justify-center gap-2">
-              //     Add <span className="icon-plus" />
-              //   </button>
-              // </article>
               <MutableCard
                 key={svg.id}
                 svg={svg}

@@ -174,3 +174,6 @@
 .icon-x-round:before {
   content: "\e92d";
 }
+.icon-menu:before {
+  content: "\e92e";
+}

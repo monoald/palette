@@ -1,7 +1,7 @@
 export default function SideBar() {
   return (
-    <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">
-      <ul className="relative w-fit h-10 px-4 flex flex-row justify-center items-center gap-3 rounded-full border border-primary-border list-none md:flex-col md:w-10 md:h-fit md:px-0 md:py-4">
+    <aside className="fixed top-1/2 -translate-y-1/2 flex items-center select-none">
+      <ul className="relative w-10 py-4 h-fit flex flex-col justify-center items-center gap-3 rounded-full border border-primary-border list-none ">
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"

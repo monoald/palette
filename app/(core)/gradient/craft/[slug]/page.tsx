@@ -376,7 +376,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   };
 
   return (
-    <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
+    <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row overflow-hidden">
       {gradient && gradientStyle && (
         <>
           <SideBar

@@ -73,9 +73,9 @@ export default function Page() {
   };
 
   return (
-    <div className="h-[calc(100vh-80px)] p-8 flex gap-8 bg-main text-secondary  text-sm">
+    <div className="min-h-[calc(100vh-80px)] p-8 flex gap-8 bg-main text-secondary text-sm">
       <SideBar />
-      <main className="w-full h-full mx-auto flex flex-col gap-12 items-center">
+      <main className="w-full h-full ml-[72px] flex flex-col gap-12 items-center">
         <section className="w-full h-auto flex flex-col items-center gap-10">
           <input
             type="text"

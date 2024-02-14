@@ -449,7 +449,7 @@ export default function Home({ params }: { params: { slug: string } }) {
   };
 
   return (
-    <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row">
+    <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row overflow-hidden">
       {palette && (
         <SideBar
           setPaletteTypeOpen={setPaletteTypeOpen}
@@ -496,7 +496,7 @@ export default function Home({ params }: { params: { slug: string } }) {
               <article
                 key={clr.id}
                 id={clr.id}
-                className="relative group w-full h-full rounded-3xl flex flex-row justify-end pr-5 items-center gap-3 overflow-hidden select-none md:flex-col md:justify-center md:pr-0"
+                className="relative group w-full h-full rounded-3xl flex flex-row flex-wrap justify-end max-[606px]:justify-center items-center gap-3 max-color-bar:gap-y-0 overflow-hidden select-none md:flex-col md:justify-center md:pr-0"
                 style={{ background: clr.hex }}
                 onPointerMove={handleResize}
                 onPointerUp={handleEndResize}
@@ -522,7 +522,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                 )}
 
                 <p
-                  className="absolute top-auto left-10 text-md font-[500] tracking-wider uppercase md:left-auto md:top-10 lg:text-xl"
+                  className="max-[606px]:hidden absolute top-auto left-10 text-md font-[500] tracking-wider uppercase md:left-auto md:top-10 lg:text-xl"
                   style={{
                     color: clr.contrastColor,
                   }}

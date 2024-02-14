@@ -20,6 +20,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        bp: "662px",
+        "color-bar": "472px",
+      },
       colors: {
         main: "#03050c",
         "transparent-main": "#03050CCC",

@@ -344,6 +344,12 @@ button:disabled {
   }
 }
 /* Scroll Bar */
+.hidden-bar::-webkit-scrollbar {
+  display: none;
+}
+.hidden-bar::-webkit-scrollbar-track {
+  display: none;
+}
 ::-webkit-scrollbar {
   width: 8px;
   height: 10px;

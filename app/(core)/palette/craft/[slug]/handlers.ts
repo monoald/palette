@@ -36,10 +36,11 @@ export function handleCreatePaletteFromUrl(
   const newPalette = url.split("-").map((clr) => "#" + clr);
 
   const newColors = newPalette.map((clr) => {
+    const isSaved =
+      colors?.findIndex((color) => color.name === clr.replace("#", "")) !== -1;
+
     return createColorObject(clr, "hex", {
-      isSaved:
-        colors?.findIndex((color) => color.name === clr.replace("#", "")) !==
-        -1,
+      isSaved,
     });
   });
 

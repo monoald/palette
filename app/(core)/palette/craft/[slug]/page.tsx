@@ -120,18 +120,22 @@ export default function Home({ params }: { params: { slug: string } }) {
   useEffect(() => {
     const urlPalette = params.slug;
 
-    const newColors = handleCreatePaletteFromUrl(urlPalette, colors);
-
     setPalette((prev) => {
       if (prev) {
+        const newColors = handleCreatePaletteFromUrl(
+          prev.history.data[prev.history.current],
+          colors
+        );
         return {
           ...prev,
           isSaved: isPaletteSaved(
             palettes,
             prev.history.data[prev.history.current]
           ),
+          colors: newColors,
         };
       }
+      const newColors = handleCreatePaletteFromUrl(urlPalette, colors);
       return {
         history: {
           data: [urlPalette],
@@ -152,12 +156,6 @@ export default function Home({ params }: { params: { slug: string } }) {
 
     const newUrl = newColors.map((clr) => clr.hex.replace("#", "")).join("-");
     replacePath(newUrl);
-
-    const paletteChange = new CustomEvent("custom:paletteChange", {
-      detail: { event: "space" },
-    });
-
-    window.dispatchEvent(paletteChange);
 
     setPalette((prev) => {
       if (prev)
@@ -389,7 +387,13 @@ export default function Home({ params }: { params: { slug: string } }) {
         const newPalette = newUrl.split("-").map((clr) => "#" + clr);
 
         const newColors = newPalette.map((clr) => {
-          return createColorObject(clr, "hex");
+          return {
+            ...createColorObject(clr, "hex"),
+            isSaved:
+              colors?.findIndex(
+                (color) => color.name === clr.replace("#", "")
+              ) !== -1,
+          };
         });
 
         return {
@@ -415,7 +419,13 @@ export default function Home({ params }: { params: { slug: string } }) {
         const newPalette = newUrl.split("-").map((clr) => "#" + clr);
 
         const newColors = newPalette.map((clr) => {
-          return createColorObject(clr, "hex");
+          return {
+            ...createColorObject(clr, "hex"),
+            isSaved:
+              colors?.findIndex(
+                (color) => color.name === clr.replace("#", "")
+              ) !== -1,
+          };
         });
 
         return {

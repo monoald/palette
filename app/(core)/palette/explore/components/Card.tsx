@@ -1,7 +1,13 @@
+"use client";
+
 import { MotionDiv } from "@/app/components/FramerMotion";
 import { getMainContrastColor } from "@/app/utils/createColorObject";
 import { hexToRgb } from "colors-kit";
 import { PaletteType } from "./getPublicPalettes";
+import { useUserStore } from "@/store";
+import { dispatch } from "@/app/(core)/hooks/useStateHandler";
+import { handleSavePalette, handleUnsavePalette } from "@/app/(core)/handlers";
+import Link from "next/link";
 
 type Props = {
   palette: PaletteType;
@@ -14,15 +20,54 @@ const variants = {
 };
 
 export default function Card({ palette, index }: Props) {
+  const token = useUserStore((state) => state.token);
+  const updatePalettes = useUserStore((state) => state.updatePalettes);
+
+  const savePalette = async () => {
+    if (!token) {
+      dispatch("custom:updateMessage", {
+        type: "error",
+        message: "You must login to save a palette!",
+      });
+      return;
+    }
+
+    if (palette.saved) {
+      await handleUnsavePalette(
+        token,
+        palette,
+        updatePalettes,
+        () => {
+          dispatch("custom:unsavePalette", { colors: palette.colors });
+        },
+        () => {
+          dispatch("custom:savePalette", { colors: palette.colors });
+        }
+      );
+    } else {
+      await handleSavePalette(
+        token,
+        palette,
+        updatePalettes,
+        () => {
+          dispatch("custom:savePalette", { colors: palette.colors });
+        },
+        () => {
+          dispatch("custom:unsavePalette", { colors: palette.colors });
+        }
+      );
+    }
+  };
+
   return (
     <MotionDiv
       variants={variants}
       initial="hidden"
       animate="visible"
       transition={{
-        delay: index * 0.2,
+        delay: index * 0.1,
         ease: "easeInOut",
-        duration: 0.5,
+        duration: 0.3,
       }}
       viewport={{ amount: 0 }}
     >
@@ -55,27 +100,31 @@ export default function Card({ palette, index }: Props) {
         <div className="w-fit h-fit px-5 py-2 mx-auto border border-primary-border rounded-full flex items-center gap-7 text-2xl">
           <button
             className="secondary-hover flex"
+            onClick={savePalette}
             tooltip="true"
             tooltip-content="Save"
             tooltip-position="bottom"
           >
             <span
               className={`
-                          icon
-                          icon-heart${palette.saved ? "-filled" : ""}
-                        `}
+                ${palette.saved ? "icon-heart-filled" : "icon-heart"}
+              `}
             />
           </button>
 
-          <button
-            className="secondary-hover flex"
-            // onClick={() => editPaletteHandler(palette.colors as string)}
+          <div
+            className="w-fit h-fit"
             tooltip="true"
             tooltip-content="Edit"
             tooltip-position="bottom"
           >
-            <span className="icon-palette" />
-          </button>
+            <Link
+              href={`/palette/craft/${palette.colors}`}
+              className="secondary-hover flex"
+            >
+              <span className="icon-palette" />
+            </Link>
+          </div>
         </div>
       </li>
     </MotionDiv>

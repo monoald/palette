@@ -1,6 +1,6 @@
-"use server";
+"use client";
 
-import Card from "./Card";
+import { urlToGradient } from "@/app/(core)/me/utils/urlToGradients";
 
 export type GradientType = {
   id: string;
@@ -12,29 +12,18 @@ export type GradientType = {
 };
 
 export const getPublicGradients = async (
-  page: number
-): Promise<JSX.Element[]> => {
+  page: number,
+  id: string
+): Promise<GradientType[]> => {
   const response: GradientType[] = await fetch(
-    `http://localhost:3000/api/v1/public-gradients?page=${page}&limit=6`
+    `http://localhost:3000/api/v1/public-gradients?page=${page}&limit=6&id=${id}`
   ).then((res) => res.json());
 
   const gradients: GradientType[] = response.map((gradient) => {
-    const colorsArr = gradient.name.split("-").map((clr) => "#" + clr);
-    let style = "linear-gradient(90deg, ";
+    const style = urlToGradient(gradient.name);
 
-    for (const i in colorsArr) {
-      if (i !== "0") {
-        style += ", ";
-      }
-      style += colorsArr[i];
-    }
-
-    style += ")";
-
-    return { ...gradient, saved: false, style };
+    return { ...gradient, style };
   });
 
-  return gradients.map((gradient, index) => (
-    <Card gradient={gradient} key={gradient.id} index={index} />
-  ));
+  return gradients;
 };

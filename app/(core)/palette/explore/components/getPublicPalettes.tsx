@@ -1,6 +1,4 @@
-"use server";
-
-import Card from "./Card";
+"use client";
 
 export type PaletteType = {
   id: string;
@@ -13,19 +11,18 @@ export type PaletteType = {
 };
 
 export const getPublicPalettes = async (
-  page: number
-): Promise<JSX.Element[]> => {
+  page: number,
+  id: string
+): Promise<PaletteType[]> => {
   const response: PaletteType[] = await fetch(
-    `http://localhost:3000/api/v1/public-palettes?page=${page}`
+    `http://localhost:3000/api/v1/public-palettes?page=${page}&limit=6&id=${id}`
   ).then((res) => res.json());
 
   const palettes = response.map((palette) => {
     const colorsArr = palette.colors.split("-").map((clr) => "#" + clr);
 
-    return { ...palette, colorsArr, saved: false };
+    return { ...palette, colorsArr };
   });
 
-  return palettes.map((palette, index) => (
-    <Card palette={palette} key={palette.id} index={index} />
-  ));
+  return palettes;
 };

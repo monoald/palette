@@ -12,7 +12,9 @@ export function urlToGradient(url: string): string {
   let typeGradient = `linear-gradient(${angle}deg, `;
 
   if (type === "circle" || (circlePositionX && circlePositionY)) {
-    typeGradient = `radial-gradient(circle at ${circlePositionX}% ${circlePositionY}%, `;
+    typeGradient = `radial-gradient(circle at ${circlePositionX || 50}% ${
+      circlePositionY || 50
+    }%, `;
   } else if (type === "conic") {
     typeGradient = "conic-gradient(";
   }

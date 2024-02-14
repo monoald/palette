@@ -7,9 +7,8 @@ import { useUserStore } from "@/store";
 import Card from "./Card";
 import useStateHandler from "@/app/(core)/hooks/useStateHandler";
 
-let page = 1;
-
 export default function InfiniteScroll() {
+  const [page, setPage] = useState(1);
   const [data, setData] = useState<ColorType[]>();
   const [keepLoading, setKeepLoading] = useState(true);
   const userId = useUserStore((state) => state.user?.id);
@@ -22,7 +21,7 @@ export default function InfiniteScroll() {
     const newData = data ? [...data, ...colors] : colors;
 
     setData(newData);
-    page++;
+    setPage(page + 1);
   });
 
   const saveColorHandler = (e: Event) => {

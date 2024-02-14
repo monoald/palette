@@ -69,7 +69,7 @@ body {
 }
 .secondary-hover:hover {
   & p:first-child,
-  & spang:first-child {
+  & span:first-child {
     @apply text-tertiary text-shadow-active;
   }
 }

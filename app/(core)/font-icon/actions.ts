@@ -38,6 +38,41 @@ export async function saveFontIcon(collection: IconCollection, token: string) {
   }
 }
 
+export async function unsaveFontIcon(
+  id: string,
+  token: string,
+  router: AppRouterInstance
+) {
+  try {
+    const data = await fetch(`http://localhost:3000/api/v1/icons/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${token}`,
+      },
+    }).then(async (res) => {
+      const data = await res.json();
+      if (!res.ok) {
+        throw new PaletaError(data);
+      }
+      return data;
+    });
+
+    dispatch("custom:updateMessage", {
+      type: "success",
+      message: "Font icon unsaved successfully",
+    });
+    router.push("/font-icon/craft");
+  } catch (error) {
+    if (error instanceof PaletaError) {
+      dispatch("custom:updateMessage", {
+        type: "error",
+        message: error.message,
+      });
+    }
+  }
+}
+
 export async function getFontIcon(
   id: string,
   name: string,

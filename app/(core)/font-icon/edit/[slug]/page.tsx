@@ -16,6 +16,7 @@ import {
   downloadFonts,
   downloadIcons,
   getFontIcon,
+  unsaveFontIcon,
   updateIcons,
 } from "../../actions";
 
@@ -226,6 +227,11 @@ export default function Page({ params }: { params: { slug: string } }) {
     await downloadIcons(id, name);
   };
 
+  // Unsave
+  const unsaveIcons = async () => {
+    await unsaveFontIcon(params.slug.split("%2B")[0], token as string, router);
+  };
+
   return (
     <div className="min-h-[calc(100vh-80px)] p-8 flex gap-8 bg-main text-secondary text-sm">
       {collection ? (
@@ -236,6 +242,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             updateFontIcon={updateFontIcon}
             downloadFontIcons={downloadFontIcons}
             downloadSvgIcons={downloadSvgIcons}
+            unsaveIcons={unsaveIcons}
           />
           {iconsColor && (
             <UpdateIconsColor

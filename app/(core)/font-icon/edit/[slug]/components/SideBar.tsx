@@ -4,6 +4,7 @@ type Props = {
   updateFontIcon: () => Promise<void>;
   downloadFontIcons: () => Promise<void>;
   downloadSvgIcons: () => Promise<void>;
+  unsaveIcons: () => Promise<void>;
 };
 
 export default function SideBar({
@@ -12,6 +13,7 @@ export default function SideBar({
   updateFontIcon,
   downloadFontIcons,
   downloadSvgIcons,
+  unsaveIcons,
 }: Props) {
   return (
     <aside className="fixed top-1/2 -translate-y-1/2 flex items-center select-none z-10">
@@ -81,12 +83,12 @@ export default function SideBar({
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
-            // onClick={() => setColorsOpen(true)}
+            onClick={unsaveIcons}
             tooltip="true"
-            tooltip-content="Icons Color"
+            tooltip-content="Unsave font icon"
             tooltip-position="left"
           >
-            <span className="icon-heart text-2xl" />
+            <span className="icon-heart-filled text-2xl" />
           </button>
         </li>
       </ul>

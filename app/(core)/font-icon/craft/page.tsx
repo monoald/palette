@@ -3,12 +3,18 @@
 import Image from "next/image";
 import { svgs } from "../data/svg";
 import { useState } from "react";
-import SideBar from "../components/SideBar";
+import SideBar from "./components/SideBar";
 import { MutableCard } from "../components/MutableCard";
 import { changeSvgColor } from "../utils/changeIconColor";
 import UpdateIconsColor from "../components/UpdateIconsColor";
 import { makeRandomID } from "@/app/utils/makeRandomID";
 import { dispatch } from "../../hooks/useStateHandler";
+import { normalizeIcon } from "../utils/normalizeIcon";
+import { generateThumbnail } from "../utils/generateThumbnail";
+import { useUserStore } from "@/store";
+import { saveFontIcon } from "../actions";
+import { useRouter } from "next/navigation";
+
 export type Icon = {
   id?: string | undefined;
   name: string;
@@ -20,7 +26,7 @@ export type Icon = {
 
 export type IconCollection = {
   name: string;
-  color: string;
+  color: string | undefined;
   icons: Icon[];
   thumbnail: string;
 };
@@ -33,6 +39,9 @@ export default function Page() {
     icons: [],
     thumbnail: "",
   });
+
+  const token = useUserStore((state) => state.token);
+  const router = useRouter();
 
   const handleNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const regex = /^[a-zA-Z0-9-_]+$/;
@@ -70,6 +79,35 @@ export default function Page() {
 
       return { ...prev, icons: newIcons };
     });
+  };
+
+  const saveIcons = async () => {
+    if (!token) {
+      dispatch("custom:updateMessage", {
+        type: "warning",
+        message: "You must login to save a font icon",
+      });
+      return;
+    }
+
+    if (collection.icons.length < 3) {
+      dispatch("custom:updateMessage", {
+        type: "error",
+        message: "You must add at least 3 icons",
+      });
+      return;
+    }
+
+    const normalizedIcons = normalizeIcon(collection);
+    normalizedIcons.thumbnail = await generateThumbnail(
+      normalizedIcons.icons.slice(0, 6)
+    );
+
+    const id = await saveFontIcon(normalizedIcons, token as string);
+
+    if (id !== undefined) {
+      router.push(`/font-icon/edit/${id}`);
+    }
   };
 
   const handleShowMoreIcons = () => {
@@ -187,7 +225,11 @@ export default function Page() {
 
   return (
     <div className="min-h-[calc(100vh-80px)] p-8 flex gap-8 bg-main text-secondary text-sm">
-      <SideBar toggleIconsColor={toggleIconsColor} uploadIcons={uploadIcons} />
+      <SideBar
+        toggleIconsColor={toggleIconsColor}
+        uploadIcons={uploadIcons}
+        saveIcons={saveIcons}
+      />
       {iconsColor && (
         <UpdateIconsColor
           iconsColorChanged={iconsColorChanged}

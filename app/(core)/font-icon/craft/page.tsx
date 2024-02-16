@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import { svgs } from "../data/svg";
 import { useState } from "react";
 import SideBar from "./components/SideBar";
 import { MutableCard } from "../components/MutableCard";
@@ -14,6 +12,7 @@ import { generateThumbnail } from "../utils/generateThumbnail";
 import { useUserStore } from "@/store";
 import { saveFontIcon } from "../actions";
 import { useRouter } from "next/navigation";
+import PaletaIcons from "../components/PaletaIcons";
 
 export type Icon = {
   _id?: string;
@@ -33,7 +32,6 @@ export type IconCollection = {
 };
 
 export default function Page() {
-  const [itemsToShow, setItemsToShow] = useState(12);
   const [collection, setCollection] = useState<IconCollection>({
     name: "untitled",
     color: "#ffffff",
@@ -109,10 +107,6 @@ export default function Page() {
     if (id !== undefined) {
       router.push(`/font-icon/edit/${id}+${collection.name}`);
     }
-  };
-
-  const handleShowMoreIcons = () => {
-    setItemsToShow(itemsToShow + 12);
   };
 
   // Update Icons Color
@@ -257,41 +251,7 @@ export default function Page() {
           </div>
         </section>
 
-        <section className="w-full h-auto flex flex-col items-center gap-10">
-          <h2 className="text-xl">Paleta Icons</h2>
-
-          <div className="w-full h-auto grid grid-cols-[repeat(auto-fill,_minmax(140px,_1fr))] gap-8">
-            {svgs.slice(0, itemsToShow).map((svg) => (
-              <article
-                key={svg.id}
-                className="p-5 border border-primary-border rounded-2xl flex flex-col items-center gap-3"
-              >
-                <Image
-                  className="icon__svg"
-                  width={36}
-                  height={36}
-                  src={`data:image/svg+xml;base64,${btoa(
-                    unescape(encodeURIComponent(svg.content))
-                  )}`}
-                  alt={`icon ${svg.name}`}
-                />
-
-                <div className="relative w-full py-1 px-2 overflow-hidden text-center after:absolute after:top-0 after:right-0 after:w-10 after:h-full after:block after:bg-[linear-gradient(90deg,rgba(0,0,0,0),#03050c)]">
-                  <p className="whitespace-nowrap overflow-hidden">
-                    {svg.name}
-                  </p>
-                </div>
-
-                <button
-                  className="w-full py-1 border border-primary-border rounded-2xl flex items-center justify-center gap-2"
-                  onClick={() => handleAddIcon(svg)}
-                >
-                  Add <span className="icon-plus" />
-                </button>
-              </article>
-            ))}
-          </div>
-        </section>
+        <PaletaIcons handleAddIcon={handleAddIcon} />
       </main>
     </div>
   );

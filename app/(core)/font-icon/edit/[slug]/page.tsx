@@ -12,7 +12,12 @@ import { useUserStore } from "@/store";
 import { useRouter } from "next/navigation";
 import { MutableCard } from "../../components/MutableCard";
 import { Icon, IconCollection } from "../../craft/page";
-import { getFontIcon, updateIcons } from "../../actions";
+import {
+  downloadFonts,
+  downloadIcons,
+  getFontIcon,
+  updateIcons,
+} from "../../actions";
 
 export default function Page({ params }: { params: { slug: string } }) {
   const [itemsToShow, setItemsToShow] = useState(12);
@@ -210,6 +215,17 @@ export default function Page({ params }: { params: { slug: string } }) {
     );
   };
 
+  // Download
+  const downloadFontIcons = async () => {
+    const [id, name] = params.slug.split("%2B");
+    await downloadFonts(id, name);
+  };
+
+  const downloadSvgIcons = async () => {
+    const [id, name] = params.slug.split("%2B");
+    await downloadIcons(id, name);
+  };
+
   return (
     <div className="min-h-[calc(100vh-80px)] p-8 flex gap-8 bg-main text-secondary text-sm">
       {collection ? (
@@ -218,6 +234,8 @@ export default function Page({ params }: { params: { slug: string } }) {
             toggleIconsColor={toggleIconsColor}
             uploadIcons={uploadIcons}
             updateFontIcon={updateFontIcon}
+            downloadFontIcons={downloadFontIcons}
+            downloadSvgIcons={downloadSvgIcons}
           />
           {iconsColor && (
             <UpdateIconsColor

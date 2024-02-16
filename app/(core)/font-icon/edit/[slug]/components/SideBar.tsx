@@ -2,12 +2,16 @@ type Props = {
   toggleIconsColor: () => void;
   uploadIcons: (e: React.ChangeEvent<HTMLInputElement>) => void;
   updateFontIcon: () => Promise<void>;
+  downloadFontIcons: () => Promise<void>;
+  downloadSvgIcons: () => Promise<void>;
 };
 
 export default function SideBar({
   toggleIconsColor,
   uploadIcons,
   updateFontIcon,
+  downloadFontIcons,
+  downloadSvgIcons,
 }: Props) {
   return (
     <aside className="fixed top-1/2 -translate-y-1/2 flex items-center select-none z-10">
@@ -44,9 +48,9 @@ export default function SideBar({
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
-            // onClick={() => setColorsOpen(true)}
+            onClick={downloadFontIcons}
             tooltip="true"
-            tooltip-content="Icons Color"
+            tooltip-content="Download fonts"
             tooltip-position="left"
           >
             <span className="icon-font text-2xl" />
@@ -55,9 +59,9 @@ export default function SideBar({
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
-            // onClick={() => setColorsOpen(true)}
+            onClick={downloadSvgIcons}
             tooltip="true"
-            tooltip-content="Icons Color"
+            tooltip-content="Download icons"
             tooltip-position="left"
           >
             <span className="icon-download text-2xl" />

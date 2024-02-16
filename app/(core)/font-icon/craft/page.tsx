@@ -16,7 +16,8 @@ import { saveFontIcon } from "../actions";
 import { useRouter } from "next/navigation";
 
 export type Icon = {
-  id?: string | undefined;
+  _id?: string;
+  id: string;
   name: string;
   content: string;
   unicode: string;
@@ -106,7 +107,7 @@ export default function Page() {
     const id = await saveFontIcon(normalizedIcons, token as string);
 
     if (id !== undefined) {
-      router.push(`/font-icon/edit/${id}`);
+      router.push(`/font-icon/edit/${id}+${collection.name}`);
     }
   };
 

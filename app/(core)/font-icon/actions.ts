@@ -2,6 +2,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { PaletaError } from "../actions";
 import { dispatch } from "../hooks/useStateHandler";
 import { IconCollection } from "./craft/page";
+import { replacePath } from "@/app/utils/urlState";
 
 export async function saveFontIcon(collection: IconCollection, token: string) {
   try {
@@ -26,24 +27,6 @@ export async function saveFontIcon(collection: IconCollection, token: string) {
     });
 
     return data.id;
-
-    // await fetch(`http://localhost:3000/api/v1/icons/download-fonts/${data.id}`)
-    //   .then(async (res) => {
-    //     if (!res.ok) {
-    //       throw new PaletaError(await res.json());
-    //     }
-    //     return await res.blob();
-    //   })
-    //   .then((res) => {
-    //     const url = window.URL.createObjectURL(new Blob([res]));
-
-    //     const link = document.createElement("a");
-    //     link.href = url;
-    //     link.setAttribute("download", `${collection.name}.zip`);
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     link?.parentNode?.removeChild(link);
-    //   });
   } catch (error) {
     if (error instanceof PaletaError) {
       dispatch("custom:updateMessage", {
@@ -59,12 +42,11 @@ export async function getFontIcon(
   id: string,
   name: string,
   router: AppRouterInstance
-) {
+): Promise<IconCollection | undefined> {
   try {
-    const fontIcon = await fetch(
+    const fontIcon: IconCollection = await fetch(
       `http://localhost:3000/api/v1/icons/${id}?name=${name}`
     ).then(async (res) => {
-      console.log(res);
       const data = await res.json();
       if (res.status !== 200) {
         throw new PaletaError(data);
@@ -73,9 +55,19 @@ export async function getFontIcon(
       return data;
     });
 
-    console.log(fontIcon);
-
-    return fontIcon;
+    return {
+      ...fontIcon,
+      icons: fontIcon.icons.map((icn) => {
+        const newIcn = {
+          color: icn.color,
+          name: icn.name,
+          content: icn.content,
+          unicode: icn.unicode,
+          id: icn._id as string,
+        };
+        return newIcn;
+      }),
+    };
   } catch (error) {
     if (error instanceof PaletaError) {
       dispatch("custom:updateMessage", {
@@ -83,6 +75,99 @@ export async function getFontIcon(
         message: error.message,
       });
       router.push("/font-icon/craft");
+    }
+  }
+}
+
+export async function downloadFonts(id: string, name: string) {
+  try {
+    await fetch(`http://localhost:3000/api/v1/icons/download-fonts/${id}`)
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new PaletaError(await res.json());
+        }
+        return await res.blob();
+      })
+      .then((res) => {
+        const url = window.URL.createObjectURL(new Blob([res]));
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `${name}-fonts.zip`);
+        document.body.appendChild(link);
+        link.click();
+        link?.parentNode?.removeChild(link);
+      });
+  } catch (error) {
+    if (error instanceof PaletaError) {
+      dispatch("custom:updateMessage", {
+        type: "error",
+        message: error.message,
+      });
+    }
+  }
+}
+
+export async function downloadIcons(id: string, name: string) {
+  try {
+    await fetch(`http://localhost:3000/api/v1/icons/download-icons/${id}`)
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new PaletaError(await res.json());
+        }
+        return await res.blob();
+      })
+      .then((res) => {
+        const url = window.URL.createObjectURL(new Blob([res]));
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `${name}-icons.zip`);
+        document.body.appendChild(link);
+        link.click();
+        link?.parentNode?.removeChild(link);
+      });
+  } catch (error) {
+    if (error instanceof PaletaError) {
+      dispatch("custom:updateMessage", {
+        type: "error",
+        message: error.message,
+      });
+    }
+  }
+}
+
+export async function updateIcons(
+  id: string,
+  token: string,
+  collection: IconCollection
+) {
+  try {
+    await fetch(`http://localhost:3000/api/v1/icons/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: collection.name,
+        icons: collection.icons,
+        color: collection.color,
+      }),
+    }).then(async (res) => {
+      const data = await res.json();
+      if (res.status !== 200) {
+        throw new PaletaError(data);
+      }
+      return data;
+    });
+    replacePath(id + "+" + collection.name);
+  } catch (error) {
+    if (error instanceof PaletaError) {
+      dispatch("custom:updateMessage", {
+        type: "error",
+        message: error.message,
+      });
     }
   }
 }

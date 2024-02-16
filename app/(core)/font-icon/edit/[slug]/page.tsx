@@ -2,13 +2,7 @@
 
 import Image from "next/image";
 import { svgs } from "../../data/svg";
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useLayoutEffect, useState } from "react";
 import SideBar from "./components/SideBar";
 import { changeSvgColor } from "../../utils/changeIconColor";
 import UpdateIconsColor from "../../components/UpdateIconsColor";
@@ -18,7 +12,7 @@ import { useUserStore } from "@/store";
 import { useRouter } from "next/navigation";
 import { MutableCard } from "../../components/MutableCard";
 import { Icon, IconCollection } from "../../craft/page";
-import { getFontIcon } from "../../actions";
+import { getFontIcon, updateIcons } from "../../actions";
 
 export default function Page({ params }: { params: { slug: string } }) {
   const [itemsToShow, setItemsToShow] = useState(12);
@@ -29,10 +23,10 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   useLayoutEffect(() => {
     async function get() {
-      const [id, name] = params.slug.split("-");
+      const [id, name] = params.slug.split("%2B");
       const data = await getFontIcon(id, name, router);
 
-      setCollection(data);
+      setCollection(data as IconCollection);
     }
     if (!token) {
       router.push("/font-icon/craft");
@@ -207,6 +201,15 @@ export default function Page({ params }: { params: { slug: string } }) {
     }
   };
 
+  // Update Collection
+  const updateFontIcon = async () => {
+    await updateIcons(
+      params.slug.split("%2B")[0],
+      token as string,
+      collection as IconCollection
+    );
+  };
+
   return (
     <div className="min-h-[calc(100vh-80px)] p-8 flex gap-8 bg-main text-secondary text-sm">
       {collection ? (
@@ -214,6 +217,7 @@ export default function Page({ params }: { params: { slug: string } }) {
           <SideBar
             toggleIconsColor={toggleIconsColor}
             uploadIcons={uploadIcons}
+            updateFontIcon={updateFontIcon}
           />
           {iconsColor && (
             <UpdateIconsColor
@@ -230,6 +234,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                 value={collection.name}
                 onChange={handleNameChanged}
               />
+              <p className="flex items-center gap-3">
+                <span className="icon-info text-2xl info-icon" /> Remember to
+                save all your changes!
+              </p>
               <div className="w-full h-auto grid grid-cols-[repeat(auto-fill,_minmax(140px,_1fr))] gap-8">
                 {collection?.icons.map((svg) => (
                   <MutableCard

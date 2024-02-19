@@ -98,9 +98,7 @@ export default function Page() {
     }
 
     const normalizedIcons = normalizeIcon(collection);
-    normalizedIcons.thumbnail = await generateThumbnail(
-      normalizedIcons.icons.slice(0, 6)
-    );
+    normalizedIcons.thumbnail = await generateThumbnail(normalizedIcons.icons);
 
     const id = await saveFontIcon(normalizedIcons, token as string);
 

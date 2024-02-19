@@ -15,7 +15,7 @@ export default function Page() {
   return (
     <div className="w-full min-h-[calc(100vh-80px)] bg-main text-secondary">
       <main className="w-full max-w-5xl p-9 mx-auto flex flex-col gap-20">
-        <h1 className="text-lg font-semibold text-center">My Colors</h1>
+        <h1 className="text-lg font-semibold text-center">My Font Icons</h1>
         <div className="w-full grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-20">
           {icons ? (
             <>
@@ -33,7 +33,8 @@ export default function Page() {
                   viewport={{ amount: 0 }}
                 >
                   <article className="flex flex-col gap-5">
-                    <div className="w-full h-36 flex rounded-3xl overflow-hidden">
+                    <p className="text-center text-base">{icon.name}</p>
+                    <div className="w-full h-36 flex rounded-3xl overflow-hidden border border-secondary-border">
                       <Image
                         src={icon.thumbnail}
                         alt="Last font icon thumbnail"
@@ -51,7 +52,7 @@ export default function Page() {
                         tooltip-position="bottom"
                       >
                         <Link
-                          href={`/font-icon/edit/${icon.id}`}
+                          href={`/font-icon/edit/${icon.id}+${icon.name}`}
                           className="secondary-hover flex"
                         >
                           <span className="icon-palette" />

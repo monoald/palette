@@ -3,6 +3,7 @@ import {
   BasicCollection,
   Collections,
   GradientCollection,
+  IconsCollection,
   PaletteCollection,
 } from "./app/(core)/me/action";
 
@@ -29,6 +30,10 @@ type Actions = {
   updateGradients: (
     type: string,
     payload: Partial<GradientCollection> | string
+  ) => void;
+  updateFontIcons: (
+    type: string,
+    payload: Partial<IconsCollection> | string
   ) => void;
 };
 
@@ -137,6 +142,41 @@ function handleUpdateGradients(
   return state;
 }
 
+function handleUpdateFontIcons(
+  state: UserState & Actions,
+  type: string,
+  payload: any
+): Partial<UserState & Actions> {
+  if (type === "save") {
+    if (state.collections) {
+      return {
+        ...state,
+        collections: {
+          ...state.collections,
+          icons: [...state.collections.icons, payload],
+        },
+      };
+    }
+  } else if (type === "unsave") {
+    if (state.collections?.icons) {
+      const newIcons = [...state.collections.icons];
+      const colorIndex = state.collections.icons.findIndex(
+        (icn) => icn.id === payload
+      );
+
+      if (colorIndex !== -1) {
+        newIcons?.splice(colorIndex, 1);
+
+        return {
+          ...state,
+          collections: { ...state.collections, icons: newIcons },
+        };
+      }
+    }
+  }
+  return state;
+}
+
 export const useUserStore = create<UserState & Actions>((set) => ({
   user: null,
   token: null,
@@ -149,4 +189,6 @@ export const useUserStore = create<UserState & Actions>((set) => ({
     set((state) => handleUpdatePalettes(state, type, payload)),
   updateGradients: (type, payload) =>
     set((state) => handleUpdateGradients(state, type, payload)),
+  updateFontIcons: (type, payload) =>
+    set((state) => handleUpdateFontIcons(state, type, payload)),
 }));

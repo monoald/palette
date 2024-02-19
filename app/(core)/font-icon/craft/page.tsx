@@ -40,6 +40,7 @@ export default function Page() {
   });
 
   const token = useUserStore((state) => state.token);
+  const updateFontIcons = useUserStore((state) => state.updateFontIcons);
   const router = useRouter();
 
   const handleNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +101,11 @@ export default function Page() {
     const normalizedIcons = normalizeIcon(collection);
     normalizedIcons.thumbnail = await generateThumbnail(normalizedIcons.icons);
 
-    const id = await saveFontIcon(normalizedIcons, token as string);
+    const id = await saveFontIcon(
+      normalizedIcons,
+      token as string,
+      updateFontIcons
+    );
 
     if (id !== undefined) {
       router.push(`/font-icon/edit/${id}+${collection.name}`);

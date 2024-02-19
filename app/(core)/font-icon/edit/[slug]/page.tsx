@@ -22,8 +22,9 @@ import PaletaIcons from "../../components/PaletaIcons";
 export default function Page({ params }: { params: { slug: string } }) {
   const [collection, setCollection] = useState<IconCollection | null>(null);
 
-  const router = useRouter();
   const token = useUserStore((state) => state.token);
+  const updateFontIcons = useUserStore((state) => state.updateFontIcons);
+  const router = useRouter();
 
   useLayoutEffect(() => {
     async function get() {
@@ -223,7 +224,12 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   // Unsave
   const unsaveIcons = async () => {
-    await unsaveFontIcon(params.slug.split("%2B")[0], token as string, router);
+    await unsaveFontIcon(
+      params.slug.split("%2B")[0],
+      token as string,
+      updateFontIcons,
+      router
+    );
   };
 
   return (

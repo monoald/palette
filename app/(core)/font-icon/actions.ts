@@ -4,7 +4,11 @@ import { dispatch } from "../hooks/useStateHandler";
 import { IconCollection } from "./craft/page";
 import { replacePath } from "@/app/utils/urlState";
 
-export async function saveFontIcon(collection: IconCollection, token: string) {
+export async function saveFontIcon(
+  collection: IconCollection,
+  token: string,
+  updateFontIcons: (type: string, payload: IconCollection | string) => void
+) {
   dispatch("custom:load", { load: true });
   try {
     const data = await fetch("http://localhost:3000/api/v1/icons", {
@@ -28,6 +32,7 @@ export async function saveFontIcon(collection: IconCollection, token: string) {
       message: `Font icon ${collection.name} saved successfully`,
     });
 
+    updateFontIcons("save", collection);
     return data.id;
   } catch (error) {
     if (error instanceof PaletaError) {
@@ -44,6 +49,7 @@ export async function saveFontIcon(collection: IconCollection, token: string) {
 export async function unsaveFontIcon(
   id: string,
   token: string,
+  updateFontIcons: (type: string, payload: IconCollection | string) => void,
   router: AppRouterInstance
 ) {
   dispatch("custom:load", { load: true });
@@ -67,6 +73,7 @@ export async function unsaveFontIcon(
       type: "success",
       message: "Font icon unsaved successfully",
     });
+    updateFontIcons("unsave", id);
     router.push("/font-icon/craft");
   } catch (error) {
     if (error instanceof PaletaError) {

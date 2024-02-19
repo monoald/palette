@@ -17,7 +17,7 @@ export type PaletteCollection = {
   length: number;
 };
 
-type IconsCollection = BasicCollection & { thumbnail: string };
+export type IconsCollection = BasicCollection & { thumbnail: string };
 
 export type Collections = {
   colors: BasicCollection[];

@@ -20,7 +20,6 @@ import {
 import PaletaIcons from "../../components/PaletaIcons";
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const [itemsToShow, setItemsToShow] = useState(12);
   const [collection, setCollection] = useState<IconCollection | null>(null);
 
   const router = useRouter();

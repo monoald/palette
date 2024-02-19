@@ -5,6 +5,7 @@ import { IconCollection } from "./craft/page";
 import { replacePath } from "@/app/utils/urlState";
 
 export async function saveFontIcon(collection: IconCollection, token: string) {
+  dispatch("custom:load", { load: true });
   try {
     const data = await fetch("http://localhost:3000/api/v1/icons", {
       method: "POST",
@@ -21,6 +22,7 @@ export async function saveFontIcon(collection: IconCollection, token: string) {
       return data;
     });
 
+    dispatch("custom:load", { load: false });
     dispatch("custom:updateMessage", {
       type: "success",
       message: `Font icon ${collection.name} saved successfully`,
@@ -29,6 +31,7 @@ export async function saveFontIcon(collection: IconCollection, token: string) {
     return data.id;
   } catch (error) {
     if (error instanceof PaletaError) {
+      dispatch("custom:load", { load: false });
       dispatch("custom:updateMessage", {
         type: "error",
         message: error.message,
@@ -43,6 +46,7 @@ export async function unsaveFontIcon(
   token: string,
   router: AppRouterInstance
 ) {
+  dispatch("custom:load", { load: true });
   try {
     const data = await fetch(`http://localhost:3000/api/v1/icons/${id}`, {
       method: "DELETE",
@@ -58,6 +62,7 @@ export async function unsaveFontIcon(
       return data;
     });
 
+    dispatch("custom:load", { load: false });
     dispatch("custom:updateMessage", {
       type: "success",
       message: "Font icon unsaved successfully",
@@ -65,6 +70,7 @@ export async function unsaveFontIcon(
     router.push("/font-icon/craft");
   } catch (error) {
     if (error instanceof PaletaError) {
+      dispatch("custom:load", { load: false });
       dispatch("custom:updateMessage", {
         type: "error",
         message: error.message,
@@ -115,6 +121,7 @@ export async function getFontIcon(
 }
 
 export async function downloadFonts(id: string, name: string) {
+  dispatch("custom:load", { load: true });
   try {
     await fetch(`http://localhost:3000/api/v1/icons/download-fonts/${id}`)
       .then(async (res) => {
@@ -133,8 +140,11 @@ export async function downloadFonts(id: string, name: string) {
         link.click();
         link?.parentNode?.removeChild(link);
       });
+
+    dispatch("custom:load", { load: false });
   } catch (error) {
     if (error instanceof PaletaError) {
+      dispatch("custom:load", { load: false });
       dispatch("custom:updateMessage", {
         type: "error",
         message: error.message,
@@ -144,6 +154,7 @@ export async function downloadFonts(id: string, name: string) {
 }
 
 export async function downloadIcons(id: string, name: string) {
+  dispatch("custom:load", { load: true });
   try {
     await fetch(`http://localhost:3000/api/v1/icons/download-icons/${id}`)
       .then(async (res) => {
@@ -162,8 +173,10 @@ export async function downloadIcons(id: string, name: string) {
         link.click();
         link?.parentNode?.removeChild(link);
       });
+    dispatch("custom:load", { load: false });
   } catch (error) {
     if (error instanceof PaletaError) {
+      dispatch("custom:load", { load: false });
       dispatch("custom:updateMessage", {
         type: "error",
         message: error.message,
@@ -177,6 +190,7 @@ export async function updateIcons(
   token: string,
   collection: IconCollection
 ) {
+  dispatch("custom:load", { load: true });
   try {
     await fetch(`http://localhost:3000/api/v1/icons/${id}`, {
       method: "PATCH",
@@ -196,9 +210,16 @@ export async function updateIcons(
       }
       return data;
     });
+
+    dispatch("custom:load", { load: false });
+    dispatch("custom:updateMessage", {
+      type: "success",
+      message: "Updated successfully",
+    });
     replacePath(id + "+" + collection.name);
   } catch (error) {
     if (error instanceof PaletaError) {
+      dispatch("custom:load", { load: false });
       dispatch("custom:updateMessage", {
         type: "error",
         message: error.message,

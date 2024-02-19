@@ -8,6 +8,7 @@ import User from "./components/User";
 
 import "../globals.css";
 import "../fontIcons.css";
+import LoadingState from "../components/LoadingState";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
           {children}
           <Message />
           <OptionMessage />
+          <LoadingState />
         </User>
       </body>
     </html>

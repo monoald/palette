@@ -26,7 +26,7 @@ export default function Page() {
                   initial="hidden"
                   animate="visible"
                   transition={{
-                    delay: index * 0.2,
+                    delay: index * 0.1,
                     ease: "easeInOut",
                     duration: 0.3,
                   }}

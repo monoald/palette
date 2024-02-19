@@ -4,6 +4,7 @@ import { MotionDiv } from "@/app/components/FramerMotion";
 import { getMainContrastColor } from "@/app/utils/createColorObject";
 import { useUserStore } from "@/store";
 import { hexToRgb } from "colors-kit";
+import Link from "next/link";
 
 const variants = {
   hidden: { opacity: 0 },
@@ -33,7 +34,8 @@ export default function Page() {
                   viewport={{ amount: 0 }}
                 >
                   <article className="flex flex-col gap-5">
-                    <div
+                    <Link
+                      href={`/color/${clr.name}`}
                       className="w-full h-36 flex items-center justify-center rounded-3xl overflow-hidden text-[0px] hover:text-lg font-semibold transition-all"
                       style={{
                         background: "#" + clr.name,
@@ -41,7 +43,7 @@ export default function Page() {
                       }}
                     >
                       <p className="uppercase">{"#" + clr.name}</p>
-                    </div>
+                    </Link>
 
                     <div className="w-fit h-fit px-5 py-2 mx-auto border border-primary-border rounded-full flex items-center gap-7 text-2xl">
                       <button

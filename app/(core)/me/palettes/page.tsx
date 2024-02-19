@@ -40,8 +40,9 @@ export default function Page() {
                           key={color}
                           className="w-full hover:w-[130%] transition-all text-[0px] hover:text-base"
                         >
-                          <button
-                            className="w-full h-full"
+                          <Link
+                            href={`/color/${color.replace("#", "")}`}
+                            className="w-full h-full flex items-center justify-center"
                             style={{
                               background: color,
                             }}
@@ -54,7 +55,7 @@ export default function Page() {
                             >
                               {color}
                             </span>
-                          </button>
+                          </Link>
                         </li>
                       ))}
                     </ul>

@@ -7,6 +7,7 @@ import { hexToRgb } from "colors-kit";
 import { useUserStore } from "@/store";
 import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import { handleSaveColor, handleUnsaveColor } from "@/app/(core)/handlers";
+import Link from "next/link";
 
 type Props = {
   color: ColorType;
@@ -71,7 +72,8 @@ export default function Card({ color, index }: Props) {
       viewport={{ amount: 0 }}
     >
       <li className="flex flex-col gap-5">
-        <div
+        <Link
+          href={`/color/${color.name}`}
           className="w-full h-36 flex items-center justify-center rounded-3xl overflow-hidden text-[0px] hover:text-lg font-semibold transition-all"
           style={{
             background: "#" + color.name,
@@ -79,7 +81,7 @@ export default function Card({ color, index }: Props) {
           }}
         >
           <p className="uppercase">{"#" + color.name}</p>
-        </div>
+        </Link>
 
         <div className="w-fit h-fit px-5 py-2 mx-auto border border-primary-border rounded-full flex items-center gap-7 text-2xl">
           <button

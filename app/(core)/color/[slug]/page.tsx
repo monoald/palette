@@ -11,7 +11,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     <div className="w-full h-auto bg-main">
       <main className="max-w-5xl p-8 flex flex-col gap-20 bg-main mx-auto">
         <div
-          className="w-full h-96 rounded-3xl mx-auto flex items-center justify-center"
+          className="w-full h-96 rounded-3xl mx-auto border border-secondary-border flex items-center justify-center"
           style={{ background: color.color, color: color.mainContrastColor }}
         >
           <h1 className="text-5xl font-semibold text-center uppercase opacity-80">
@@ -76,8 +76,9 @@ export default function Page({ params }: { params: { slug: string } }) {
                       key={color}
                       className="w-full hover:w-[130%] transition-all text-[0px] hover:text-base"
                     >
-                      <button
-                        className="w-full h-full"
+                      <Link
+                        href={`/color/${color.replace("#", "")}`}
+                        className="w-full h-full flex items-center justify-center"
                         style={{
                           background: color,
                         }}
@@ -90,7 +91,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                         >
                           {color}
                         </span>
-                      </button>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -142,7 +143,11 @@ export default function Page({ params }: { params: { slug: string } }) {
                 <li className="flex flex-col gap-5" key={blindness}>
                   <p className="capitalize text-center">{blindness}</p>
 
-                  <div
+                  <Link
+                    href={`/color/${color?.colorBlind[blindness].replace(
+                      "#",
+                      ""
+                    )}`}
                     className="w-full h-36 flex items-center justify-center rounded-3xl overflow-hidden text-[0px] hover:text-lg font-semibold transition-all"
                     style={{
                       background: color?.colorBlind[blindness],
@@ -152,7 +157,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                     }}
                   >
                     <p className="uppercase">{color?.colorBlind[blindness]}</p>
-                  </div>
+                  </Link>
 
                   <div className="w-fit h-fit px-5 py-2 mx-auto border border-primary-border rounded-full flex items-center gap-7 text-2xl">
                     <button

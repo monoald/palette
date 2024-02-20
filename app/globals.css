@@ -33,17 +33,6 @@ p {
     --background-end-rgb: 0, 0, 0;
   }
 }
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
 .primary-active {
   & > *:first-child {
     @apply text-tertiary text-shadow-active relative pb-1 after:absolute after:left-0 after:top-[100%] after:w-full after:h-[2px] after:bg-tertiary after:opacity-80 after:transition-all after:shadow-active;

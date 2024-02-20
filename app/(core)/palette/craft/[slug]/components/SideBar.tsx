@@ -74,7 +74,7 @@ export default function SideBar({
             tooltip-position="left"
             onClick={changePalette}
           >
-            <span className="icon-plus text-2xl" />
+            <span className="icon-shuffle text-2xl" />
           </button>
         </li>
 

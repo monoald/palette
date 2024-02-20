@@ -1,22 +1,80 @@
+"use client";
+
 import { ColorFormats, hexToRgb } from "colors-kit";
 
 import { ColorBlind, Palettes, createColor } from "./utils/createSingleColor";
 import { getMainContrastColor } from "@/app/utils/createColorObject";
 import Link from "next/link";
+import { useUserStore } from "@/store";
+import { useEffect, useState } from "react";
+import { dispatch } from "../../hooks/useStateHandler";
+import { handleSaveColor, handleUnsaveColor } from "../../handlers";
+import { makeRandomID } from "@/app/utils/makeRandomID";
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const color = createColor(params.slug);
+  const [color, setColor] = useState(createColor(params.slug));
+  const colors = useUserStore((state) => state.collections?.colors);
+  const token = useUserStore((state) => state.token);
+  const updateColors = useUserStore((state) => state.updateColors);
+
+  useEffect(() => {
+    setColor((prev) => ({
+      ...prev,
+      saved: colors
+        ? Boolean(colors.find((clr) => clr.name === params.slug))
+        : false,
+    }));
+  }, [colors, params.slug]);
+
+  const saveColor = async () => {
+    if (!token) {
+      dispatch("custom:updateMessage", {
+        type: "error",
+        message: "You must login to save a color!",
+      });
+      return;
+    }
+
+    if (color.saved) {
+      await handleUnsaveColor(
+        token,
+        { name: params.slug, id: makeRandomID() },
+        updateColors
+      );
+    } else {
+      await handleSaveColor(
+        token,
+        { name: params.slug, id: makeRandomID() },
+        updateColors
+      );
+    }
+  };
 
   return (
     <div className="w-full h-auto bg-main">
       <main className="max-w-5xl p-8 flex flex-col gap-20 bg-main mx-auto">
-        <div
-          className="w-full h-96 rounded-3xl mx-auto border border-secondary-border flex items-center justify-center"
-          style={{ background: color.color, color: color.mainContrastColor }}
-        >
-          <h1 className="text-5xl font-semibold text-center uppercase opacity-80">
-            {color.color}
-          </h1>
+        <div className="flex flex-col gap-10">
+          <div
+            className="w-full h-96 rounded-3xl mx-auto border border-secondary-border flex items-center justify-center"
+            style={{ background: color.color, color: color.mainContrastColor }}
+          >
+            <h1 className="text-5xl font-semibold text-center uppercase opacity-80">
+              {color.color}
+            </h1>
+          </div>
+
+          <div className="w-fit h-fit px-10 py-2 mx-auto border border-primary-border rounded-full flex items-center text-2xl">
+            <button
+              className="flex items-center justify-center"
+              onClick={saveColor}
+            >
+              <span
+                className={`${
+                  color.saved ? "icon-heart-filled" : "icon-heart"
+                } text-4xl`}
+              />
+            </button>
+          </div>
         </div>
 
         <section>
@@ -68,7 +126,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
           <ul className="pt-10 grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-14">
             {Object.keys(color.palettes).map((palette) => (
-              <li className="flex flex-col gap-5" key={color.color}>
+              <li className="flex flex-col gap-5" key={color.color + palette}>
                 <p className="capitalize text-center">{palette}</p>
                 <ul className="w-full h-36 flex rounded-3xl overflow-hidden">
                   {color.palettes[palette as keyof Palettes].map((color) => (
@@ -97,7 +155,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </ul>
 
                 <div className="w-fit h-fit px-5 py-2 mx-auto border border-primary-border rounded-full flex items-center gap-7 text-2xl">
-                  <button
+                  {/* <button
                     className="secondary-hover flex"
                     tooltip="true"
                     tooltip-content="Save"
@@ -108,7 +166,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                       icon-heart
                     `}
                     />
-                  </button>
+                  </button> */}
 
                   <div
                     className="secondary-hover flex"
@@ -122,6 +180,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                       ]
                         .join("-")
                         .replaceAll("#", "")}`}
+                      className="flex items-center justify-center"
                     >
                       <span className="icon-palette" />
                     </Link>
@@ -159,7 +218,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                     <p className="uppercase">{color?.colorBlind[blindness]}</p>
                   </Link>
 
-                  <div className="w-fit h-fit px-5 py-2 mx-auto border border-primary-border rounded-full flex items-center gap-7 text-2xl">
+                  {/* <div className="w-fit h-fit px-5 py-2 mx-auto border border-primary-border rounded-full flex items-center gap-7 text-2xl">
                     <button
                       className="secondary-hover flex"
                       tooltip="true"
@@ -172,7 +231,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                         `}
                       />
                     </button>
-                  </div>
+                  </div> */}
                 </li>
               )
             )}

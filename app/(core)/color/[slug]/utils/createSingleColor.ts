@@ -38,6 +38,7 @@ export interface ColorSpec {
   allFormats: ColorFormats;
   palettes: Palettes;
   colorBlind: ColorBlind;
+  saved: boolean;
 }
 
 export function createColor(id: string): ColorSpec {
@@ -99,6 +100,7 @@ export function createColor(id: string): ColorSpec {
       tritanomaly: toTritanomaly(hex) as string,
       tritanopia: toTritanopia(hex) as string,
     },
+    saved: false,
   };
 
   return color;

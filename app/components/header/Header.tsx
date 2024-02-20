@@ -3,6 +3,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import UserArea from "./UserArea";
+import Image from "next/image";
 
 const navContent = [
   {
@@ -54,9 +55,7 @@ const navContent = [
 export default function Header() {
   const [toggleMenu, setToggleMenu] = useState(false);
 
-  const [windowSize, setWindowSize] = useState([0, 0]);
   const updateWindowSize = () => {
-    // setWindowSize([window.innerWidth, window.innerHeight]);
     setToggleMenu(window.innerWidth >= 662);
   };
   useLayoutEffect(() => {
@@ -67,7 +66,8 @@ export default function Header() {
 
   return (
     <header className="relative px-8 pt-8 w-full h-fit flex items-center justify-center gap-9 bg-main text-secondary text-sm">
-      <div className="">
+      <div className="flex items-center gap-2">
+        <Image src="/logo.svg" alt="paleta logo" width={35} height={35} />
         <h1 className="text-2xl">
           <Link href="/">Paleta</Link>
         </h1>

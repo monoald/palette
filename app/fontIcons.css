@@ -177,3 +177,6 @@
 .icon-menu:before {
   content: "\e92e";
 }
+.icon-logo:before {
+  content: "\e92f";
+}

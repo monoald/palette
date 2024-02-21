@@ -331,7 +331,7 @@ export default function Home({ params }: { params: { slug: string } }) {
   const copyColor = (clr: string) => {
     navigator.clipboard.writeText(clr.replace("#", ""));
     dispatch("custom:updateMessage", {
-      type: "error",
+      type: "success",
       message: "Color copied to clipboard",
     });
   };

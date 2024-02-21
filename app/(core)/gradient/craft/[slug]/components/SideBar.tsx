@@ -1,3 +1,4 @@
+import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import { getParam } from "@/app/utils/urlState";
 import { Dispatch, SetStateAction } from "react";
 
@@ -129,11 +130,19 @@ ${spinAnimation.keyframe}`;
     }
 
     navigator.clipboard.writeText(code);
+    dispatch("custom:updateMessage", {
+      type: "success",
+      message: "Gradient CSS copied to clipboard",
+    });
   };
 
   const copyUrlToClipboard = () => {
     const url = window.location.href.split("#")[0];
     navigator.clipboard.writeText(url);
+    dispatch("custom:updateMessage", {
+      type: "success",
+      message: "Gradient url copied to clipboard",
+    });
   };
   return (
     <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">

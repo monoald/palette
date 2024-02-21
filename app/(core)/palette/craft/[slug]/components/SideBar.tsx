@@ -1,3 +1,4 @@
+import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import { Dispatch, SetStateAction } from "react";
 
 type Props = {
@@ -26,6 +27,10 @@ export default function SideBar({
   const copyPaletteToClipboard = () => {
     const url = window.location.href.split("#")[0];
     navigator.clipboard.writeText(url);
+    dispatch("custom:updateMessage", {
+      type: "success",
+      message: "Palette url copied to clipboard",
+    });
   };
   return (
     <aside className="h-10 flex flex-col items-center select-none md:flex-row md:h-full">

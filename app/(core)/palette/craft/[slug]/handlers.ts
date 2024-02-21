@@ -82,3 +82,16 @@ export function handleRemoveColor(colors: Color[], id: string) {
 
   return newColors;
 }
+
+export function handleAddColor(
+  color: string,
+  index: number,
+  palette: Color[]
+): Color[] {
+  const newPalette = [...palette];
+  const newColorObject = createColorObject(color, "hex");
+
+  newPalette.splice(index, 0, newColorObject);
+
+  return newPalette;
+}

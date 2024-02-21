@@ -1,13 +1,14 @@
 "use client";
 
 import { PointerEvent, useEffect, useRef, useState } from "react";
-import { Palette as PaletteType } from "colors-kit";
+import { Palette as PaletteType, Rgb, hexToRgb, rgbToHex } from "colors-kit";
 
 import { createColorObject } from "@/app/utils/createColorObject";
 import { replacePath } from "@/app/utils/urlState";
 import { useKeyDown } from "@/app/(core)/hooks/useKeyDown";
 import useStateHandler, { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import {
+  handleAddColor,
   handleChangePalette,
   handleCreatePaletteFromUrl,
   handleLockColor,
@@ -448,6 +449,47 @@ export default function Home({ params }: { params: { slug: string } }) {
     setOpenImg(!openImg);
   };
 
+  //
+  function combineColors(color1: Rgb, color2: Rgb) {
+    const combinedColor = {
+      r: Math.round((color1.r + color2.r) / 2),
+      g: Math.round((color1.g + color2.g) / 2),
+      b: Math.round((color1.b + color2.b) / 2),
+    };
+
+    return combinedColor;
+  }
+
+  function addColor(index: number) {
+    const secondaryColorIndex = index + 1;
+
+    const color1 = palette?.colors[index].formats.rgb;
+    const color2 = palette?.colors[secondaryColorIndex].formats.rgb;
+
+    const newColorRgb = combineColors(color1, color2);
+    const newColor = rgbToHex(newColorRgb);
+
+    setPalette((prev) => {
+      if (prev) {
+        const updatedColors = handleAddColor(newColor, index + 1, prev.colors);
+        const url = updatedColors
+          .map((clr) => clr.hex.replace("#", ""))
+          .join("-") as string;
+        const isSaved = isPaletteSaved(palettes, url);
+        replacePath(url);
+        return {
+          ...prev,
+          colors: updatedColors,
+          isSaved,
+          history: {
+            data: [...prev.history.data, url],
+            current: prev.history.data.length,
+          },
+        };
+      }
+    });
+  }
+
   return (
     <div className="relative flex flex-col-reverse h-[calc(100vh-80px)] gap-8 p-8 bg-main md:flex-row overflow-hidden">
       {palette && (
@@ -492,11 +534,11 @@ export default function Home({ params }: { params: { slug: string } }) {
       <main className="w-full h-full">
         {palette && (
           <PalettePlayground onUpdate={onUpdate}>
-            {palette.colors.map((clr) => (
+            {palette.colors.map((clr, index) => (
               <article
                 key={clr.id}
                 id={clr.id}
-                className="relative group w-full h-full rounded-3xl flex flex-row flex-wrap justify-end max-[606px]:justify-center items-center gap-3 max-color-bar:gap-y-0 overflow-hidden select-none md:flex-col md:justify-center md:pr-0"
+                className="relative group/main w-full h-full rounded-3xl flex flex-row flex-wrap justify-end max-[606px]:justify-center items-center gap-3 max-color-bar:gap-y-0 select-none md:flex-col md:justify-center md:pr-0"
                 style={{ background: clr.hex }}
                 onPointerMove={handleResize}
                 onPointerUp={handleEndResize}
@@ -521,6 +563,17 @@ export default function Home({ params }: { params: { slug: string } }) {
                   </div>
                 )}
 
+                {index + 1 !== palette.colors.length && (
+                  <div className="absolute top-0 w-[60px] h-full -right-[36px] z-50 group/plus flex items-center">
+                    <button
+                      className="w-[60px] h-[60px] hidden rounded-full bg-main group-hover/plus:flex items-center justify-center"
+                      onClick={() => addColor(index)}
+                    >
+                      <span className="icon-plus text-2xl" />
+                    </button>
+                  </div>
+                )}
+
                 <p
                   className="max-[606px]:hidden absolute top-auto left-10 text-md font-[500] tracking-wider uppercase md:left-auto md:top-10 lg:text-xl"
                   style={{
@@ -531,7 +584,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                 </p>
 
                 <button
-                  className="text-2xl hidden p-3 group-hover:flex"
+                  className="text-2xl hidden p-3 group-hover/main:flex"
                   style={{
                     color: clr.contrastColor,
                   }}
@@ -544,7 +597,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                 </button>
 
                 <button
-                  className="text-2xl hidden p-3 group-hover:flex color-like"
+                  className="text-2xl hidden p-3 group-hover/main:flex color-like"
                   style={{
                     color: clr.contrastColor,
                   }}
@@ -566,7 +619,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                 </button>
 
                 <button
-                  className="text-2xl hidden p-3 group-hover:flex"
+                  className="text-2xl hidden p-3 group-hover/main:flex"
                   style={{
                     color: clr.contrastColor,
                   }}
@@ -579,7 +632,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                 </button>
 
                 <button
-                  className="text-2xl hidden p-3 group-hover:flex"
+                  className="text-2xl hidden p-3 group-hover/main:flex"
                   style={{
                     color: clr.contrastColor,
                   }}
@@ -596,7 +649,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                 </button>
 
                 <button
-                  className="text-2xl hidden p-3 group-hover:flex cursor-grab"
+                  className="text-2xl hidden p-3 group-hover/main:flex cursor-grab"
                   style={{
                     color: clr.contrastColor,
                   }}
@@ -609,7 +662,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                 </button>
 
                 <button
-                  className="text-2xl hidden p-3 group-hover:flex"
+                  className="text-2xl hidden p-3 group-hover/main:flex"
                   style={{
                     color: clr.contrastColor,
                   }}
@@ -622,7 +675,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                 </button>
 
                 <button
-                  className="text-2xl hidden p-3 group-hover:flex"
+                  className="text-2xl hidden p-3 group-hover/main:flex"
                   style={{
                     color: clr.contrastColor,
                   }}

@@ -48,7 +48,7 @@ function handleUpdateColors(
         ...state,
         collections: {
           ...state.collections,
-          colors: [...state.collections.colors, payload],
+          colors: [payload, ...state.collections.colors],
         },
       };
     }
@@ -83,7 +83,7 @@ function handleUpdatePalettes(
         ...state,
         collections: {
           ...state.collections,
-          palettes: [...state.collections.palettes, payload],
+          palettes: [payload, ...state.collections.palettes],
         },
       };
     }
@@ -118,7 +118,7 @@ function handleUpdateGradients(
         ...state,
         collections: {
           ...state.collections,
-          gradients: [...state.collections.gradients, payload],
+          gradients: [payload, ...state.collections.gradients],
         },
       };
     }
@@ -153,7 +153,7 @@ function handleUpdateFontIcons(
         ...state,
         collections: {
           ...state.collections,
-          icons: [...state.collections.icons, payload],
+          icons: [payload, ...state.collections.icons],
         },
       };
     }

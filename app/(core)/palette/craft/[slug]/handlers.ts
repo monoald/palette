@@ -11,7 +11,7 @@ export function handleChangePalette(prevColors: Color[], type: PaletteType) {
   const newPalette = makeColorPalette({
     format: "hex",
     paletteType: type,
-    quantity: prevColors.length,
+    quantity: prevColors.length < 4 ? 5 : prevColors.length,
   }) as string[];
 
   const newColors = [];

@@ -17,9 +17,7 @@ export default function Page() {
                   <div
                     className="w-full h-36 flex rounded-3xl overflow-hidden"
                     style={{
-                      background:
-                        "#" +
-                        collections.colors[collections.colors.length - 1].name,
+                      background: "#" + collections.colors[0].name,
                     }}
                   ></div>
 
@@ -60,9 +58,7 @@ export default function Page() {
                   <div
                     className="w-full h-36 flex rounded-3xl overflow-hidden"
                     style={{
-                      background:
-                        collections.gradients[collections.gradients.length - 1]
-                          .style,
+                      background: collections.gradients[0].style,
                     }}
                   ></div>
                   <p className="text-center text-lg">Gradients</p>
@@ -100,9 +96,7 @@ export default function Page() {
               {collections.palettes.length > 0 ? (
                 <Link href="/me/palettes" className="flex flex-col gap-5">
                   <div className="w-full h-36 flex rounded-3xl overflow-hidden">
-                    {collections.palettes[
-                      collections.palettes.length - 1
-                    ].colorsArr.map((color) => (
+                    {collections.palettes[0].colorsArr.map((color) => (
                       <div
                         key={color}
                         className="w-full h-full"
@@ -149,10 +143,7 @@ export default function Page() {
                 <Link href="/me/font-icons" className="flex flex-col gap-5">
                   <div className="w-full h-36 flex rounded-3xl overflow-hidden">
                     <Image
-                      src={
-                        collections.icons[collections.icons.length - 1]
-                          .thumbnail
-                      }
+                      src={collections.icons[0].thumbnail}
                       alt="Last font icon thumbnail"
                       className="w-full object-cover"
                       width={380}

@@ -320,7 +320,7 @@ export default function Home({ params }: { params: { slug: string } }) {
           colors: newColors,
           history: {
             data: [...prev.history.data, newUrl],
-            current: prev.history.current++,
+            current: prev.history.current + 1,
           },
           isSaved: isPaletteSaved(palettes, newUrl),
         };

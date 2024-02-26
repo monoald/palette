@@ -36,8 +36,9 @@ export function handleCreatePaletteFromUrl(
   const newPalette = url.split("-").map((clr) => "#" + clr);
 
   const newColors = newPalette.map((clr) => {
-    const isSaved =
-      colors?.findIndex((color) => color.name === clr.replace("#", "")) !== -1;
+    const isSaved = colors
+      ? colors.findIndex((color) => color.name === clr.replace("#", "")) !== -1
+      : false;
 
     return createColorObject(clr, "hex", {
       isSaved,

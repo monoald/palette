@@ -390,10 +390,11 @@ export default function Home({ params }: { params: { slug: string } }) {
         const newColors = newPalette.map((clr) => {
           return {
             ...createColorObject(clr, "hex"),
-            isSaved:
-              colors?.findIndex(
-                (color) => color.name === clr.replace("#", "")
-              ) !== -1,
+            isSaved: colors
+              ? colors?.findIndex(
+                  (color) => color.name === clr.replace("#", "")
+                ) !== -1
+              : false,
           };
         });
 
@@ -422,10 +423,11 @@ export default function Home({ params }: { params: { slug: string } }) {
         const newColors = newPalette.map((clr) => {
           return {
             ...createColorObject(clr, "hex"),
-            isSaved:
-              colors?.findIndex(
-                (color) => color.name === clr.replace("#", "")
-              ) !== -1,
+            isSaved: colors
+              ? colors?.findIndex(
+                  (color) => color.name === clr.replace("#", "")
+                ) !== -1
+              : false,
           };
         });
 

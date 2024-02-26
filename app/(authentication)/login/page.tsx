@@ -2,6 +2,10 @@
 import Link from "next/link";
 import SocialLogin from "../components/SocialLogin";
 import { FormEvent } from "react";
+import { useUserStore } from "@/store";
+import { useRouter } from "next/navigation";
+import { dispatch } from "@/app/(core)/hooks/useStateHandler";
+import { PaletaError } from "@/app/(core)/actions";
 
 type Form = { email: { value: string }; password: { value: string } };
 
@@ -21,8 +25,12 @@ const socialLogin = [
 ];
 
 export default function Page() {
+  const router = useRouter();
+  const updateUser = useUserStore((state) => state.updateUser);
+
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    dispatch("custom:load", { load: true });
 
     const formData = event.target as EventTarget & Form;
     const body = JSON.stringify({
@@ -30,13 +38,42 @@ export default function Page() {
       password: formData.password.value,
     });
 
-    const response = await fetch("http://localhost:3000/api/v1/users/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body,
-    }).then((res) => res.json());
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/v1/users/signin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body,
+        }
+      ).then(async (res) => {
+        const data = await res.json();
+        if (res.status !== 200) {
+          throw new PaletaError(data);
+        }
+        return data;
+      });
+
+      dispatch("custom:load", { load: false });
+      const { user, token } = response;
+
+      if (user && token) {
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("token", JSON.stringify(token));
+        updateUser(user, token);
+        router.push("/me");
+      }
+    } catch (error) {
+      if (error instanceof PaletaError) {
+        dispatch("custom:load", { load: false });
+        dispatch("custom:updateMessage", {
+          type: "error",
+          message: error.message,
+        });
+      }
+    }
   }
 
   return (

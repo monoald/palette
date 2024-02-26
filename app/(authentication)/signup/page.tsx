@@ -2,6 +2,9 @@
 import Link from "next/link";
 import SocialLogin from "../components/SocialLogin";
 import { FormEvent } from "react";
+import { PaletaError } from "@/app/(core)/actions";
+import { dispatch } from "@/app/(core)/hooks/useStateHandler";
+import { useRouter } from "next/navigation";
 
 type Form = {
   email: { value: string };
@@ -25,8 +28,10 @@ const socialLogin = [
 ];
 
 export default function Page() {
+  const router = useRouter();
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    dispatch("custom:load", { load: true });
 
     const formData = event.target as EventTarget & Form;
     const body = JSON.stringify({
@@ -35,13 +40,39 @@ export default function Page() {
       password: formData.password.value,
     });
 
-    const response = await fetch("http://localhost:3000/api/v1/users/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body,
-    }).then((res) => res.json());
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/v1/users/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body,
+        }
+      ).then(async (res) => {
+        const data = await res.json();
+        if (res.status !== 201) {
+          throw new PaletaError(data);
+        }
+        return data;
+      });
+
+      dispatch("custom:load", { load: false });
+      dispatch("custom:updateMessage", {
+        type: "success",
+        message: `User ${response.username} created successfully`,
+      });
+      router.push("/login");
+    } catch (error) {
+      if (error instanceof PaletaError) {
+        dispatch("custom:load", { load: false });
+        dispatch("custom:updateMessage", {
+          type: "error",
+          message: error.message,
+        });
+      }
+    }
   }
 
   return (

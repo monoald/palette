@@ -2,36 +2,63 @@
 import { useUserStore } from "@/store";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useLayoutEffect } from "react";
 
 export default function UserArea() {
+  const router = useRouter();
   const user = useUserStore((state) => state.user);
-  const updatUser = useUserStore((state) => state.updateUser);
+  const updateUser = useUserStore((state) => state.updateUser);
 
   useLayoutEffect(() => {
-    updatUser(
+    updateUser(
       JSON.parse(localStorage.getItem("user") as string),
       JSON.parse(localStorage.getItem("token") as string)
     );
-  }, [updatUser]);
+  }, [updateUser]);
+
+  const handleLogOut = () => {
+    updateUser(null, null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+    router.push("/login");
+  };
 
   return (
     <>
       {!user ? (
         <div className="flex gap-6">
-          <button className="w-28 h-10 bg-tertiary rounded-full text-main">
+          <Link
+            href="/signup"
+            className="w-28 h-10 bg-transparent border border-primary-border rounded-full flex items-center justify-center text-secondary"
+          >
             Sign Up
-          </button>
-          <button className="w-28 h-10 border border-primary-border rounded-full">
-            Sign In
-          </button>
+          </Link>
+          <Link href="/login" className="primary-button">
+            <div>
+              <span>Sign in</span>
+              <div className="circle-12"></div>
+              <div className="circle-11"></div>
+              <div className="circle-10"></div>
+              <div className="circle-9"></div>
+              <div className="circle-8"></div>
+              <div className="circle-7"></div>
+              <div className="circle-6"></div>
+              <div className="circle-5"></div>
+              <div className="circle-4"></div>
+              <div className="circle-3"></div>
+              <div className="circle-2"></div>
+              <div className="circle-1"></div>
+            </div>
+          </Link>
         </div>
       ) : (
         <div className="group/area w-fit h-fit flex">
           <button className="w-[42px] h-[42px] rounded-full overflow-hidden">
             <Image
               className="object-cover"
-              src={`data:image/png;base64,${user.avatar}`}
+              src={user.avatar}
               alt=""
               width={42}
               height={42}
@@ -51,7 +78,7 @@ export default function UserArea() {
               <Link href="/me/font-icons">My Font Icons</Link>
             </li>
             <li className="primary-hover">
-              <Link href="/login">Sign out</Link>
+              <button onClick={handleLogOut}>Sign out</button>
             </li>
           </ul>
         </div>

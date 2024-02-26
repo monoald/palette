@@ -20,7 +20,7 @@ export type UserState = {
 };
 
 type Actions = {
-  updateUser: (user: User, token: string) => void;
+  updateUser: (user: User | null, token: string | null) => void;
   updateCollections: (collections: Collections) => void;
   updateColors: (type: string, payload: BasicCollection | string) => void;
   updatePalettes: (
@@ -36,6 +36,18 @@ type Actions = {
     payload: Partial<IconsCollection> | string
   ) => void;
 };
+
+function handleUpdateUser(user: User | null, token: string | null) {
+  if (user) {
+    if (user?.avatar.length <= 12) {
+      user.avatar = `/avatars/${user.avatar}.webp`;
+    } else {
+      user.avatar = `data:image/png;base64,${user.avatar}`;
+    }
+  }
+
+  return { user, token };
+}
 
 function handleUpdateColors(
   state: UserState & Actions,
@@ -181,7 +193,7 @@ export const useUserStore = create<UserState & Actions>((set) => ({
   user: null,
   token: null,
   collections: null,
-  updateUser: (user, token) => set(() => ({ user, token })),
+  updateUser: (user, token) => set(() => handleUpdateUser(user, token)),
   updateCollections: (collections) => set(() => ({ collections })),
   updateColors: (type, payload) =>
     set((state) => handleUpdateColors(state, type, payload)),

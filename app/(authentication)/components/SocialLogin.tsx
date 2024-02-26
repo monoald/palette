@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { openPopUp } from "../login/utils/openPopUp";
 import { UserState, useUserStore } from "@/store";
+import { useRouter } from "next/navigation";
 
 type Props = {
   src: string;
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export default function SocialLogin({ src, url }: Props) {
+  const router = useRouter();
   const updateUser = useUserStore((state) => state.updateUser);
 
   const handleSocialLogin = () => {
@@ -37,6 +39,7 @@ export default function SocialLogin({ src, url }: Props) {
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", JSON.stringify(token));
         updateUser(user, token);
+        router.push("/me");
       }
     }
   };

@@ -4,11 +4,16 @@ export function urlToGradient(url: string): string {
 
   const colors = colorsString.split("-").map((clr) => "#" + clr);
   const type = searchParams.get("type");
-  const angle = searchParams.get("angle");
+  let angle = searchParams.get("angle");
   const circlePositionX = searchParams.get("circle-x");
   const circlePositionY = searchParams.get("circle-y");
   const stops = (searchParams.get("stops") as string)?.split("-");
 
+  if (type === "horizontal") {
+    angle = "90";
+  } else if (type === "vertical") {
+    angle = "0";
+  }
   let typeGradient = `linear-gradient(${angle}deg, `;
 
   if (type === "circle" || (circlePositionX && circlePositionY)) {

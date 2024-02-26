@@ -157,40 +157,23 @@ export default function Home() {
     <>
       <main className="w-full p-8 bg-main h-fit">
         <div className="w-full max-w-6xl mx-auto flex flex-col gap-20">
-          <section className="flex flex-col gap-4">
+          <section className="flex flex-col gap-8">
             <div
-              className="w-full mx-auto p-8 border border-secondary-border rounded-3xl flex flex-col gap-8"
-              style={{ background: palette.palette[palette.bg] }}
+              className="w-full mx-auto flex flex-col gap-8"
+              // style={{ background: palette.palette[palette.bg] }}
             >
               <p
                 className="text-6xl font-extrabold text-center text-balance"
-                style={{ color: palette.palette[palette.txt] }}
+                // style={{ color: palette.palette[palette.txt] }}
               >
                 Find the perfect palette for your project
               </p>
-
-              <div className="w-fit mx-auto flex gap-4">
-                <Link
-                  href="/palette/craft"
-                  className="rounded-lg w-32 h-10 font-semibold flex items-center justify-center"
-                  style={{
-                    background: palette.palette[palette["btn-1-bg"]],
-                    color: palette.palette[palette["btn-1-txt"]],
-                  }}
-                >
-                  start
-                </Link>{" "}
-                <Link
-                  href="/login"
-                  className="rounded-lg w-32 h-10 font-semibold flex items-center justify-center"
-                  style={{
-                    background: palette.palette[palette["btn-2-bg"]],
-                    color: palette.palette[palette["btn-2-txt"]],
-                  }}
-                >
-                  login
-                </Link>
-              </div>
+              <Link
+                href="/palette/craft"
+                className="rounded-full w-32 h-10 mx-auto font-semibold border border-primary-border flex items-center justify-center"
+              >
+                start
+              </Link>
             </div>
 
             <div className="w-full h-96 flex gap-2">
@@ -211,8 +194,7 @@ export default function Home() {
               </p>
               <Link
                 href="/gradient/craft"
-                className="relative w-fit py-3 px-10 text-secondary z-[0] before:absolute before:inset-1 before:rounded-3xl before:bg-main before:-z-[1] after:absolute after:rounded-3xl after:inset-0 after:[background-image:var(--ffrr)] after:-z-[2]"
-                style={{ "--ffrr": gradient } as React.CSSProperties}
+                className="w-32 h-10 border border-primary-border rounded-full text-secondary flex items-center justify-center"
               >
                 start
               </Link>

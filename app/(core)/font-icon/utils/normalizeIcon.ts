@@ -1,7 +1,8 @@
-import { IconCollection } from "../craft/page";
+import { makeRandomID } from "@/app/utils/makeRandomID";
+import { Icon, IconCollection } from "../craft/page";
 
 export function normalizeIcon(icon: IconCollection): IconCollection {
-  const icons = [...icon.icons].map((ico) => {
+  const icons: Icon[] = [...icon.icons].map((ico) => {
     let color = ico.color;
     if (ico.color === "#") color = undefined;
     return {
@@ -9,6 +10,7 @@ export function normalizeIcon(icon: IconCollection): IconCollection {
       content: ico.content,
       unicode: ico.unicode,
       color: color,
+      id: makeRandomID(),
     };
   });
 

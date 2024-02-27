@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description:
     "Find amazing color palettes, css gradients, colors and make your own font icons like fontawesome!",
   openGraph: {
-    images: ["/og.webp"],
+    images: ["https://paleta-v3.vercel.app/og.webp"],
   },
 };
 

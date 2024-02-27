@@ -16,7 +16,7 @@ export const getPublicGradients = async (
   id: string
 ): Promise<GradientType[]> => {
   const response: GradientType[] = await fetch(
-    `http://localhost:3000/api/v1/public-gradients?page=${page}&limit=6&id=${id}`
+    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/public-gradients?page=${page}&limit=6&id=${id}`
   ).then((res) => res.json());
 
   const gradients: GradientType[] = response.map((gradient) => {

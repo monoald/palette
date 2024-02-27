@@ -16,14 +16,17 @@ export class PaletaError extends Error {
 }
 
 export async function saveColor(token: string, color: string) {
-  const isSaved = await fetch("http://localhost:3000/api/v1/colors/save", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: `bearer ${token}`,
-    },
-    body: JSON.stringify({ name: color }),
-  });
+  const isSaved = await fetch(
+    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/colors/save`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${token}`,
+      },
+      body: JSON.stringify({ name: color }),
+    }
+  );
 
   if (isSaved.status !== 200) {
     const er: PaletaErrorConstructor = await isSaved.json();
@@ -32,14 +35,17 @@ export async function saveColor(token: string, color: string) {
 }
 
 export async function unsaveColor(token: string, color: string) {
-  const isUnsaved = await fetch("http://localhost:3000/api/v1/colors/unsave", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: `bearer ${token}`,
-    },
-    body: JSON.stringify({ name: color }),
-  });
+  const isUnsaved = await fetch(
+    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/colors/unsave`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${token}`,
+      },
+      body: JSON.stringify({ name: color }),
+    }
+  );
 
   if (isUnsaved.status !== 200) {
     const er: PaletaErrorConstructor = await isUnsaved.json();
@@ -48,14 +54,17 @@ export async function unsaveColor(token: string, color: string) {
 }
 
 export async function savePalette(token: string, colors: string) {
-  const isSaved = await fetch("http://localhost:3000/api/v1/palettes/save", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: `bearer ${token}`,
-    },
-    body: JSON.stringify({ colors }),
-  });
+  const isSaved = await fetch(
+    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/palettes/save`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${token}`,
+      },
+      body: JSON.stringify({ colors }),
+    }
+  );
 
   if (isSaved.status !== 200) {
     const er: PaletaErrorConstructor = await isSaved.json();
@@ -65,7 +74,7 @@ export async function savePalette(token: string, colors: string) {
 
 export async function unsavePalette(token: string, colors: string) {
   const isUnsaved = await fetch(
-    "http://localhost:3000/api/v1/palettes/unsave",
+    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/palettes/unsave`,
     {
       method: "POST",
       headers: {
@@ -83,14 +92,17 @@ export async function unsavePalette(token: string, colors: string) {
 }
 
 export async function saveGradient(token: string, name: string) {
-  const isSaved = await fetch("http://localhost:3000/api/v1/gradients/save", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: `bearer ${token}`,
-    },
-    body: JSON.stringify({ name }),
-  });
+  const isSaved = await fetch(
+    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/gradients/save`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${token}`,
+      },
+      body: JSON.stringify({ name }),
+    }
+  );
 
   if (isSaved.status !== 200) {
     const er: PaletaErrorConstructor = await isSaved.json();
@@ -100,7 +112,7 @@ export async function saveGradient(token: string, name: string) {
 
 export async function unsaveGradient(token: string, name: string) {
   const isUnsaved = await fetch(
-    "http://localhost:3000/api/v1/gradients/unsave",
+    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/gradients/unsave`,
     {
       method: "POST",
       headers: {

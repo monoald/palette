@@ -11,14 +11,17 @@ export async function saveFontIcon(
 ) {
   dispatch("custom:load", { load: true });
   try {
-    const data = await fetch("http://localhost:3000/api/v1/icons", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `bearer ${token}`,
-      },
-      body: JSON.stringify(collection),
-    }).then(async (res) => {
+    const data = await fetch(
+      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${token}`,
+        },
+        body: JSON.stringify(collection),
+      }
+    ).then(async (res) => {
       const data = await res.json();
       if (!res.ok) {
         throw new PaletaError(data);
@@ -54,13 +57,16 @@ export async function unsaveFontIcon(
 ) {
   dispatch("custom:load", { load: true });
   try {
-    const data = await fetch(`http://localhost:3000/api/v1/icons/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `bearer ${token}`,
-      },
-    }).then(async (res) => {
+    const data = await fetch(
+      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${token}`,
+        },
+      }
+    ).then(async (res) => {
       const data = await res.json();
       if (!res.ok) {
         throw new PaletaError(data);
@@ -93,7 +99,7 @@ export async function getFontIcon(
 ): Promise<IconCollection | undefined> {
   try {
     const fontIcon: IconCollection = await fetch(
-      `http://localhost:3000/api/v1/icons/${id}?name=${name}`
+      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/${id}?name=${name}`
     ).then(async (res) => {
       const data = await res.json();
       if (res.status !== 200) {
@@ -130,7 +136,9 @@ export async function getFontIcon(
 export async function downloadFonts(id: string, name: string) {
   dispatch("custom:load", { load: true });
   try {
-    await fetch(`http://localhost:3000/api/v1/icons/download-fonts/${id}`)
+    await fetch(
+      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/download-fonts/${id}`
+    )
       .then(async (res) => {
         if (!res.ok) {
           throw new PaletaError(await res.json());
@@ -163,7 +171,9 @@ export async function downloadFonts(id: string, name: string) {
 export async function downloadIcons(id: string, name: string) {
   dispatch("custom:load", { load: true });
   try {
-    await fetch(`http://localhost:3000/api/v1/icons/download-icons/${id}`)
+    await fetch(
+      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/download-icons/${id}`
+    )
       .then(async (res) => {
         if (!res.ok) {
           throw new PaletaError(await res.json());
@@ -199,23 +209,26 @@ export async function updateIcons(
 ) {
   dispatch("custom:load", { load: true });
   try {
-    await fetch(`http://localhost:3000/api/v1/icons/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `bearer ${token}`,
-      },
-      body: JSON.stringify({
-        name: collection.name,
-        icons: collection.icons.map((icn) => ({
-          color: icn.color,
-          content: icn.content,
-          name: icn.name,
-          unicode: icn.unicode,
-        })),
-        color: collection.color,
-      }),
-    }).then(async (res) => {
+    await fetch(
+      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: collection.name,
+          icons: collection.icons.map((icn) => ({
+            color: icn.color,
+            content: icn.content,
+            name: icn.name,
+            unicode: icn.unicode,
+          })),
+          color: collection.color,
+        }),
+      }
+    ).then(async (res) => {
       const data = await res.json();
       if (res.status !== 200) {
         throw new PaletaError(data);

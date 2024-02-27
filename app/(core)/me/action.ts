@@ -30,7 +30,7 @@ export const getUserCollections = async (
   token: string
 ): Promise<Collections> => {
   const response: Collections = await fetch(
-    `http://localhost:3000/api/v1/users/collections`,
+    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/users/collections`,
     {
       headers: {
         authorization: `bearer ${token}`,

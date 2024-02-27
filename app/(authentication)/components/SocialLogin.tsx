@@ -23,7 +23,7 @@ export default function SocialLogin({ src, url }: Props) {
     if (key) {
       const body = JSON.stringify({ key: key });
       const credentials: UserState = await fetch(
-        "http://localhost:3000/api/v1/auth/signin",
+        `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/signin`,
         {
           method: "POST",
           headers: {

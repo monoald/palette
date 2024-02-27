@@ -12,7 +12,14 @@ export const getColors = async (
   id: string
 ): Promise<ColorType[]> => {
   const response: ColorType[] = await fetch(
-    `http://localhost:3000/api/v1/colors?page=${page}&limit=6&id=${id}`
+    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/colors?page=${page}&limit=6&id=${id}`,
+    {
+      method: "GET",
+      headers: {
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+      },
+    }
   ).then((res) => res.json());
 
   return response;

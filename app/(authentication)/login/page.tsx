@@ -12,15 +12,15 @@ type Form = { email: { value: string }; password: { value: string } };
 const socialLogin = [
   {
     src: "/google.svg",
-    url: "http://localhost:3000/api/v1/auth/google/callback",
+    url: `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/google/callback`,
   },
   {
     src: "/facebook.svg",
-    url: "http://localhost:3000/api/v1/auth/facebook/callback",
+    url: `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/facebook/callback`,
   },
   {
     src: "/github.svg",
-    url: "http://localhost:3000/api/v1/auth/github/callback",
+    url: `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/github/callback`,
   },
 ];
 
@@ -40,7 +40,7 @@ export default function Page() {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/signin",
+        `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/users/signin`,
         {
           method: "POST",
           headers: {

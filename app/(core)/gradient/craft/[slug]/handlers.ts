@@ -345,8 +345,11 @@ function randomGradient(history: CustomHistory): Gradient {
   }
 
   const newUrl = newPalette.reduce((a, b) => a + "-" + b).replaceAll("#", "");
-  replacePath(newUrl);
-  const searchParams = updateParams(angle, type, circlePosition, "none");
+  let searchParams = "";
+  if (window.location.pathname !== "/") {
+    searchParams = updateParams(angle, type, circlePosition, "none");
+    replacePath(newUrl);
+  }
 
   const newHistory = {
     data: [...history.data, newUrl + searchParams],

@@ -207,7 +207,12 @@ export async function updateIcons(
       },
       body: JSON.stringify({
         name: collection.name,
-        icons: collection.icons,
+        icons: collection.icons.map((icn) => ({
+          color: icn.color,
+          content: icn.content,
+          name: icn.name,
+          unicode: icn.unicode,
+        })),
         color: collection.color,
       }),
     }).then(async (res) => {

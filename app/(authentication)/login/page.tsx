@@ -15,10 +15,6 @@ const socialLogin = [
     url: `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/google/callback`,
   },
   {
-    src: "/facebook.svg",
-    url: `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/facebook/callback`,
-  },
-  {
     src: "/github.svg",
     url: `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/github/callback`,
   },
@@ -77,7 +73,7 @@ export default function Page() {
   }
 
   return (
-    <main className="w-full h-screen flex items-center justify-center text-secondary text-sm bg-main">
+    <main className="w-full h-auto min-h-screen flex items-center justify-center text-secondary text-sm bg-main">
       <div className="relative w-full max-w-sm h-fit z-0 overflow-hidden">
         <section className="w-full min-h-[85dvh] h-fit p-14 border border-primary-border rounded-3xl flex flex-col justify-center gap-8 backdrop-blur-3xl">
           <form onSubmit={onSubmit} className="flex flex-col gap-7">

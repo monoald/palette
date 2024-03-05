@@ -66,6 +66,15 @@ export default function Page({ params }: { params: { slug: string } }) {
     });
   }, [gradients, params.slug, searchParams]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch("custom:updateMessage", {
+        type: "general",
+        message: "Press the spacebar to craft a new Gradient!",
+      });
+    }, 1000);
+  }, [])
+
   const changeGradient = () => {
     setGradient((prev) => {
       if (prev) {

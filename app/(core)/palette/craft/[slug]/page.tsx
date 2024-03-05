@@ -119,6 +119,15 @@ export default function Home({ params }: { params: { slug: string } }) {
   );
 
   useEffect(() => {
+    setTimeout(() => {
+      dispatch("custom:updateMessage", {
+        type: "general",
+        message: "Press the spacebar to craft a new Palette!",
+      });
+    }, 1000);
+  }, [])
+
+  useEffect(() => {
     const urlPalette = params.slug;
 
     setPalette((prev) => {
@@ -566,7 +575,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                 )}
 
                 {index + 1 !== palette.colors.length && (
-                  <div className="absolute top-0 w-[60px] h-full -right-[36px] z-50 group/plus flex items-center">
+                  <div className="absolute top-0 w-[60px] h-full -right-[36px] z-[1] group/plus flex items-center">
                     <button
                       className="w-[60px] h-[60px] hidden rounded-full bg-main group-hover/plus:flex items-center justify-center"
                       onClick={() => addColor(index)}

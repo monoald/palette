@@ -75,7 +75,7 @@ export default function SideBar({
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             tooltip="true"
-            tooltip-content="Palette type"
+            tooltip-content="Craft new palette (space bar)"
             tooltip-position="left"
             onClick={changePalette}
           >

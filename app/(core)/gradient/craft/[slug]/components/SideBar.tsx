@@ -240,7 +240,7 @@ ${spinAnimation.keyframe}`;
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
             onClick={changeGradient}
             tooltip="true"
-            tooltip-content="Craft new palette"
+            tooltip-content="Craft new gradient (space bar)"
             tooltip-position="left"
           >
             <span className="icon-shuffle text-2xl" />

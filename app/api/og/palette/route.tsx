@@ -9,9 +9,9 @@ export async function GET(request: NextRequest) {
     ?.split("-")
     .map((clr) => "#" + clr);
 
-  const data = await fetch("http://localhost:3000/fonts/Geist-Medium.otf").then(
-    (res) => res.arrayBuffer()
-  );
+  const data = await fetch(
+    "https://paleta-v3.vercel.app/fonts/Geist-Medium.otf"
+  ).then((res) => res.arrayBuffer());
 
   return new ImageResponse(
     (

@@ -113,7 +113,7 @@ button:disabled {
 .secondary-button {
   --duration: 7s;
   --easing: linear;
-  @apply relative border-none rounded-full bg-btn-primary text-[#f4f1f2] text-sm font-medium outline-none shadow-btn-primary cursor-pointer;
+  @apply relative border-none rounded-full bg-btn-primary text-[#f4f1f2] text-sm font-medium outline-none shadow-btn-primary cursor-pointer overflow-hidden;
   /* Before element */
   @apply before:absolute before:inset-0 before:rounded-full before:pointer-events-none before:z-[3] before:shadow-[inset_0_3px_12px_#34dfff4d,inset_0_-2px_4px_#d7faff4d];
   > div {

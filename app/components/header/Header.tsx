@@ -109,6 +109,31 @@ export default function Header() {
               </li>
             ))}
           </ul>
+          <div className="bp:hidden flex justify-between gap-6 mt-5">
+            <Link
+              href="/signup"
+              className="w-28 h-10 bg-transparent border border-primary-border rounded-full flex items-center justify-center text-secondary"
+            >
+              Sign Up
+            </Link>
+            <Link href="/login" className="primary-button">
+              <div>
+                <span>Sign in</span>
+                <div className="circle-12"></div>
+                <div className="circle-11"></div>
+                <div className="circle-10"></div>
+                <div className="circle-9"></div>
+                <div className="circle-8"></div>
+                <div className="circle-7"></div>
+                <div className="circle-6"></div>
+                <div className="circle-5"></div>
+                <div className="circle-4"></div>
+                <div className="circle-3"></div>
+                <div className="circle-2"></div>
+                <div className="circle-1"></div>
+              </div>
+            </Link>
+          </div>
         </nav>
       </div>
 

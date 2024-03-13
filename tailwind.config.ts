@@ -21,7 +21,7 @@ const config: Config = {
   theme: {
     extend: {
       screens: {
-        bp: "662px",
+        bp: "898px",
         "color-bar": "472px",
       },
       colors: {

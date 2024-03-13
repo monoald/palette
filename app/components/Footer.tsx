@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full max-w-2xl p-10 mx-auto h-fit text-secondary flex ap-16 items-center justify-between">
+    <footer className="w-full max-w-2xl p-10 mx-auto h-fit text-secondary flex flex-col sm:flex-row ap-16 items-center justify-between gap-5">
       <div className="flex items-center gap-2">
         <Image src="/logo.svg" alt="paleta logo" width={35} height={35} />
         <p className="text-2xl">

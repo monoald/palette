@@ -28,7 +28,7 @@ export default function UserArea() {
   return (
     <>
       {!user ? (
-        <div className="flex gap-6">
+        <div className="hidden bp:flex gap-6">
           <Link
             href="/signup"
             className="w-28 h-10 bg-transparent border border-primary-border rounded-full flex items-center justify-center text-secondary"

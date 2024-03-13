@@ -27,7 +27,7 @@ export default function Home() {
         <div className="w-full max-w-6xl mx-auto flex flex-col gap-20">
           <section className="flex flex-col gap-8">
             <div className="w-full mx-auto flex flex-col gap-8">
-              <p className="text-6xl font-extrabold text-center text-balance">
+              <p className="text-4xl md:text-6xl font-extrabold text-center text-balance">
                 Find the perfect palette for your project
               </p>
               <Link
@@ -38,7 +38,7 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="w-full h-96 flex gap-2">
+            <div className="w-full h-64 md:h-96 flex gap-2">
               {palette.slice(0, randomBetween(3, 4)).map((clr) => (
                 <article
                   key={clr}
@@ -51,7 +51,7 @@ export default function Home() {
 
           <section className="flex flex-col gap-10">
             <div className="flex flex-col items-center gap-8">
-              <p className="text-6xl font-extrabold text-center text-balance">
+              <p className="text-4xl md:text-6xl font-extrabold text-center text-balance">
                 Discover amazing gradients
               </p>
               <Link
@@ -74,7 +74,7 @@ export default function Home() {
           </section>
 
           <section className="flex flex-col gap-14">
-            <p className="text-6xl font-extrabold text-center text-balance">
+            <p className="text-4xl md:text-6xl font-extrabold text-center text-balance">
               Make font icons for your apps
             </p>
 

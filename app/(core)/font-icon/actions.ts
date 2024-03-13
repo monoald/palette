@@ -19,7 +19,15 @@ export async function saveFontIcon(
           "Content-Type": "application/json",
           authorization: `bearer ${token}`,
         },
-        body: JSON.stringify(collection),
+        body: JSON.stringify({
+          ...collection,
+          icons: collection.icons.map((icn) => ({
+            color: icn.color,
+            content: icn.content,
+            name: icn.name,
+            unicode: icn.unicode,
+          })),
+        }),
       }
     ).then(async (res) => {
       const data = await res.json();

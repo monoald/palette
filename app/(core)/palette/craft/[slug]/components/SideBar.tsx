@@ -43,7 +43,7 @@ export default function SideBar({
             tooltip-position="left"
             onClick={() => setPaletteTypeOpen(true)}
           >
-            <span className="icon-palette text-2xl" />
+            <span className="icon-palette text-2xl max-h-6" />
           </button>
         </li>
 
@@ -55,7 +55,7 @@ export default function SideBar({
             tooltip-position="left"
             onClick={() => setColorBlindOpen(true)}
           >
-            <span className="icon-eye text-2xl" />
+            <span className="icon-eye text-2xl max-h-6" />
           </button>
         </li>
 
@@ -67,7 +67,7 @@ export default function SideBar({
             tooltip-content="Extract palette from image"
             tooltip-position="left"
           >
-            <span className="icon-image text-2xl" />
+            <span className="icon-image text-2xl max-h-6" />
           </button>
         </li>
 
@@ -79,7 +79,7 @@ export default function SideBar({
             tooltip-position="left"
             onClick={changePalette}
           >
-            <span className="icon-shuffle text-2xl" />
+            <span className="icon-shuffle text-2xl max-h-6" />
           </button>
         </li>
 
@@ -92,7 +92,7 @@ export default function SideBar({
             tooltip-position="left"
             onClick={historyBack}
           >
-            <span className="icon-undo text-2xl" />
+            <span className="icon-undo text-2xl max-h-6" />
           </button>
         </li>
 
@@ -105,7 +105,7 @@ export default function SideBar({
             tooltip-position="left"
             onClick={historyForward}
           >
-            <span className="icon-redo text-2xl" />
+            <span className="icon-redo text-2xl max-h-6" />
           </button>
         </li>
 
@@ -133,7 +133,7 @@ export default function SideBar({
             tooltip-position="left"
             onClick={copyPaletteToClipboard}
           >
-            <span className="icon-share text-2xl" />
+            <span className="icon-share text-2xl max-h-6" />
           </button>
         </li>
       </ul>

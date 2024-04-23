@@ -1,7 +1,7 @@
 "use client";
 
 import { PointerEvent, useEffect, useRef, useState } from "react";
-import { Palette as PaletteType, Rgb, rgbToHex } from "colors-kit";
+import { Palette as PaletteType, Rgb, hexToRgb, rgbToHex } from "colors-kit";
 
 import { createBaseColorObject } from "@/app/utils/createBaseColorObject";
 import { replacePath } from "@/app/utils/urlState";
@@ -417,6 +417,8 @@ export default function Home({ params }: { params: { slug: string } }) {
         const newColors = newPalette.map((clr) => {
           return {
             ...createBaseColorObject(clr),
+            isLocked:
+              prev.colors.find((color) => color.hex === clr)?.isLocked || false,
             isSaved: colors
               ? colors?.findIndex(
                   (color) => color.name === clr.replace("#", "")
@@ -450,6 +452,8 @@ export default function Home({ params }: { params: { slug: string } }) {
         const newColors = newPalette.map((clr) => {
           return {
             ...createBaseColorObject(clr),
+            isLocked:
+              prev.colors.find((color) => color.hex === clr)?.isLocked || false,
             isSaved: colors
               ? colors?.findIndex(
                   (color) => color.name === clr.replace("#", "")
@@ -492,8 +496,12 @@ export default function Home({ params }: { params: { slug: string } }) {
   function addColor(index: number) {
     const secondaryColorIndex = index + 1;
 
-    const color1 = palette?.colors[index].formats?.rgb;
-    const color2 = palette?.colors[secondaryColorIndex].formats?.rgb;
+    const color1 =
+      palette?.colors[index].formats?.rgb ||
+      hexToRgb(palette?.colors[index].hex as string);
+    const color2 =
+      palette?.colors[secondaryColorIndex].formats?.rgb ||
+      hexToRgb(palette?.colors[secondaryColorIndex].hex as string);
 
     const newColorRgb = combineColors(color1, color2);
     const newColor = rgbToHex(newColorRgb);

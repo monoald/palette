@@ -3,7 +3,7 @@
 import { ColorFormats, hexToRgb } from "colors-kit";
 
 import { ColorBlind, Palettes, createColor } from "./utils/createSingleColor";
-import { getMainContrastColor } from "@/app/utils/createColorObject";
+import { getMainContrastColor } from "@/app/utils/createBaseColorObject";
 import Link from "next/link";
 import { useUserStore } from "@/store";
 import { useEffect, useState } from "react";

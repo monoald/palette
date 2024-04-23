@@ -1,5 +1,5 @@
 interface Props {
-  clr: { id: string; hex: string; formats: Formats };
+  clr: { id: string; hex: string; formats?: Formats };
 }
 
 export function LabPicker({ clr }: Props) {
@@ -9,21 +9,21 @@ export function LabPicker({ clr }: Props) {
         <div>
           <p>l</p>
           <div className="w-10 h-8 flex items-center justify-center border border-primary-border rounded-lg bg-transparent text-center text-sm">
-            <p>{clr?.formats.lab?.l}</p>
+            <p>{clr?.formats?.lab?.l}</p>
           </div>
         </div>
 
         <div>
           <p>a</p>
           <div className="w-10 h-8 flex items-center justify-center border border-primary-border rounded-lg bg-transparent text-center text-sm">
-            <p>{clr?.formats.lab?.a}</p>
+            <p>{clr?.formats?.lab?.a}</p>
           </div>
         </div>
 
         <div>
           <p>b</p>
           <div className="w-10 h-8 flex items-center justify-center border border-primary-border rounded-lg bg-transparent text-center text-sm">
-            <p>{clr?.formats.lab?.b}</p>
+            <p>{clr?.formats?.lab?.b}</p>
           </div>
         </div>
       </div>

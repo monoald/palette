@@ -1,9 +1,9 @@
 "use client";
 
 import { PointerEvent, useEffect, useRef, useState } from "react";
-import { Palette as PaletteType, Rgb, hexToRgb, rgbToHex } from "colors-kit";
+import { Palette as PaletteType, Rgb, rgbToHex } from "colors-kit";
 
-import { createColorObject } from "@/app/utils/createColorObject";
+import { createBaseColorObject } from "@/app/utils/createBaseColorObject";
 import { replacePath } from "@/app/utils/urlState";
 import { useKeyDown } from "@/app/(core)/hooks/useKeyDown";
 import useStateHandler, { dispatch } from "@/app/(core)/hooks/useStateHandler";
@@ -11,6 +11,8 @@ import {
   handleAddColor,
   handleChangePalette,
   handleCreatePaletteFromUrl,
+  handleGetColorBlind,
+  handleGetFormats,
   handleLockColor,
   handleRemoveColor,
   handleUpdateColor,
@@ -125,7 +127,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         message: "Press the spacebar to craft a new Palette!",
       });
     }, 1000);
-  }, [])
+  }, []);
 
   useEffect(() => {
     const urlPalette = params.slug;
@@ -189,7 +191,12 @@ export default function Home({ params }: { params: { slug: string } }) {
     setPaletteType(selected);
   };
 
-  const selectColorBlind = (selected: string) => {
+  const selectColorBlind = (selected: keyof ColorBlindSimulator) => {
+    setPalette((prev) => {
+      if (prev) {
+        return { ...prev, colors: handleGetColorBlind(prev.colors, selected) };
+      }
+    });
     setColorBlind(selected);
   };
 
@@ -297,7 +304,18 @@ export default function Home({ params }: { params: { slug: string } }) {
 
   const setCurrentColor = (id: string) => {
     setPalette((prev) => {
-      if (prev) return { ...prev, currentColor: id };
+      if (prev) {
+        const clrIndex = prev.colors.findIndex((clr) => clr.id === id);
+        if (!prev.colors[clrIndex].formats) {
+          const updatedColors = [...prev.colors];
+          const updatedColor = handleGetFormats(prev.colors[clrIndex]);
+          updatedColors.splice(clrIndex, 1, updatedColor);
+
+          return { ...prev, currentColor: id, colors: updatedColors };
+        } else {
+          return { ...prev, currentColor: id };
+        }
+      }
     });
   };
 
@@ -398,7 +416,7 @@ export default function Home({ params }: { params: { slug: string } }) {
 
         const newColors = newPalette.map((clr) => {
           return {
-            ...createColorObject(clr, "hex"),
+            ...createBaseColorObject(clr),
             isSaved: colors
               ? colors?.findIndex(
                   (color) => color.name === clr.replace("#", "")
@@ -431,7 +449,7 @@ export default function Home({ params }: { params: { slug: string } }) {
 
         const newColors = newPalette.map((clr) => {
           return {
-            ...createColorObject(clr, "hex"),
+            ...createBaseColorObject(clr),
             isSaved: colors
               ? colors?.findIndex(
                   (color) => color.name === clr.replace("#", "")
@@ -474,8 +492,8 @@ export default function Home({ params }: { params: { slug: string } }) {
   function addColor(index: number) {
     const secondaryColorIndex = index + 1;
 
-    const color1 = palette?.colors[index].formats.rgb;
-    const color2 = palette?.colors[secondaryColorIndex].formats.rgb;
+    const color1 = palette?.colors[index].formats?.rgb;
+    const color2 = palette?.colors[secondaryColorIndex].formats?.rgb;
 
     const newColorRgb = combineColors(color1, color2);
     const newColor = rgbToHex(newColorRgb);
@@ -555,10 +573,10 @@ export default function Home({ params }: { params: { slug: string } }) {
                 onPointerUp={handleEndResize}
                 data-draggable
               >
-                {colorBlind !== "none" && (
+                {colorBlind !== "none" && clr.colorBlind && (
                   <div
                     ref={clrBlindRef}
-                    className={`absolute top-0 left-0 w-full h-1/2 ${
+                    className={`absolute top-0 left-0 w-full h-1/2 rounded-t-3xl ${
                       clr ? `block` : "hidden"
                     }`}
                     style={{

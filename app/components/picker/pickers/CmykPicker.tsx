@@ -4,11 +4,11 @@ import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import { keepNumberInRange } from "@/app/utils/keepNumberInRange";
 
 type Props = {
-  clr: { id: string; hex: string; formats: Formats };
+  clr: { id: string; hex: string; formats?: Formats };
 };
 
 export function CmykPicker({ clr }: Props) {
-  const cmyk = clr.formats.cmyk as Cmyk;
+  const cmyk = clr.formats?.cmyk as Cmyk;
 
   const hex = colorFormatConverter(cmyk, {
     currentFormat: "cmyk",

@@ -1,4 +1,4 @@
-import { getMainContrastColor } from "@/app/utils/createColorObject";
+import { getMainContrastColor } from "@/app/utils/createBaseColorObject";
 import { ImageResponse } from "@vercel/og";
 import { hexToRgb } from "colors-kit";
 import { NextRequest } from "next/server";

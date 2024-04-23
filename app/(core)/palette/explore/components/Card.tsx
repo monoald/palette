@@ -1,7 +1,7 @@
 "use client";
 
 import { MotionDiv } from "@/app/components/FramerMotion";
-import { getMainContrastColor } from "@/app/utils/createColorObject";
+import { getMainContrastColor } from "@/app/utils/createBaseColorObject";
 import { hexToRgb } from "colors-kit";
 import { PaletteType } from "./getPublicPalettes";
 import { useUserStore } from "@/store";

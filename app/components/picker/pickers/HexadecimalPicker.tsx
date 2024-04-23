@@ -4,7 +4,7 @@ import { RangeInput } from "../RangeInput";
 import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 
 type Props = {
-  clr: { id: string; hex: string; formats: Formats };
+  clr: { id: string; hex: string; formats?: Formats };
 };
 
 export function HexadecimalPicker({ clr }: Props) {
@@ -22,8 +22,8 @@ export function HexadecimalPicker({ clr }: Props) {
         id: clr.id,
         clr: {
           h: hueValue,
-          s: clr?.formats.hsv?.s as number,
-          v: clr?.formats.hsv?.v as number,
+          s: clr?.formats?.hsv?.s as number,
+          v: clr?.formats?.hsv?.v as number,
         },
         format: "hsv",
       });
@@ -64,7 +64,7 @@ export function HexadecimalPicker({ clr }: Props) {
         id="hue"
         min={0}
         max={360}
-        value={clr?.formats.hsv?.h as number}
+        value={clr?.formats?.hsv?.h as number}
         onChange={handleHueChange}
         isHue
       />

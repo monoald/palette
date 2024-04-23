@@ -5,11 +5,11 @@ import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import { keepNumberInRange } from "@/app/utils/keepNumberInRange";
 
 interface Props {
-  clr: { id: string; hex: string; formats: Formats };
+  clr: { id: string; hex: string; formats?: Formats };
 }
 
 export function RgbPicker({ clr }: Props) {
-  const rgb = clr.formats.rgb as Rgb;
+  const rgb = clr.formats?.rgb as Rgb;
   const hex = colorFormatConverter(rgb, {
     currentFormat: "rgb",
     targetFormat: ["hex"],

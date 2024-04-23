@@ -1,4 +1,4 @@
-import { getMainContrastColor } from "@/app/utils/createColorObject";
+import { getMainContrastColor } from "@/app/utils/createBaseColorObject";
 import { makeRandomID } from "@/app/utils/makeRandomID";
 import { replacePath, setParams } from "@/app/utils/urlState";
 import {

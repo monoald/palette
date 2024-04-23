@@ -5,7 +5,7 @@ type Props = {
   setOpen: Dispatch<SetStateAction<boolean>>;
   options: string[];
   current: string;
-  selectOption: (option: string) => void;
+  selectOption: (option: any) => void;
 };
 
 function OptionBar({ open, options, current, selectOption, setOpen }: Props) {

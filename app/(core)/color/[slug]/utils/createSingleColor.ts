@@ -1,4 +1,4 @@
-import { getMainContrastColor } from "@/app/utils/createColorObject";
+import { getMainContrastColor } from "@/app/utils/createbaseColorObject";
 import {
   ColorFormats,
   WCAGRequierements,

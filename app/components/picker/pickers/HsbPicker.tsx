@@ -4,11 +4,11 @@ import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 import { keepNumberInRange } from "@/app/utils/keepNumberInRange";
 
 interface Props {
-  clr: { id: string; hex: string; formats: Formats };
+  clr: { id: string; hex: string; formats?: Formats };
 }
 
 export function HsbPicker({ clr }: Props) {
-  const hsv = clr.formats.hsv as Hsv;
+  const hsv = clr.formats?.hsv as Hsv;
   const hex = colorFormatConverter(hsv, {
     currentFormat: "hsv",
     targetFormat: ["hex"],

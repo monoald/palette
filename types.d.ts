@@ -9,14 +9,14 @@ type Formats = {
 };
 
 type ColorBlindSimulator = {
-  achromatomaly: string;
-  achromatopsia: string;
-  deuteranomaly: string;
-  deuteranopia: string;
-  protanomaly: string;
-  protanopia: string;
-  tritanomaly: string;
-  tritanopia: string;
+  achromatomaly?: string;
+  achromatopsia?: string;
+  deuteranomaly?: string;
+  deuteranopia?: string;
+  protanomaly?: string;
+  protanopia?: string;
+  tritanomaly?: string;
+  tritanopia?: string;
 };
 
 type CustomHistory = {
@@ -30,8 +30,8 @@ type Color = {
   isSaved: boolean;
   contrastColor: string;
   id: string;
-  formats: Formats;
-  colorBlind: ColorBlindSimulator;
+  formats?: Formats;
+  colorBlind?: ColorBlindSimulator;
 };
 
 type Palette = {

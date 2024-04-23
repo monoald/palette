@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 
 type Props = {
-  clr: { id: string; hex: string; formats: Formats };
+  clr: { id: string; hex: string; formats?: Formats };
 };
 
 type Coordinates = {
@@ -41,7 +41,7 @@ export function Canvas({ clr }: Props) {
 
       dispatch("custom:updatePaletteFromPicker", {
         id: clr.id,
-        clr: { h: clr.formats.hsv?.h as number, s: hsbColor.s, v: hsbColor.v },
+        clr: { h: clr.formats?.hsv?.h as number, s: hsbColor.s, v: hsbColor.v },
         format: "hsv",
       });
     }
@@ -133,9 +133,9 @@ export function Canvas({ clr }: Props) {
 
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement;
-    drawColorCanvas(canvas, clr.formats.hsv?.h as number);
+    drawColorCanvas(canvas, clr.formats?.hsv?.h as number);
 
-    const { x, y } = findColorCoordinates(canvas, clr.formats.rgb as Rgb);
+    const { x, y } = findColorCoordinates(canvas, clr.formats?.rgb as Rgb);
 
     setCoordinates({ x: x - 12, y: y - 12, mouseMoved: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
 import { extractPalette, hexToRgb, rgbToHex } from "colors-kit";
-import { getMainContrastColor } from "@/app/utils/createColorObject";
+import { getMainContrastColor } from "@/app/utils/createBaseColorObject";
 import { keepNumberInRange } from "@/app/utils/keepNumberInRange";
 import { dispatch } from "@/app/(core)/hooks/useStateHandler";
 

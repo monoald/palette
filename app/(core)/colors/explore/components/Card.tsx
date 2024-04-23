@@ -2,7 +2,7 @@
 
 import { MotionDiv } from "@/app/components/FramerMotion";
 import { ColorType } from "./getColors";
-import { getMainContrastColor } from "@/app/utils/createColorObject";
+import { getMainContrastColor } from "@/app/utils/createBaseColorObject";
 import { hexToRgb } from "colors-kit";
 import { useUserStore } from "@/store";
 import { dispatch } from "@/app/(core)/hooks/useStateHandler";

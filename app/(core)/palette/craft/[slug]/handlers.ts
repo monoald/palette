@@ -3,9 +3,12 @@ import {
   makeColorPalette,
   Palette as PaletteType,
   Color as ColorType,
+  colorFormatConverter,
+  toColorBlind,
 } from "colors-kit";
-import { createColorObject } from "../../../../utils/createColorObject";
+import { createBaseColorObject } from "../../../../utils/createBaseColorObject";
 import { BasicCollection } from "@/app/(core)/me/action";
+import { createColorObject } from "@/app/utils/createColorObject";
 
 export function handleChangePalette(prevColors: Color[], type: PaletteType) {
   const newPalette = makeColorPalette({
@@ -18,11 +21,11 @@ export function handleChangePalette(prevColors: Color[], type: PaletteType) {
 
   for (const clrindex in prevColors) {
     if (prevColors[clrindex].isLocked) {
-      const newColor = createColorObject(prevColors[clrindex].hex, "hex");
+      const newColor = createBaseColorObject(prevColors[clrindex].hex);
       newColor.isLocked = true;
       newColors.push(newColor);
     } else {
-      newColors.push(createColorObject(newPalette[clrindex], "hex"));
+      newColors.push(createBaseColorObject(newPalette[clrindex]));
     }
   }
 
@@ -40,7 +43,7 @@ export function handleCreatePaletteFromUrl(
       ? colors.findIndex((color) => color.name === clr.replace("#", "")) !== -1
       : false;
 
-    return createColorObject(clr, "hex", {
+    return createBaseColorObject(clr, {
       isSaved,
     });
   });
@@ -90,9 +93,49 @@ export function handleAddColor(
   palette: Color[]
 ): Color[] {
   const newPalette = [...palette];
-  const newColorObject = createColorObject(color, "hex");
+  const newColorObject = createBaseColorObject(color);
 
   newPalette.splice(index, 0, newColorObject);
 
   return newPalette;
+}
+
+export function handleGetFormats(color: Color) {
+  const { cmyk, hsl, hsv, lab, rgb, xyz } = colorFormatConverter(color.hex, {
+    allFormats: true,
+    currentFormat: "hex",
+  }) as Formats;
+
+  return {
+    ...color,
+    formats: {
+      cmyk,
+      hsv,
+      hsl,
+      lab,
+      rgb,
+      xyz,
+    },
+  };
+}
+
+export function handleGetColorBlind(
+  colors: Color[],
+  type: keyof ColorBlindSimulator
+) {
+  if (colors[0].colorBlind && colors[0].colorBlind[type]) {
+    return colors;
+  }
+
+  const newColors = [...colors];
+  for (const clr in newColors) {
+    newColors[clr] = {
+      ...newColors[clr],
+      colorBlind: {
+        ...newColors[clr].colorBlind,
+        [type]: toColorBlind(newColors[clr].hex as string, type),
+      },
+    };
+  }
+  return newColors;
 }

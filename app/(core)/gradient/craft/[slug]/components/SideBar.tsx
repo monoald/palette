@@ -146,7 +146,7 @@ ${spinAnimation.keyframe}`;
   };
   return (
     <aside className="h-fit flex flex-col items-center select-none md:flex-row md:h-full">
-      <ul className="max-w-full relative w-fit h-10 px-4 flex flex-row [576px]:justify-center items-center gap-3 rounded-full border border-primary-border list-none md:flex-col md:w-10 md:h-fit md:px-0 md:py-4 overflow-x-scroll md:overflow-visible hidden-bar">
+      <ul className="max-w-full relative w-fit h-10 px-4 flex flex-row [576px]:justify-center items-center gap-2 rounded-full border border-primary-border list-none md:flex-col md:w-10 md:h-fit md:px-0 md:py-4 overflow-x-scroll md:overflow-visible hidden-bar">
         <li>
           <button
             className="flex py-3 px-2 rounded-xl bg-transparent border-none text-secondary secondary-hover transition duration-300"
@@ -155,7 +155,7 @@ ${spinAnimation.keyframe}`;
             tooltip-content="Colors"
             tooltip-position="left"
           >
-            <span className="icon-palette text-2xl" />
+            <span className="icon-palette text-2xl leading-none" />
           </button>
         </li>
         <li>
@@ -167,17 +167,17 @@ ${spinAnimation.keyframe}`;
             tooltip-position="left"
           >
             {(getParam("type") == "horizontal" || getParam("angle")) && (
-              <span className="icon-gradient-horizontal text-2xl" />
+              <span className="icon-gradient-horizontal text-2xl leading-none" />
             )}
             {getParam("type") == "vertical" && (
-              <span className="icon-gradient-vertical text-2xl" />
+              <span className="icon-gradient-vertical text-2xl leading-none" />
             )}
             {(getParam("type") == "circle" ||
               (getParam("circle-x") && getParam("circle-y"))) && (
-              <span className="icon-gradient-circle text-2xl" />
+              <span className="icon-gradient-circle text-2xl leading-none" />
             )}
             {getParam("type") === "conic" && (
-              <span className="icon-gradient-conic text-2xl" />
+              <span className="icon-gradient-conic text-2xl leading-none" />
             )}
           </button>
         </li>
@@ -199,7 +199,7 @@ ${spinAnimation.keyframe}`;
               tooltip-content="Angle"
               tooltip-position="left"
             >
-              <span className="icon-angle text-2xl" />
+              <span className="icon-angle text-2xl leading-none" />
             </button>
           </li>
         )}
@@ -220,7 +220,7 @@ ${spinAnimation.keyframe}`;
               tooltip-content="Position circle"
               tooltip-position="left"
             >
-              <span className="icon-move-circle text-2xl" />
+              <span className="icon-move-circle text-2xl leading-none" />
             </button>
           </li>
         )}
@@ -232,7 +232,7 @@ ${spinAnimation.keyframe}`;
             tooltip-content="Animation"
             tooltip-position="left"
           >
-            <span className="icon-animation text-2xl" />
+            <span className="icon-animation text-2xl leading-none" />
           </button>
         </li>
         <li>
@@ -243,7 +243,7 @@ ${spinAnimation.keyframe}`;
             tooltip-content="Craft new gradient (space bar)"
             tooltip-position="left"
           >
-            <span className="icon-shuffle text-2xl" />
+            <span className="icon-shuffle text-2xl leading-none" />
           </button>
         </li>
         <li>
@@ -255,7 +255,7 @@ ${spinAnimation.keyframe}`;
             tooltip-position="left"
             onClick={historyBack}
           >
-            <span className="icon-undo text-2xl" />
+            <span className="icon-undo text-2xl leading-none" />
           </button>
         </li>
         <li>
@@ -269,7 +269,7 @@ ${spinAnimation.keyframe}`;
             tooltip-position="left"
             onClick={historyForward}
           >
-            <span className="icon-redo text-2xl" />
+            <span className="icon-redo text-2xl leading-none" />
           </button>
         </li>
 
@@ -297,7 +297,7 @@ ${spinAnimation.keyframe}`;
             tooltip-position="left"
             onClick={copyCodeToClipboard}
           >
-            <span className="icon-code text-2xl" />
+            <span className="icon-code text-2xl leading-none" />
           </button>
         </li>
 
@@ -309,7 +309,7 @@ ${spinAnimation.keyframe}`;
             tooltip-position="left"
             onClick={copyUrlToClipboard}
           >
-            <span className="icon-share text-2xl" />
+            <span className="icon-share text-2xl leading-none" />
           </button>
         </li>
       </ul>

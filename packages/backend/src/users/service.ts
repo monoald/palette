@@ -115,9 +115,11 @@ export class UserService {
 
     return {
       token,
+      user: {
       username: user.username,
       id: user.id,
       avatar: user.avatar,
+      }
     };
   }
 }

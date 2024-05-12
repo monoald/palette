@@ -12,7 +12,7 @@ export default function Page() {
     if (!window.opener) return router.push("/");
 
     if (window.opener && key) {
-      window.opener.postMessage(key);
+      window.opener.postMessage({ key });
       window.close();
     } else {
       window.opener.postMessage("error");

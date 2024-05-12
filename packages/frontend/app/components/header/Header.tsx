@@ -4,6 +4,7 @@ import React, { useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import UserArea from "./UserArea";
 import Image from "next/image";
+import LogIn from "../LogIn";
 
 const navContent = [
   {
@@ -54,10 +55,16 @@ const navContent = [
 
 export default function Header() {
   const [toggleMenu, setToggleMenu] = useState(false);
+  const [toggleLogIn, setToggleLogIn] = useState(false);
 
   const updateWindowSize = () => {
     setToggleMenu(window.innerWidth >= 662);
   };
+
+  const handleToggleLogIn = () => {
+    setToggleLogIn(!toggleLogIn);
+  };
+
   useLayoutEffect(() => {
     window.addEventListener("resize", updateWindowSize);
     updateWindowSize();
@@ -110,15 +117,9 @@ export default function Header() {
             ))}
           </ul>
           <div className="bp:hidden flex justify-between gap-6 mt-5">
-            <Link
-              href="/signup"
-              className="w-28 h-10 bg-transparent border border-primary-border rounded-full flex items-center justify-center text-secondary"
-            >
-              Sign Up
-            </Link>
-            <Link href="/login" className="primary-button">
+            <button onClick={handleToggleLogIn} className="primary-button">
               <div>
-                <span>Sign in</span>
+                <span>Log in</span>
                 <div className="circle-12"></div>
                 <div className="circle-11"></div>
                 <div className="circle-10"></div>
@@ -132,12 +133,13 @@ export default function Header() {
                 <div className="circle-2"></div>
                 <div className="circle-1"></div>
               </div>
-            </Link>
+            </button>
           </div>
         </nav>
       </div>
 
-      <UserArea />
+      <UserArea handleToggleLogIn={handleToggleLogIn} />
+      {toggleLogIn && <LogIn close={handleToggleLogIn} />}
     </header>
   );
 }

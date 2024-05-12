@@ -38,14 +38,6 @@ type Actions = {
 };
 
 function handleUpdateUser(user: User | null, token: string | null) {
-  if (user) {
-    if (user?.avatar.length <= 12) {
-      user.avatar = `/avatars/${user.avatar}.webp`;
-    } else {
-      user.avatar = `data:image/png;base64,${user.avatar}`;
-    }
-  }
-
   return { user, token };
 }
 

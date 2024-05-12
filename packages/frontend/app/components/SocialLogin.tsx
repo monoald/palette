@@ -1,29 +1,41 @@
 "use client";
-import Image from "next/image";
-import { openPopUp } from "../login/utils/openPopUp";
-import { UserState, useUserStore } from "@/store";
-import { useRouter } from "next/navigation";
 
-type Props = {
+import Image from "next/image";
+import { openPopUp } from "../utils/openPopUp";
+import { UserState, useUserStore } from "@/store";
+import { dispatch } from "../(core)/hooks/useStateHandler";
+
+export type Provider = {
+  name: string;
   src: string;
   url: string;
 };
+type Props = {
+  provider: Provider;
+  handleEvent?: () => void;
+};
 
-export default function SocialLogin({ src, url }: Props) {
-  const router = useRouter();
+const BACKEND_URI = process.env.NEXT_PUBLIC_BACKEND_URI;
+
+export default function SocialLogin({ provider, handleEvent }: Props) {
+  const { name, src, url } = provider;
   const updateUser = useUserStore((state) => state.updateUser);
 
   const handleSocialLogin = () => {
     openPopUp(url, "signin", messageListener);
+    if (handleEvent) {
+      handleEvent();
+    }
   };
 
   const messageListener = async (e: MessageEvent) => {
-    const key = e.data.length === 20 ? e.data : null;
+    const data = e.data;
+    const key = data?.key;
 
-    if (key) {
-      const body = JSON.stringify({ key: key });
+    if (key !== undefined) {
+      const body = JSON.stringify({ key: data?.key });
       const credentials: UserState = await fetch(
-        `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/auth/signin`,
+        `${BACKEND_URI}/users/signin`,
         {
           method: "POST",
           headers: {
@@ -39,16 +51,20 @@ export default function SocialLogin({ src, url }: Props) {
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", JSON.stringify(token));
         updateUser(user, token);
-        router.push("/me");
+      } else {
+        dispatch("custom:updateMessage", {
+          type: "error",
+          message: "An error ocurred!",
+        });
       }
     }
   };
   return (
     <button
-      className="p-4 border border-primary-border rounded-full"
+      className="p-4 w-fit border border-primary-border rounded-full"
       onClick={handleSocialLogin}
     >
-      <Image src={src} alt="facebook icon" width={18} height={18} />
+      <Image src={src} alt={`${name} icon`} width={22} height={22} />
     </button>
   );
 }

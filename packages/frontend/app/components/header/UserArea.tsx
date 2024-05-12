@@ -1,11 +1,14 @@
-"use client";
 import { useUserStore } from "@/store";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLayoutEffect } from "react";
 
-export default function UserArea() {
+type Props = {
+  handleToggleLogIn: () => void;
+};
+
+export default function UserArea({ handleToggleLogIn }: Props) {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const updateUser = useUserStore((state) => state.updateUser);
@@ -29,15 +32,9 @@ export default function UserArea() {
     <>
       {!user ? (
         <div className="hidden bp:flex gap-6">
-          <Link
-            href="/signup"
-            className="w-28 h-10 bg-transparent border border-primary-border rounded-full flex items-center justify-center text-secondary"
-          >
-            Sign Up
-          </Link>
-          <Link href="/login" className="primary-button">
+          <button onClick={handleToggleLogIn} className="primary-button">
             <div>
-              <span>Sign in</span>
+              <span>Log in</span>
               <div className="circle-12"></div>
               <div className="circle-11"></div>
               <div className="circle-10"></div>
@@ -51,7 +48,7 @@ export default function UserArea() {
               <div className="circle-2"></div>
               <div className="circle-1"></div>
             </div>
-          </Link>
+          </button>
         </div>
       ) : (
         <div className="group/area w-fit h-fit flex">

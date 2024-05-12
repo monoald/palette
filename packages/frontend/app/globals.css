@@ -124,7 +124,7 @@ button:disabled {
     }
     [class^="circle-"],
     [class*=" circle-"] {
-      @apply absolute left-0 top-0 w-10 h-10 rounded-full blur-md;
+      @apply absolute left-0 top-0 w-10 h-10 rounded-full blur-md pointer-events-none;
       background: var(--background, transparent);
       transform: translate(var(--x, 0), var(--y, 0)) translateZ(0);
       animation: var(--animation, none) var(--duration) var(--easing) infinite;

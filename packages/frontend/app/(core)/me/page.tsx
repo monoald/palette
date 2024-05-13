@@ -139,11 +139,11 @@ export default function Page() {
                 </div>
               )}
 
-              {collections.icons.length > 0 ? (
+              {collections.fonticons.length > 0 ? (
                 <Link href="/me/font-icons" className="flex flex-col gap-5">
                   <div className="w-full h-36 flex rounded-3xl overflow-hidden">
                     <Image
-                      src={collections.icons[0].thumbnail}
+                      src={collections.fonticons[0].thumbnail}
                       alt="Last font icon thumbnail"
                       className="w-full object-cover"
                       width={380}

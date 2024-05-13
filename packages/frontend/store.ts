@@ -3,7 +3,7 @@ import {
   BasicCollection,
   Collections,
   GradientCollection,
-  IconsCollection,
+  FontIconsCollection,
   PaletteCollection,
 } from "./app/(core)/me/action";
 
@@ -33,7 +33,7 @@ type Actions = {
   ) => void;
   updateFontIcons: (
     type: string,
-    payload: Partial<IconsCollection> | string
+    payload: Partial<FontIconsCollection> | string
   ) => void;
 };
 

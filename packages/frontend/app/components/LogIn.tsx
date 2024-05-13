@@ -5,18 +5,18 @@ type Props = {
   close: () => void;
 };
 
-const BACKEND_URI = process.env.NEXT_PUBLIC_BACKEND_URI;
+const SERVER_URI = process.env.NEXT_PUBLIC_SERVER_URI;
 
 const socialLogin = [
   {
     name: "google",
     src: "/google.svg",
-    url: `${BACKEND_URI}/auth/google`,
+    url: `${SERVER_URI}/auth/google`,
   },
   {
     name: "github",
     src: "/github.svg",
-    url: `${BACKEND_URI}/auth/github`,
+    url: `${SERVER_URI}/auth/github`,
   },
 ];
 

@@ -12,31 +12,30 @@ export type GradientCollection = BasicCollection & {
 export type PaletteCollection = {
   id: string;
   upId: string;
-  colors: string;
+  name: string;
   colorsArr: string[];
   length: number;
 };
 
-export type IconsCollection = BasicCollection & { thumbnail: string };
+export type FontIconsCollection = BasicCollection & { thumbnail: string };
 
 export type Collections = {
   colors: BasicCollection[];
   gradients: GradientCollection[];
-  icons: IconsCollection[];
+  fonticons: FontIconsCollection[];
   palettes: PaletteCollection[];
 };
+
+const SERVER_URI = process.env.NEXT_PUBLIC_SERVER_URI;
 
 export const getUserCollections = async (
   token: string
 ): Promise<Collections> => {
-  const response: Collections = await fetch(
-    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/users/collections`,
-    {
-      headers: {
-        authorization: `bearer ${token}`,
-      },
-    }
-  ).then((res) => res.json());
+  const response: Collections = await fetch(`${SERVER_URI}/users/collections`, {
+    headers: {
+      authorization: `bearer ${token}`,
+    },
+  }).then((res) => res.json());
 
   const gradients: GradientCollection[] = response.gradients.map((gradient) => {
     const style = urlToGradient(gradient.name);
@@ -45,7 +44,7 @@ export const getUserCollections = async (
   });
 
   const palettes = response.palettes.map((palette) => {
-    const colorsArr = palette.colors.split("-").map((clr) => "#" + clr);
+    const colorsArr = palette.name.split("-").map((clr) => "#" + clr);
 
     return { ...palette, colorsArr };
   });

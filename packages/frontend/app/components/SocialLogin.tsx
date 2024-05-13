@@ -15,7 +15,7 @@ type Props = {
   handleEvent?: () => void;
 };
 
-const BACKEND_URI = process.env.NEXT_PUBLIC_BACKEND_URI;
+const SERVER_URI = process.env.NEXT_PUBLIC_SERVER_URI;
 
 export default function SocialLogin({ provider, handleEvent }: Props) {
   const { name, src, url } = provider;
@@ -34,16 +34,13 @@ export default function SocialLogin({ provider, handleEvent }: Props) {
 
     if (key !== undefined) {
       const body = JSON.stringify({ key: data?.key });
-      const credentials: UserState = await fetch(
-        `${BACKEND_URI}/users/signin`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body,
-        }
-      ).then((res) => res.json());
+      const credentials: UserState = await fetch(`${SERVER_URI}/users/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body,
+      }).then((res) => res.json());
 
       const { user, token } = credentials;
 

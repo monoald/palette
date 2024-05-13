@@ -7,12 +7,14 @@ export type ColorType = {
   saved: boolean;
 };
 
+const SERVER_URI = process.env.NEXT_PUBLIC_SERVER_URI;
+
 export const getColors = async (
   page: number,
   id: string
 ): Promise<ColorType[]> => {
   const response: ColorType[] = await fetch(
-    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/colors?page=${page}&limit=6&id=${id}`
+    `${SERVER_URI}/colors?page=${page}&userId=${id}`
   ).then((res) => res.json());
 
   return response;

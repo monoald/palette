@@ -11,12 +11,14 @@ export type GradientType = {
   upId: string;
 };
 
+const SERVER_URI = process.env.NEXT_PUBLIC_SERVER_URI;
+
 export const getPublicGradients = async (
   page: number,
   id: string
 ): Promise<GradientType[]> => {
   const response: GradientType[] = await fetch(
-    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/public-gradients?page=${page}&limit=6&id=${id}`
+    `${SERVER_URI}/gradients?page=${page}&userId=${id}`
   ).then((res) => res.json());
 
   const gradients: GradientType[] = response.map((gradient) => {

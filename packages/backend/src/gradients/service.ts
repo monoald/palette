@@ -1,29 +1,40 @@
 import { db } from "../dbConnection";
 import { gradients, gradientsToUsers } from "../db/schemas/gradients";
-import { sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 import { HTTPException } from "hono/http-exception";
 
 export class GradientService {
-  constructor() { }
+  constructor() {}
 
   async create(name: string) {
     const result = await db
       .insert(gradients)
       .values({
         name,
-      }).returning({ id: gradients.id });
+      })
+      .returning({ id: gradients.id });
 
     return result[0];
   }
 
-  async find() {
+  async find(page: number, userId: number) {
+    const limit = 6;
+
     const result = await db
       .select({
         id: gradients.id,
         name: gradients.name,
-        savedCount: gradients.savedCount
+        savedCount: gradients.savedCount,
+        saved: sql`CASE WHEN ${gradientsToUsers.gradientId} IS NOT NULL THEN TRUE ELSE FALSE END`,
       })
-      .from(gradients);
+      .from(gradients)
+      .leftJoin(
+        gradientsToUsers,
+        sql`${gradientsToUsers.gradientId} = ${gradients.id} AND ${gradientsToUsers.userId} = ${userId}`
+      )
+      .orderBy(desc(gradients.savedCount))
+      .offset((page - 1) * limit)
+      .limit(limit);
 
     return result;
   }
@@ -56,18 +67,18 @@ export class GradientService {
     const isSaved = await db
       .select({ userId: gradientsToUsers.userId })
       .from(gradientsToUsers)
-      .where(sql`${gradientsToUsers.gradientId} = ${id} AND ${gradientsToUsers.userId} = ${userId}`)
+      .where(
+        sql`${gradientsToUsers.gradientId} = ${id} AND ${gradientsToUsers.userId} = ${userId}`
+      );
 
     if (isSaved.length !== 0) {
       throw new HTTPException(409, { message: "Gradient already saved" });
     }
 
-    await db
-      .insert(gradientsToUsers)
-      .values({
-        userId,
-        gradientId: id,
-      });
+    await db.insert(gradientsToUsers).values({
+      userId,
+      gradientId: id,
+    });
 
     return userId;
   }
@@ -77,7 +88,9 @@ export class GradientService {
 
     const result = await db
       .delete(gradientsToUsers)
-      .where(sql`${gradientsToUsers.gradientId} = ${gradient.id} AND ${gradientsToUsers.userId} = ${userId}`)
+      .where(
+        sql`${gradientsToUsers.gradientId} = ${gradient.id} AND ${gradientsToUsers.userId} = ${userId}`
+      )
       .returning({ gradientId: gradientsToUsers.gradientId });
 
     if (result.length === 0 || result[0].gradientId !== gradient.id) {

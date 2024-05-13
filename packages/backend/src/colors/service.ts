@@ -1,6 +1,6 @@
 import { db } from "../dbConnection";
 import { colors, colorsToUsers } from "../db/schemas/colors";
-import { sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 import { HTTPException } from "hono/http-exception";
 
 export class ColorService {
@@ -17,14 +17,24 @@ export class ColorService {
     return result[0];
   }
 
-  async find() {
+  async find(page: number, userId: number) {
+    const limit = 6;
+
     const result = await db
       .select({
         id: colors.id,
         name: colors.name,
         savedCount: colors.savedCount,
+        saved: sql`CASE WHEN ${colorsToUsers.colorId} IS NOT NULL THEN TRUE ELSE FALSE END`,
       })
-      .from(colors);
+      .from(colors)
+      .leftJoin(
+        colorsToUsers,
+        sql`${colorsToUsers.colorId} = ${colors.id} AND ${colorsToUsers.userId} = ${userId}`
+      )
+      .orderBy(desc(colors.savedCount))
+      .offset((page - 1) * limit)
+      .limit(limit);
 
     return result;
   }

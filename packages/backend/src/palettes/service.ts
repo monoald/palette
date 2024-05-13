@@ -1,6 +1,6 @@
 import { db } from "../dbConnection";
 import { palettes, palettesToUsers } from "../db/schemas/palettes";
-import { sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 import { uniquePaletteId } from "../utils/uniquePaletteId";
 import { HTTPException } from "hono/http-exception";
 import { appendTrailingSlash } from "hono/trailing-slash";
@@ -35,16 +35,25 @@ export class PaletteService {
     return palette;
   }
 
-  async find() {
+  async find(page: number, userId: number) {
+    const limit = 6;
+
     const result = await db
       .select({
         id: palettes.id,
-        upId: palettes.upId,
         name: palettes.name,
         length: palettes.length,
         savedCount: palettes.savedCount,
+        saved: sql`CASE WHEN ${palettesToUsers.paletteId} IS NOT NULL THEN TRUE ELSE FALSE END`,
       })
-      .from(palettes);
+      .from(palettes)
+      .leftJoin(
+        palettesToUsers,
+        sql`${palettesToUsers.paletteId} = ${palettes.id} AND ${palettesToUsers.userId} = ${userId}`
+      )
+      .orderBy(desc(palettes.savedCount))
+      .offset((page - 1) * limit)
+      .limit(limit);
 
     return result;
   }

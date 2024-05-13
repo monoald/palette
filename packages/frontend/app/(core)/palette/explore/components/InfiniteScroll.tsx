@@ -30,7 +30,7 @@ export default function InfiniteScroll() {
       if (prev) {
         const newData = [...prev];
         const pltIndex = newData.findIndex(
-          (plt) => plt.colors === event.detail.colors
+          (plt) => plt.name === event.detail.colors
         );
         const plt = { ...newData[pltIndex] };
         plt.saved = true;
@@ -47,7 +47,7 @@ export default function InfiniteScroll() {
       if (prev) {
         const newData = [...prev];
         const pltIndex = newData.findIndex(
-          (plt) => plt.colors === event.detail.colors
+          (plt) => plt.name === event.detail.colors
         );
         const plt = { ...newData[pltIndex] };
         plt.saved = false;

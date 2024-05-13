@@ -38,10 +38,10 @@ export default function Card({ palette, index }: Props) {
         palette,
         updatePalettes,
         () => {
-          dispatch("custom:unsavePalette", { colors: palette.colors });
+          dispatch("custom:unsavePalette", { colors: palette.name });
         },
         () => {
-          dispatch("custom:savePalette", { colors: palette.colors });
+          dispatch("custom:savePalette", { colors: palette.name });
         }
       );
     } else {
@@ -50,10 +50,10 @@ export default function Card({ palette, index }: Props) {
         palette,
         updatePalettes,
         () => {
-          dispatch("custom:savePalette", { colors: palette.colors });
+          dispatch("custom:savePalette", { colors: palette.name });
         },
         () => {
-          dispatch("custom:unsavePalette", { colors: palette.colors });
+          dispatch("custom:unsavePalette", { colors: palette.name });
         }
       );
     }
@@ -120,7 +120,7 @@ export default function Card({ palette, index }: Props) {
             tooltip-position="bottom"
           >
             <Link
-              href={`/palette/craft/${palette.colors}`}
+              href={`/palette/craft/${palette.name}`}
               className="secondary-hover flex"
             >
               <span className="icon-palette" />

@@ -2,7 +2,7 @@
 
 export type PaletteType = {
   id: string;
-  colors: string;
+  name: string;
   colorsArr: string[];
   length: number;
   savedCount: number;
@@ -10,12 +10,14 @@ export type PaletteType = {
   upId: string;
 };
 
+const SERVER_URI = process.env.NEXT_PUBLIC_SERVER_URI;
+
 export const getPublicPalettes = async (
   page: number,
   id: string
 ): Promise<PaletteType[]> => {
   const response: PaletteType[] = await fetch(
-    `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/public-palettes?page=${page}&limit=6&id=${id}`,
+    `${SERVER_URI}/palettes?page=${page}&userId=${id}`,
     {
       method: "GET",
       headers: {
@@ -26,7 +28,7 @@ export const getPublicPalettes = async (
   ).then((res) => res.json());
 
   const palettes = response.map((palette) => {
-    const colorsArr = palette.colors.split("-").map((clr) => "#" + clr);
+    const colorsArr = palette.name.split("-").map((clr) => "#" + clr);
 
     return { ...palette, colorsArr };
   });

@@ -6,7 +6,8 @@ const service = new PaletteService();
 export const palettes = new Hono();
 
 palettes.get("/", async (c) => {
-  const palettes = await service.find();
+  const { page, userId } = c.req.query();
+  const palettes = await service.find(+page, +userId);
 
   return c.json(palettes);
 });

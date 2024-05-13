@@ -6,18 +6,19 @@ import { HTTPException } from "hono/http-exception";
 import { appendTrailingSlash } from "hono/trailing-slash";
 
 export class PaletteService {
-  constructor() { }
+  constructor() {}
 
   async create(name: string) {
-    const upId = await uniquePaletteId(name)
+    const upId = await uniquePaletteId(name);
 
     const result = await db
       .insert(palettes)
       .values({
         name,
         upId,
-        length: name.split("-").length
-      }).returning({ id: palettes.id });
+        length: name.split("-").length,
+      })
+      .returning({ id: palettes.id });
 
     return result[0];
   }
@@ -41,7 +42,7 @@ export class PaletteService {
         upId: palettes.upId,
         name: palettes.name,
         length: palettes.length,
-        savedCount: palettes.savedCount
+        savedCount: palettes.savedCount,
       })
       .from(palettes);
 
@@ -65,18 +66,18 @@ export class PaletteService {
     const isSaved = await db
       .select({ userId: palettesToUsers.userId })
       .from(palettesToUsers)
-      .where(sql`${palettesToUsers.paletteId} = ${id} AND ${palettesToUsers.userId} = ${userId}`)
+      .where(
+        sql`${palettesToUsers.paletteId} = ${id} AND ${palettesToUsers.userId} = ${userId}`
+      );
 
     if (isSaved.length !== 0) {
       throw new HTTPException(409, { message: "Palette already saved" });
     }
 
-    await db
-      .insert(palettesToUsers)
-      .values({
-        userId,
-        paletteId: id,
-      });
+    await db.insert(palettesToUsers).values({
+      userId,
+      paletteId: id,
+    });
 
     return userId;
   }
@@ -86,7 +87,9 @@ export class PaletteService {
 
     const result = await db
       .delete(palettesToUsers)
-      .where(sql`${palettesToUsers.paletteId} = ${palette.id} AND ${palettesToUsers.userId} = ${userId}`)
+      .where(
+        sql`${palettesToUsers.paletteId} = ${palette.id} AND ${palettesToUsers.userId} = ${userId}`
+      )
       .returning({ paletteId: palettesToUsers.paletteId });
 
     if (result.length === 0 || result[0].paletteId !== palette.id) {

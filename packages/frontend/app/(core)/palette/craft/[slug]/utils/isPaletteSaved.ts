@@ -8,7 +8,7 @@ export function isPaletteSaved(
     return (
       palettes.findIndex(
         (plt) =>
-          plt.colors.split("-").sort().join("-") ===
+          plt.name.split("-").sort().join("-") ===
           url.split("-").sort().join("-")
       ) !== -1
     );

@@ -77,7 +77,7 @@ export default function Page() {
                         tooltip-position="bottom"
                       >
                         <Link
-                          href={`/palette/craft/${palette.colors}`}
+                          href={`/palette/craft/${palette.name}`}
                           className="secondary-hover flex"
                         >
                           <span className="icon-palette" />

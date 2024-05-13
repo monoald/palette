@@ -95,7 +95,7 @@ function handleUpdatePalettes(
     if (state.collections?.palettes) {
       const newPalettes = [...state.collections.palettes];
       const colorIndex = state.collections.palettes.findIndex(
-        (palette) => palette.colors === payload
+        (palette) => palette.name === payload
       );
 
       if (colorIndex !== -1) {
@@ -157,14 +157,14 @@ function handleUpdateFontIcons(
         ...state,
         collections: {
           ...state.collections,
-          icons: [payload, ...state.collections.icons],
+          fonticons: [payload, ...state.collections.fonticons],
         },
       };
     }
   } else if (type === "unsave") {
-    if (state.collections?.icons) {
-      const newIcons = [...state.collections.icons];
-      const colorIndex = state.collections.icons.findIndex(
+    if (state.collections?.fonticons) {
+      const newIcons = [...state.collections.fonticons];
+      const colorIndex = state.collections.fonticons.findIndex(
         (icn) => icn.id === payload
       );
 
@@ -173,7 +173,7 @@ function handleUpdateFontIcons(
 
         return {
           ...state,
-          collections: { ...state.collections, icons: newIcons },
+          collections: { ...state.collections, fonticons: newIcons },
         };
       }
     }

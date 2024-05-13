@@ -11,7 +11,7 @@ const variants = {
 };
 
 export default function Page() {
-  const icons = useUserStore((state) => state.collections?.icons);
+  const icons = useUserStore((state) => state.collections?.fonticons);
   return (
     <div className="w-full min-h-[calc(100vh-80px)] bg-main text-secondary">
       <main className="w-full max-w-5xl p-9 mx-auto flex flex-col gap-20">

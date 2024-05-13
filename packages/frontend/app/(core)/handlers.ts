@@ -108,7 +108,7 @@ export async function handleSavePalette(
   callbackUnsave?: () => void
 ) {
   try {
-    await savePalette(token, palette.colors as string);
+    await savePalette(token, palette.name as string);
 
     dispatch("custom:updateMessage", {
       type: "success",
@@ -156,13 +156,13 @@ export async function handleUnsavePalette(
   callbackSave?: () => void
 ) {
   try {
-    await unsavePalette(token, palette.colors as string);
+    await unsavePalette(token, palette.name as string);
 
     dispatch("custom:updateMessage", {
       type: "success",
       message: "Palette unsaved successfully!",
     });
-    updatePalettes("unsave", palette.colors as string);
+    updatePalettes("unsave", palette.name as string);
 
     if (callbackUnsave) {
       callbackUnsave();

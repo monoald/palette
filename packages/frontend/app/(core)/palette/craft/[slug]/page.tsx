@@ -215,7 +215,7 @@ export default function Home({ params }: { params: { slug: string } }) {
           token,
           {
             id: makeRandomID(),
-            colors: palette.history.data[palette.history.current],
+            name: palette.history.data[palette.history.current],
             colorsArr: palette.history.data[palette.history.current]
               .split("-")
               .map((clr) => "#" + clr),
@@ -228,7 +228,7 @@ export default function Home({ params }: { params: { slug: string } }) {
           token,
           {
             id: makeRandomID(),
-            colors: palette.history.data[palette.history.current],
+            name: palette.history.data[palette.history.current],
             colorsArr: palette.history.data[palette.history.current]
               .split("-")
               .map((clr) => "#" + clr),

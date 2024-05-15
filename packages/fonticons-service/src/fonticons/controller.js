@@ -8,13 +8,17 @@ const findAll = async (req, res) => {
   return res.json(fonticons);
 };
 
-const findOne = async (req, res) => {
-  const { userId } = req;
-  const { name } = req.params;
+const findOne = async (req, res, next) => {
+  try {
+    const { userId } = req;
+    const { name } = req.params;
 
-  const fonticons = await service.findOne(name, +userId);
+    const fonticons = await service.findOne(name, +userId);
 
-  return res.json(fonticons);
+    return res.json(fonticons);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const save = async (req, res, next) => {
@@ -22,9 +26,9 @@ const save = async (req, res, next) => {
     const body = req.body;
     const { userId } = req;
 
-    const result = await service.save(body, userId);
+    const id = await service.save(body, userId);
 
-    return res.json({ result });
+    return res.json({ id });
   } catch (error) {
     next(error);
   }

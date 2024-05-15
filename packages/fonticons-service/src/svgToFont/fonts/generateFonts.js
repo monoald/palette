@@ -6,8 +6,8 @@ const JSZip = require("jszip");
 
 const generateCSS = require("./generateCss");
 
-async function generateFonts(icons, svgFont) {
-  const css = generateCSS(icons);
+async function generateFonts(name, color, icons, svgFont) {
+  const css = generateCSS(name, color, icons);
   const ttf = svg2ttf(svgFont, {});
   const eot = ttf2eot(ttf);
   const woff = ttf2woff(ttf);
@@ -15,11 +15,11 @@ async function generateFonts(icons, svgFont) {
 
   const zip = new JSZip();
 
-  zip.file(`${icons.name}.svg`, svgFont);
-  zip.file(`${icons.name}.ttf`, Buffer.from(ttf.buffer));
-  zip.file(`${icons.name}.eot`, eot);
-  zip.file(`${icons.name}.woff`, Buffer.from(woff.buffer));
-  zip.file(`${icons.name}.woff2`, woff2);
+  zip.file(`${name}.svg`, svgFont);
+  zip.file(`${name}.ttf`, Buffer.from(ttf.buffer));
+  zip.file(`${name}.eot`, eot);
+  zip.file(`${name}.woff`, Buffer.from(woff.buffer));
+  zip.file(`${name}.woff2`, woff2);
   zip.file("styles.css", css);
 
   let str = "";

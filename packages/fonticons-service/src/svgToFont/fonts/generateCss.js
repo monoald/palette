@@ -1,10 +1,10 @@
-function generateCSS(icons) {
+function generateCSS(name, color, icons) {
   let css = `@font-face {
-  font-family: '${icons.name}';
+  font-family: '${name}';
   src:
-    url("${icons.name}.eot") format("embedded-opentype"),
-    url("${icons.name}.woff") format("woff"),
-    url("${icons.name}.woff2") format("woff2");
+    url("${name}.eot") format("embedded-opentype"),
+    url("${name}.woff") format("woff"),
+    url("${name}.woff2") format("woff2");
 
   font-weight: normal;
   font-style: normal;
@@ -12,23 +12,21 @@ function generateCSS(icons) {
 }
 
 [class^="icon-"], [class*=" icon-"] {
-  font-family: "${icons.name}" !important;
+  font-family: "${name}" !important;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; ${
-    icons.color ? `\n  color: ${icons.color};` : ""
-  }
+  -moz-osx-font-smoothing: grayscale; ${color ? `\n  color: ${color};` : ""}
 }`;
 
-  icons.icons.forEach((icon) => {
+  icons.forEach((icon) => {
     let color = undefined;
     if (
-      (icon.color && icons.color && icons.color !== icon.color) ||
-      (icon.color && !icons.color)
+      (icon.color && color && color !== icon.color) ||
+      (icon.color && !color)
     ) {
       color = icon.color;
     }

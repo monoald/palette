@@ -1,0 +1,29 @@
+{
+  "name": "fonticons-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@libsql/client": "^0.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.30.10",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "jszip": "^3.10.1",
+    "oslllo-potrace": "^2.0.1",
+    "oslllo-svg2": "^2.0.2",
+    "svg-pathdata": "^6.0.3",
+    "svg2ttf": "^6.0.3",
+    "ttf2eot": "^3.1.0",
+    "ttf2woff": "^3.0.0",
+    "ttf2woff2": "^5.0.0"
+  }
+}

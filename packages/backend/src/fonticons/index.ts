@@ -11,29 +11,21 @@ fonticons.get("/", async (c) => {
   return c.json(fonticons);
 });
 
-fonticons.post(
-  "/save",
-  jwtWithSecret(),
-  async (c) => {
-    const body = await c.req.json();
-    const payload = c.get("jwtPayload");
+fonticons.post("/save", jwtWithSecret(), async (c) => {
+  const body = await c.req.json();
+  const payload = c.get("jwtPayload");
 
-    const userId = await service.save(body, payload.id);
+  const userId = await service.save(body, payload.id);
 
-    return c.json({ userId });
-  }
-);
+  return c.json({ userId });
+});
 
-fonticons.post(
-  "/unsave",
-  jwtWithSecret(),
-  async (c) => {
-    const body = await c.req.json();
-    const payload = c.get("jwtPayload");
+fonticons.post("/unsave", jwtWithSecret(), async (c) => {
+  const body = await c.req.json();
+  const payload = c.get("jwtPayload");
 
-    await service.unsave(body.id, payload.id);
+  await service.unsave(body.id, payload.id);
 
-    c.status(204);
-    return c.body(null);
-  }
-);
+  c.status(204);
+  return c.body(null);
+});

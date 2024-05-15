@@ -19,6 +19,8 @@
     "start:frontend": "npm run start -w=frontend",
     "dev:backend": "npm run dev -w=backend",
     "deploy:backend": "npm run deploy -w=backend",
-    "db:push": "npm run db:push -w=backend"
+    "db:push": "npm run db:push -w=backend",
+    "dev:fonticons": "npm run dev -w=fonticons-service",
+    "start:fonticons": "npm run start -w=fonticons=service"
   }
 }

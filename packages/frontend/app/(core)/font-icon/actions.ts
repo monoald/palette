@@ -1,50 +1,47 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { PaletaError } from "../actions";
 import { dispatch } from "../hooks/useStateHandler";
-import { IconCollection } from "./craft/page";
+import { Fonticon, FonticonData } from "./craft/page";
 import { replacePath } from "@/app/utils/urlState";
+import { normalizeFonticon } from "./utils/normalizeFonticon";
+import { FontIconsCollection } from "../me/action";
+import { Changes } from "./edit/[slug]/page";
+import { normalizeChanges } from "./utils/normalizeChanges";
+
+const SERVICE_URI = process.env.NEXT_PUBLIC_FONTICON_SERVICE_URI;
 
 export async function saveFontIcon(
-  collection: IconCollection,
+  fonticon: FonticonData,
   token: string,
-  updateFontIcons: (type: string, payload: IconCollection | string) => void
+  updateFontIcons: (type: string, payload: FontIconsCollection | string) => void
 ) {
   dispatch("custom:load", { load: true });
   try {
-    const data = await fetch(
-      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `bearer ${token}`,
-        },
-        body: JSON.stringify({
-          ...collection,
-          icons: collection.icons.map((icn) => ({
-            color: icn.color,
-            content: icn.content,
-            name: icn.name,
-            unicode: icn.unicode,
-          })),
-        }),
-      }
-    ).then(async (res) => {
-      const data = await res.json();
+    const body = await normalizeFonticon(fonticon);
+
+    const result = await fetch(`${SERVICE_URI}/save`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ ...body }),
+    }).then(async (res) => {
+      const result = await res.json();
       if (!res.ok) {
-        throw new PaletaError(data);
+        throw new PaletaError(result);
       }
-      return data;
+      return result;
     });
 
     dispatch("custom:load", { load: false });
     dispatch("custom:updateMessage", {
       type: "success",
-      message: `Font icon ${collection.name} saved successfully`,
+      message: `Font icon ${fonticon.data.name} saved successfully`,
     });
 
-    updateFontIcons("save", collection);
-    return data.id;
+    updateFontIcons("save", { ...body.data, id: result.id });
+    return result.id;
   } catch (error) {
     if (error instanceof PaletaError) {
       dispatch("custom:load", { load: false });
@@ -60,7 +57,7 @@ export async function saveFontIcon(
 export async function unsaveFontIcon(
   id: string,
   token: string,
-  updateFontIcons: (type: string, payload: IconCollection | string) => void,
+  updateFontIcons: (type: string, payload: Fonticon | string) => void,
   router: AppRouterInstance
 ) {
   dispatch("custom:load", { load: true });
@@ -100,15 +97,17 @@ export async function unsaveFontIcon(
   }
 }
 
-export async function getFontIcon(
-  id: string,
+export async function getFonticon(
   name: string,
+  token: string,
   router: AppRouterInstance
-): Promise<IconCollection | undefined> {
+): Promise<FonticonData | undefined> {
   try {
-    const fontIcon: IconCollection = await fetch(
-      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/${id}?name=${name}`
-    ).then(async (res) => {
+    const fonticon: FonticonData = await fetch(`${SERVICE_URI}/${name}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(async (res) => {
       const data = await res.json();
       if (res.status !== 200) {
         throw new PaletaError(data);
@@ -118,17 +117,7 @@ export async function getFontIcon(
     });
 
     return {
-      ...fontIcon,
-      icons: fontIcon.icons.map((icn) => {
-        const newIcn = {
-          color: icn.color,
-          name: icn.name,
-          content: icn.content,
-          unicode: icn.unicode,
-          id: icn._id as string,
-        };
-        return newIcn;
-      }),
+      ...fonticon,
     };
   } catch (error) {
     if (error instanceof PaletaError) {
@@ -141,12 +130,53 @@ export async function getFontIcon(
   }
 }
 
-export async function downloadFonts(id: string, name: string) {
-  dispatch("custom:load", { load: true });
+export async function downloadFonts(fonticon: FonticonData) {
   try {
-    await fetch(
-      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/download-fonts/${id}`
-    )
+    dispatch("custom:load", { load: true });
+
+    const body = await normalizeFonticon(fonticon);
+
+    await fetch(`${SERVICE_URI}/download-fonts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then(async (res) => {
+        if (res.status !== 200) {
+          throw new PaletaError(await res.json());
+        }
+        return await res.blob();
+      })
+      .then((res) => {
+        const url = window.URL.createObjectURL(new Blob([res]));
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `${fonticon.data.name}-fonts.zip`);
+        document.body.appendChild(link);
+        link.click();
+        link?.parentNode?.removeChild(link);
+      });
+
+    dispatch("custom:load", { load: false });
+  } catch (error) {
+    if (error instanceof PaletaError) {
+      dispatch("custom:load", { load: false });
+      dispatch("custom:updateMessage", {
+        type: "error",
+        message: error.message,
+      });
+    }
+  }
+}
+
+export async function downloadSavedFonts(id: string, name: string) {
+  try {
+    dispatch("custom:load", { load: true });
+
+    await fetch(`${SERVICE_URI}/download-fonts-saved/${id}`)
       .then(async (res) => {
         if (!res.ok) {
           throw new PaletaError(await res.json());
@@ -179,9 +209,7 @@ export async function downloadFonts(id: string, name: string) {
 export async function downloadIcons(id: string, name: string) {
   dispatch("custom:load", { load: true });
   try {
-    await fetch(
-      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/download-icons/${id}`
-    )
+    await fetch(`${SERVICE_URI}/download-icons/${id}`)
       .then(async (res) => {
         if (!res.ok) {
           throw new PaletaError(await res.json());
@@ -210,38 +238,23 @@ export async function downloadIcons(id: string, name: string) {
   }
 }
 
-export async function updateIcons(
-  id: string,
-  token: string,
-  collection: IconCollection
-) {
+export async function updateIcons(id: string, token: string, changes: Changes) {
   dispatch("custom:load", { load: true });
   try {
-    await fetch(
-      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/${id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: collection.name,
-          icons: collection.icons.map((icn) => ({
-            color: icn.color,
-            content: icn.content,
-            name: icn.name,
-            unicode: icn.unicode,
-          })),
-          color: collection.color,
-        }),
-      }
-    ).then(async (res) => {
-      const data = await res.json();
-      if (res.status !== 200) {
+    const body = normalizeChanges(changes);
+
+    await fetch(`${SERVICE_URI}/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    }).then(async (res) => {
+      if (res.status !== 204) {
+        const data = await res.json();
         throw new PaletaError(data);
       }
-      return data;
     });
 
     dispatch("custom:load", { load: false });
@@ -249,7 +262,8 @@ export async function updateIcons(
       type: "success",
       message: "Updated successfully",
     });
-    replacePath(id + "+" + collection.name);
+
+    if (changes.data.name) replacePath(id + "+" + changes.data.name);
   } catch (error) {
     if (error instanceof PaletaError) {
       dispatch("custom:load", { load: false });

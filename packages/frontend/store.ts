@@ -165,7 +165,7 @@ function handleUpdateFontIcons(
     if (state.collections?.fonticons) {
       const newIcons = [...state.collections.fonticons];
       const colorIndex = state.collections.fonticons.findIndex(
-        (icn) => icn.id === payload
+        (fonticon) => fonticon.id === payload
       );
 
       if (colorIndex !== -1) {

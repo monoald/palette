@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { Icon, IconCollection } from "../craft/page";
+import { Icon, FonticonData } from "../craft/page";
 import { Dispatch, SetStateAction, useState } from "react";
 import { changeSvgColor } from "../utils/changeIconColor";
 import { dispatch } from "../../hooks/useStateHandler";
 
 type Props = {
   svg: Icon;
-  setCollection: Dispatch<SetStateAction<IconCollection>>;
+  setCollection: Dispatch<SetStateAction<FonticonData>>;
 };
 
 export function MutableCard({ svg, setCollection }: Props) {
@@ -92,7 +92,7 @@ export function MutableCard({ svg, setCollection }: Props) {
         if (icon) {
           icon.color = e.target.value;
           const color = e.target.value;
-          icon.content = changeSvgColor(icon.content, color);
+          icon.svg = changeSvgColor(icon.svg, color);
         }
 
         return { ...prev, icons: newIcons };
@@ -121,7 +121,7 @@ export function MutableCard({ svg, setCollection }: Props) {
         width={36}
         height={36}
         src={`data:image/svg+xml;base64,${btoa(
-          unescape(encodeURIComponent(svg.content))
+          unescape(encodeURIComponent(svg.svg))
         )}`}
         alt={`icon ${svg.name}`}
       />

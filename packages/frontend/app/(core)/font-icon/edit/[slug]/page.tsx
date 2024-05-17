@@ -8,30 +8,59 @@ import { makeRandomID } from "@/app/utils/makeRandomID";
 import { dispatch } from "../../../hooks/useStateHandler";
 import { useUserStore } from "@/store";
 import { useRouter } from "next/navigation";
-import { MutableCard } from "../../components/MutableCard";
-import { Icon, IconCollection } from "../../craft/page";
+import { MutableCard } from "./components/MutableCard";
+import { Icon, FonticonData } from "../../craft/page";
 import {
-  downloadFonts,
   downloadIcons,
-  getFontIcon,
+  downloadSavedFonts,
+  getFonticon,
   unsaveFontIcon,
   updateIcons,
 } from "../../actions";
 import PaletaIcons from "../../components/PaletaIcons";
 
-export default function Page({ params }: { params: { slug: string } }) {
-  const [collection, setCollection] = useState<IconCollection | null>(null);
+export type Changes = {
+  data: {
+    name?: string;
+    color?: string;
+  };
+  icons: {
+    new: Icon[];
+    update: {
+      id: string;
+      name?: string;
+      color?: string;
+      unicode?: string;
+      svg?: string;
+    }[];
+    delete: {
+      id: number;
+    }[];
+  };
+};
 
-  const token = useUserStore((state) => state.token);
+const baseChanges = {
+  data: {},
+  icons: {
+    new: [],
+    update: [],
+    delete: [],
+  },
+};
+
+export default function Page({ params }: { params: { slug: string } }) {
+  const [fonticon, setFonticon] = useState<FonticonData>();
+  const [changes, setChanges] = useState<Changes>(baseChanges);
+
+  const token = useUserStore((state) => state.token)!;
   const updateFontIcons = useUserStore((state) => state.updateFontIcons);
   const router = useRouter();
 
   useLayoutEffect(() => {
     async function get() {
-      const [id, name] = params.slug.split("%2B");
-      const data = await getFontIcon(id, name, router);
+      const data = await getFonticon(params.slug, token, router);
 
-      setCollection(data as IconCollection);
+      setFonticon(data as FonticonData);
     }
     if (!token) {
       router.push("/font-icon/craft");
@@ -44,44 +73,49 @@ export default function Page({ params }: { params: { slug: string } }) {
     const regex = /^[a-zA-Z0-9-_]+$/;
     let normalizedText = e.target.value.toLowerCase();
     if (regex.test(normalizedText) || normalizedText === "") {
-      setCollection((prev) =>
-        prev ? { ...prev, name: normalizedText } : null
+      setFonticon((prev) =>
+        prev != undefined
+          ? { ...prev, data: { ...prev.data, name: normalizedText } }
+          : undefined
       );
+      setChanges((prev) => ({ ...prev, data: { name: normalizedText } }));
     }
   };
 
   const handleAddIcon = (svg: Icon) => {
-    setCollection((prev) => {
-      if (prev) {
-        const newIcons = [...prev.icons];
-        const newIcon: Icon = { ...svg };
+    const alreadyAdded = fonticon?.icons.findIndex(
+      (ico) => ico.svg === svg.svg
+    );
 
-        const alreadyAdded = newIcons.findIndex(
-          (ico) => ico.content === svg.content
-        );
+    if (alreadyAdded !== -1) {
+      dispatch("custom:updateMessage", {
+        type: "warning",
+        message: "Icon already added",
+      });
+      return;
+    }
 
-        if (alreadyAdded !== -1) {
-          dispatch("custom:updateMessage", {
-            type: "warning",
-            message: "Icon already added",
-          });
-          return prev;
-        }
+    const tempIcon: Icon = { ...svg };
+    tempIcon.unicode =
+      fonticon?.icons.length === 0
+        ? "a101"
+        : (
+            parseInt(
+              fonticon?.icons[fonticon?.icons.length - 1].unicode as string,
+              16
+            ) + 1
+          ).toString(16);
 
-        newIcon.unicode =
-          newIcons.length === 0
-            ? "a101"
-            : (
-                parseInt(newIcons[newIcons.length - 1].unicode as string, 16) +
-                1
-              ).toString(16);
+    const tempIcons = [...fonticon?.icons!, tempIcon];
+    setFonticon((prev) => ({ ...prev!, icons: tempIcons }));
 
-        newIcons.push(newIcon);
-
-        return { ...prev, icons: newIcons };
-      }
-      return prev;
-    });
+    const newIcons = changes.icons?.new
+      ? [...changes.icons.new, tempIcon]
+      : [tempIcon];
+    setChanges((prev) => ({
+      ...prev,
+      icons: { ...prev.icons, new: newIcons },
+    }));
   };
 
   // Update Icons Color
@@ -92,28 +126,32 @@ export default function Page({ params }: { params: { slug: string } }) {
   };
 
   const iconsColorChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCollection((prev) => {
+    const color = e.target.value;
+    setFonticon((prev) => {
       if (prev) {
         const newIcons = [...(prev.icons as Icon[])];
 
         newIcons.forEach((ico, index) => {
-          const content = changeSvgColor(ico.content, e.target.value as string);
+          const svg = changeSvgColor(ico.svg, color as string);
 
           newIcons[index] = {
             ...ico,
-            content,
-            color: e.target.value,
+            svg,
+            color: color,
           };
         });
 
         return {
-          ...prev,
-          color: e.target.value,
+          data: {
+            ...prev.data,
+            color: color,
+          },
           icons: newIcons,
         };
       }
       return prev;
     });
+    setChanges((prev) => ({ ...prev, data: { ...prev.data, color } }));
   };
 
   // Upload Icons
@@ -127,23 +165,23 @@ export default function Page({ params }: { params: { slug: string } }) {
           const reader = new FileReader();
 
           reader.onload = (event: Event) => {
-            if (collection) {
+            if (fonticon) {
               const target = event.target as EventTarget & { result: string };
               let name = file.name
                 .split(".")[0]
                 .toLowerCase()
                 .replaceAll(" ", "-");
-              const color = (collection?.color as string) || "#ffffff";
+              const color = (fonticon.data.color as string) || "#ffffff";
 
-              const content = changeSvgColor(target.result, color);
+              const svg = changeSvgColor(target.result, color);
 
               let warning = false;
 
               let alreadyAdded = -1;
               let nameUsed = -1;
 
-              collection.icons.forEach((ico, index) => {
-                if (ico.content === content) alreadyAdded = index;
+              fonticon.icons.forEach((ico, index) => {
+                if (ico.svg === svg) alreadyAdded = index;
                 if (ico.name === name) nameUsed = index;
               });
 
@@ -161,15 +199,15 @@ export default function Page({ params }: { params: { slug: string } }) {
                   message: `Name ${name} already used`,
                 });
                 warning = true;
-                collection.icons[nameUsed].warning = true;
+                fonticon.icons[nameUsed].warning = true;
               }
 
               const unicode =
-                collection.icons.length === 0
+                fonticon.icons.length === 0
                   ? (parseInt("a101", 16) + i).toString(16)
                   : (
                       parseInt(
-                        collection.icons[collection.icons.length - 1]
+                        fonticon.icons[fonticon.icons.length - 1]
                           .unicode as string,
                         16
                       ) +
@@ -179,13 +217,13 @@ export default function Page({ params }: { params: { slug: string } }) {
 
               const newIcon = {
                 name,
-                content,
+                svg,
                 unicode,
                 id: makeRandomID(),
-                color: collection.color,
+                color: fonticon.data.color,
                 warning,
               };
-              setCollection((prev) =>
+              setFonticon((prev) =>
                 prev
                   ? {
                       ...prev,
@@ -193,6 +231,14 @@ export default function Page({ params }: { params: { slug: string } }) {
                     }
                   : prev
               );
+
+              const newIcons = changes.icons?.new
+                ? [...changes.icons.new, newIcon]
+                : [newIcon];
+              setChanges((prev) => ({
+                ...prev,
+                icons: { ...prev.icons, new: newIcons },
+              }));
             }
           };
 
@@ -204,22 +250,23 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   // Update Collection
   const updateFontIcon = async () => {
-    await updateIcons(
-      params.slug.split("%2B")[0],
-      token as string,
-      collection as IconCollection
-    );
+    await updateIcons(fonticon?.data.id!, token as string, changes);
+    setChanges(baseChanges);
   };
 
   // Download
-  const downloadFontIcons = async () => {
-    const [id, name] = params.slug.split("%2B");
-    await downloadFonts(id, name);
+  const downloadFonticons = async () => {
+    if (JSON.stringify(changes) !== JSON.stringify(baseChanges)) {
+      await updateFontIcon();
+    }
+    await downloadSavedFonts(fonticon?.data?.id!, fonticon?.data.name!);
   };
 
   const downloadSvgIcons = async () => {
-    const [id, name] = params.slug.split("%2B");
-    await downloadIcons(id, name);
+    if (JSON.stringify(changes) !== JSON.stringify(baseChanges)) {
+      await updateFontIcon();
+    }
+    await downloadIcons(fonticon?.data.id!, fonticon?.data.name!);
   };
 
   // Unsave
@@ -234,13 +281,13 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   return (
     <div className="min-h-[calc(100vh-80px)] p-8 flex gap-8 bg-main text-secondary text-sm">
-      {collection ? (
+      {fonticon ? (
         <>
           <SideBar
             toggleIconsColor={toggleIconsColor}
             uploadIcons={uploadIcons}
             updateFontIcon={updateFontIcon}
-            downloadFontIcons={downloadFontIcons}
+            downloadFontIcons={downloadFonticons}
             downloadSvgIcons={downloadSvgIcons}
             unsaveIcons={unsaveIcons}
           />
@@ -248,7 +295,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             <UpdateIconsColor
               iconsColorChanged={iconsColorChanged}
               toggleIconsColor={toggleIconsColor}
-              iconsColor={collection.color as string}
+              iconsColor={fonticon.data.color as string}
             />
           )}
           <main className="w-full h-full ml-[72px] flex flex-col gap-12 items-center">
@@ -256,7 +303,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               <input
                 type="text"
                 className="max-w-80 min-h-10 text-xl text-center"
-                value={collection.name}
+                value={fonticon.data.name}
                 onChange={handleNameChanged}
               />
               <p className="flex items-center gap-3">
@@ -264,13 +311,15 @@ export default function Page({ params }: { params: { slug: string } }) {
                 save all your changes!
               </p>
               <div className="w-full h-auto grid grid-cols-[repeat(auto-fill,_minmax(140px,_1fr))] gap-8">
-                {collection?.icons.map((svg) => (
+                {fonticon?.icons.map((icon) => (
                   <MutableCard
-                    key={svg.id}
-                    svg={svg}
-                    setCollection={
-                      setCollection as Dispatch<SetStateAction<IconCollection>>
+                    key={icon.id}
+                    icon={icon}
+                    setFonticon={
+                      setFonticon as Dispatch<SetStateAction<FonticonData>>
                     }
+                    changes={changes}
+                    setChanges={setChanges}
                   />
                 ))}
               </div>

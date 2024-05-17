@@ -7,36 +7,40 @@ import { changeSvgColor } from "../utils/changeIconColor";
 import UpdateIconsColor from "../components/UpdateIconsColor";
 import { makeRandomID } from "@/app/utils/makeRandomID";
 import { dispatch } from "../../hooks/useStateHandler";
-import { normalizeIcon } from "../utils/normalizeIcon";
-import { generateThumbnail } from "../utils/generateThumbnail";
 import { useUserStore } from "@/store";
-import { saveFontIcon } from "../actions";
+import { saveFontIcon, downloadFonts } from "../actions";
 import { useRouter } from "next/navigation";
 import PaletaIcons from "../components/PaletaIcons";
 
 export type Icon = {
-  _id?: string;
-  id: string;
+  id?: string | number;
   name: string;
-  content: string;
+  svg: string;
   unicode: string;
   color: string | undefined;
   warning?: boolean;
 };
 
-export type IconCollection = {
+export type Fonticon = {
+  id?: string;
   name: string;
   color: string | undefined;
-  icons: Icon[];
   thumbnail: string;
 };
 
+export type FonticonData = {
+  data: Fonticon;
+  icons: Icon[];
+};
+
 export default function Page() {
-  const [collection, setCollection] = useState<IconCollection>({
-    name: "untitled",
-    color: "#ffffff",
+  const [fonticon, setFonticon] = useState<FonticonData>({
+    data: {
+      name: "untitled",
+      color: "#ffffff",
+      thumbnail: "",
+    },
     icons: [],
-    thumbnail: "",
   });
 
   const token = useUserStore((state) => state.token);
@@ -47,18 +51,19 @@ export default function Page() {
     const regex = /^[a-zA-Z0-9-_]+$/;
     let normalizedText = e.target.value.toLowerCase();
     if (regex.test(normalizedText) || normalizedText === "") {
-      setCollection((prev) => ({ ...prev, name: normalizedText }));
+      setFonticon((prev) => ({
+        ...prev,
+        data: { ...prev.data, name: normalizedText },
+      }));
     }
   };
 
   const handleAddIcon = (svg: Icon) => {
-    setCollection((prev) => {
+    setFonticon((prev) => {
       const newIcons = [...prev.icons];
       const newIcon: Icon = { ...svg };
 
-      const alreadyAdded = newIcons.findIndex(
-        (ico) => ico.content === svg.content
-      );
+      const alreadyAdded = newIcons.findIndex((ico) => ico.svg === newIcon.svg);
 
       if (alreadyAdded !== -1) {
         dispatch("custom:updateMessage", {
@@ -90,7 +95,7 @@ export default function Page() {
       return;
     }
 
-    if (collection.icons.length < 3) {
+    if (fonticon.icons.length < 3) {
       dispatch("custom:updateMessage", {
         type: "error",
         message: "You must add at least 3 icons",
@@ -98,18 +103,15 @@ export default function Page() {
       return;
     }
 
-    const normalizedIcons = normalizeIcon(collection);
-    normalizedIcons.thumbnail = await generateThumbnail(normalizedIcons.icons);
-
-    const id = await saveFontIcon(
-      normalizedIcons,
-      token as string,
-      updateFontIcons
-    );
+    const id = await saveFontIcon(fonticon, token as string, updateFontIcons);
 
     if (id !== undefined) {
-      router.push(`/font-icon/edit/${id}+${collection.name}`);
+      router.push(`/font-icon/edit/${fonticon.data.name}`);
     }
+  };
+
+  const downloadFonticon = async () => {
+    downloadFonts(fonticon);
   };
 
   // Update Icons Color
@@ -120,15 +122,15 @@ export default function Page() {
   };
 
   const iconsColorChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCollection((prev) => {
+    setFonticon((prev) => {
       const newIcons = [...(prev.icons as Icon[])];
 
       newIcons.forEach((ico, index) => {
-        const content = changeSvgColor(ico.content, e.target.value as string);
+        const svg = changeSvgColor(ico.svg, e.target.value as string);
 
         newIcons[index] = {
           ...ico,
-          content,
+          svg,
           color: e.target.value,
         };
       });
@@ -157,17 +159,17 @@ export default function Page() {
               .split(".")[0]
               .toLowerCase()
               .replaceAll(" ", "-");
-            const color = collection.color as string;
+            const color = fonticon.data.color as string;
 
-            const content = changeSvgColor(target.result, color);
+            const svg = changeSvgColor(target.result, color);
 
             let warning = false;
 
             let alreadyAdded = -1;
             let nameUsed = -1;
 
-            collection.icons?.forEach((ico, index) => {
-              if (ico.content === content) alreadyAdded = index;
+            fonticon.icons?.forEach((ico, index) => {
+              if (ico.svg === svg) alreadyAdded = index;
               if (ico.name === name) nameUsed = index;
             });
 
@@ -185,15 +187,15 @@ export default function Page() {
                 message: `Name ${name} already used`,
               });
               warning = true;
-              collection.icons[nameUsed].warning = true;
+              fonticon.icons[nameUsed].warning = true;
             }
 
             const unicode =
-              collection.icons.length === 0
+              fonticon.icons.length === 0
                 ? (parseInt("a101", 16) + i).toString(16)
                 : (
                     parseInt(
-                      collection.icons[collection.icons.length - 1]
+                      fonticon.icons[fonticon.icons.length - 1]
                         .unicode as string,
                       16
                     ) +
@@ -203,13 +205,13 @@ export default function Page() {
 
             const newIcon = {
               name,
-              content,
+              svg,
               unicode,
               id: makeRandomID(),
-              color: collection.color,
+              color: fonticon.data.color,
               warning,
             };
-            setCollection((prev) => ({
+            setFonticon((prev) => ({
               ...prev,
               icons: [...prev.icons, newIcon],
             }));
@@ -227,12 +229,13 @@ export default function Page() {
         toggleIconsColor={toggleIconsColor}
         uploadIcons={uploadIcons}
         saveIcons={saveIcons}
+        downloadFontIcons={downloadFonticon}
       />
       {iconsColor && (
         <UpdateIconsColor
           iconsColorChanged={iconsColorChanged}
           toggleIconsColor={toggleIconsColor}
-          iconsColor={collection.color as string}
+          iconsColor={fonticon.data.color as string}
         />
       )}
       <main className="w-full h-full ml-[72px] flex flex-col gap-12 items-center">
@@ -240,16 +243,12 @@ export default function Page() {
           <input
             type="text"
             className="max-w-80 min-h-10 text-xl text-center"
-            value={collection.name}
+            value={fonticon.data.name}
             onChange={handleNameChanged}
           />
           <div className="w-full h-auto grid grid-cols-[repeat(auto-fill,_minmax(140px,_1fr))] gap-8">
-            {collection?.icons.map((svg) => (
-              <MutableCard
-                key={svg.id}
-                svg={svg}
-                setCollection={setCollection}
-              />
+            {fonticon?.icons.map((svg) => (
+              <MutableCard key={svg.id} svg={svg} setCollection={setFonticon} />
             ))}
           </div>
         </section>

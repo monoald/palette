@@ -50,7 +50,7 @@ export function generateThumbnail(icons: Icon[]): Promise<string> {
       img.src =
         "data:image/svg+xml," +
         encodeURIComponent(
-          svgIcon.content.replace(
+          svgIcon.svg.replace(
             'xmlns="http://www.w3.org/2000/svg"',
             `xmlns="http://www.w3.org/2000/svg" transform="rotate(${
               randomBetween(0, 1) === 0

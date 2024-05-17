@@ -52,7 +52,7 @@ export default function Page() {
                         tooltip-position="bottom"
                       >
                         <Link
-                          href={`/font-icon/edit/${icon.id}+${icon.name}`}
+                          href={`/font-icon/edit/${icon.name}`}
                           className="secondary-hover flex"
                         >
                           <span className="icon-palette" />

@@ -84,7 +84,7 @@ export default function Home() {
                 width={36}
                 height={36}
                 src={`data:image/svg+xml;base64,${btoa(
-                  unescape(encodeURIComponent(icon.content))
+                  unescape(encodeURIComponent(icon.svg))
                 )}`}
                 alt={`icon ${icon.name}`}
               />
@@ -102,16 +102,16 @@ export default function Home() {
             </div>
 
             <div className="flex flex-wrap justify-center gap-12 mt-4">
-              {icons.map((svg) => (
+              {icons.map((icon) => (
                 <Image
-                  key={svg.name}
+                  key={icon.name}
                   className="icon__svg"
                   width={36}
                   height={36}
                   src={`data:image/svg+xml;base64,${btoa(
-                    unescape(encodeURIComponent(svg.content))
+                    unescape(encodeURIComponent(icon.svg))
                   )}`}
-                  alt={`icon ${svg.name}`}
+                  alt={`icon ${icon.name}`}
                 />
               ))}
             </div>

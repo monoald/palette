@@ -40,9 +40,9 @@ export default function PaletaIcons({ handleAddIcon }: Props) {
         {(searchFilter === ""
           ? svgs.slice(0, itemsToShow)
           : svgs.filter((svg) => svg.name.includes(searchFilter))
-        ).map((svg) => (
+        ).map((icon) => (
           <article
-            key={svg.id}
+            key={icon.id}
             className="p-5 border border-primary-border rounded-2xl flex flex-col items-center gap-3"
           >
             <Image
@@ -50,18 +50,18 @@ export default function PaletaIcons({ handleAddIcon }: Props) {
               width={36}
               height={36}
               src={`data:image/svg+xml;base64,${btoa(
-                unescape(encodeURIComponent(svg.content))
+                unescape(encodeURIComponent(icon.svg))
               )}`}
-              alt={`icon ${svg.name}`}
+              alt={`icon ${icon.name}`}
             />
 
             <div className="relative w-full py-1 px-2 overflow-hidden text-center after:absolute after:top-0 after:right-0 after:w-10 after:h-full after:block after:bg-[linear-gradient(90deg,rgba(0,0,0,0),#03050c)]">
-              <p className="whitespace-nowrap overflow-hidden">{svg.name}</p>
+              <p className="whitespace-nowrap overflow-hidden">{icon.name}</p>
             </div>
 
             <button
               className="w-full py-1 border border-primary-border rounded-2xl flex items-center justify-center gap-2"
-              onClick={() => handleAddIcon(svg)}
+              onClick={() => handleAddIcon(icon)}
             >
               Add <span className="icon-plus" />
             </button>

@@ -54,6 +54,13 @@ class IconService {
   }
 
   async updateByFonticon(data, fonticonId) {
+    // Delete
+    if (data.delete) {
+      for (const icon of data.delete) {
+        await db.delete(icons).where(sql`${icons.id} = ${icon.id}`);
+      }
+    }
+
     // Insert
     if (data.new) {
       const newIcons = data.new.map((icon) => ({ ...icon, fonticonId }));
@@ -67,13 +74,6 @@ class IconService {
           .update(icons)
           .set(icon)
           .where(sql`${icons.id} = ${icon.id}`);
-      }
-    }
-
-    // Delete
-    if (data.delete) {
-      for (const icon of data.delete) {
-        await db.delete(icons).where(sql`${icons.id} = ${icon.id}`);
       }
     }
   }

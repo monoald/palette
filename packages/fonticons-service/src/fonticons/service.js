@@ -68,8 +68,19 @@ class FonticonService {
     };
   }
 
+  async findOneUtil(name, userId) {
+    const result = await db
+      .select()
+      .from(fonticons)
+      .where(
+        sql`${fonticons.name} = ${name} AND ${fonticons.userId} = ${userId}`
+      );
+
+    return result[0];
+  }
+
   async save(fonticon, userId) {
-    const fonticonSaved = await this.findOne(fonticon.data.name, userId);
+    const fonticonSaved = await this.findOneUtil(fonticon.data.name, userId);
 
     if (fonticonSaved !== undefined) {
       throw boom.conflict("You have a Font Icon with that name already");

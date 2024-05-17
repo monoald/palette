@@ -1,0 +1,44 @@
+name: ci-backend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/backend/**":
+
+jobs:
+  Cancel_Prev_Workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          workflow_id: "ci-backend.yml"
+          access_token: ${{ github.token }}
+
+  deploy:
+    runs-on: ubuntu-lates
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v4
+        with:
+        fetch-depth: 0
+      - name: Install dependencies
+        run: npm ci
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: "packages/backend/"
+        env:
+          GOOGLE_SECRET: ${{ secrets.GOOGLE_SECRET }}
+          GOOGLE_ID: ${{ secrets.GOOGLE_ID }}
+          GITHUB_SECRET: ${{ secrets.GITHUB_SECRET }}
+          GITHUB_ID: ${{ secrets.GITHUB_ID }}
+          TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+          TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+          TURSO_ENCRYPTION_KEY: ${{ secrets.TURSO_ENCRYPTION_KEY }}
+          CLIENT_URI: ${{ secrets.CLIENT_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}

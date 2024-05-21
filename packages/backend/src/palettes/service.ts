@@ -1,14 +1,13 @@
-import { db } from "../dbConnection";
 import { palettes, palettesToUsers } from "../db/schemas/palettes";
 import { desc, sql } from "drizzle-orm";
 import { uniquePaletteId } from "../utils/uniquePaletteId";
 import { HTTPException } from "hono/http-exception";
-import { appendTrailingSlash } from "hono/trailing-slash";
+import { LibSQLDatabase } from "drizzle-orm/libsql";
 
 export class PaletteService {
   constructor() {}
 
-  async create(name: string) {
+  async create(db: LibSQLDatabase<any>, name: string) {
     const upId = await uniquePaletteId(name);
 
     const result = await db
@@ -23,7 +22,7 @@ export class PaletteService {
     return result[0];
   }
 
-  async findOne(name: string) {
+  async findOne(db: LibSQLDatabase<any>, name: string) {
     const incomingUniquePaletteId = await uniquePaletteId(name);
     const result = await db
       .select({ id: palettes.id, savedCount: palettes.savedCount })
@@ -35,7 +34,7 @@ export class PaletteService {
     return palette;
   }
 
-  async find(page: number, userId: number) {
+  async find(db: LibSQLDatabase<any>, page: number, userId: number) {
     const limit = 6;
 
     const result = await db
@@ -58,8 +57,8 @@ export class PaletteService {
     return result;
   }
 
-  async save(name: string, userId: number) {
-    const palette = await this.findOne(name);
+  async save(db: LibSQLDatabase<any>, name: string, userId: number) {
+    const palette = await this.findOne(db, name);
     let id = palette?.id;
 
     if (palette !== undefined) {
@@ -68,7 +67,7 @@ export class PaletteService {
         .set({ savedCount: palette.savedCount + 1 })
         .where(sql`${palettes.id} = ${palette.id}`);
     } else {
-      const palette = await this.create(name);
+      const palette = await this.create(db, name);
       id = palette.id;
     }
 
@@ -91,8 +90,8 @@ export class PaletteService {
     return userId;
   }
 
-  async unsave(name: string, userId: number) {
-    const palette = await this.findOne(name);
+  async unsave(db: LibSQLDatabase<any>, name: string, userId: number) {
+    const palette = await this.findOne(db, name);
 
     const result = await db
       .delete(palettesToUsers)

@@ -1,12 +1,12 @@
-import { db } from "../dbConnection";
 import { gradients, gradientsToUsers } from "../db/schemas/gradients";
 import { desc, sql } from "drizzle-orm";
+import { LibSQLDatabase } from "drizzle-orm/libsql";
 import { HTTPException } from "hono/http-exception";
 
 export class GradientService {
   constructor() {}
 
-  async create(name: string) {
+  async create(db: LibSQLDatabase<any>, name: string) {
     const result = await db
       .insert(gradients)
       .values({
@@ -17,7 +17,7 @@ export class GradientService {
     return result[0];
   }
 
-  async find(page: number, userId: number) {
+  async find(db: LibSQLDatabase<any>, page: number, userId: number) {
     const limit = 6;
 
     const result = await db
@@ -39,7 +39,7 @@ export class GradientService {
     return result;
   }
 
-  async findOne(name: string) {
+  async findOne(db: LibSQLDatabase<any>, name: string) {
     const result = await db
       .select({ id: gradients.id, savedCount: gradients.savedCount })
       .from(gradients)
@@ -50,8 +50,8 @@ export class GradientService {
     return gradient;
   }
 
-  async save(name: string, userId: number) {
-    const gradient = await this.findOne(name);
+  async save(db: LibSQLDatabase<any>, name: string, userId: number) {
+    const gradient = await this.findOne(db, name);
     let id = gradient?.id;
 
     if (gradient !== undefined) {
@@ -60,7 +60,7 @@ export class GradientService {
         .set({ savedCount: gradient.savedCount + 1 })
         .where(sql`${gradients.id} = ${gradient.id}`);
     } else {
-      const gradient = await this.create(name);
+      const gradient = await this.create(db, name);
       id = gradient.id;
     }
 
@@ -83,8 +83,8 @@ export class GradientService {
     return userId;
   }
 
-  async unsave(name: string, userId: number) {
-    const gradient = await this.findOne(name);
+  async unsave(db: LibSQLDatabase<any>, name: string, userId: number) {
+    const gradient = await this.findOne(db, name);
 
     const result = await db
       .delete(gradientsToUsers)

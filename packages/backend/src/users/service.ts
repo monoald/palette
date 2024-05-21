@@ -1,14 +1,14 @@
 import { eq, sql } from "drizzle-orm";
 import { users } from "../db/schemas/users";
-import { db } from "../dbConnection";
 import { HTTPException } from "hono/http-exception";
 import { randomKey } from "../utils/randomKey";
 import { sign } from "hono/jwt";
+import { LibSQLDatabase } from "drizzle-orm/libsql";
 
 export class UserService {
   constructor() {}
 
-  async find() {
+  async find(db: LibSQLDatabase<any>) {
     const result = await db
       .select({
         id: users.id,
@@ -22,7 +22,7 @@ export class UserService {
     return result;
   }
 
-  async findOne(id: string) {
+  async findOne(db: LibSQLDatabase<any>, id: string) {
     const result = await db
       .select({
         id: users.id,
@@ -44,7 +44,10 @@ export class UserService {
     return user;
   }
 
-  async findOneByEmail(email: string): Promise<User | null> {
+  async findOneByEmail(
+    db: LibSQLDatabase<any>,
+    email: string
+  ): Promise<User | null> {
     const user = await db
       .select({
         id: users.id,
@@ -64,7 +67,7 @@ export class UserService {
     return user[0];
   }
 
-  async create(user: User) {
+  async create(db: LibSQLDatabase<any>, user: User) {
     const id = await db.insert(users).values(user).returning({ id: users.id });
 
     if (id.length === 0) {
@@ -72,7 +75,7 @@ export class UserService {
     }
   }
 
-  async addKey(email: string) {
+  async addKey(db: LibSQLDatabase<any>, email: string) {
     const signinKey = randomKey();
 
     await db
@@ -83,7 +86,7 @@ export class UserService {
     return signinKey;
   }
 
-  async signin(key: string | null, secret: string) {
+  async signin(db: LibSQLDatabase<any>, key: string | null, secret: string) {
     if (!key) {
       throw new HTTPException(400, { message: "Bad request" });
     }
@@ -124,7 +127,7 @@ export class UserService {
     };
   }
 
-  async getCollections(userId: number) {
+  async getCollections(db: any, userId: number) {
     const result = await db.query.users.findMany({
       columns: {},
       with: {
@@ -168,9 +171,9 @@ export class UserService {
 
     const formated = {
       ...result[0],
-      colors: result[0].colors.map((cols) => cols.color),
-      palettes: result[0].palettes.map((cols) => cols.palette),
-      gradients: result[0].gradients.map((cols) => cols.gradient),
+      colors: result[0].colors?.map((cols: any) => cols.color),
+      palettes: result[0].palettes?.map((cols: any) => cols.palette),
+      gradients: result[0].gradients?.map((cols: any) => cols.gradient),
     };
 
     return formated;

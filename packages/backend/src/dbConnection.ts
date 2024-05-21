@@ -6,13 +6,21 @@ import * as palettes from "./db/schemas/palettes";
 import * as gradients from "./db/schemas/gradients";
 import * as fonticons from "./db/schemas/fonticons";
 
-export const client = createClient({
-  // url: c.env.TURSO_DATABASE_URL,
-  // authToken: c.env.TURSO_AUTH_TOKEN,
-  // encryptionKey: c.env.ENCRYPTION_KEY,
-  url: "http://127.0.0.1:8080",
-});
+import { MiddlewareHandler } from "hono";
 
-export const db = drizzle(client, {
-  schema: { ...users, ...colors, ...palettes, ...gradients, ...fonticons },
-});
+export const dbConnection = (): MiddlewareHandler => {
+  return async (c, next) => {
+    const client = createClient({
+      url: c.env.TURSO_DATABASE_URL!,
+      authToken: c.env.TURSO_AUTH_TOKEN,
+    });
+
+    const db = drizzle(client, {
+      schema: { ...users, ...colors, ...palettes, ...gradients, ...fonticons },
+    });
+
+    c.set("db", db);
+
+    await next();
+  };
+};

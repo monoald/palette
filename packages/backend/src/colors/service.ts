@@ -1,12 +1,12 @@
-import { db } from "../dbConnection";
 import { colors, colorsToUsers } from "../db/schemas/colors";
 import { desc, sql } from "drizzle-orm";
+import { LibSQLDatabase } from "drizzle-orm/libsql";
 import { HTTPException } from "hono/http-exception";
 
 export class ColorService {
   constructor() {}
 
-  async create(name: string) {
+  async create(db: LibSQLDatabase<any>, name: string) {
     const result = await db
       .insert(colors)
       .values({
@@ -17,7 +17,7 @@ export class ColorService {
     return result[0];
   }
 
-  async find(page: number, userId: number) {
+  async find(db: LibSQLDatabase<any>, page: number, userId: number) {
     const limit = 6;
 
     const result = await db
@@ -39,7 +39,7 @@ export class ColorService {
     return result;
   }
 
-  async findOne(name: string) {
+  async findOne(db: LibSQLDatabase<any>, name: string) {
     const result = await db
       .select({ id: colors.id, savedCount: colors.savedCount })
       .from(colors)
@@ -50,8 +50,8 @@ export class ColorService {
     return color;
   }
 
-  async save(name: string, userId: number) {
-    const color = await this.findOne(name);
+  async save(db: LibSQLDatabase<any>, name: string, userId: number) {
+    const color = await this.findOne(db, name);
     let id = color?.id;
 
     if (color !== undefined) {
@@ -60,7 +60,7 @@ export class ColorService {
         .set({ savedCount: color.savedCount + 1 })
         .where(sql`${colors.id} = ${color.id}`);
     } else {
-      const color = await this.create(name);
+      const color = await this.create(db, name);
       id = color.id;
     }
 
@@ -83,8 +83,8 @@ export class ColorService {
     return userId;
   }
 
-  async unsave(name: string, userId: number) {
-    const color = await this.findOne(name);
+  async unsave(db: LibSQLDatabase<any>, name: string, userId: number) {
+    const color = await this.findOne(db, name);
 
     const result = await db
       .delete(colorsToUsers)

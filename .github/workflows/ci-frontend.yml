@@ -22,17 +22,26 @@ jobs:
           access_token: ${{ github.token }}
 
   Deploy:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     name: Deploy
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Install Vercel CLI
+        working-directory: packages/frontend
         run: npm i vercel --global --no-audit --no-fund --no-optional
       - name: Pull Vercel Environment
+        working-directory: packages/frontend
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Pull the GitHub Environment variables
+        working-directory: packages/frontend
+        run: |
+          echo "NEXT_PUBLIC_SERVER_URI=${{ secrets.SERVER_URI }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_FONTICON_SERVICE_URI=${{ secrets.FONTICON_SERVICE_URI }}" >> $GITHUB_ENV
       - name: Build Artifacts
+        working-directory: packages/frontend
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy to Vercel
+        working-directory: packages/frontend
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}

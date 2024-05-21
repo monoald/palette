@@ -18,11 +18,11 @@ jobs:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
         with:
-          workflow_id: "ci-service-fonticons.yml"
+          workflow_id: 99079597
           access_token: ${{ github.token }}
 
   Deploy:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     name: Deploy
     steps:
       - uses: actions/checkout@v4

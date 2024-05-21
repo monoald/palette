@@ -8,10 +8,12 @@ import { cors } from "hono/cors";
 
 const app = new Hono().basePath("api/v1");
 
-app.use("/*", cors());
+app.use("/*", async (c, next) => {
+  const handler = cors({
+    origin: [c.env?.CLIENT_URI as string, "http://localhost:3001"],
+  });
 
-app.get("/", (c) => {
-  return c.text("it works");
+  return await handler(c, next);
 });
 
 app.route("/auth", auth);

@@ -40,13 +40,15 @@ export const getUserCollections = async (
     },
   }).then((res) => res.json());
 
-  const gradients: GradientCollection[] = response.gradients.map((gradient) => {
-    const style = urlToGradient(gradient.name);
+  const gradients: GradientCollection[] = response.gradients?.map(
+    (gradient) => {
+      const style = urlToGradient(gradient.name);
 
-    return { ...gradient, style };
-  });
+      return { ...gradient, style };
+    }
+  );
 
-  const palettes = response.palettes.map((palette) => {
+  const palettes = response.palettes?.map((palette) => {
     const colorsArr = palette.name.split("-").map((clr) => "#" + clr);
 
     return { ...palette, colorsArr };

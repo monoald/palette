@@ -13,7 +13,11 @@ const SERVICE_URI = process.env.NEXT_PUBLIC_FONTICON_SERVICE_URI;
 export async function saveFontIcon(
   fonticon: FonticonData,
   token: string,
-  updateFontIcons: (type: string, payload: FontIconsCollection | string) => void
+  updateFontIcons: (
+    type: string,
+    payload: FontIconsCollection | string
+  ) => void,
+  router: AppRouterInstance
 ) {
   dispatch("custom:load", { load: true });
   try {
@@ -41,7 +45,7 @@ export async function saveFontIcon(
     });
 
     updateFontIcons("save", { ...body.data, id: result.id });
-    return result.id;
+    router.push(`/font-icon/edit/${fonticon.data.name}`);
   } catch (error) {
     if (error instanceof PaletaError) {
       dispatch("custom:load", { load: false });
@@ -50,7 +54,6 @@ export async function saveFontIcon(
         message: error.message,
       });
     }
-    return undefined;
   }
 }
 
@@ -62,21 +65,18 @@ export async function unsaveFontIcon(
 ) {
   dispatch("custom:load", { load: true });
   try {
-    const data = await fetch(
-      `https://extinct-houndstooth-fly.cyclic.cloud/api/v1/icons/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `bearer ${token}`,
-        },
-      }
-    ).then(async (res) => {
-      const data = await res.json();
+    await fetch(`${SERVICE_URI}/unsave`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${token}`,
+      },
+      body: JSON.stringify({ id: id }),
+    }).then(async (res) => {
       if (!res.ok) {
+        const data = await res.json();
         throw new PaletaError(data);
       }
-      return data;
     });
 
     dispatch("custom:load", { load: false });

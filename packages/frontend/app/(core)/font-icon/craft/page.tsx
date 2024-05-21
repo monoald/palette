@@ -103,11 +103,7 @@ export default function Page() {
       return;
     }
 
-    const id = await saveFontIcon(fonticon, token as string, updateFontIcons);
-
-    if (id !== undefined) {
-      router.push(`/font-icon/edit/${fonticon.data.name}`);
-    }
+    await saveFontIcon(fonticon, token as string, updateFontIcons, router);
   };
 
   const downloadFonticon = async () => {

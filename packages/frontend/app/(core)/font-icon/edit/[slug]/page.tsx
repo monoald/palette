@@ -272,7 +272,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   // Unsave
   const unsaveIcons = async () => {
     await unsaveFontIcon(
-      params.slug.split("%2B")[0],
+      fonticon?.data.id!,
       token as string,
       updateFontIcons,
       router

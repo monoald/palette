@@ -14,7 +14,7 @@ export const getColors = async (
   id: string
 ): Promise<ColorType[]> => {
   const response: ColorType[] = await fetch(
-    `${SERVER_URI}/colors?page=${page}&userId=${id}`
+    `${SERVER_URI}/colors?page=${page}&userId=${id ?? 0}`
   ).then((res) => res.json());
 
   return response;

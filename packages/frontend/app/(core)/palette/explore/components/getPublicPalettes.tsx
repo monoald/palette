@@ -17,7 +17,7 @@ export const getPublicPalettes = async (
   id: string
 ): Promise<PaletteType[]> => {
   const response: PaletteType[] = await fetch(
-    `${SERVER_URI}/palettes?page=${page}&userId=${id}`,
+    `${SERVER_URI}/palettes?page=${page}&userId=${id ?? 0}`,
     {
       method: "GET",
       headers: {

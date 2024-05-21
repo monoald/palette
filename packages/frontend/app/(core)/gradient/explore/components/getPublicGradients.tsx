@@ -18,7 +18,7 @@ export const getPublicGradients = async (
   id: string
 ): Promise<GradientType[]> => {
   const response: GradientType[] = await fetch(
-    `${SERVER_URI}/gradients?page=${page}&userId=${id}`
+    `${SERVER_URI}/gradients?page=${page}&userId=${id ?? 0}`
   ).then((res) => res.json());
 
   const gradients: GradientType[] = response.map((gradient) => {

@@ -11,7 +11,11 @@ export const auth = new Hono<{
     "user-github": GitHubUser;
     db: LibSQLDatabase<any>;
   };
-  Bindings: { CLIENT_URI: string };
+  Bindings: {
+    CLIENT_URI: string;
+    AUTH_GITHUB_ID: string;
+    AUTH_GITHUB_SECRET: string;
+  };
 }>();
 
 auth.use(dbConnection());
@@ -39,10 +43,15 @@ auth.get(
 
 auth.get(
   "/github",
-  githubAuth({
-    scope: ["read:user", "user", "user:email"],
-    oauthApp: true,
-  }),
+  async (c, next) => {
+    const handler = githubAuth({
+      scope: ["read:user", "user", "user:email"],
+      oauthApp: true,
+      client_id: c.env.AUTH_GITHUB_ID!,
+      client_secret: c.env.AUTH_GITHUB_SECRET!,
+    });
+    return await handler(c, next);
+  },
   async (c) => {
     const githubUser = c.get("user-github")!;
     const db = c.get("db");

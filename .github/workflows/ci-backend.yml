@@ -14,7 +14,7 @@ jobs:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
         with:
-          workflow_id: "ci-backend.yml"
+          workflow_id: 99079595
           access_token: ${{ github.token }}
 
   deploy:
@@ -35,8 +35,8 @@ jobs:
         env:
           GOOGLE_SECRET: ${{ secrets.GOOGLE_SECRET }}
           GOOGLE_ID: ${{ secrets.GOOGLE_ID }}
-          GITHUB_SECRET: ${{ secrets.GITHUB_SECRET }}
-          GITHUB_ID: ${{ secrets.GITHUB_ID }}
+          GITHUB_SECRET: ${{ secrets.AUTH_GITHUB_SECRET }}
+          GITHUB_ID: ${{ secrets.AUTH_GITHUB_ID }}
           TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
           TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
           TURSO_ENCRYPTION_KEY: ${{ secrets.TURSO_ENCRYPTION_KEY }}

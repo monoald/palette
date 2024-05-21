@@ -7,7 +7,7 @@ import * as gradients from "./db/schemas/gradients";
 import * as fonticons from "./db/schemas/fonticons";
 
 import { MiddlewareHandler } from "hono";
-
+//
 export const dbConnection = (): MiddlewareHandler => {
   return async (c, next) => {
     const client = createClient({

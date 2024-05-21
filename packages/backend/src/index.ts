@@ -10,7 +10,7 @@ const app = new Hono().basePath("api/v1");
 
 app.use("/*", async (c, next) => {
   const handler = cors({
-    origin: [c.env?.CLIENT_URI as string, "http://localhost:3001"],
+    origin: [c.env?.CLIENT_URI as string, c.env?.DEV_CLIENT_URI as string],
   });
 
   return await handler(c, next);

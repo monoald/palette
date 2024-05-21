@@ -32,13 +32,3 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: "packages/backend/"
-        env:
-          GOOGLE_SECRET: ${{ secrets.GOOGLE_SECRET }}
-          GOOGLE_ID: ${{ secrets.GOOGLE_ID }}
-          GITHUB_SECRET: ${{ secrets.AUTH_GITHUB_SECRET }}
-          GITHUB_ID: ${{ secrets.AUTH_GITHUB_ID }}
-          TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
-          TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
-          TURSO_ENCRYPTION_KEY: ${{ secrets.TURSO_ENCRYPTION_KEY }}
-          CLIENT_URI: ${{ secrets.CLIENT_URI }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}

@@ -18,7 +18,7 @@ jobs:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
         with:
-          workflow_id: "ci-frontend.yml"
+          workflow_id: 99079596
           access_token: ${{ github.token }}
 
   Deploy:
@@ -34,11 +34,6 @@ jobs:
       - name: Pull Vercel Environment
         working-directory: packages/frontend
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Pull the GitHub Environment variables
-        working-directory: packages/frontend
-        run: |
-          echo "NEXT_PUBLIC_SERVER_URI=${{ secrets.SERVER_URI }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_FONTICON_SERVICE_URI=${{ secrets.FONTICON_SERVICE_URI }}" >> $GITHUB_ENV
       - name: Deploy to Vercel
         working-directory: packages/frontend
         run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}

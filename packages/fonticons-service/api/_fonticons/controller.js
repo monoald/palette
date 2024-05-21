@@ -8,7 +8,6 @@ const findAll = async (req, res) => {
   return res.json(fonticons);
 };
 
-//
 const findOne = async (req, res, next) => {
   try {
     const { userId } = req;

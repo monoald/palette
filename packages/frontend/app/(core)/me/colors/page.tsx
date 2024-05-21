@@ -5,6 +5,9 @@ import { getMainContrastColor } from "@/app/utils/createBaseColorObject";
 import { useUserStore } from "@/store";
 import { hexToRgb } from "colors-kit";
 import Link from "next/link";
+import { BasicCollection } from "../action";
+import { dispatch } from "../../hooks/useStateHandler";
+import { handleUnsaveColor } from "../../handlers";
 
 const variants = {
   hidden: { opacity: 0 },
@@ -13,6 +16,22 @@ const variants = {
 
 export default function Page() {
   const colors = useUserStore((state) => state.collections?.colors);
+  const token = useUserStore((state) => state.token);
+  const updateColors = useUserStore((state) => state.updateColors);
+
+  const unsaveColor = async (color: BasicCollection) => {
+    await handleUnsaveColor(
+      token!,
+      color,
+      updateColors,
+      () => {
+        dispatch("custom:unsaveColor", { name: color.name });
+      },
+      () => {
+        dispatch("custom:saveColor", { name: color.name });
+      }
+    );
+  };
   return (
     <div className="w-full min-h-[calc(100vh-80px)] bg-main text-secondary">
       <main className="w-full max-w-5xl p-9 mx-auto flex flex-col gap-20">
@@ -47,6 +66,7 @@ export default function Page() {
 
                     <div className="w-fit h-fit px-5 py-2 mx-auto border border-primary-border rounded-full flex items-center gap-7 text-2xl">
                       <button
+                        onClick={() => unsaveColor(clr)}
                         className="secondary-hover flex"
                         tooltip="true"
                         tooltip-content="Unsave"

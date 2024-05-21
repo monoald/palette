@@ -3,6 +3,8 @@
 import { MotionDiv } from "@/app/components/FramerMotion";
 import { useUserStore } from "@/store";
 import Link from "next/link";
+import { handleUnsaveGradient } from "../../handlers";
+import { GradientCollection } from "../action";
 
 const variants = {
   hidden: { opacity: 0 },
@@ -11,6 +13,23 @@ const variants = {
 
 export default function Page() {
   const gradients = useUserStore((state) => state.collections?.gradients);
+  const token = useUserStore((state) => state.token);
+  const updateGradients = useUserStore((state) => state.updateGradients);
+
+  const unsaveGradient = async (gradient: GradientCollection) => {
+    await handleUnsaveGradient(
+      token!,
+      gradient,
+      updateGradients,
+      () => {
+        dispatch("custom:unsaveGradient", { name: gradient.name });
+      },
+      () => {
+        dispatch("custom:saveGradient", { name: gradient.name });
+      }
+    );
+  };
+
   return (
     <div className="w-full min-h-[calc(100vh-80px)] bg-main text-secondary">
       <main className="w-full max-w-5xl p-9 mx-auto flex flex-col gap-20">
@@ -39,6 +58,7 @@ export default function Page() {
 
                     <div className="w-fit h-fit px-5 py-2 mx-auto border border-primary-border rounded-full flex items-center gap-7 text-2xl">
                       <button
+                        onClick={() => unsaveGradient(grad)}
                         className="secondary-hover flex"
                         tooltip="true"
                         tooltip-content="Unsave"
@@ -124,4 +144,7 @@ export default function Page() {
       </main>
     </div>
   );
+}
+function dispatch(arg0: string, arg1: { name: any }) {
+  throw new Error("Function not implemented.");
 }

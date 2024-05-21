@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLayoutEffect } from "react";
+import { usePathname } from "next/navigation";
 
 type Props = {
   handleToggleLogIn: () => void;
@@ -12,6 +13,7 @@ export default function UserArea({ handleToggleLogIn }: Props) {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const updateUser = useUserStore((state) => state.updateUser);
+  const pathname = usePathname();
 
   useLayoutEffect(() => {
     updateUser(
@@ -25,7 +27,9 @@ export default function UserArea({ handleToggleLogIn }: Props) {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
 
-    router.push("/login");
+    if (pathname.includes("/me")) {
+      router.push("/");
+    }
   };
 
   return (
@@ -75,7 +79,7 @@ export default function UserArea({ handleToggleLogIn }: Props) {
               <Link href="/me/font-icons">My Font Icons</Link>
             </li>
             <li className="primary-hover">
-              <button onClick={handleLogOut}>Sign out</button>
+              <button onClick={handleLogOut}>Log out</button>
             </li>
           </ul>
         </div>

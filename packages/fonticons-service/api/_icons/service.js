@@ -1,7 +1,7 @@
-const { db } = require("../dbConnection");
+const { db } = require("../_dbConnection");
 const { icons } = require("./schema");
 const { sql } = require("drizzle-orm");
-const { normalizeSvg } = require("../svgToFont/toSvgFont");
+const { normalizeSvg } = require("../_svgToFont/toSvgFont");
 
 class IconService {
   constructor() {}

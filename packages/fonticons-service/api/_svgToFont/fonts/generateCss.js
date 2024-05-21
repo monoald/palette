@@ -4,7 +4,6 @@ function generateCSS(name, color, icons) {
   src:
     url("${name}.eot") format("embedded-opentype"),
     url("${name}.woff") format("woff"),
-    url("${name}.woff2") format("woff2");
 
   font-weight: normal;
   font-style: normal;

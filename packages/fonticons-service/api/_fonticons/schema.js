@@ -1,7 +1,4 @@
 const { sqliteTable, integer, text } = require("drizzle-orm/sqlite-core");
-const { relations } = require("drizzle-orm");
-const { icons } = require("../icons/schema");
-const { users } = require("../users/schema");
 
 const fonticons = sqliteTable("fonticons", {
   id: integer("id").notNull().primaryKey(),

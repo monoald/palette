@@ -64,14 +64,14 @@ const update = async (req, res, next) => {
 const downloadFonts = async (req, res, next) => {
   try {
     const body = req.body;
-    const { file, name } = await service.downloadFonts(body);
+    const data = await service.downloadFonts(body);
 
     res.set({
       "Content-Type": "application/zip",
-      "Content-Disposition": `attachment; filename=${name}.zip`,
-      "Content-Length": file.length,
+      "Content-Disposition": `attachment; filename=${body.data.name}.zip`,
+      "Content-Length": data.length,
     });
-    res.send(file);
+    return res.send(data);
   } catch (error) {
     next(error);
   }

@@ -1,4 +1,4 @@
-const changeIconColor = require("../../utils/changeSvgColor");
+const changeIconColor = require("../../_utils/changeSvgColor");
 const Svg = require("./svg");
 
 async function strokeToFill(svg, color, generalColor) {

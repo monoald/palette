@@ -1,4 +1,4 @@
-const { fonticons } = require("../fonticons/schema");
+const { fonticons } = require("../_fonticons/schema");
 
 const { sqliteTable, integer, text } = require("drizzle-orm/sqlite-core");
 const { relations, sql } = require("drizzle-orm");

@@ -1,12 +1,12 @@
 const boom = require("@hapi/boom");
 const { sql } = require("drizzle-orm");
 const { fonticons } = require("./schema");
-const { db } = require("../dbConnection");
-const { IconService } = require("../icons/service");
-const { toSvgFont, normalizeSvg } = require("../svgToFont/toSvgFont");
-const generateFonts = require("../svgToFont/fonts/generateFonts");
-const iconsToZip = require("../svgToFont/fonts/iconsToZip");
-const { normalizeName } = require("../utils/normalizeName");
+const { db } = require("../_dbConnection");
+const { IconService } = require("../_icons/service");
+const { toSvgFont, normalizeSvg } = require("../_svgToFont/toSvgFont");
+const generateFonts = require("../_svgToFont/fonts/generateFonts");
+const iconsToZip = require("../_svgToFont/fonts/iconsToZip");
+const { normalizeName } = require("../_utils/normalizeName");
 
 const service = new IconService();
 
@@ -146,7 +146,7 @@ class FonticonService {
 
     const file = Buffer.from(fonts, "base64");
 
-    return { file, name: normalizedIcons.name };
+    return file;
   }
 
   async downloadFontsFromSaved(id) {

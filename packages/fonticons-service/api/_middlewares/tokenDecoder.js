@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const boom = require("@hapi/boom");
 
-const { JWT_SECRET } = require("../config");
+const { JWT_SECRET } = require("../_config");
 
 async function tokenDecoderHandler(req, res, next) {
   const authorization = req.get("authorization");
